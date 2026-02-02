@@ -42,8 +42,6 @@ format:
       - cosmo
       - brand
     number-depth: 3
-  pdf:
-    documentclass: scrreprt
 
 editor: source
 lang: de

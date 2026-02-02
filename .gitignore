@@ -3,3 +3,6 @@
 .RData
 images-creation/
 .quarto/
+
+/.quarto/
+**/*.quarto_ipynb
