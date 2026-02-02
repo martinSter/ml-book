@@ -1,8 +1,12 @@
-.Rproj.user
+# Quarto
+.quarto/
+_book/
+*_files/
+
+# R / RStudio
+.Rproj.user/
 .Rhistory
 .RData
-images-creation/
-.quarto/
+.Ruserdata
 
-/.quarto/
-**/*.quarto_ipynb
+images-creation/
