@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Einführung – Machine Learning verstehen statt nur anwenden</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./classical.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6599ec1fc9178c01465d710de4496228.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Keine Treffer",
+    "search-matching-documents-text": "Treffer",
+    "search-copy-link-title": "Link in die Suche kopieren",
+    "search-hide-matches-text": "Zusätzliche Treffer verbergen",
+    "search-more-match-text": "weitere Treffer in diesem Dokument",
+    "search-more-matches-text": "weitere Treffer in diesem Dokument",
+    "search-clear-button-title": "Zurücksetzen",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Abbrechen",
+    "search-submit-button-title": "Abschicken",
+    "search-label": "Suchen"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Einführung</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Suchen" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Machine Learning verstehen statt nur anwenden</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Suchen"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Über das Buch</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Einführung</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./classical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Klassisches Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_linreg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineare Regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_linclass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lineare Klassifikation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ML Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Entscheidungsbäume</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_ensemble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ensembles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_svm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Support Vector Machines</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./deep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_ann.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Artificial Neural Networks</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_cnn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Convolutional Neural Networks</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_rnn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Recurrent Neural Networks</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_transformer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transformers</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quellenverzeichnis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Anhang</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Mathe- und Statistik-Grundlagen</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">R und Python</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Inhaltsverzeichnis</h2>
+   
+  <ul>
+  <li><a href="#was-ist-machine-learning-eine-kurze-geschichte-und-definitionen." id="toc-was-ist-machine-learning-eine-kurze-geschichte-und-definitionen." class="nav-link active" data-scroll-target="#was-ist-machine-learning-eine-kurze-geschichte-und-definitionen."><span class="header-section-number">1.1</span> Was ist Machine Learning? Eine kurze Geschichte und Definitionen.</a></li>
+  <li><a href="#wann-macht-es-sinn-ml-einzusetzen" id="toc-wann-macht-es-sinn-ml-einzusetzen" class="nav-link" data-scroll-target="#wann-macht-es-sinn-ml-einzusetzen"><span class="header-section-number">1.2</span> Wann macht es Sinn ML einzusetzen?</a></li>
+  <li><a href="#anwendungsfälle-von-ml" id="toc-anwendungsfälle-von-ml" class="nav-link" data-scroll-target="#anwendungsfälle-von-ml"><span class="header-section-number">1.3</span> Anwendungsfälle von ML</a></li>
+  <li><a href="#supervised-vs.-unsupervised-learning" id="toc-supervised-vs.-unsupervised-learning" class="nav-link" data-scroll-target="#supervised-vs.-unsupervised-learning"><span class="header-section-number">1.4</span> Supervised vs.&nbsp;Unsupervised Learning</a>
+  <ul class="collapse">
+  <li><a href="#input-daten" id="toc-input-daten" class="nav-link" data-scroll-target="#input-daten"><span class="header-section-number">1.4.1</span> Input-Daten</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">1.4.2</span> Output</a></li>
+  <li><a href="#taxonomie-des-machine-learnings" id="toc-taxonomie-des-machine-learnings" class="nav-link" data-scroll-target="#taxonomie-des-machine-learnings"><span class="header-section-number">1.4.3</span> Taxonomie des Machine Learnings</a></li>
+  </ul></li>
+  <li><a href="#regression-vs.-klassifikation" id="toc-regression-vs.-klassifikation" class="nav-link" data-scroll-target="#regression-vs.-klassifikation"><span class="header-section-number">1.5</span> Regression vs.&nbsp;Klassifikation</a></li>
+  <li><a href="#parametrische-vs.-nicht-parametrische-modelle" id="toc-parametrische-vs.-nicht-parametrische-modelle" class="nav-link" data-scroll-target="#parametrische-vs.-nicht-parametrische-modelle"><span class="header-section-number">1.6</span> Parametrische vs.&nbsp;nicht-parametrische Modelle</a></li>
+  <li><a href="#perceptron-und-erste-mathematische-konzepte" id="toc-perceptron-und-erste-mathematische-konzepte" class="nav-link" data-scroll-target="#perceptron-und-erste-mathematische-konzepte"><span class="header-section-number">1.7</span> Perceptron und erste mathematische Konzepte</a>
+  <ul class="collapse">
+  <li><a href="#datenpunkte-als-vektoren" id="toc-datenpunkte-als-vektoren" class="nav-link" data-scroll-target="#datenpunkte-als-vektoren"><span class="header-section-number">1.7.1</span> Datenpunkte als Vektoren</a></li>
+  <li><a href="#das-perceptron-mathematische-sicht" id="toc-das-perceptron-mathematische-sicht" class="nav-link" data-scroll-target="#das-perceptron-mathematische-sicht"><span class="header-section-number">1.7.2</span> Das Perceptron (mathematische Sicht)</a></li>
+  <li><a href="#das-perceptron-geometrische-sicht" id="toc-das-perceptron-geometrische-sicht" class="nav-link" data-scroll-target="#das-perceptron-geometrische-sicht"><span class="header-section-number">1.7.3</span> Das Perceptron (geometrische Sicht)</a></li>
+  <li><a href="#wie-lernt-das-perceptron" id="toc-wie-lernt-das-perceptron" class="nav-link" data-scroll-target="#wie-lernt-das-perceptron"><span class="header-section-number">1.7.4</span> Wie lernt das Perceptron?</a></li>
+  <li><a href="#das-xor-problem" id="toc-das-xor-problem" class="nav-link" data-scroll-target="#das-xor-problem"><span class="header-section-number">1.7.5</span> Das XOR Problem</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-intro" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Einführung</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In diesem Kapitel geht es darum zu verstehen, was Machine Learning überhaupt ist, warum es nützlich sein kann und was typische Anwendungsfälle von ML sind. Wir werden ausserdem verschiedene Unterkategorien von ML kennen lernen und uns eine kleine Taxonomie erarbeiten. Zum Schluss schauen wir uns den ersten ganz wichtigen Meilenstein im ML an: das Perceptron. Dabei lernen wir auch gleich ein paar wichtige mathematische Grundlagen kennen.</p>
+<section id="was-ist-machine-learning-eine-kurze-geschichte-und-definitionen." class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="was-ist-machine-learning-eine-kurze-geschichte-und-definitionen."><span class="header-section-number">1.1</span> Was ist Machine Learning? Eine kurze Geschichte und Definitionen.</h2>
+<!-- Kurze Geschichte von ML -->
+<!-- Schon lange, seit 1950er / 1960er -->
+<!-- Viel gemacht von Statistiker*innen -->
+<!-- Computing Power -->
+<!-- Algorithmische Kniffs -->
+<!-- Generalization! -->
+<p>Im Prinzip geht die Geschichte des MLs weit zurück, nämlich zu den Anfängen der Statistik. Viele Modelle, die heutzutage im ML angewendet werden sind nämlich eigentlich von Statistiker:innen erfundene Modelle. Die Geschichte des MLs und der Statistik sind darum eng miteinander verknüpft. Einen eigentlichen Startpunkt des MLs könnte man vielleicht in den 1950er Jahren ausmachen. Einerseits fand 1956 das sagenumwobene <em>Dartmouth Summer Research Project on Artificial Intelligence</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> statt, an dem alle wichtigen Grössen aus dem Gebiet zu dieser Zeit teilnahmen. Der Begriff <strong>Artificial Intelligence</strong> wurde an diesem Anlass erstmal erwähnt. Andererseits hat Frank Rosenblatt<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> ein Jahr später das sogenannte <strong>Perceptron</strong> und einen dazugehörigen Lernalgorithmus eingeführt (dazu später mehr).</p>
+<p>Danach blieb es aber rund 20 Jahre relativ ruhig bis die Forschung im Bereich Machine Learning so richtig Fahrt aufnahm. Der Hauptgrund dafür war, dass das Perceptron nur für <strong>linear separierbare Probleme</strong> (auch hierzu später mehr) funktionierte und darum das Interesse daran bald abflachte.</p>
+<p>Ein grosser Schub für die Entwicklung von ML ging vom Aufkommen von extrem grossen Datenmengen (<strong>Big Data</strong>) und dem Internet aus. Das führte nämlich dazu, dass sich immer mehr Leute aus den Fachbereichen Informatik und Computer Science mit dem Thema ML befassten und effiziente Hard- und Software sowie algorithmische Kniffs und Tricks beisteuerten. Ausserdem ermöglichte das Internet den Zugang zu gewaltigen Datenmengen an Bildern, Videos, Klicks, etc. - denken Sie beispielsweise nur schon an die Informationen, die jede:r von uns tagtäglich im Internet hinterlässt. Diese Entwicklungen führten unter anderem zur Entwicklung der ImageNet Challenge<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, welche die Entwicklungen im Bereich <strong>Computer Vision</strong> (maschinelles Sehen) katalysierten.</p>
+<p>Ein weiterer Schub für das Machine Learning war (und ist) zudem die immer besser werdende Rechenleistung von Computern, insbesondere der Grafikkarten (engl. <em>Graphics Processing Units</em> oder <em>GPUs</em>), welche für schnelle Matrix- und Vektoroperationen verwendet werden können. All diese Entwicklungen haben sich im November 2022 kulminiert in der erstmaligen breiten öffentlichen Wahrnehmung von sogenannten <strong>Large Language Models</strong> wie ChatGPT.</p>
+<p>Nachdem wir einen ersten groben Überblick über die Geschichte des MLs erhalten haben, wollen wir uns nun überlegen, was ML denn genau ist. Wie der Name sagt, geht es im Machine Learning darum, dass eine Maschine (oder präziser, ein Computer) aus einem gegebenen Datensatz <strong>automatisch</strong> Muster lernt, ohne dass ein Mensch dem Computer (explizit) sagen muss, was er lernen soll. Der Mensch gibt jedoch dem Computer die Rahmenbedingungen für das automatische Lernen vor.</p>
+<p>Die erlernten Muster sind selbstverständlich nur nützlich, wenn sie <strong>genereller Natur</strong> sind und auch zukünftigen Beobachtungen zugrunde liegen. Beispiel: ein Spital hat während der Corona Pandemie ein Modell trainiert, um den täglichen Pflegebedarf je nach Wochentag, Saison, und weiteren Indikatoren vorherzusagen. Das Modell funktioniert nun nach der Pandemie aber nicht wunschgemäss und prognostiziert in der Tendenz einen zu hohen Pflegebedarf. Das Problem ist, dass die erlernten Muster nicht gut auf eine Zeit nach der Pandemie generalisierbar sind. Mit anderen Worten: die Trainingsdaten waren nicht repräsentativ genug. ML-Modelle sollen also <strong>generell gültige Muster</strong> in den Daten erlernen.</p>
+<p>Bevor wir etwas konkreter anschauen, wie genau ein Computer automatisch aus Daten lernen kann, schauen wir uns die Definitionen von zwei Experten im Gebiet ML an:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Definitionen
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>“[Machine Learning is the] field of study that gives computers the ability to learn without being explicitly programmed.”</em> Arthur Samuel, 1959 <span class="citation" data-cites="Geron">(zitiert in <a href="references.html#ref-Geron" role="doc-biblioref">Géron 2022</a>, p.&nbsp;4)</span></p>
+<p><em>“Machine Learning is the science (and art) of programming computers so they can learn from data.”</em> Aurélien Géron <span class="citation" data-cites="Geron">(<a href="references.html#ref-Geron" role="doc-biblioref">Géron 2022</a>, p.&nbsp;4)</span></p>
+</div>
+</div>
+<p>Zusammenfassend lässt sich sagen, dass wir mit ML dem Computer die Möglichkeit geben, automatisch und selbständig aus Daten generalisierbare Muster zu lernen. Nichtsdestotrotz braucht es Sie als ML-Expert:in, und zwar wie folgt:</p>
+<ol type="1">
+<li>Bevor wir ML verwenden können, um Muster in Daten zu lernen, müssen wir uns für ein konkretes Modell entscheiden. ML Modelle können unterschiedlich flexibel sein und es liegt im Ermessen von Ihnen, wie flexibel das Modell sein soll. Sie müssen bei der Wahl des Modells die Komplexität des Problems berücksichtigen. Grundsätzliche gilt bei der Wahl des Modells, dass flexiblere Modelle komplexere Sachverhalte abbilden können. Ein zu flexibles Modell kann aber schnell zu <em>Overfitting</em> führen, doch dazu später mehr. Dieser erste Schritt wird im Fachjargon typischerweise <strong>Modellwahl</strong> (engl. <em>Model Selection</em>) genannt.</li>
+<li>Sobald Sie das Modell ausgewählt haben, übergeben Sie dem Computer (etwas vereinfacht gesagt) das Modell, einen Datensatz sowie einen Lernalgorithmus. Nun hat der Computer alle Zutaten, um automatisch zu lernen. Doch was lernt er eigentlich? Der Computer lernt die Parameter Ihres gewählten Modells, so dass das Modell sich optimal an die Daten anpasst. Dieser Schritt wird im Fachjargon <strong>Modelltraining</strong> (engl. <em>Model Training</em> oder <em>Model Fitting</em>) genannt.</li>
+<li>Falls Sie mit dem erlernten Modell zufrieden sind, können Sie es nun entweder dazu verwenden Vorhersagen zu machen oder um Zusammenhänge in den Daten zu interpretieren und daraus wertvolle Einsichten gewinnen. Dieser Schritt wird im Fachjargon als <strong>Modellinferenz</strong> (engl. <em>Model Inference</em>) zusammengefasst. Typischerweise sind Sie in der Realität mit dem ersten erlernten Modell allerdings noch nicht zufrieden und gehen zurück zu Schritt 1 und wählen ein anderes Modell.</li>
+</ol>
+<p>Es handelt sich bei dieser Vorgehensweise um eine sehr allgemeine Beschreibung des ML Prozesses. Wie diese drei Schritte konkret funktionieren, werden Sie in den nachfolgenden Kapiteln dieses Buchs erfahren.</p>
+</section>
+<section id="wann-macht-es-sinn-ml-einzusetzen" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="wann-macht-es-sinn-ml-einzusetzen"><span class="header-section-number">1.2</span> Wann macht es Sinn ML einzusetzen?</h2>
+<p>Ein ML Modell zu trainieren (zweiter Schritt oben) kann viel Zeit und Geld kosten. Zum Beispiel müssen Sie unter Umständen überhaupt erst die Daten sammeln (oder von einem Datendienstleister kaufen), um ein Modell trainieren zu können. Oder das Projekt ist so komplex, dass Sie als Analyst:in unzählige Stunden benötigen, um die Daten überhaupt erst in eine Form zu bringen, die es erlaubt ein Modell zu trainieren. Für neuartige DL Modelle oder Generative KI kann das Trainieren eines Modells durch den reinen Stromverbrauch bzw. die vom Cloud-Betreiber in Rechnung gestellten Kosten so hoch sein, dass sich Ihr ursprüngliches Vorhaben nicht mehr lohnt. Es ist also ungemein wichtig, dass Sie sich vor Projektbeginn gut überlegen, ob ML für Ihr vorliegendes Problem überhaupt Sinn macht und einen Mehrwert generieren kann.</p>
+<p>Folgende Daumenregeln <span class="citation" data-cites="Geron">(siehe auch <a href="references.html#ref-Geron" role="doc-biblioref">Géron 2022</a>, p.&nbsp;7)</span> können Ihnen dabei helfen, zu entscheiden, ob ML für Ihr Projekt Sinn macht:</p>
+<ul>
+<li>Ihr Problem entspricht einem <strong>standard ML-Problem</strong>, das bereits mehrfach gelöst wurde und für das es sogenannte “off-the-shelf” Lösungen gibt. Beispiel: Sie wollen das Sentiment (positive vs.&nbsp;negative Grundhaltung) von Social Media Posts über Ihr Unternehmen automatisch klassifizieren. Dazu gibt es viele vortrainierte Modelle, die teilweise open-source sind und frei verwendet werden können.</li>
+<li>Der <strong>manuelle Arbeitsaufwand</strong> ist sehr gross, wenn das Problem durch Menschen gelöst werden soll. Das Problem ist aber ansonsten <strong>klar strukturiert</strong> und benötigt keinen grossen kognitiven Einsatz eines Menschen. Beispiel: In den Post-Verteilzentren werden die von Hand geschriebenen Postleitzahlen (PLZ) bzw. Adressen problemlos von ML Modellen erkannt und die Briefe und Pakete entsprechend sortiert.</li>
+<li>Komplexe Probleme, in denen ein Mensch keinen Überblick hat, weil so <strong>grosse und komplexe Datenmengen</strong> vorhanden sind. Wir Menschen haben grosse Mühe damit, in Rohdaten (reinen Datentabellen) irgendwelche Muster zu erkennen. In diesem Fall können wir entweder versuchen, die Daten zu visualisieren oder mithilfe von ML Zusammenhänge zu lernen, die wir sonst nicht erkennen könnten.</li>
+</ul>
+<p>Ein illustratives Beispiel für den dritten Fall ist das <strong>Anscombe Quartett</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, das vier kleine Stichproben mit jeweils elf Datenpunkten enthält. Jeder Datenpunkt wird durch eine <span class="math inline">\(x\)</span> und eine <span class="math inline">\(y\)</span> Variable beschrieben. Die vier <span class="math inline">\(x\)</span>- sowie die vier <span class="math inline">\(y\)</span>-Variablen haben identische Mittelwerte:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   x1 x2 x3 x4    y1   y2    y3    y4
+1  10 10 10  8  8.04 9.14  7.46  6.58
+2   8  8  8  8  6.95 8.14  6.77  5.76
+3  13 13 13  8  7.58 8.74 12.74  7.71
+4   9  9  9  8  8.81 8.77  7.11  8.84
+5  11 11 11  8  8.33 9.26  7.81  8.47
+6  14 14 14  8  9.96 8.10  8.84  7.04
+7   6  6  6  8  7.24 6.13  6.08  5.25
+8   4  4  4 19  4.26 3.10  5.39 12.50
+9  12 12 12  8 10.84 9.13  8.15  5.56
+10  7  7  7  8  4.82 7.26  6.42  7.91
+11  5  5  5  8  5.68 4.74  5.73  6.89</code></pre>
+</div>
+</div>
+<p>Selbst in diesem kleinen Datensatz ist es für uns Menschen äusserst schwierig, irgendwelche Muster zu erkennen. Erst eine einfache Visualisierung der vier Stichproben mithilfe eines Streudiagramms zeigt die Muster sowie die Unterschiede zwischen den vier Stichproben deutlich auf:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_intro_files/figure-html/anscombe2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="anwendungsfälle-von-ml" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="anwendungsfälle-von-ml"><span class="header-section-number">1.3</span> Anwendungsfälle von ML</h2>
+<p>In diesem Abschnitt stelle ich erfolgreiche Anwendungsfälle von ML vor. Einige davon treffen Sie womöglich tagtäglich in Ihrem Alltag an:</p>
+<ul>
+<li><strong>Spam Filter</strong> sind ein frühes Beispiel einer erfolgreichen Anwendung von ML. Ein Modell entscheidet dabei automatisch aufgrund der Inhalte einer Email, des Betreffs sowie des Absenders, ob es sich um eine Spam oder eine sogenannte Ham Email (unproblematische Email) handelt. Falls Sie gängige Email Software verwenden, dann arbeitet im Hintergrund ein Spam Filter daran, Sie vor lästigen Emails zu schützen.</li>
+<li>Ein grosser Teil des wirtschaftlichen Erfolgs von <strong>Google</strong> basiert auf der Idee, dass aufgrund der Suchhistorie hervorgesagt werden kann, welche Nutzerin oder welcher Nutzer mit welcher Wahrscheinlichkeit eine bestimmte Werbung anklickt. Dies erlaubt Google für jede Nutzer:in die Werbung mit den höchsten “Erfolgschancen” zu schalten. Da jeder Klick Einnahmen generiert, ist es für das Geschäftsmodell von Google entscheidend, dass möglichst viele Klicks stattfinden.</li>
+<li>Ein grosser Bereich des MLs und speziell des DLs befasst sich mit <strong>Computer Vision</strong>. Dabei geht es darum, das Hauptmotiv von Bildern zu klassifizieren (z.B. zeigt ein Bild ein Tier oder einen Menschen?), Objekte in Bildern zu entdecken (z.B. enthält das Bild eine Person?) und das entdeckte Objekt dann auch zu klassifizieren (z.B. handelt es sich bei der Person um XY?). Als konkreteres Beispiel können Sie sich einen Industriebetrieb vorstellen, welcher ein Computer Vision Modell einsetzen möchte, um den Abnützungsgrad der von ihnen produzierten Werkzeuge automatisch zu erkennen und den Kundinnen und Kunden den optimalen Ersatzzeitpunkt für das Werkzeug vorhersagen zu können.</li>
+<li>Ähnlich wie im vorherigen Beispiel gibt es bereits viele Anwendungen im öffentlichen Verkehr, in denen es um <strong>Predictive Maintenance</strong> geht. Z.B. kann der optimale Wartungszeitpunkt für eine Weiche oder einen Gleisabschnitt aufgrund einer Vielzahl an Indikatoren und Messungen vorhergesagt werden.</li>
+<li>Ein grosses Einsatzgebiet für ML ergibt sich im Finanzsektor durch das automatische Erkennen von potentiell <strong>betrügerischen Transaktionen</strong>. Falls Sie auch schon mal eine Kreditkartentransaktion direkt am Telefon einer Kundenberaterin oder einem Kundenberater bestätigen mussten, dann ist es wahrscheinlich, dass Ihre Transaktion von einem ML System zur manuellen Überprüfung geflaggt wurde. In diesem Zusammenhang spricht man manchmal auch vom Erkennen von Anomalien (engl. <em>Anomaly Detection</em>).</li>
+<li>Sogenannte <strong>Recommender Systems</strong> sind insbesondere in Online Verkaufspunkten von grossem Nutzen. Betreiben Sie beispielsweise einen grossen Onlinehandel, dann wollen Sie Ihren Kundinnen und Kunden Produkte zum Kauf vorschlagen. Dazu verwenden Sie ein Modell, das basierend auf der Ähnlichkeit zwischen Kundinnen und Kunden potentiell interessante Produkte vorschlägt.</li>
+<li>Die rasanten Entwicklungen im Bereich <strong>Natural Language Processing</strong> (NLP) in den letzten 10 Jahren haben viele neue und interessante Anwendungsgebiete zutage gefördert. Zum Beispiel eignen sich <em>Large Language Models</em> (LLMs) als erste Anlaufstelle für Kundinnen und Kunden (automatisierter Kundenservice). LLMs werden vermutlich aber auch immer mehr in internen Prozessen in Unternehmen eingesetzt, z.B. um komplexe Dokumente zusammenzufassen oder Sitzungsprotokolle zu erstellen.</li>
+</ul>
+<p>Die obige Liste ist bei weitem nicht komplett und die Entwicklungen im Bereich ML sind aktuell so rasant, dass jeden Tag eine grosse Zahl von neuen ML-basierten Produkten und Dienstleistungen auf den Markt kommen.</p>
+</section>
+<section id="supervised-vs.-unsupervised-learning" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="supervised-vs.-unsupervised-learning"><span class="header-section-number">1.4</span> Supervised vs.&nbsp;Unsupervised Learning</h2>
+<p>Den Unterschied zwischen dem Supervised Learning und dem Unsupervised Learning können wir am besten erklären, indem wir uns mit ein paar mathematischen Grundlagen des Machine Learnings befassen. Keine Sorge, diese Grundlagen sind sehr einfach, aber versuchen Sie, diese bereits gut zu verstehen, denn wir bauen später darauf auf.</p>
+<p>Im <strong>Supervised Learning</strong> haben wir einerseits sogenannte Input-Daten und andererseits einen Output, den wir vorhersagen wollen. Für die Input-Daten gibt es ganz viele verschiedene Begriffe, die synonym verwendet werden: z.B. Features, unabhängige Variablen, Attribute, Prädiktoren. Dasselbe gilt für den Output, hier gibt es folgende Synonyme: Zielvariable, abhängige Variable, Label, oder auch einfach <span class="math inline">\(y\)</span>. Unsere Konvention hier ist aber folgende: es gibt <strong>Input-Daten</strong> (oder Input-Variablen) und einen <strong>Output</strong> (oder Output-Variable). Im <strong>Unsupervised Learning</strong> haben wir lediglich Input-Daten und keinen Output, doch dazu später etwas mehr. Wir formalisieren erstmal die Konzepte Input-Daten und Output.</p>
+<section id="input-daten" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="input-daten"><span class="header-section-number">1.4.1</span> Input-Daten</h3>
+<p>Die Input-Daten für eine Beobachtung <span class="math inline">\(i\)</span> schreiben wir mathematisch wie folgt:</p>
+<p><span class="math display">\[
+\mathbf{x}_i=\begin{pmatrix} x_{i1} \\ x_{i2} \\ \vdots \\ x_{ip} \end{pmatrix},
+\]</span> Diese Notation bedarf ein paar Erklärungen:</p>
+<ul>
+<li>Den Index <span class="math inline">\(i\)</span> brauchen wir, um die verschiedenen Beobachtungen zu kennzeichnen. <span class="math inline">\(i\)</span> kann eine Ganzzahl zwischen <span class="math inline">\(1\)</span> und <span class="math inline">\(n\)</span> annehmen, wobei <span class="math inline">\(n\)</span> die Anzahl Beobachtungen im Datensatz bezeichnet. Wenn wir zum Beispiel etwas über die Input-Daten der dritten Beobachtung sagen wollen, dann können wir die Notation <span class="math inline">\(\mathbf{x}_3\)</span> verwenden.</li>
+<li>Für jede Beobachtung <span class="math inline">\(i\)</span> haben wir insgesamt <span class="math inline">\(p\)</span> Variablen, welche die verschiedenen Attribute einer Beobachtung enthalten. <span class="math inline">\(x_{i1}\)</span> bezeichnet also die erste Variable der i-ten Beobachtung, <span class="math inline">\(x_{i2}\)</span> die zweite Variable der i-ten Beobachtung und <span class="math inline">\(x_{ip}\)</span> die p-te (letzte) Variable der i-ten Beobachtung.</li>
+<li>Was Sie oben sehen, ist <span class="math inline">\(\mathbf{x}_i\)</span> aus mathematischer Sicht ein Spaltenvektor. Mit diesem Spaltenvektor können wir die Input-Daten einer Beobachtung <em>kompakt</em> darstellen können.</li>
+</ul>
+<p><span class="math inline">\(\mathbf{x}_i\)</span> bezeichnet nur die beobachteten Input-Variablenwerte für die i-te Beobachtung. Wenn wir die beobachteten Input-Variablenwerte aller <span class="math inline">\(n\)</span> Beobachtungen kompakt darstellen möchten, dann können wir das mit einer Matrix tun. Dazu müssen wir die Input-Variablen für jede Beobachtung <span class="math inline">\(i\)</span> <strong>zeilenweise</strong> in einer Matrix anordnen:</p>
+<p><span class="math display">\[
+\mathbf{X} = \begin{pmatrix}
+x_{11} &amp; x_{12} &amp; \cdots &amp; x_{1p}\\
+x_{21} &amp; x_{22} &amp; \cdots &amp; x_{2p}\\
+\vdots &amp; \cdots &amp; \ddots &amp; \vdots\\
+x_{n1} &amp; x_{n2} &amp; \cdots &amp; x_{np}\\
+\end{pmatrix}
+\]</span></p>
+<p>Die erste Zeile enthält die Input-Variablen für die erste Beobachtung, die zweite Zeile die Input-Variablen für die zweite Beobachtung, usw.</p>
+</section>
+<section id="output" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="output"><span class="header-section-number">1.4.2</span> Output</h3>
+<p>Neben den Input-Daten haben wir im Supervised Learning aber wie erwähnt auch einen Output und den bezeichnen wir üblicherweise mit <span class="math inline">\(y_i\)</span>. Auch hier hilft uns der Index <span class="math inline">\(i\)</span> dabei, die Beobachtungen eindeutig zu kennzeichnen. In den meisten Fällen ist <span class="math inline">\(y_i\)</span> ein sogenannter <strong>Skalar</strong>, also einfach eine Zahl. Darum schreiben wir es nicht in fetter Schrift wie oben, denn diese ist meist für Vektoren oder Matrizen reserviert.</p>
+<p>Auch hier können wir die Outputwerte aller <span class="math inline">\(n\)</span> Beobachtungen kompakt zusammenfassen und zwar als Vektor</p>
+<p><span class="math display">\[
+\mathbf{y}=\begin{pmatrix} y_{1} \\ y_{2} \\ \vdots \\ y_{n} \end{pmatrix}.
+\]</span></p>
+<section id="frage" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
+<p>Stellen Sie sich vor, wir versuchen mithilfe eines Datensatzes von 5000 getätigten Kreditkartentransaktionen ein Modell zu trainieren, das vorhersagen kann, ob es sich bei einer gegebenen Transaktion um eine betrügerische Transaktion handelt oder nicht. Jede Transaktion in Ihrem Datensatz entspricht einer Beobachtung <span class="math inline">\(i\)</span>. Der Output <span class="math inline">\(y_i\)</span> in diesem Beispiel ist eine kategorische Variable, die wir als <span class="math inline">\(y_i \in \{0,\;1\}\)</span> beschreiben können, wobei 0 keinen Betrug und 1 Betrug bezeichnet. Ausserdem haben Sie folgende Input-Daten:</p>
+<p><span class="math display">\[
+\mathbf{x}_i=\begin{pmatrix}
+\text{Transaktionsbetrag} \\
+\text{Land des Zahlungsempfaengers} \\
+\text{Zeitstempel der Transaktion}
+\end{pmatrix}
+\]</span> Welche Werte nehmen in diesem Beispiel <span class="math inline">\(n\)</span> und <span class="math inline">\(p\)</span> an?</p>
+<ol type="a">
+<li><span class="math inline">\(n = 100,\ p = 3\)</span></li>
+<li><span class="math inline">\(n = 5000,\ p = 3\)</span></li>
+<li><span class="math inline">\(n = 3,\ p = 5000\)</span><br>
+</li>
+<li><span class="math inline">\(n = 100,\ p = 4\)</span></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die richtige Antwort ist <strong>b</strong>.</p>
+<p>Wir haben <span class="math inline">\(n = 5000\)</span> Beobachtungen und <span class="math inline">\(p = 3\)</span> Variablen.</p>
+</div>
+</div>
+</div>
+<p>Die <span class="math inline">\(n\)</span> Beobachtungen, die für das Training eines Modells zur Verfügung stehen werden meist <strong>Trainingsdaten</strong> oder <strong>Trainingset</strong> genannt.</p>
+</section>
+</section>
+<section id="taxonomie-des-machine-learnings" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="taxonomie-des-machine-learnings"><span class="header-section-number">1.4.3</span> Taxonomie des Machine Learnings</h3>
+<p>Beim <strong>Supervised Learning</strong> geht es um ML Probleme, in denen <strong>sowohl Input-Daten als auch ein Output</strong> vorhanden ist. Ziel beim Supervised Learning ist es, ein Modell zu trainieren, das basierend auf den Input-Daten möglichst gute Vorhersagen für den Output macht. Es geht also hier um Vorhersageprobleme. In einem gewissen Sinn ist der Output die überwachende Instanz (engl. <em>Supervisor</em>), welche den Lernprozess des Modells kontrolliert.</p>
+<p>Etwas formaler und mit einem probabilistischen Hut auf kann man Supervised Learning auch wie folgt beschreiben: wir nehmen an, dass die vorliegenden Daten <span class="math inline">\((\mathbf{X},\,\mathbf{y})\)</span> gezogen wurden aus einer wahren, aber unbekannten Verteilung, die wir als <span class="math inline">\(P(\mathbf{X},\,\mathbf{y})\)</span> beschreiben. Im Supervised Learning geht es nun darum diese gemeinsame Verteilung <span class="math inline">\(P(\mathbf{X},\,\mathbf{y})\)</span> mithilfe der vorliegenden Daten möglichst gut zu schätzen. Wählen wir ein Modell, das diese gemeinsame Wahrscheinlichkeit direkt modelliert, dann sprechen wir von einem <strong>generativen</strong> Modell. Oft versucht man sich jedoch das Leben einfacher zu machen, indem man <span class="math inline">\(P(\mathbf{y}\mid\mathbf{X})\)</span> modelliert. In diesem Fall spricht man von <strong>diskriminativen</strong> Modellen. Wir werden in späteren Kapiteln auf diese Unterscheidung zurückkommen. Wichtig: fast jedes Modell macht irgendwelche <strong>vereinfachenden Annahmen</strong>, um entweder ein generatives oder ein diskriminatives Modell zu rechnen.</p>
+<section id="frage-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-1">Frage</h4>
+<p>Was passiert, wenn <span class="math inline">\(\mathbf{X}\)</span> und <span class="math inline">\(\mathbf{y}\)</span> (statistisch) unabhängig sind? Macht es Sinn, in diesem Fall ein Modell aus dem Supervised Learning zu lernen?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wenn <span class="math inline">\(\mathbf{X}\)</span> und <span class="math inline">\(\mathbf{y}\)</span> (statistisch) unabhängig sind, dann kann die gemeinsame Wahrscheinlichkeit (Verteilung) geschrieben werden als <span class="math inline">\(P(\mathbf{X},\,\mathbf{y}) = P(\mathbf{X}) \cdot P(\mathbf{y})\)</span>.</p>
+<p>Die bedingte Wahrscheinlichkeit <span class="math inline">\(P(\mathbf{y}\mid\mathbf{X})\)</span> ist in diesem Fall: <span class="math display">\[
+P(\mathbf{y}\mid\mathbf{X}) = \frac{P(\mathbf{X},\,\mathbf{y})}{P(\mathbf{X})} = \frac{P(\mathbf{X}) \cdot P(\mathbf{y})}{P(\mathbf{X})} = P(\mathbf{y})
+\]</span></p>
+<p>Das bedeutet, dass wir aus <span class="math inline">\(\mathbf{X}\)</span> nichts über <span class="math inline">\(\mathbf{y}\)</span> lernen können und Supervised Learning in diesem Fall keinen Sinn macht.</p>
+</div>
+</div>
+</div>
+<p>Im Gegensatz zum Supervised Learning haben wir im <strong>Unsupervised Learning</strong> nur Input-Daten und <em>keinen Output</em>. Im Unsupervised Learning geht es darum, aus den Input-Daten interessante Muster zu lernen, welche für bessere unternehmerische Entscheidungen verwendet werden können. Ein einfaches Beispiel ist das Clustering von Kundinnen und Kunden eines Unternehmens in ähnliche Kundengruppen, so dass die verschiedenen Kundengruppen gezielter mit Marketingaktionen angesprochen werden können. Techniken, um komplexe Datensätze zu visualisieren, werden typischerweise auch zum Unsupervised Learning gezählt. Im Unsupervised Learning geht es darum, Modelle für <span class="math inline">\(P(\mathbf{X})\)</span> zu finden und zu rechnen.</p>
+<p>Etwas vereinfacht gesagt, sind ein grosser Teil der Modelle, die wir der <strong>Generativen KI</strong> zusprechen, nichts anderes als Modelle, die <span class="math inline">\(P(\mathbf{X})\)</span> so gut wie möglich zu beschreiben versuchen. <span class="math inline">\(\mathbf{X}\)</span> kann man sich als grosse Menge Text oder eine grosse Anzahl von Bildern vorstellen. Wenn wir nun also Text von einem LLM generieren lassen, dann ist das im Grunde nichts anderes als aus der gelernten Verteilung, die <span class="math inline">\(P(\mathbf{X})\)</span> approximiert, zu <strong>samplen</strong>.</p>
+<p>Neben dem Supervised und dem Unsupervised Learning gibt es noch eine dritte Kategorie von Machine Learning, nämlich das <strong>Reinforcement Learning</strong> (RL). Dieser Kategorie gehören Modelle an, die (virtuelle) Agenten so trainieren, dass sie langfristig möglichst optimal handeln. Das bisher bekannteste Beispiel aus dem RL ist Googles AlphaGo Agent, welcher den menschlichen Go Weltmeister im Jahr 2017 schlug.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Reinforcement Learning ist aber auch eine wichtige Komponente in der Optimierung von grossen Sprachmodellen wie ChatGPT. In einer ersten Fassung dieses Buchs werden wir uns nicht (oder nur am Rande) mit RL befassen.</p>
+<p>Die Unterscheidung zwischen den drei Arten von Machine Learning ist im oberen Teil der <a href="#fig-slulrl" class="quarto-xref">Abbildung&nbsp;<span>1.1</span></a> visualisiert:</p>
+<div id="fig-slulrl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-slulrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/SL_UL_RL.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slulrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;1.1: Die verschiedenen Kategorien des Machine Learnings und deren Hierarchie.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="regression-vs.-klassifikation" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="regression-vs.-klassifikation"><span class="header-section-number">1.5</span> Regression vs.&nbsp;Klassifikation</h2>
+<p>In der Kategorie des Supervised Learnings unterscheiden wir weiter zwischen Regressions- und Klassifikationsproblemen (siehe auch <a href="#fig-slulrl" class="quarto-xref">Abbildung&nbsp;<span>1.1</span></a>).</p>
+<p>Beim <strong>Regressionsproblem</strong> ist der Output eine <strong>stetige</strong> Variable (Intervall- oder Verhältnisskalierung), d.h. die Variable enthält reelle (numerische) Werte. Mathematisch schreibt man dies als <span class="math inline">\(y_i \in \mathbb{R}\)</span>, wobei <span class="math inline">\(\mathbb{R}\)</span> die Menge der reellen Zahlen beschreibt.</p>
+<p>Beim <strong>Klassifikationsproblem</strong> ist der Output bzw. die Zielvariable eine <strong>kategorische</strong> Variable (Nominal- oder Ordinalskalierung). Mathematisch schreibt man dies als <span class="math inline">\(y_i \in \{1, \dots, C\}\)</span>, wobei <span class="math inline">\(C\)</span> die Anzahl Kategorien beschreibt. Wenn wir nur <span class="math inline">\(C=2\)</span> Kategorien haben wie im Beispiel oben mit <span class="math inline">\(y_i \in \{0, 1\}\)</span>, sprechen wir von einem <strong>binären</strong> Klassifikationsproblem. Falls <span class="math inline">\(C&gt;2\)</span> sprechen wir vom <strong>mehrklassigen</strong> (engl. <em>multiclass</em>) Klassifikationsproblem.</p>
+<section id="frage-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-2">Frage</h4>
+<p>Welche der folgenden Probleme sind Regressionsprobleme?</p>
+<ol type="a">
+<li>Vorhersage des Lohns der/des Leiter:in eines Unternehmens basierend auf Profit, Marktkapitalisation, Anzahl Mitarbeitender, sowie Sektor, in dem das Unternehmen tätig ist.</li>
+<li>Basierend auf der aktuellen Marktlage und weiteren wirtschaftlichen Aspekten wollen Sie den morgigen Preis einer bestimmten Aktie vorhersagen.</li>
+<li>Vorhersage ob eine Person, welche ein bestimmtes Youtube Video schauen will, volljährig ist oder nicht.</li>
+<li>Eine Bank möchte mithilfe von historischen Daten vorhersagen, ob ein bestimmter Kunde zahlungsunfähig wird oder nicht.</li>
+<li>Ein Detailhandelsunternehmen möchte vorhersagen, ob eine Kundin ein Produkt aus der Kategorie A, B, C, oder kein Produkt kauft.</li>
+<li>Vorhersage von Hauspreisen basierend auf Attributen wie der Grösse, Anzahl Zimmer, Seeblick (ja/nein), Steuerlast, etc.</li>
+<li>Ein Unternehmen lanciert ein neues Produkt und schätzt anhand von Konkurrenzprodukten, ob das eigene Produkt ein Erfolg wird oder nicht.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Korrekt sind die Antworten <strong>a</strong>, <strong>b</strong> und <strong>f</strong>.</p>
+<p>Bei allen anderen Antworten handelt es sich um Klassifikationsprobleme.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="parametrische-vs.-nicht-parametrische-modelle" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="parametrische-vs.-nicht-parametrische-modelle"><span class="header-section-number">1.6</span> Parametrische vs.&nbsp;nicht-parametrische Modelle</h2>
+<p>Ein ML Modell gehört entweder der Familie <strong>parametrischer</strong> Modelle oder der Familie <strong>nicht-parametrischer</strong> Modelle an. Dabei spielt es keine Rolle, ob wir mit dem Modell ein Regressions- oder ein Klassifikationsproblem lösen wollen.</p>
+<p>Womöglich sind Sie in Ihrer Ausbildung bereits <strong>parametrischen Modellen</strong> begegnet, denn das einfache lineare Regressionsmodell ist ein typisches Beispiel für ein parametrisches ML Modell. Das Modell ist vollkommen charakterisiert durch die beiden lernbaren Parameter <span class="math inline">\(w_0\)</span> und <span class="math inline">\(w_1\)</span><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> und kann wie folgt (mathematisch) aufgeschrieben werden:</p>
+<p><span class="math display">\[
+\hat{y}_i = f(x_i)=w_0 + w_1 \cdot x_i
+\]</span></p>
+<p>Wenn Ihnen der obige Ausdruck noch fremd vorkommt, dann ist das nicht schlimm. Wir werden im <a href="02_linreg.html" class="quarto-xref"><span>Kapitel 2</span></a> ausführlich auf lineare Regressionsmodelle eingehen. Im Moment müssen Sie nur wissen, dass ein parametrisches Modell wie oben mit einer mathematischen Funktion beschrieben werden kann und dass diese Funktion durch lernbare <strong>Parameter</strong> (hier <span class="math inline">\(w_0\)</span> und <span class="math inline">\(w_1\)</span>) charakterisiert wird.</p>
+<p><strong>Nicht-parametrische Modelle</strong> wiederum sind Modelle, welche nicht (oder zumindest nicht explizit) durch Parameter charakterisiert sind. Am besten schauen wir uns kurz ein einfaches nicht-parametrisches Modell an, nämlich das <strong>K-Nearest-Neighbors</strong> (KNN) Modell. Ein KNN Modell verwendet für die Vorhersage einer neuen Beobachtung die <span class="math inline">\(K\)</span> nächsten bzw. ähnlichsten (Nachbars-)Beobachtungen. Doch wie werden die Vorhersagen gemacht?</p>
+<ul>
+<li>Klassifikationsproblem: die <strong>häufigste</strong> Outputkategorie unter den <span class="math inline">\(K\)</span> Nachbarn ist die Vorhersage für den neuen Datenpunkt.</li>
+<li>Regressionsproblem: der <strong>Mittelwert</strong> der Outputwerte <span class="math inline">\(y_i\)</span> unter den <span class="math inline">\(K\)</span> Nachbarn ist die Vorhersage für den neuen Datenpunkt.</li>
+</ul>
+<p>Das KNN Modell ist ein sehr einfaches ML Modell, welches in der Praxis allerdings nicht allzu häufig angewendet wird. Warum nicht? Weil es am sogenannten <strong>Fluch der Dimensionalität</strong> (engl. <em>Curse of Dimensionality</em>) leidet. Doch was bedeutet das? Je mehr Input-Variablen wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee, dass wir <span class="math inline">\(K\)</span> nahe, ähnliche Beobachtungen für die Vorhersage verwenden. Wenn diese <span class="math inline">\(K\)</span> nahen Beobachtungen im hochdimensionalen Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert auch das Modell nicht mehr gut. Wir werden uns in <a href="03_linclass.html" class="quarto-xref"><span>Kapitel 3</span></a> ausführlicher mit dem KNN Modell und dem Fluch der Dimensionalität befassen.</p>
+</section>
+<section id="perceptron-und-erste-mathematische-konzepte" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="perceptron-und-erste-mathematische-konzepte"><span class="header-section-number">1.7</span> Perceptron und erste mathematische Konzepte</h2>
+<p>Wir versuchen nun hier die Anfänge des MLs auch aus technischer Sicht zu verstehen und zwar schauen wir uns die Funktionsweise von Frank Rosenblatt’s Perceptron an. Der Einfachheit halber schauen wir uns ein Beispiel mit nur zwei Input-Variablen <span class="math inline">\(x_{i1}\)</span> und <span class="math inline">\(x_{i2}\)</span> an. Ausserdem befinden wir uns im binären Klassifikationsfall mit zwei möglichen Kategorien, die als <span class="math inline">\(y_i \in \{-1, 1\}\)</span> kodiert sind (wir werden später sehen, warum wir hier nicht eine 0/1 Kodierung wählen). Dieser Abschnitt ist inspiriert durch <span class="citation" data-cites="Ananthaswamy">(<a href="references.html#ref-Ananthaswamy" role="doc-biblioref">Ananthaswamy 2024, Kap. 2</a>)</span>.</p>
+<section id="datenpunkte-als-vektoren" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" class="anchored" data-anchor-id="datenpunkte-als-vektoren"><span class="header-section-number">1.7.1</span> Datenpunkte als Vektoren</h3>
+<p>Jeder Datenpunkt (bzw. Beobachtung) <span class="math inline">\(\mathbf{x}_i\)</span> kann als <strong>Vektor</strong> im Koordinatensystem dargestellt werden. Da wir uns hier auf zwei Input-Variablen beschränken, kann dieses Koordinatensystem einfach visualisiert werden:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01_intro_files/figure-html/vec1-1.png" class="img-fluid figure-img" style="width:70.0%" alt="Koordinatensystem"></p>
+<figcaption>Koordinatensystem mit zwei Dimensionen und einem Datenpunkt (-4.1, 3.5).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Der Datenpunkt <span class="math inline">\(\mathbf{x}_i = \begin{pmatrix} -4.1 &amp; 3.5 \end{pmatrix}'\)</span><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> ist aus geometrischer Sicht ein Vektor in diesem zweidimensionalen Raum.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Definition eines Vektors
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ein Vektor ist definiert durch zwei Dinge: (i) seine <strong>Richtung</strong> im Koordinatensystem und (ii) seine <strong>Länge</strong>. Ein Vektor muss nicht zwingend am Ursprung des Koordinatensystems (0, 0) beginnen. Das heisst, zwei Vektoren mit identischer Richtung und Länge, aber an unterschiedlichen Orten im Koordinatensystem, gelten als identisch.</p>
+<p>Die Richtung des Vektors ist durch seine Koordinaten bereits definiert.</p>
+<p>Die Länge eines Vektors <span class="math inline">\(\mathbf{x}_i = \begin{pmatrix} x_{i1} &amp; x_{i2} \end{pmatrix}'\)</span> berechnet sich wie folgt:</p>
+<p><span class="math display">\[
+\| \mathbf{x}_i \| = \sqrt{x_{i1}^2 + x_{i2}^2}
+\]</span></p>
+</div>
+</div>
+<section id="frage-3" class="level4">
+<h4 class="anchored" data-anchor-id="frage-3">Frage</h4>
+<p>Welche Länge hat unser Vektor <span class="math inline">\(\mathbf{x}_i = \begin{pmatrix} -4.1 &amp; 3.5 \end{pmatrix}'\)</span> im Beispiel oben?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\| \mathbf{x}_i \| = \sqrt{{-4.1}^2 + {3.5}^2} = 5.39
+\]</span></p>
+</div>
+</div>
+</div>
+<p>Nun kommen wir bereits zu einem der aus meiner Sicht wichtigsten mathematischen Operationen im Machine Learning: das <strong>Skalarprodukt</strong>. Wenn Sie das Skalarprodukt gut verstehen, dann werden viele der Konzepte später massiv einfacher zu verstehen sein.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Skalarprodukt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Das Skalarprodukt zwischen zwei Vektoren kann aus zwei Perspektiven betrachtet werden: einer geometrischen und einer algebraischen. Das Resultat ist aber in beiden Fällen dasselbe, nämlich ein <strong>Skalar</strong> (also irgendeine reelle Zahl).</p>
+<p>In der <strong>geometrischen</strong> Perspektive entspricht das Skalarprodukt zwischen zwei Vektoren <span class="math inline">\(\mathbf{a}\)</span> und <span class="math inline">\(\mathbf{b}\)</span> dem Produkt der Länge von <span class="math inline">\(\mathbf{a}\)</span> sowie der Länge der orthogonalen Projektion von <span class="math inline">\(\mathbf{b}\)</span> auf <span class="math inline">\(\mathbf{a}\)</span>. Wir können das selbstverständlich als Formel aufschreiben. Weil wir das ganze aus einer geometrischen Perspektive betrachten, verwenden wir die geomtrische Schreibweise von Vektoren (mit Pfeilen oberhalb der Variablennamen):</p>
+<p><span class="math display">\[
+\vec{a} \cdot \vec{b} = \| \vec{a} \| \; \| \vec{b} \| \cos(\varphi)
+\]</span> Wir multiplizieren also die Länge von <span class="math inline">\(\mathbf{a}\)</span> (also <span class="math inline">\(\| \vec{a} \|\)</span>) mit der Länge der orthogonalen Projektion von <span class="math inline">\(\mathbf{b}\)</span> auf <span class="math inline">\(\mathbf{a}\)</span> (definiert durch <span class="math inline">\(\| \vec{b} \| \cos(\varphi)\)</span>). Der Winkel <span class="math inline">\(\varphi\)</span> ist der Winkel zwischen den beiden Vektoren.</p>
+<p>Folgendes Beispiel hilft das ganze zu veranschaulichen. Die Projektion des roten Vektors <span class="math inline">\(\vec{b}\)</span> auf den blauen Vektor <span class="math inline">\(\vec{a}\)</span> ist dargestellt durch die gestrichelte Linie, die vom roten Vektor senkrecht auf den blauen trifft. Der Winkel zwischen den beiden Vektoren beträgt 40.6 Grad.</p>
+<div id="fig-skalarprodukt" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-skalarprodukt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/skalarprodukt.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-skalarprodukt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;1.2: Skalarprodukt aus geometrischer Sicht.
+</figcaption>
+</figure>
+</div>
+<p>Mit obiger Formel können wir nun problemlos das Skalarprodukt zwischen den beiden Vektoren berechnen:</p>
+<p><span class="math display">\[
+\vec{a} \cdot \vec{b} = \sqrt{{3}^2 + {1}^2} \cdot  \sqrt{{3}^2 + {5}^2} \cdot \cos(40.6) = \sqrt{10} \cdot \sqrt{34} \cdot 0.76 = 14
+\]</span></p>
+<p>Doch was genau misst eigentlich das Skalarprodukt? Es misst, wie stark ein Vektor in die Richtung des anderen Vektors zeigt.</p>
+<p>Es gibt weitere wichtige Eigenschaften des Skalarprodukts:</p>
+<ul>
+<li>Zeigen die beiden Vektoren in die gleiche Richtung ist der Winkel zwischen den Vektoren 0 Grad und <span class="math inline">\(\cos(0)=1\)</span>. In diesem Fall reduziert sich das Skalarprodukt auf das Produkt der beiden Längen.</li>
+<li>Stehen die Vektoren in einem rechten Winkel zueinander, dann ist <span class="math inline">\(\cos(90)=0\)</span> und das Skalarprodukt wird immer 0 sein. Diese Eigenschaft müssen Sie sich unbedingt merken, denn sie taucht überall im ML immer wieder auf!</li>
+<li>Das Skalarprodukt ist symmetrisch. Es spiel also keine Rolle, ob wir das Skalarprodukt zwischen <span class="math inline">\(\vec{a}\)</span> und <span class="math inline">\(\vec{b}\)</span> oder das Skalarprodukt zwischen <span class="math inline">\(\vec{b}\)</span> und <span class="math inline">\(\vec{a}\)</span> rechnen. Das Resultat wird dasselbe sein.</li>
+</ul>
+<p>Aus der <strong>algebraischen</strong> Perspektive ist die Berechnung zum Glück noch einfacher. Wir berechnen das Skalarprodukt hier einfach als Summe über die elementweisen Multiplikationen der Koordinaten:</p>
+<p><span class="math display">\[
+\vec{a} \cdot \vec{b} = a_1\,b_1 + a_2\,b_2 = 3 \cdot 3 + 1 \cdot 5 = 14
+\]</span></p>
+<p>Im Machine Learning ist es üblich, das Skalarprodukt als Produkt des <strong>transponierten</strong> Vektors <span class="math inline">\(\mathbf{a}\)</span> und des Vektors <span class="math inline">\(\mathbf{b}\)</span> zu schreiben, also:</p>
+<p><span class="math display">\[
+\mathbf{a}'\, \mathbf{b} = \begin{pmatrix} 3 &amp; 1 \end{pmatrix} \begin{pmatrix} 3 \\ 5 \end{pmatrix} = 3 \cdot 3 + 1 \cdot 5 = 14
+\]</span></p>
+</div>
+</div>
+</div>
+<p>Nun sind wir bereit, uns das Perceptron erst aus mathematischer und dann aus geometrischer Sicht anzuschauen.</p>
+</section>
+</section>
+<section id="das-perceptron-mathematische-sicht" class="level3" data-number="1.7.2">
+<h3 data-number="1.7.2" class="anchored" data-anchor-id="das-perceptron-mathematische-sicht"><span class="header-section-number">1.7.2</span> Das Perceptron (mathematische Sicht)</h3>
+<p>Das Perceptron ist ein parametrisches Modell und wird in unserem Beispiel mit zwei Input-Variablen durch drei Parameter (oder Gewichte) <span class="math inline">\(w_0\)</span>, <span class="math inline">\(w_1\)</span> und <span class="math inline">\(w_2\)</span> charakterisiert.</p>
+<p>In einem <strong>ersten Schritt</strong> werden diese drei Gewichte verwendet, um eine <strong>gewichtete Summe</strong> der Input-Variablenwerte zu rechnen:</p>
+<p><span class="math display">\[
+w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2}
+\]</span></p>
+<p>Vielleicht erkennen Sie bereits, dass diese gewichtete Summe dem Skalarprodukt ähnelt. Mit einem kleinen Trick können wir diese gewichtete Summe tatsächlich als Skalarprodukt ausdrücken, nämlich indem wir dem Input-Datenvektor <span class="math inline">\(\mathbf{x}_i\)</span> noch eine 1 voranhängen:</p>
+<p><span class="math display">\[
+\mathbf{w}'\,\mathbf{x}_i = \begin{pmatrix} w_0 &amp; w_1 &amp; w_2 \end{pmatrix} \begin{pmatrix} 1 \\ x_{i1} \\ x_{i2} \end{pmatrix} = w_0 \cdot 1 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2}
+\]</span></p>
+<p>In einem <strong>zweiten Schritt</strong> wird der Wert der gewichteten Summe verglichen mit dem Schwellenwert 0, um zu entscheiden, ob der Output <span class="math inline">\(\hat{y}_i\)</span> des Perceptrons -1 oder +1 ist. Man nennt dies eine sogenannte <strong>Step-Funktion</strong>, die folgendermassen geschrieben werden kann:</p>
+<p><span class="math display">\[
+\hat{y}_i = \begin{cases}
+            -1, &amp; \mathbf{w}'\,\mathbf{x}_i &lt; 0\\
+      +1, &amp; \mathbf{w}'\,\mathbf{x}_i \geq 0
+        \end{cases}
+\]</span></p>
+<p>Wir können diese zwei Schritte auch grafisch darstellen. Das Summenzeichen im grünen Kreis in <a href="#fig-perceptron" class="quarto-xref">Abbildung&nbsp;<span>1.3</span></a> soll den ersten Schritt, die Berechnung der gewichteten Summe der Input-Variablenwerte, darstellen. Das Zeichen rechts davon stellt die Step-Funktion dar, etwas, das wir später als sogenannte <strong>Aktivierung</strong> verallgemeinern werden.</p>
+<div id="fig-perceptron" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-perceptron-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/perceptron.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-perceptron-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;1.3: Ein Perceptron mit einer Einheit.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="das-perceptron-geometrische-sicht" class="level3" data-number="1.7.3">
+<h3 data-number="1.7.3" class="anchored" data-anchor-id="das-perceptron-geometrische-sicht"><span class="header-section-number">1.7.3</span> Das Perceptron (geometrische Sicht)</h3>
+<p>Aus geometrischer Sicht kann man sich das Perceptron mit zwei Input-Variablen als Gerade im Koordinatensystem vorstellen, welche die Beobachtungen der einen Kategorie von den Beobachtungen der anderen Kategorie trennt.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p>Für jeden Datenpunkt, der genau auf dieser trennenden Geraden liegt, muss gelten, dass <span class="math inline">\(\mathbf{w}'\,\mathbf{x}_i = 0\)</span>. Aus der Einführung zum Skalarprodukt wissen wir, dass wenn das Skalarprodukt 0 ist die Vektoren in einem rechten Winkel zueinander stehen, oder in anderen Worten, orthogonal sind.</p>
+<p>Wir sehen in untenstehender Abbildung, dass dies tatsächlich so ist. Die Gerade (in Grün) trennt die 5 Datenpunkte perfekt auf in die zwei Kategorien (blaue Kreise und rote Dreiecke). Der Gewichtsvektor (definiert durch die Gewichte <span class="math inline">\(w_1\)</span> und <span class="math inline">\(w_2\)</span>) steht in einem <strong>rechten Winkel</strong> zur Geraden. Der Gewichtsvektor charakterisiert also indirekt die Gerade (oder allgemeiner: die Hyperebene), weil diese Orthogonalität immer gegeben ist.</p>
+<p>Doch was ist der Zweck des Gewichts <span class="math inline">\(w_0\)</span>? Dieser Parameter stellt sicher, dass die Gerade nicht durch den Nullpunkt (0, 0) gehen muss. <span class="math inline">\(w_0\)</span> erlaubt dem Perceptron also mehr Flexibilität. Man spricht bei <span class="math inline">\(w_0\)</span> in der Fachsprache häufig vom <strong>Bias Term</strong>. Sie sehen anhand der Grafik, dass eine Gerade, die durch den Nullpunkt gehen muss, die zwei Kategorien nicht voneinander trennen könnte.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01_intro_files/figure-html/percep-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Perceptron"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="frage-4" class="level4">
+<h4 class="anchored" data-anchor-id="frage-4">Frage</h4>
+<p>Wie können wir aus der Gleichung <span class="math inline">\(w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} = 0\)</span> die Steigung der Geraden und den Punkt, wo die Gerade die y-Achse schneidet, berechnen?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wir können die Gleichung nach den Regeln der Algebra umformen, so dass wir auf der linken Seite der Gleichung nur noch <span class="math inline">\(x_2\)</span> haben:</p>
+<p><span class="math display">\[
+\begin{align}
+w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} &amp;= 0 \\
+w_2 \cdot x_{i2} &amp;= - w_0 - w_1 \cdot x_{i1} \\
+x_{i2} &amp;= - \frac{w_0}{w_2} - \frac{w_1}{w_2} \cdot x_{i1}
+\end{align}
+\]</span></p>
+<p>Daran erkennen wir, dass die Gerade eine Steigung von <span class="math inline">\(- \frac{w_1}{w_2}\)</span> und eine Konstante von <span class="math inline">\(- \frac{w_0}{w_2}\)</span> hat. In unserem Beispiel wäre die Steigung -0.49 und die Konstante 1.14.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wie-lernt-das-perceptron" class="level3" data-number="1.7.4">
+<h3 data-number="1.7.4" class="anchored" data-anchor-id="wie-lernt-das-perceptron"><span class="header-section-number">1.7.4</span> Wie lernt das Perceptron?</h3>
+<p>Im vorherigen Abschnitt waren die optimalen Gewichte gegeben, doch das eigentlich Erstaunliche am Perceptron ist der von Rosenblatt vorgeschlagene <strong>Perceptron Learning Algorithm</strong>, welcher nach einer gewissen Anzahl Iterationen Werte für die Gewichte findet, so dass die beiden Kategorien perfekt voneinander getrennt werden.</p>
+<p>Doch wie funktioniert dieser Algorithmus? Er ist enorm simpel und verfährt in drei Schritten:</p>
+<ol type="1">
+<li>Die Gewichte werden mit 0 initialisiert also <span class="math inline">\(\mathbf{w}=0\)</span>.</li>
+<li>Nun iterieren wir. Jede Iteration geht durch die Datenpunkte und berechnet <span class="math inline">\(y_i\,\mathbf{w}'\,\mathbf{x}_i\)</span>. Falls <span class="math inline">\(y_i\,\mathbf{w}'\,\mathbf{x}_i \leq 0\)</span>, werden die Gewichte angepasst und zwar wie folgt: <span class="math display">\[
+\mathbf{w} := \mathbf{w} + y_i\,\mathbf{x}_i
+\]</span></li>
+<li>Wenn in Schritt 2 der Gewichtsvektor für keinen Datenpunkt angepasst werden musste, dann sind wir fertig und beenden die Iteration.</li>
+</ol>
+<p>Doch wie funktioniert Schritt 2? Wenn die Berechnung <span class="math inline">\(\mathbf{w}'\,\mathbf{x}_i\)</span> einen negativen Wert ergibt und <span class="math inline">\(y_i = -1\)</span>, dann sind die Gewichte für den Datenpunkt <span class="math inline">\(i\)</span> gut und müssen nicht aktualisiert werden. Dasselbe gilt, wenn sowohl <span class="math inline">\(\mathbf{w}'\,\mathbf{x}_i\)</span> und <span class="math inline">\(y_i\)</span> positiv sind.</p>
+<p>Wenn <span class="math inline">\(\mathbf{w}'\,\mathbf{x}_i\)</span> und <span class="math inline">\(y_i\)</span> jedoch <strong>unterschiedliche Vorzeichen</strong> haben, dann bedeutet dies, dass eine falsche Klassifikation vorliegt. Der Datenpunkt liegt auf der falschen Seite der Geraden. Im Panel oben links in untenstehender Abbildung ist das für das rote Dreieck, das oberhalb der Geraden liegt der Fall. In der Iteration 2 machen wir für diesen Datenpunkt folgende Anpassung:</p>
+<p><span class="math display">\[
+\mathbf{w} := \begin{pmatrix} 0 \\ 2.1 \\ -2.5 \end{pmatrix} + 1\,\begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 \\ 0.1 \\ -1.5 \end{pmatrix}
+\]</span></p>
+<p>Im Panel oben rechts (Resultat nach Iteration 2) sehen wir mit dieser Operation die Gerade so verschieben, dass der falsch klassifizierte Datenpunkt etwas näher an der korrekten Seite der Gerade liegt. Der Algorithmus lernt also von Fehlern und tastet sich iterativ an das Optimum heran - eine Idee, die wir in späteren Kapiteln häufig antreffen werden.</p>
+<p>Im Panel rechts unten sehen wir, dass der Algorithmus nach 10 Iterationen die Datenpunkte bereits korrekt klassifiziert. Wow!</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01_intro_files/figure-html/percep-learn-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="Perceptron am lernen"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="das-xor-problem" class="level3" data-number="1.7.5">
+<h3 data-number="1.7.5" class="anchored" data-anchor-id="das-xor-problem"><span class="header-section-number">1.7.5</span> Das XOR Problem</h3>
+<p>Als das Perceptron und der Lernalgorithmus in den 50er und 60er Jahre bekannt wurde, herrschte eine regelrechte Euphorie. Man hatte ein Modell und einen Lernalgorithmus gefunden, die aus Datenpunkten korrekte Klassifizierungsregeln <strong>selbständig</strong> lernen konnten, und zwar nicht nur in zwei Dimensionen, wo man das korrekte Resultat von Auge sieht, sondern auch in hochdimensionalen Räumen, wo die Aufgabe viel schwieriger ist.</p>
+<p>Doch bald legte sich die Euphorie und der erste “KI-Winter”<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> trat ein: das Interesse an KI verschwand und auch der Wille weitere Forschung zu finanzieren war massiv kleiner. Doch warum? Weil man bald merkte, dass das Perceptron nur für <strong>linear separierbare</strong> Probleme funktioniert. Auf unser Beispiel übertragen heisst das, nur wenn wir die Datenpunkte mit einer Geraden in die zwei Kategorien aufteilen können.</p>
+<p>Um das Problem zu veranschaulichen, wird oft auf das <strong>Exclusive OR</strong> (XOR) Problem zurück gegriffen. Im XOR Problem haben wir zwei Input-Variablen <span class="math inline">\(x_{i1}\)</span> und <span class="math inline">\(x_{i2}\)</span>, welche beide nur die Werte 0 oder 1 annehmen können. Der Output für eine Beobachtung folgt einer exklusiven ODER Logik, welche von den Input-Variablenwerte abhängt. Folgende vier Fälle sind möglich:</p>
+<ul>
+<li>Falls <span class="math inline">\(x_{i1}=0\)</span> und <span class="math inline">\(x_{i2}=0\)</span>, dann ist <span class="math inline">\(y_i=-1\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=1\)</span> und <span class="math inline">\(x_{i2}=1\)</span>, dann ist <span class="math inline">\(y_i=-1\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=1\)</span> und <span class="math inline">\(x_{i2}=0\)</span>, dann ist <span class="math inline">\(y_i=+1\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=0\)</span> und <span class="math inline">\(x_{i2}=1\)</span>, dann ist <span class="math inline">\(y_i=+1\)</span>.</li>
+</ul>
+<p>Eine Beobachtung <span class="math inline">\(i\)</span> hat also nur dann einen Outputwert von +1, wenn <strong>eine</strong> der Input-Variablen den Wert 1 annimmt. In der nicht-exklusiven ODER Logik würden auch <span class="math inline">\(x_{i1}=1\)</span> und <span class="math inline">\(x_{i2}=1\)</span> zu einem Outputwert von +1 führen.</p>
+<p>Grafisch kann das XOR Problem durch folgende vier Datenpunkte visualisiert werden:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01_intro_files/figure-html/xor-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%" alt="XOR Problem"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Ich hoffe Sie sehen, dass hier keine Gerade gezeichnet werden kann, welche die zwei Kategorien korrekt voneinander trennt. Ironischerweise wäre die Lösung für dieses Problem nicht schwierig gewesen: man musste einfach mindestens zwei Perceptron-Einheiten nacheinander anordnen und das Problem wäre lösbar gewesen. Aber um darauf zu kommen und die mathematischen Grundlagen zu schaffen, brauchte es erst ein paar Jahrzehnte mehr Forschung von Leuten, die sich von der Enttäuschung nicht aufhalten liessen. Wir werden im zweiten Teil dieses Buchs auf das Perceptron und das XOR Problem zurückkommen.</p>
+<!-- Uebungsblatt: -->
+<!-- - Perceptron für Iris Daten -->
+<!-- - Skalarprodukte üben -->
+<!-- TODO für mich: -->
+<!-- - Convergence Proof einfügen-->
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-Ananthaswamy" class="csl-entry" role="listitem">
+Ananthaswamy, Anil. 2024. <em>Why Machines Learn: The Elegant Math Behind Modern AI</em>. Dutton.
+</div>
+<div id="ref-Geron" class="csl-entry" role="listitem">
+Géron, Aurélien. 2022. <em>Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems</em>. 3. Aufl. O’Reilly.
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>https://home.dartmouth.edu/about/artificial-intelligence-ai-coined-dartmouth<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>https://en.wikipedia.org/wiki/Frank_Rosenblatt<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>https://www.image-net.org/<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>https://de.wikipedia.org/wiki/Anscombe-Quartett<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>https://deepmind.google/technologies/alphago/<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>In Statistikvorlesungen werden die beiden Parameter oft eher mit <span class="math inline">\(b_0\)</span> und <span class="math inline">\(b_1\)</span> oder mit <span class="math inline">\(\beta_0\)</span> und <span class="math inline">\(\beta_1\)</span> bezeichnet. Im Machine Learning nennt man Parameter oft Gewichte (engl. <em>Weights</em>), weshalb die Parameter typischerweise mit <span class="math inline">\(w\)</span> bezeichnet werden.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Da ein Spaltenvektor im Text nicht gut geschrieben werden kann, schreiben wir <span class="math inline">\(\mathbf{x}_i\)</span> als transponierten Zeilenvektor, was wiederum dem Spaltenvektor entspricht<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>In höherdimensionalen Räumen sind es anstelle von Geraden sogenannte Hyperebenen.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>https://en.wikipedia.org/wiki/AI_winter<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopiert");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopiert");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Über das Buch">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Über das Buch</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./classical.html" class="pagination-link" aria-label="Klassisches Machine Learning">
+        <span class="nav-page-text">Klassisches Machine Learning</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2026, Martin Sterchi</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.martinsterchi.ch">
+<p>https://www.martinsterchi.ch</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
