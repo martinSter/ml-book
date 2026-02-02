@@ -1,0 +1,76 @@
+# Lineare Klassifikation {#sec-linclass}
+
+## Logistische Regression
+
+Coming soon.
+
+## Naive Bayes
+
+Coming soon.
+
+## K-Nearest Neighbors
+
+<!-- Curse of Dimensionality -->
+
+<!-- Optimal Bayes Classifier -->
+
+<!-- Ch. 5 in Anil's Book -->
+
+**Nicht-parametrische Modelle** wiederum sind Modelle, welche nicht (oder zumindest nicht explizit) durch Parameter charakterisiert sind. Am besten schauen wir uns gleich ein einfaches nicht-parametrisches Modell an, nämlich das **K-Nearest-Neighbors** (KNN) Modell. Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer\*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram ($x_{i1}$) und ein Werbebudget für Tiktok ($x_{i2}$). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output $y_i$). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die $K$ nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den $K$ nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die $K$ **ähnlichsten** Beobachtungen und nutzen diese, um eine Vorhersage zu machen.
+
+Selbstverständlich spielt der konkrete Wert von $K$ hier eine grosse Rolle - sollen wir nur $K=1$ Nachbarn berücksichtigen? Oder $K=10$ Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55 Datenpunkte, sondern auch die **Entscheidungsgrenze** (in schwarz). Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn Sie $K$ erhöhen oder reduzieren.
+
+Ausserdem können Sie in der ersten Abbildung auch den schwarzen Punkt mit der Maus setzen, wodurch Ihnen die $K$ nächsten Punkte des schwarzen Punkts angezeigt werden.
+
+Die zweite Abbildung zeigt die Entscheidungsregionen mit unterschiedlicher Intensität je nachdem wie sicher sich das Modell ist. In einer Region, in der alle $K$ Nachbarn nicht-erfolgreiche Produkte sind, sind wir uns eher sicher bezüglich der Vorhersage als in einer Region, in der die Anteile zwischen erfolgreichen und nicht-erfolgreichen Produkten ausgeglichen sind.
+
+```{r, echo=FALSE}
+knitr::include_app("https://martin-sterchi.shinyapps.io/appKNN/", height = "600px")
+```
+
+Um die $K$ nächsten Nachbarn zu finden, müssen wir die Distanzen zwischen Punkten rechnen können. Dazu verwenden wir die Euklidische Distanz, welche wir in Kapitel \@ref(basics) kennen lernen werden.
+
+Das KNN Modell ist ein sehr einfaches ML Modell, welches in der Praxis allerdings nicht allzu häufig angewendet wird. Warum nicht? Weil es am sogenannten **Fluch der Dimensionalität** (engl. Curse of Dimensionality) leidet. Doch was bedeutet das? Je mehr Input-Variablen wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee, dass wir $K$ nahe, ähnliche Beobachtungen für die Vorhersage verwenden. Wenn diese $K$ nahen Beobachtungen im hochdimensionalen Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert auch das Modell nicht mehr gut.
+
+#### Fragen {.unnumbered}
+
+Stellen Sie sich vor, Sie haben folgendes Klassifikationsproblem, das Sie mit KNN lösen wollen. Welche Kategorie prognostiziert ein KNN Modell für den Punkt $x$ in der unten stehenden Abbildung?
+
+a. Blauer Kreis.
+b. Beide Klassen sind gleich wahrscheinlich.
+c. Rotes Kreuz.
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Es hat drei rote Kreuze und zwei blaue Kreise in der Nachbarschaft. Die roten Kreuze sind darum in der Mehrheit, weshalb Antwort **c** korrekt ist.
+:::
+
+![KNN Modell für binäres Klassifikationsproblem](images/knn.PNG){#fig-knn}
+
+Was ist der Wert für $K$ für das KNN Modell in der oben stehenden Abbildung?
+
+a. 5
+b. 2
+c. 3
+d. 10
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Die Nachbarschaft, dargestellt durch den Kreis, enthält 5 Beobachtungen. Deshalb ist Antwort **a** korrekt.
+:::
+
+Stellen Sie sich vor, Sie haben folgendes Regressionsproblem, das Sie mit KNN lösen wollen. Was ist die Vorhersage für den Punkt $x$ für das KNN-Regressionsmodell in der unten stehenden Abbildung? Die Zahlen neben den Datenpunkten stellen die entsprechenden $y_i$-Werte dar.
+
+a. 4
+b. 20
+c. 5
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Der Durchschnitt über die 5 $y_i$-Werte in der Nachbarschaft beträgt 4, weshalb Antwort **a** korrekt ist.
+:::
+
+![KNN Modell für Regressionsproblem](images/knnreg.PNG){#fig-knnreg}

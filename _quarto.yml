@@ -1,0 +1,53 @@
+project:
+  type: book
+
+book:
+  title: "Machine Learning verstehen statt nur anwenden"
+  author: "Martin Sterchi"
+  date: "02.02.2026"
+  search: true
+  cover-image: cover.png
+  page-footer: 
+    left: "Copyright 2026, Martin Sterchi"
+    right:
+      - href: https://www.martinsterchi.ch
+    background: dark
+  chapters:
+    - index.qmd
+    - 01_intro.qmd
+    - part: classical.qmd
+      chapters:
+        - 02_linreg.qmd
+        - 03_linclass.qmd
+        - 04_pipeline.qmd
+        - 05_tree.qmd
+        - 06_ensemble.qmd
+        - 07_svm.qmd
+    - part: deep.qmd
+      chapters:
+        - 08_ann.qmd
+        - 09_cnn.qmd
+        - 10_rnn.qmd
+        - 11_transformer.qmd
+    - references.qmd
+  appendices:
+    - math.qmd
+    - programming.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    number-depth: 3
+  pdf:
+    documentclass: scrreprt
+
+editor: source
+lang: de
+
+execute: 
+  freeze: auto
+

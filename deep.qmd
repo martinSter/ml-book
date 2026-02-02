@@ -1,0 +1,6 @@
+# Deep Learning
+
+In diesem zweiten Teil des Buchs befassen wir uns nun mit den modernen Entwicklungen im Machine Learning, nämlich dem Deep Learning.
+
+Wir bauen hierfür jedoch auf dem ersten Teil auf. Es macht also Sinn, die Kapitel in diesem Buch wirklich in der von mir vorgeschlagenen Reihenfolge zu lesen.
+

@@ -1,0 +1,70 @@
+# Über das Buch {.unnumbered}
+
+Die Motivation für dieses Buch entstand aus drei Gründen. Erstens wuchs bei mir die Erkenntnis, dass viele kleine und mittelgrosse Unternehmen (KMU) in der Schweiz zwar über grosse Datenmengen verfügen, aber nicht das nötige Knowhow haben, um die Daten zu analysieren und für die Optimierung von Entscheidungsprozessen zu nutzen. Zweitens ist das Thema Machine Learning (ML) und Künstliche Intelligenz (KI) spätestens seit dem Launch von ChatGPT im November 2022^[https://openai.com/index/chatgpt/] kaum mehr ignorierbar und es geht nun darum, solche Modelle wertschöpfend in Unternehmens- oder Organisationsprozesse zu integrieren. Mit diesem Buch möchte ich einen kleinen Beitrag leisten, den Knowhow Transfer von Fachhochschulen in die Unternehmen und Organisationen zu katalysieren. Drittens sind die meisten Lehrmittel zum Thema auf Englisch verfasst und ich möchte mit einem ausführlichen Lehrmittel in Deutscher Sprache dazu beitragen, dass die Sprachbarriere niemanden daran hindert, in das faszinierende Thema einzutauchen.
+
+Das Buch versucht, sowohl die klassischen Machine Learning Methoden als auch neueste Entwicklungen im Deep Learning (DL) zu vermitteln. Deep Learning kann als eine Teilmenge des Machine Learnings gesehen werden. Das heisst, jede Deep Learning Methode ist auch eine Machine Learning Methode. Machine Learning umfasst jedoch weitere Methoden, welche nicht dem Deep Learning zugeordnet werden können. Das Gebiet Machine Learning ist wiederum eine Teilmenge der Methoden der Künstlichen Intelligenz. Letztere umfasst wiederum weitere Methoden, welche nicht dem Machine Learning zuzuordnen sind. @fig-kimldl stellt diesen Sachverhalt schematisch dar.
+
+![Unterscheidung zwischen KI, ML und DL.](images/KI_ML_DL.png){#fig-kimldl}
+
+Obwohl das Buch einen anwendungsorientierten Ansatz verfolgt, soll die mathematisch-statistische Intuition hinter den beschriebenen Modellen und Methoden nicht zu kurz kommen. Diese Intuition ist aus meiner Sicht zwingend notwendig, um beurteilen zu können, ob sich ein Modell überhaupt für ein gegebenes Problem eignet und wann ein Modell potentiell nicht funktioniert. Am Schluss geht es nämlich darum, dass wir mit dem Einsatz von Machine Learning einen **Mehrwert** für ein Unternehmen oder für die Gesellschaft schaffen können. Das erfordert, dass wir uns eingehend und kritisch mit den Modellen und deren Eignung für ein gegebenes Problem auseinander setzen.
+
+Wir werden darum für alle Themen und Modelle die notwendigen **mathematischen Grundlagen** erarbeiten, so dass wir die zugrunde liegeden Annahmen, die Form sowie die Funktionsweise eines Modells verstehen. Wie es der Titel des Buchs sagt, soll es nämlich darum gehen, Modelle nicht nur anzuwenden, sondern sie eben auch richtig gut zu verstehen.
+
+## Zielgruppe {.unnumbered}
+
+Das Buch richtet sich insbesondere an Fachhochschulstudierende in der deutschsprachigen Schweiz mit einem intrinsischen Interesse an quantitativen Methoden im Allgemeinen und Machine Learning im Besonderen. Vorausgesetzt werden Mathematikkenntnisse auf Stufe Mittelschule (Berufs- oder gymnasiale Matur), d.h. Sie sollten vertraut sein mit den Grundlagen bezüglich mathematischer Funktionen, der Integral- und Differentialrechnung sowie den wichtigsten Resultaten aus der Algebra. Ausserdem gehe ich davon aus, dass Sie bereits eine Einführung in das Thema Statistik besucht haben und Konzepte aus der deskriptiven Statistik (Mittelwert, Median, Varianz, Quantile, etc.) sowie aus der Inferenzstatistik (Verteilungen, statistisches Testen, etc.) bekannt sind.
+
+Bevor Sie sich aber nun Sorgen machen: Kapitel @sec-math enthält eine Einführung in die wichtigsten Mathematik- und Statistikgrundlagen, die nötig sind für das Verständnis von Machine Learning Modellen.
+
+Da ich mit diesem Buch einen anwendungsorientierten Ansatz verfolge, werden wir auch in das Programmieren einsteigen. Dazu verwenden wir in diesem Buch die Programmiersprache `R` und für die späteren Kapitel zum Thema Deep learning auch `Python`. Es werden keine Vorkenntnisse vorausgesetzt. Kapitel @sec-programming enthält eine kurze Einführung in die Programmiersprachen `R` und `Python` und verweist Sie auf weiterführende Ressourcen zum Thema Programmieren. Jedes Modell, das wir uns anschauen werden, ist mit R-Code (oder Python-Code) dokumentiert, so dass Sie lernen, wie die Modelle in der Praxis angewendet werden können.
+
+## Aufbau des Buchs {.unnumbered}
+
+Das Buch beginnt mit einer Einführung zum Thema Machine Learning in Kapitel @sec-intro. Wir lernen verschiedene **Definitionen** kennen, machen einen kurzen Ausflug in die Geschichte des Machine Learnings und sehen Anwendungsbeispiele.
+
+Danach ist das Buch in zwei Teile aufgeteilt. Im ersten Teil beginnen wir mit dem Teil des Machine Learnings, den ich **klassisches Machine Learning** nenne. Dabei lernen wir drei Modellfamilien kennen: lineare Modelle, Entscheidungsbaum-basierte Modelle sowie Support Vector Machines. Ausserdem schauen wir uns in Kapitel @sec-pipeline eine typische Pipelines für klassische ML Probleme an. Dieser Teil enthält folgende sechs Kapitel:
+
+-   Kapitel @sec-linreg: Hier erlernen wir die Grundmodelle, um **Regressionsprobleme** zu lösen. Es sind lineare Modelle, was bedeutet, dass die funktionale Form der Modelle linear von den Parametern des Modells abhängen. Grafisch bedeutet dies, dass ein solches Modell im einfachsten Fall durch eine Gerade beschrieben werden kann.
+-   Kapitel @sec-linclass: In diesem Kapitel lernen wir die Grundmodelle für das **Klassifikationsproblem** kennen. Diese Modelle führen typischerweise zu einer linearen Entscheidungsgrenze (engl. *Decision Boundary*) zwischen den verschiedenen Klassen, die wir unterscheiden oder klassifizieren wollen.
+-   Kapitel @sec-pipeline: Damit wir ML in der Praxis anwenden können, lernen wir hier die typische **ML-Pipeline** kennen. Sie werden die Techniken und Methoden kennen lernen, die es braucht, um überhaupt erst an den Punkt zu kommen, um ein ML-Modell rechnen zu können. Oft werden diese Techniken und Methoden unter dem Begriff Preprocessing der Daten zusammengefasst. Doch die Pipeline endet nicht mit dem Rechnen eines ML-Modells. Danach muss ein Modell evaluiert werden und wenn Sie als Analyst:in zufrieden sind, müssen Sie sich Gedanken machen, wie das Deployment des Modells aussehen soll. Das heisst, wie kann Ihr Modell Dritten zur Verfügung gestellt werden?
+-   Kapitel @sec-tree: Nach den ersten linearen Modellen für das Regressions- und Klassifikationsproblem lernen wir hier ein flexibleres Modell kennen, nämlich den **Entscheidungsbaum** (engl. *Decision Tree*). Entscheidungsbäume eignen sich sowohl für das Regressions- als auch für das Klassifikationsproblem. Obwohl sie in realen Projekten typischerweise anderen Modellen unterlegen sind, wenn es um die Vorhersagequalität geht, sind sie trotzdem attraktive Modelle, da sie gut visualisierbar und erklärbar sind.
+-   Kapitel @sec-ensemble: Aufbauend auf den Entscheidungsbäumen aus dem vorherigen Kapitel können sehr mächtige Modelle erstellt werden, die in der Praxis oft mit Modellen aus dem Deep Learning konkurrenzieren können. Weil es sich dabei üblicherweise um eine clevere Aggregierung der Resultate einer grossen Anzahl individueller Entscheidungsbäume handelt, werden diese Modelle **Ensembles** genannt. Wie die individuellen Entscheidungsbäume eignen sich Ensembles sowohl für das Regressions- als auch für das Klassifikationsproblem.
+-   Kapitel @sec-svm: Ein weiteres Modell, das sich sowohl für das Regressions- als auch für das Klassifikationsproblem eignet, sind die **Support Vector Machines**. Ihre Popularität ist mit dem Aufstieg von Deep Learning etwas verblasst. Es lohnt sich aber immer noch allemal, diese Familie von Modellen kennen zu lernen, insbesondere auch weil sie nicht als Blackbox-Modelle gelten und theoretisch gut fundiert sind.
+
+In einem zweiten Teil schauen wir uns die modernen Entwicklungen im Gebiet an. Man kann diese grob als **Deep Learning** beschreiben. Folgende Kapitel sind in diesem zweiten Teil enthalten:
+
+-   Kapitel @sec-ann: Ab diesem Kapitel steigen wir in das Thema Deep Learning ein. Sie werden die Architektur von einfachen **Articial Neural Networks** (ANNs) kennen lernen. Ausserdem schauen wir uns in diesem Kapitel den genialen Backpropagation Algorithmus anhand eines einfachen linearen Regressionsproblems an. Dieser Algorithmus ist der Schlüssel für die viel diskutierten Fortschritte im Bereich der künstlichen Intelligenz, weil er das Trainieren von riesigen Modellen überhaupt erst möglich macht.
+-   Kapitel @sec-cnn: Hier lernen wir sogenannte **Convolutional Neural Networks** (CNNs) kennen. Sie sind die Basis für die Fortschritte auf dem Gebiet Computer Vision und erlauben beispielsweise Anwendungen im Bereich automatische Gesichtserkennung in Bildern oder Videos.
+-   Kapitel @sec-rnn: Nach ANNs und CNNs lernen wir hier **Recurrent Neural Networks** (RNNs) kennen. Diese Modelle bilden die Basis für Probleme, in denen die Daten als Sequenzen vorliegen. Das können einache Zeitreihen (z.B. Börsenkurse) sein, aber auch komplexere Sequenzdaten wie beispielsweise geschriebene oder gesprochene Sprache oder Tonaufnahmen.
+-   Kapitel @sec-transformer: Hier schauen wir uns die Architektur an, die moderne LLMs wie ChatGPT oder Claude überhaupt erst möglich machte, nämlich die **Transformer** Architektur. Eine wichtige Komponenten hierbei ist die sogenannte **Attention**, deren Funktionsweise wir uns im Detail anschauen werden. Nach dem Lesen dieses Kapitels sollten Sie ein grundlegendes Verständnis für die Funktionsweise von Modellen wie Chat-GPT haben.
+
+Der Anhang enthält die mathematisch-statistischen Grundlagen sowie eine Einführung in die Programmierung in R und Python:
+
+-   @sec-math: Wichtigste **Mathe- und Statistikgrundlagen**, die für das Verständnis der Modelle elementar sind.
+-   @sec-programming: Einführung in das **Programmieren** mit `R` und `Python` sowie Überblick über die wichtigsten `R`-Packages, die wir verwenden.
+
+## Weiterführende Literatur {.unnumbered}
+
+Ein grosser Teil des vorliegenden Buchs baut auf bestehenden Büchern zum Thema Machine Learning und Deep Learning auf. Ich werde im Buch immer wieder auf die Quellen verweisen. Die wichtigsten Referenzen für dieses Buch sind folgende:
+
+-   Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani. (2021). [An Introduction to Statistical Learning: with Applications in R.](https://www.statlearning.com/) New York, NY: Springer. 2nd Edition.
+-   Aurélien Géron. (2022). [Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems.](https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/) Sebastopol, CA: O’Reilly Media Inc. 3rd Edition.
+-   Kevin P. Murphy. (2022). [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html). Cambridge, MA: The MIT Press. 1st Edition.
+-   Kevin P. Murphy. (2023). [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html). Cambridge, MA: The MIT Press. 1st Edition.
+-   Anil Ananthaswamy. (2024). [Why machines learn: The elegant math behind modern AI](https://anilananthaswamy.com/why-machines-learn). New York, NY: Dutton.
+-   Christopher M. Bishop, Hugh Bishop. (2024). [Deep Learning: Foundations and Concepts](https://www.bishopbook.com/). Cham, Switzerland: Springer International Publishing. 1st Edition.
+
+Die ersten beiden Referenzen sowie das populärwissenschaftliche Buch von Anil Ananthaswamy sind einführende Texte und können problemlos parallel zum vorliegenden Buch gelesen werden. Die Lehrbücher von Kevin Murhpy sowie von Chris und Hugh Bishop sind fortgeschrittene Texte und ich empfehle, sie erst nach dem vollständigen Verständnis des vorliegenden Buchs oder der anderen drei Referenzen zu lesen.
+
+## Lizenz {.unnumbered}
+
+Das vorliegende Buch ist unter der Lizenz [CC BY-NC-SA 4.0 DEED](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de) (Namensnennung, nicht-kommerziell, Weitergabe unter gleichen Bedingungen 4.0 International) lizenziert.
+
+## Kontakt {.unnumbered}
+
+Für Fragen und Anregungen zum Buch stehe ich gerne zur Verfügung:
+
+Martin Sterchi\
+Riggenbachstrasse 16\
+4600 Olten\
+[martin.sterchi\@fhnw.ch](mailto:martin.sterchi@fhnw.ch)

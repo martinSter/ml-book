@@ -1,0 +1,59 @@
+{
+  "index.qmd": {
+    "index.html": "4e3683b0"
+  },
+  "intro.qmd": {
+    "intro.html": "75056a0f"
+  },
+  "summary.qmd": {
+    "summary.html": "bd91edce"
+  },
+  "references.qmd": {
+    "references.html": "861b7936"
+  },
+  "01_intro.qmd": {
+    "01_intro.html": "ba461f11"
+  },
+  "02_linreg.qmd": {
+    "02_linreg.html": "89ca5a01"
+  },
+  "03_linclass.qmd": {
+    "03_linclass.html": "53b0d00c"
+  },
+  "04_pipeline.qmd": {
+    "04_pipeline.html": "3bbd2ee0"
+  },
+  "05_tree.qmd": {
+    "05_tree.html": "0bf6ecfe"
+  },
+  "06_ensemble.qmd": {
+    "06_ensemble.html": "3352b359"
+  },
+  "07_svm.qmd": {
+    "07_svm.html": "a5058e16"
+  },
+  "08_ann.qmd": {
+    "08_ann.html": "97baad49"
+  },
+  "09_cnn.qmd": {
+    "09_cnn.html": "382f13c4"
+  },
+  "10_rnn.qmd": {
+    "10_rnn.html": "5abcafd9"
+  },
+  "11_transformer.qmd": {
+    "11_transformer.html": "0618fc6c"
+  },
+  "math.qmd": {
+    "math.html": "db056b38"
+  },
+  "programming.qmd": {
+    "programming.html": "e764fc81"
+  },
+  "classical.qmd": {
+    "classical.html": "47191e32"
+  },
+  "deep.qmd": {
+    "deep.html": "9f05ee98"
+  }
+}

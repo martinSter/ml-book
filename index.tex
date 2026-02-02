@@ -1,0 +1,3430 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  ngerman,
+  letterpaper,
+  DIV=11]{scrreprt}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\ifLuaTeX
+  \usepackage[german]{selnolig} % disable illegal ligatures
+\fi
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
+\@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Inhaltsverzeichnis}
+\else
+  \newcommand\contentsname{Inhaltsverzeichnis}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{Abbildungsverzeichnis}
+\else
+  \newcommand\listfigurename{Abbildungsverzeichnis}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{Tabellenverzeichnis}
+\else
+  \newcommand\listtablename{Tabellenverzeichnis}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Abbildung}
+\else
+  \newcommand\figurename{Abbildung}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Tabelle}
+\else
+  \newcommand\tablename{Tabelle}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{Listingverzeichnis}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Machine Learning verstehen statt nur anwenden},
+  pdfauthor={Martin Sterchi},
+  pdflang={de},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Machine Learning verstehen statt nur anwenden}
+\author{Martin Sterchi}
+\date{2026-01-06}
+\begin{document}
+\maketitle
+
+\renewcommand*\contentsname{Inhaltsverzeichnis}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+
+\bookmarksetup{startatroot}
+
+\chapter*{Über das Buch}\label{uxfcber-das-buch}
+\addcontentsline{toc}{chapter}{Über das Buch}
+
+\markboth{Über das Buch}{Über das Buch}
+
+Die Motivation für dieses Buch entstand aus drei Gründen. Erstens wuchs
+bei mir die Erkenntnis, dass viele kleine und mittelgrosse Unternehmen
+(KMU) in der Schweiz zwar über grosse Datenmengen verfügen, aber nicht
+das nötige Knowhow haben, um die Daten zu analysieren und für die
+Optimierung von Entscheidungsprozessen zu nutzen. Zweitens ist das Thema
+Machine Learning (ML) und Künstliche Intelligenz (KI) spätestens seit
+dem Launch von ChatGPT im November 2022\footnote{https://openai.com/index/chatgpt/}
+kaum mehr ignorierbar und es geht nun darum, solche Modelle
+wertschöpfend in Unternehmens- oder Organisationsprozesse zu
+integrieren. Mit diesem Buch möchte ich einen kleinen Beitrag leisten,
+den Knowhow Transfer von Fachhochschulen in die Unternehmen und
+Organisationen zu katalysieren. Drittens sind die meisten Lehrmittel zum
+Thema auf Englisch verfasst und ich möchte mit einem ausführlichen
+Lehrmittel in Deutscher Sprache dazu beitragen, dass die Sprachbarriere
+niemanden daran hindert, in das faszinierende Thema einzutauchen.
+
+Das Buch versucht, sowohl die klassischen Machine Learning Methoden als
+auch neueste Entwicklungen im Deep Learning (DL) zu vermitteln. Deep
+Learning kann als eine Teilmenge des Machine Learnings gesehen werden.
+Das heisst, jede Deep Learning Methode ist auch eine Machine Learning
+Methode. Machine Learning umfasst jedoch weitere Methoden, welche nicht
+dem Deep Learning zugeordnet werden können. Das Gebiet Machine Learning
+ist wiederum eine Teilmenge der Methoden der Künstlichen Intelligenz.
+Letztere umfasst wiederum weitere Methoden, welche nicht dem Machine
+Learning zuzuordnen sind. Abbildung~\ref{fig-kimldl} stellt diesen
+Sachverhalt schematisch dar.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/KI_ML_DL.png}}
+
+}
+
+\caption{\label{fig-kimldl}Unterscheidung zwischen KI, ML und DL.}
+
+\end{figure}%
+
+Obwohl das Buch einen anwendungsorientierten Ansatz verfolgt, soll die
+mathematisch-statistische Intuition hinter den beschriebenen Modellen
+und Methoden nicht zu kurz kommen. Diese Intuition ist aus meiner Sicht
+zwingend notwendig, um beurteilen zu können, ob sich ein Modell
+überhaupt für ein gegebenes Problem eignet und wann ein Modell
+potentiell nicht funktioniert. Am Schluss geht es nämlich darum, dass
+wir mit dem Einsatz von Machine Learning einen \textbf{Mehrwert} für ein
+Unternehmen oder für die Gesellschaft schaffen können. Das erfordert,
+dass wir uns eingehend und kritisch mit den Modellen und deren Eignung
+für ein gegebenes Problem auseinander setzen.
+
+Wir werden darum für alle Themen und Modelle die notwendigen
+\textbf{mathematischen Grundlagen} erarbeiten, so dass wir die zugrunde
+liegeden Annahmen, die Form sowie die Funktionsweise eines Modells
+verstehen. Wie es der Titel des Buchs sagt, soll es nämlich darum gehen,
+Modelle nicht nur anzuwenden, sondern sie eben auch richtig gut zu
+verstehen.
+
+\section*{Zielgruppe}\label{zielgruppe}
+\addcontentsline{toc}{section}{Zielgruppe}
+
+\markright{Zielgruppe}
+
+Das Buch richtet sich insbesondere an Fachhochschulstudierende in der
+deutschsprachigen Schweiz mit einem intrinsischen Interesse an
+quantitativen Methoden im Allgemeinen und Machine Learning im
+Besonderen. Vorausgesetzt werden Mathematikkenntnisse auf Stufe
+Mittelschule (Berufs- oder gymnasiale Matur), d.h. Sie sollten vertraut
+sein mit den Grundlagen bezüglich mathematischer Funktionen, der
+Integral- und Differentialrechnung sowie den wichtigsten Resultaten aus
+der Algebra. Ausserdem gehe ich davon aus, dass Sie bereits eine
+Einführung in das Thema Statistik besucht haben und Konzepte aus der
+deskriptiven Statistik (Mittelwert, Median, Varianz, Quantile, etc.)
+sowie aus der Inferenzstatistik (Verteilungen, statistisches Testen,
+etc.) bekannt sind.
+
+Bevor Sie sich aber nun Sorgen machen: Kapitel Anhang~\ref{sec-math}
+enthält eine Einführung in die wichtigsten Mathematik- und
+Statistikgrundlagen, die nötig sind für das Verständnis von Machine
+Learning Modellen.
+
+Da ich mit diesem Buch einen anwendungsorientierten Ansatz verfolge,
+werden wir auch in das Programmieren einsteigen. Dazu verwenden wir in
+diesem Buch die Programmiersprache \texttt{R} und für die späteren
+Kapitel zum Thema Deep learning auch \texttt{Python}. Es werden keine
+Vorkenntnisse vorausgesetzt. Kapitel Anhang~\ref{sec-programming}
+enthält eine kurze Einführung in die Programmiersprachen \texttt{R} und
+\texttt{Python} und verweist Sie auf weiterführende Ressourcen zum Thema
+Programmieren. Jedes Modell, das wir uns anschauen werden, ist mit
+R-Code (oder Python-Code) dokumentiert, so dass Sie lernen, wie die
+Modelle in der Praxis angewendet werden können.
+
+\section*{Aufbau des Buchs}\label{aufbau-des-buchs}
+\addcontentsline{toc}{section}{Aufbau des Buchs}
+
+\markright{Aufbau des Buchs}
+
+Das Buch beginnt mit einer Einführung zum Thema Machine Learning in
+Kapitel Kapitel~\ref{sec-intro}. Wir lernen verschiedene
+\textbf{Definitionen} kennen, machen einen kurzen Ausflug in die
+Geschichte des Machine Learnings und sehen Anwendungsbeispiele.
+
+Danach ist das Buch in zwei Teile aufgeteilt. Im ersten Teil beginnen
+wir mit dem Teil des Machine Learnings, den ich \textbf{klassisches
+Machine Learning} nenne. Dabei lernen wir drei Modellfamilien kennen:
+lineare Modelle, Entscheidungsbaum-basierte Modelle sowie Support Vector
+Machines. Ausserdem schauen wir uns in Kapitel
+Kapitel~\ref{sec-pipeline} eine typische Pipelines für klassische ML
+Probleme an. Dieser Teil enthält folgende sechs Kapitel:
+
+\begin{itemize}
+\tightlist
+\item
+  Kapitel Kapitel~\ref{sec-linreg}: Hier erlernen wir die Grundmodelle,
+  um \textbf{Regressionsprobleme} zu lösen. Es sind lineare Modelle, was
+  bedeutet, dass die funktionale Form der Modelle linear von den
+  Parametern des Modells abhängen. Grafisch bedeutet dies, dass ein
+  solches Modell im einfachsten Fall durch eine Gerade beschrieben
+  werden kann.
+\item
+  Kapitel Kapitel~\ref{sec-linclass}: In diesem Kapitel lernen wir die
+  Grundmodelle für das \textbf{Klassifikationsproblem} kennen. Diese
+  Modelle führen typischerweise zu einer linearen Entscheidungsgrenze
+  (engl. \emph{Decision Boundary}) zwischen den verschiedenen Klassen,
+  die wir unterscheiden oder klassifizieren wollen.
+\item
+  Kapitel Kapitel~\ref{sec-pipeline}: Damit wir ML in der Praxis
+  anwenden können, lernen wir hier die typische \textbf{ML-Pipeline}
+  kennen. Sie werden die Techniken und Methoden kennen lernen, die es
+  braucht, um überhaupt erst an den Punkt zu kommen, um ein ML-Modell
+  rechnen zu können. Oft werden diese Techniken und Methoden unter dem
+  Begriff Preprocessing der Daten zusammengefasst. Doch die Pipeline
+  endet nicht mit dem Rechnen eines ML-Modells. Danach muss ein Modell
+  evaluiert werden und wenn Sie als Analyst:in zufrieden sind, müssen
+  Sie sich Gedanken machen, wie das Deployment des Modells aussehen
+  soll. Das heisst, wie kann Ihr Modell Dritten zur Verfügung gestellt
+  werden?
+\item
+  Kapitel Kapitel~\ref{sec-tree}: Nach den ersten linearen Modellen für
+  das Regressions- und Klassifikationsproblem lernen wir hier ein
+  flexibleres Modell kennen, nämlich den \textbf{Entscheidungsbaum}
+  (engl. \emph{Decision Tree}). Entscheidungsbäume eignen sich sowohl
+  für das Regressions- als auch für das Klassifikationsproblem. Obwohl
+  sie in realen Projekten typischerweise anderen Modellen unterlegen
+  sind, wenn es um die Vorhersagequalität geht, sind sie trotzdem
+  attraktive Modelle, da sie gut visualisierbar und erklärbar sind.
+\item
+  Kapitel Kapitel~\ref{sec-ensemble}: Aufbauend auf den
+  Entscheidungsbäumen aus dem vorherigen Kapitel können sehr mächtige
+  Modelle erstellt werden, die in der Praxis oft mit Modellen aus dem
+  Deep Learning konkurrenzieren können. Weil es sich dabei üblicherweise
+  um eine clevere Aggregierung der Resultate einer grossen Anzahl
+  individueller Entscheidungsbäume handelt, werden diese Modelle
+  \textbf{Ensembles} genannt. Wie die individuellen Entscheidungsbäume
+  eignen sich Ensembles sowohl für das Regressions- als auch für das
+  Klassifikationsproblem.
+\item
+  Kapitel Kapitel~\ref{sec-svm}: Ein weiteres Modell, das sich sowohl
+  für das Regressions- als auch für das Klassifikationsproblem eignet,
+  sind die \textbf{Support Vector Machines}. Ihre Popularität ist mit
+  dem Aufstieg von Deep Learning etwas verblasst. Es lohnt sich aber
+  immer noch allemal, diese Familie von Modellen kennen zu lernen,
+  insbesondere auch weil sie nicht als Blackbox-Modelle gelten und
+  theoretisch gut fundiert sind.
+\end{itemize}
+
+In einem zweiten Teil schauen wir uns die modernen Entwicklungen im
+Gebiet an. Man kann diese grob als \textbf{Deep Learning} beschreiben.
+Folgende Kapitel sind in diesem zweiten Teil enthalten:
+
+\begin{itemize}
+\tightlist
+\item
+  Kapitel Kapitel~\ref{sec-ann}: Ab diesem Kapitel steigen wir in das
+  Thema Deep Learning ein. Sie werden die Architektur von einfachen
+  \textbf{Articial Neural Networks} (ANNs) kennen lernen. Ausserdem
+  schauen wir uns in diesem Kapitel den genialen Backpropagation
+  Algorithmus anhand eines einfachen linearen Regressionsproblems an.
+  Dieser Algorithmus ist der Schlüssel für die viel diskutierten
+  Fortschritte im Bereich der künstlichen Intelligenz, weil er das
+  Trainieren von riesigen Modellen überhaupt erst möglich macht.
+\item
+  Kapitel Kapitel~\ref{sec-cnn}: Hier lernen wir sogenannte
+  \textbf{Convolutional Neural Networks} (CNNs) kennen. Sie sind die
+  Basis für die Fortschritte auf dem Gebiet Computer Vision und erlauben
+  beispielsweise Anwendungen im Bereich automatische Gesichtserkennung
+  in Bildern oder Videos.
+\item
+  Kapitel Kapitel~\ref{sec-rnn}: Nach ANNs und CNNs lernen wir hier
+  \textbf{Recurrent Neural Networks} (RNNs) kennen. Diese Modelle bilden
+  die Basis für Probleme, in denen die Daten als Sequenzen vorliegen.
+  Das können einache Zeitreihen (z.B. Börsenkurse) sein, aber auch
+  komplexere Sequenzdaten wie beispielsweise geschriebene oder
+  gesprochene Sprache oder Tonaufnahmen.
+\item
+  Kapitel Kapitel~\ref{sec-transformer}: Hier schauen wir uns die
+  Architektur an, die moderne LLMs wie ChatGPT oder Claude überhaupt
+  erst möglich machte, nämlich die \textbf{Transformer} Architektur.
+  Eine wichtige Komponenten hierbei ist die sogenannte
+  \textbf{Attention}, deren Funktionsweise wir uns im Detail anschauen
+  werden. Nach dem Lesen dieses Kapitels sollten Sie ein grundlegendes
+  Verständnis für die Funktionsweise von Modellen wie Chat-GPT haben.
+\end{itemize}
+
+Der Anhang enthält die mathematisch-statistischen Grundlagen sowie eine
+Einführung in die Programmierung in R und Python:
+
+\begin{itemize}
+\tightlist
+\item
+  Anhang~\ref{sec-math}: Wichtigste \textbf{Mathe- und
+  Statistikgrundlagen}, die für das Verständnis der Modelle elementar
+  sind.
+\item
+  Anhang~\ref{sec-programming}: Einführung in das \textbf{Programmieren}
+  mit \texttt{R} und \texttt{Python} sowie Überblick über die
+  wichtigsten \texttt{R}-Packages, die wir verwenden.
+\end{itemize}
+
+\section*{Weiterführende Literatur}\label{weiterfuxfchrende-literatur}
+\addcontentsline{toc}{section}{Weiterführende Literatur}
+
+\markright{Weiterführende Literatur}
+
+Ein grosser Teil des vorliegenden Buchs baut auf bestehenden Büchern zum
+Thema Machine Learning und Deep Learning auf. Ich werde im Buch immer
+wieder auf die Quellen verweisen. Die wichtigsten Referenzen für dieses
+Buch sind folgende:
+
+\begin{itemize}
+\tightlist
+\item
+  Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani.
+  (2021). \href{https://www.statlearning.com/}{An Introduction to
+  Statistical Learning: with Applications in R.} New York, NY: Springer.
+  2nd Edition.
+\item
+  Aurélien Géron. (2022).
+  \href{https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/}{Hands-On
+  Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts,
+  Tools, and Techniques to Build Intelligent Systems.} Sebastopol, CA:
+  O'Reilly Media Inc.~3rd Edition.
+\item
+  Kevin P. Murphy. (2022).
+  \href{https://probml.github.io/pml-book/book1.html}{Probabilistic
+  Machine Learning: An Introduction}. Cambridge, MA: The MIT Press. 1st
+  Edition.
+\item
+  Kevin P. Murphy. (2023).
+  \href{https://probml.github.io/pml-book/book2.html}{Probabilistic
+  Machine Learning: Advanced Topics}. Cambridge, MA: The MIT Press. 1st
+  Edition.
+\item
+  Anil Ananthaswamy. (2024).
+  \href{https://anilananthaswamy.com/why-machines-learn}{Why machines
+  learn: The elegant math behind modern AI}. New York, NY: Dutton.
+\item
+  Christopher M. Bishop, Hugh Bishop. (2024).
+  \href{https://www.bishopbook.com/}{Deep Learning: Foundations and
+  Concepts}. Cham, Switzerland: Springer International Publishing. 1st
+  Edition.
+\end{itemize}
+
+Die ersten beiden Referenzen sowie das populärwissenschaftliche Buch von
+Anil Ananthaswamy sind einführende Texte und können problemlos parallel
+zum vorliegenden Buch gelesen werden. Die Lehrbücher von Kevin Murhpy
+sowie von Chris und Hugh Bishop sind fortgeschrittene Texte und ich
+empfehle, sie erst nach dem vollständigen Verständnis des vorliegenden
+Buchs oder der anderen drei Referenzen zu lesen.
+
+\section*{Lizenz}\label{lizenz}
+\addcontentsline{toc}{section}{Lizenz}
+
+\markright{Lizenz}
+
+Das vorliegende Buch ist unter der Lizenz
+\href{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de}{CC
+BY-NC-SA 4.0 DEED} (Namensnennung, nicht-kommerziell, Weitergabe unter
+gleichen Bedingungen 4.0 International) lizenziert.
+
+\section*{Kontakt}\label{kontakt}
+\addcontentsline{toc}{section}{Kontakt}
+
+\markright{Kontakt}
+
+Für Fragen und Anregungen zum Buch stehe ich gerne zur Verfügung:
+
+Martin Sterchi\\
+Riggenbachstrasse 16\\
+4600 Olten\\
+\href{mailto:martin.sterchi@fhnw.ch}{\nolinkurl{martin.sterchi@fhnw.ch}}
+
+\bookmarksetup{startatroot}
+
+\chapter{Einführung}\label{sec-intro}
+
+In diesem Kapitel geht es darum zu verstehen, was Machine Learning
+überhaupt ist, warum es nützlich sein kann und was typische
+Anwendungsfälle von ML sind. Wir werden ausserdem verschiedene
+Unterkategorien von ML kennen lernen und uns eine kleine Taxonomie
+erarbeiten. Zum Schluss schauen wir uns den ersten ganz wichtigen
+Meilenstein im ML an: das Perceptron. Dabei lernen wir auch gleich ein
+paar wichtige mathematische Grundlagen kennen.
+
+\section{Was ist Machine Learning? Eine kurze Geschichte und
+Definitionen.}\label{was-ist-machine-learning-eine-kurze-geschichte-und-definitionen.}
+
+Im Prinzip geht die Geschichte des MLs weit zurück, nämlich zu den
+Anfängen der Statistik. Viele Modelle, die heutzutage im ML angewendet
+werden sind nämlich eigentlich von Statistiker:innen erfundene Modelle.
+Die Geschichte des MLs und der Statistik sind darum eng miteinander
+verknüpft. Einen eigentlichen Startpunkt des MLs könnte man vielleicht
+in den 1950er Jahren ausmachen. Einerseits fand 1956 das sagenumwobene
+\emph{Dartmouth Summer Research Project on Artificial
+Intelligence}\footnote{https://home.dartmouth.edu/about/artificial-intelligence-ai-coined-dartmouth}
+statt, an dem alle wichtigen Grössen aus dem Gebiet zu dieser Zeit
+teilnahmen. Der Begriff \textbf{Artificial Intelligence} wurde an diesem
+Anlass erstmal erwähnt. Andererseits hat Frank Rosenblatt\footnote{https://en.wikipedia.org/wiki/Frank\_Rosenblatt}
+ein Jahr später das sogenannte \textbf{Perceptron} und einen
+dazugehörigen Lernalgorithmus eingeführt (dazu später mehr).
+
+Danach blieb es aber rund 20 Jahre relativ ruhig bis die Forschung im
+Bereich Machine Learning so richtig Fahrt aufnahm. Der Hauptgrund dafür
+war, dass das Perceptron nur für \textbf{linear separierbare Probleme}
+(auch hierzu später mehr) funktionierte und darum das Interesse daran
+bald abflachte.
+
+Ein grosser Schub für die Entwicklung von ML ging vom Aufkommen von
+extrem grossen Datenmengen (\textbf{Big Data}) und dem Internet aus. Das
+führte nämlich dazu, dass sich immer mehr Leute aus den Fachbereichen
+Informatik und Computer Science mit dem Thema ML befassten und
+effiziente Hard- und Software sowie algorithmische Kniffs und Tricks
+beisteuerten. Ausserdem ermöglichte das Internet den Zugang zu
+gewaltigen Datenmengen an Bildern, Videos, Klicks, etc. - denken Sie
+beispielsweise nur schon an die Informationen, die jede:r von uns
+tagtäglich im Internet hinterlässt. Diese Entwicklungen führten unter
+anderem zur Entwicklung der ImageNet Challenge\footnote{https://www.image-net.org/},
+welche die Entwicklungen im Bereich \textbf{Computer Vision}
+(maschinelles Sehen) katalysierten.
+
+Ein weiterer Schub für das Machine Learning war (und ist) zudem die
+immer besser werdende Rechenleistung von Computern, insbesondere der
+Grafikkarten (engl. \emph{Graphics Processing Units} oder \emph{GPUs}),
+welche für schnelle Matrix- und Vektoroperationen verwendet werden
+können. All diese Entwicklungen haben sich im November 2022 kulminiert
+in der erstmaligen breiten öffentlichen Wahrnehmung von sogenannten
+\textbf{Large Language Models} wie ChatGPT.
+
+Nachdem wir einen ersten groben Überblick über die Geschichte des MLs
+erhalten haben, wollen wir uns nun überlegen, was ML denn genau ist. Wie
+der Name sagt, geht es im Machine Learning darum, dass eine Maschine
+(oder präziser, ein Computer) aus einem gegebenen Datensatz
+\textbf{automatisch} Muster lernt, ohne dass ein Mensch dem Computer
+(explizit) sagen muss, was er lernen soll. Der Mensch gibt jedoch dem
+Computer die Rahmenbedingungen für das automatische Lernen vor.
+
+Die erlernten Muster sind selbstverständlich nur nützlich, wenn sie
+\textbf{genereller Natur} sind und auch zukünftigen Beobachtungen
+zugrunde liegen. Beispiel: ein Spital hat während der Corona Pandemie
+ein Modell trainiert, um den täglichen Pflegebedarf je nach Wochentag,
+Saison, und weiteren Indikatoren vorherzusagen. Das Modell funktioniert
+nun nach der Pandemie aber nicht wunschgemäss und prognostiziert in der
+Tendenz einen zu hohen Pflegebedarf. Das Problem ist, dass die erlernten
+Muster nicht gut auf eine Zeit nach der Pandemie generalisierbar sind.
+Mit anderen Worten: die Trainingsdaten waren nicht repräsentativ genug.
+ML-Modelle sollen also \textbf{generell gültige Muster} in den Daten
+erlernen.
+
+Bevor wir etwas konkreter anschauen, wie genau ein Computer automatisch
+aus Daten lernen kann, schauen wir uns die Definitionen von zwei
+Experten im Gebiet ML an:
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Definitionen}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-note-color-frame, titlerule=0mm]
+
+\emph{``{[}Machine Learning is the{]} field of study that gives
+computers the ability to learn without being explicitly programmed.''}
+Arthur Samuel, 1959 (zitiert in Géron 2022, p.~4)
+
+\emph{``Machine Learning is the science (and art) of programming
+computers so they can learn from data.''} Aurélien Géron (Géron 2022,
+p.~4)
+
+\end{tcolorbox}
+
+Zusammenfassend lässt sich sagen, dass wir mit ML dem Computer die
+Möglichkeit geben, automatisch und selbständig aus Daten
+generalisierbare Muster zu lernen. Nichtsdestotrotz braucht es Sie als
+ML-Expert:in, und zwar wie folgt:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Bevor wir ML verwenden können, um Muster in Daten zu lernen, müssen
+  wir uns für ein konkretes Modell entscheiden. ML Modelle können
+  unterschiedlich flexibel sein und es liegt im Ermessen von Ihnen, wie
+  flexibel das Modell sein soll. Sie müssen bei der Wahl des Modells die
+  Komplexität des Problems berücksichtigen. Grundsätzliche gilt bei der
+  Wahl des Modells, dass flexiblere Modelle komplexere Sachverhalte
+  abbilden können. Ein zu flexibles Modell kann aber schnell zu
+  \emph{Overfitting} führen, doch dazu später mehr. Dieser erste Schritt
+  wird im Fachjargon typischerweise \textbf{Modellwahl} (engl.
+  \emph{Model Selection}) genannt.
+\item
+  Sobald Sie das Modell ausgewählt haben, übergeben Sie dem Computer
+  (etwas vereinfacht gesagt) das Modell, einen Datensatz sowie einen
+  Lernalgorithmus. Nun hat der Computer alle Zutaten, um automatisch zu
+  lernen. Doch was lernt er eigentlich? Der Computer lernt die Parameter
+  Ihres gewählten Modells, so dass das Modell sich optimal an die Daten
+  anpasst. Dieser Schritt wird im Fachjargon \textbf{Modelltraining}
+  (engl. \emph{Model Training} oder \emph{Model Fitting}) genannt.
+\item
+  Falls Sie mit dem erlernten Modell zufrieden sind, können Sie es nun
+  entweder dazu verwenden Vorhersagen zu machen oder um Zusammenhänge in
+  den Daten zu interpretieren und daraus wertvolle Einsichten gewinnen.
+  Dieser Schritt wird im Fachjargon als \textbf{Modellinferenz} (engl.
+  \emph{Model Inference}) zusammengefasst. Typischerweise sind Sie in
+  der Realität mit dem ersten erlernten Modell allerdings noch nicht
+  zufrieden und gehen zurück zu Schritt 1 und wählen ein anderes Modell.
+\end{enumerate}
+
+Es handelt sich bei dieser Vorgehensweise um eine sehr allgemeine
+Beschreibung des ML Prozesses. Wie diese drei Schritte konkret
+funktionieren, werden Sie in den nachfolgenden Kapiteln dieses Buchs
+erfahren.
+
+\section{Wann macht es Sinn ML
+einzusetzen?}\label{wann-macht-es-sinn-ml-einzusetzen}
+
+Ein ML Modell zu trainieren (zweiter Schritt oben) kann viel Zeit und
+Geld kosten. Zum Beispiel müssen Sie unter Umständen überhaupt erst die
+Daten sammeln (oder von einem Datendienstleister kaufen), um ein Modell
+trainieren zu können. Oder das Projekt ist so komplex, dass Sie als
+Analyst:in unzählige Stunden benötigen, um die Daten überhaupt erst in
+eine Form zu bringen, die es erlaubt ein Modell zu trainieren. Für
+neuartige DL Modelle oder Generative KI kann das Trainieren eines
+Modells durch den reinen Stromverbrauch bzw. die vom Cloud-Betreiber in
+Rechnung gestellten Kosten so hoch sein, dass sich Ihr ursprüngliches
+Vorhaben nicht mehr lohnt. Es ist also ungemein wichtig, dass Sie sich
+vor Projektbeginn gut überlegen, ob ML für Ihr vorliegendes Problem
+überhaupt Sinn macht und einen Mehrwert generieren kann.
+
+Folgende Daumenregeln (siehe auch Géron 2022, p.~7) können Ihnen dabei
+helfen, zu entscheiden, ob ML für Ihr Projekt Sinn macht:
+
+\begin{itemize}
+\tightlist
+\item
+  Ihr Problem entspricht einem \textbf{standard ML-Problem}, das bereits
+  mehrfach gelöst wurde und für das es sogenannte ``off-the-shelf''
+  Lösungen gibt. Beispiel: Sie wollen das Sentiment (positive
+  vs.~negative Grundhaltung) von Social Media Posts über Ihr Unternehmen
+  automatisch klassifizieren. Dazu gibt es viele vortrainierte Modelle,
+  die teilweise open-source sind und frei verwendet werden können.
+\item
+  Der \textbf{manuelle Arbeitsaufwand} ist sehr gross, wenn das Problem
+  durch Menschen gelöst werden soll. Das Problem ist aber ansonsten
+  \textbf{klar strukturiert} und benötigt keinen grossen kognitiven
+  Einsatz eines Menschen. Beispiel: In den Post-Verteilzentren werden
+  die von Hand geschriebenen Postleitzahlen (PLZ) bzw. Adressen
+  problemlos von ML Modellen erkannt und die Briefe und Pakete
+  entsprechend sortiert.
+\item
+  Komplexe Probleme, in denen ein Mensch keinen Überblick hat, weil so
+  \textbf{grosse und komplexe Datenmengen} vorhanden sind. Wir Menschen
+  haben grosse Mühe damit, in Rohdaten (reinen Datentabellen)
+  irgendwelche Muster zu erkennen. In diesem Fall können wir entweder
+  versuchen, die Daten zu visualisieren oder mithilfe von ML
+  Zusammenhänge zu lernen, die wir sonst nicht erkennen könnten.
+\end{itemize}
+
+Ein illustratives Beispiel für den dritten Fall ist das \textbf{Anscombe
+Quartett}\footnote{https://de.wikipedia.org/wiki/Anscombe-Quartett}, das
+vier kleine Stichproben mit jeweils elf Datenpunkten enthält. Jeder
+Datenpunkt wird durch eine \(x\) und eine \(y\) Variable beschrieben.
+Die vier \(x\)- sowie die vier \(y\)-Variablen haben identische
+Mittelwerte:
+
+\begin{verbatim}
+   x1 x2 x3 x4    y1   y2    y3    y4
+1  10 10 10  8  8.04 9.14  7.46  6.58
+2   8  8  8  8  6.95 8.14  6.77  5.76
+3  13 13 13  8  7.58 8.74 12.74  7.71
+4   9  9  9  8  8.81 8.77  7.11  8.84
+5  11 11 11  8  8.33 9.26  7.81  8.47
+6  14 14 14  8  9.96 8.10  8.84  7.04
+7   6  6  6  8  7.24 6.13  6.08  5.25
+8   4  4  4 19  4.26 3.10  5.39 12.50
+9  12 12 12  8 10.84 9.13  8.15  5.56
+10  7  7  7  8  4.82 7.26  6.42  7.91
+11  5  5  5  8  5.68 4.74  5.73  6.89
+\end{verbatim}
+
+Selbst in diesem kleinen Datensatz ist es für uns Menschen äusserst
+schwierig, irgendwelche Muster zu erkennen. Erst eine einfache
+Visualisierung der vier Stichproben mithilfe eines Streudiagramms zeigt
+die Muster sowie die Unterschiede zwischen den vier Stichproben deutlich
+auf:
+
+\pandocbounded{\includegraphics[keepaspectratio]{01_intro_files/figure-pdf/anscombe2-1.pdf}}
+
+\section{Anwendungsfälle von ML}\label{anwendungsfuxe4lle-von-ml}
+
+In diesem Abschnitt stelle ich erfolgreiche Anwendungsfälle von ML vor.
+Einige davon treffen Sie womöglich tagtäglich in Ihrem Alltag an:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Spam Filter} sind ein frühes Beispiel einer erfolgreichen
+  Anwendung von ML. Ein Modell entscheidet dabei automatisch aufgrund
+  der Inhalte einer Email, des Betreffs sowie des Absenders, ob es sich
+  um eine Spam oder eine sogenannte Ham Email (unproblematische Email)
+  handelt. Falls Sie gängige Email Software verwenden, dann arbeitet im
+  Hintergrund ein Spam Filter daran, Sie vor lästigen Emails zu
+  schützen.
+\item
+  Ein grosser Teil des wirtschaftlichen Erfolgs von \textbf{Google}
+  basiert auf der Idee, dass aufgrund der Suchhistorie hervorgesagt
+  werden kann, welche Nutzerin oder welcher Nutzer mit welcher
+  Wahrscheinlichkeit eine bestimmte Werbung anklickt. Dies erlaubt
+  Google für jede Nutzer:in die Werbung mit den höchsten
+  ``Erfolgschancen'' zu schalten. Da jeder Klick Einnahmen generiert,
+  ist es für das Geschäftsmodell von Google entscheidend, dass möglichst
+  viele Klicks stattfinden.
+\item
+  Ein grosser Bereich des MLs und speziell des DLs befasst sich mit
+  \textbf{Computer Vision}. Dabei geht es darum, das Hauptmotiv von
+  Bildern zu klassifizieren (z.B. zeigt ein Bild ein Tier oder einen
+  Menschen?), Objekte in Bildern zu entdecken (z.B. enthält das Bild
+  eine Person?) und das entdeckte Objekt dann auch zu klassifizieren
+  (z.B. handelt es sich bei der Person um XY?). Als konkreteres Beispiel
+  können Sie sich einen Industriebetrieb vorstellen, welcher ein
+  Computer Vision Modell einsetzen möchte, um den Abnützungsgrad der von
+  ihnen produzierten Werkzeuge automatisch zu erkennen und den Kundinnen
+  und Kunden den optimalen Ersatzzeitpunkt für das Werkzeug vorhersagen
+  zu können.
+\item
+  Ähnlich wie im vorherigen Beispiel gibt es bereits viele Anwendungen
+  im öffentlichen Verkehr, in denen es um \textbf{Predictive
+  Maintenance} geht. Z.B. kann der optimale Wartungszeitpunkt für eine
+  Weiche oder einen Gleisabschnitt aufgrund einer Vielzahl an
+  Indikatoren und Messungen vorhergesagt werden.
+\item
+  Ein grosses Einsatzgebiet für ML ergibt sich im Finanzsektor durch das
+  automatische Erkennen von potentiell \textbf{betrügerischen
+  Transaktionen}. Falls Sie auch schon mal eine Kreditkartentransaktion
+  direkt am Telefon einer Kundenberaterin oder einem Kundenberater
+  bestätigen mussten, dann ist es wahrscheinlich, dass Ihre Transaktion
+  von einem ML System zur manuellen Überprüfung geflaggt wurde. In
+  diesem Zusammenhang spricht man manchmal auch vom Erkennen von
+  Anomalien (engl. \emph{Anomaly Detection}).
+\item
+  Sogenannte \textbf{Recommender Systems} sind insbesondere in Online
+  Verkaufspunkten von grossem Nutzen. Betreiben Sie beispielsweise einen
+  grossen Onlinehandel, dann wollen Sie Ihren Kundinnen und Kunden
+  Produkte zum Kauf vorschlagen. Dazu verwenden Sie ein Modell, das
+  basierend auf der Ähnlichkeit zwischen Kundinnen und Kunden potentiell
+  interessante Produkte vorschlägt.
+\item
+  Die rasanten Entwicklungen im Bereich \textbf{Natural Language
+  Processing} (NLP) in den letzten 10 Jahren haben viele neue und
+  interessante Anwendungsgebiete zutage gefördert. Zum Beispiel eignen
+  sich \emph{Large Language Models} (LLMs) als erste Anlaufstelle für
+  Kundinnen und Kunden (automatisierter Kundenservice). LLMs werden
+  vermutlich aber auch immer mehr in internen Prozessen in Unternehmen
+  eingesetzt, z.B. um komplexe Dokumente zusammenzufassen oder
+  Sitzungsprotokolle zu erstellen.
+\end{itemize}
+
+Die obige Liste ist bei weitem nicht komplett und die Entwicklungen im
+Bereich ML sind aktuell so rasant, dass jeden Tag eine grosse Zahl von
+neuen ML-basierten Produkten und Dienstleistungen auf den Markt kommen.
+
+\section{Supervised vs.~Unsupervised
+Learning}\label{supervised-vs.-unsupervised-learning}
+
+Den Unterschied zwischen dem Supervised Learning und dem Unsupervised
+Learning können wir am besten erklären, indem wir uns mit ein paar
+mathematischen Grundlagen des Machine Learnings befassen. Keine Sorge,
+diese Grundlagen sind sehr einfach, aber versuchen Sie, diese bereits
+gut zu verstehen, denn wir bauen später darauf auf.
+
+Im \textbf{Supervised Learning} haben wir einerseits sogenannte
+Input-Daten und andererseits einen Output, den wir vorhersagen wollen.
+Für die Input-Daten gibt es ganz viele verschiedene Begriffe, die
+synonym verwendet werden: z.B. Features, unabhängige Variablen,
+Attribute, Prädiktoren. Dasselbe gilt für den Output, hier gibt es
+folgende Synonyme: Zielvariable, abhängige Variable, Label, oder auch
+einfach \(y\). Unsere Konvention hier ist aber folgende: es gibt
+\textbf{Input-Daten} (oder Input-Variablen) und einen \textbf{Output}
+(oder Output-Variable). Im \textbf{Unsupervised Learning} haben wir
+lediglich Input-Daten und keinen Output, doch dazu später etwas mehr.
+Wir formalisieren erstmal die Konzepte Input-Daten und Output.
+
+\subsection{Input-Daten}\label{input-daten}
+
+Die Input-Daten für eine Beobachtung \(i\) schreiben wir mathematisch
+wie folgt:
+
+\[
+\mathbf{x}_i=\begin{pmatrix} x_{i1} \\ x_{i2} \\ \vdots \\ x_{ip} \end{pmatrix},
+\] Diese Notation bedarf ein paar Erklärungen:
+
+\begin{itemize}
+\tightlist
+\item
+  Den Index \(i\) brauchen wir, um die verschiedenen Beobachtungen zu
+  kennzeichnen. \(i\) kann eine Ganzzahl zwischen \(1\) und \(n\)
+  annehmen, wobei \(n\) die Anzahl Beobachtungen im Datensatz
+  bezeichnet. Wenn wir zum Beispiel etwas über die Input-Daten der
+  dritten Beobachtung sagen wollen, dann können wir die Notation
+  \(\mathbf{x}_3\) verwenden.
+\item
+  Für jede Beobachtung \(i\) haben wir insgesamt \(p\) Variablen, welche
+  die verschiedenen Attribute einer Beobachtung enthalten. \(x_{i1}\)
+  bezeichnet also die erste Variable der i-ten Beobachtung, \(x_{i2}\)
+  die zweite Variable der i-ten Beobachtung und \(x_{ip}\) die p-te
+  (letzte) Variable der i-ten Beobachtung.
+\item
+  Was Sie oben sehen, ist \(\mathbf{x}_i\) aus mathematischer Sicht ein
+  Spaltenvektor. Mit diesem Spaltenvektor können wir die Input-Daten
+  einer Beobachtung \emph{kompakt} darstellen können.
+\end{itemize}
+
+\(\mathbf{x}_i\) bezeichnet nur die beobachteten Input-Variablenwerte
+für die i-te Beobachtung. Wenn wir die beobachteten Input-Variablenwerte
+aller \(n\) Beobachtungen kompakt darstellen möchten, dann können wir
+das mit einer Matrix tun. Dazu müssen wir die Input-Variablen für jede
+Beobachtung \(i\) \textbf{zeilenweise} in einer Matrix anordnen:
+
+\[
+\mathbf{X} = \begin{pmatrix}
+x_{11} & x_{12} & \cdots & x_{1p}\\ 
+x_{21} & x_{22} & \cdots & x_{2p}\\
+\vdots & \cdots & \ddots & \vdots\\
+x_{n1} & x_{n2} & \cdots & x_{np}\\
+\end{pmatrix}
+\]
+
+Die erste Zeile enthält die Input-Variablen für die erste Beobachtung,
+die zweite Zeile die Input-Variablen für die zweite Beobachtung, usw.
+
+\subsection{Output}\label{output}
+
+Neben den Input-Daten haben wir im Supervised Learning aber wie erwähnt
+auch einen Output und den bezeichnen wir üblicherweise mit \(y_i\). Auch
+hier hilft uns der Index \(i\) dabei, die Beobachtungen eindeutig zu
+kennzeichnen. In den meisten Fällen ist \(y_i\) ein sogenannter
+\textbf{Skalar}, also einfach eine Zahl. Darum schreiben wir es nicht in
+fetter Schrift wie oben, denn diese ist meist für Vektoren oder Matrizen
+reserviert.
+
+Auch hier können wir die Outputwerte aller \(n\) Beobachtungen kompakt
+zusammenfassen und zwar als Vektor
+
+\[
+\mathbf{y}=\begin{pmatrix} y_{1} \\ y_{2} \\ \vdots \\ y_{n} \end{pmatrix}.
+\]
+
+\subsubsection*{Frage}\label{frage}
+\addcontentsline{toc}{subsubsection}{Frage}
+
+Stellen Sie sich vor, wir versuchen mithilfe eines Datensatzes von 5000
+getätigten Kreditkartentransaktionen ein Modell zu trainieren, das
+vorhersagen kann, ob es sich bei einer gegebenen Transaktion um eine
+betrügerische Transaktion handelt oder nicht. Jede Transaktion in Ihrem
+Datensatz entspricht einer Beobachtung \(i\). Der Output \(y_i\) in
+diesem Beispiel ist eine kategorische Variable, die wir als
+\(y_i \in \{0,\;1\}\) beschreiben können, wobei 0 keinen Betrug und 1
+Betrug bezeichnet. Ausserdem haben Sie folgende Input-Daten:
+
+\[
+\mathbf{x}_i=\begin{pmatrix}
+\text{Transaktionsbetrag} \\
+\text{Land des Zahlungsempfaengers} \\
+\text{Zeitstempel der Transaktion}
+\end{pmatrix}
+\] Welche Werte nehmen in diesem Beispiel \(n\) und \(p\) an?
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  \(n = 100,\ p = 3\)
+\item
+  \(n = 5000,\ p = 3\)
+\item
+  \(n = 3,\ p = 5000\)\\
+\item
+  \(n = 100,\ p = 4\)
+\end{enumerate}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Die richtige Antwort ist \textbf{b}.
+
+Wir haben \(n = 5000\) Beobachtungen und \(p = 3\) Variablen.
+
+\end{tcolorbox}
+
+Die \(n\) Beobachtungen, die für das Training eines Modells zur
+Verfügung stehen werden meist \textbf{Trainingsdaten} oder
+\textbf{Trainingset} genannt.
+
+\subsection{Taxonomie des Machine
+Learnings}\label{taxonomie-des-machine-learnings}
+
+Beim \textbf{Supervised Learning} geht es um ML Probleme, in denen
+\textbf{sowohl Input-Daten als auch ein Output} vorhanden ist. Ziel beim
+Supervised Learning ist es, ein Modell zu trainieren, das basierend auf
+den Input-Daten möglichst gute Vorhersagen für den Output macht. Es geht
+also hier um Vorhersageprobleme. In einem gewissen Sinn ist der Output
+die überwachende Instanz (engl. \emph{Supervisor}), welche den
+Lernprozess des Modells kontrolliert.
+
+Etwas formaler und mit einem probabilistischen Hut auf kann man
+Supervised Learning auch wie folgt beschreiben: wir nehmen an, dass die
+vorliegenden Daten \((\mathbf{X},\,\mathbf{y})\) gezogen wurden aus
+einer wahren, aber unbekannten Verteilung, die wir als
+\(P(\mathbf{X},\,\mathbf{y})\) beschreiben. Im Supervised Learning geht
+es nun darum diese gemeinsame Verteilung \(P(\mathbf{X},\,\mathbf{y})\)
+mithilfe der vorliegenden Daten möglichst gut zu schätzen. Wählen wir
+ein Modell, das diese gemeinsame Wahrscheinlichkeit direkt modelliert,
+dann sprechen wir von einem \textbf{generativen} Modell. Oft versucht
+man sich jedoch das Leben einfacher zu machen, indem man
+\(P(\mathbf{y}\mid\mathbf{X})\) modelliert. In diesem Fall spricht man
+von \textbf{diskriminativen} Modellen. Wir werden in späteren Kapiteln
+auf diese Unterscheidung zurückkommen. Wichtig: fast jedes Modell macht
+irgendwelche \textbf{vereinfachenden Annahmen}, um entweder ein
+generatives oder ein diskriminatives Modell zu rechnen.
+
+\subsubsection*{Frage}\label{frage-1}
+\addcontentsline{toc}{subsubsection}{Frage}
+
+Was passiert, wenn \(\mathbf{X}\) und \(\mathbf{y}\) (statistisch)
+unabhängig sind? Macht es Sinn, in diesem Fall ein Modell aus dem
+Supervised Learning zu lernen?
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Wenn \(\mathbf{X}\) und \(\mathbf{y}\) (statistisch) unabhängig sind,
+dann kann die gemeinsame Wahrscheinlichkeit (Verteilung) geschrieben
+werden als
+\(P(\mathbf{X},\,\mathbf{y}) = P(\mathbf{X}) \cdot P(\mathbf{y})\).
+
+Die bedingte Wahrscheinlichkeit \(P(\mathbf{y}\mid\mathbf{X})\) ist in
+diesem Fall: \[
+P(\mathbf{y}\mid\mathbf{X}) = \frac{P(\mathbf{X},\,\mathbf{y})}{P(\mathbf{X})} = \frac{P(\mathbf{X}) \cdot P(\mathbf{y})}{P(\mathbf{X})} = P(\mathbf{y})
+\]
+
+Das bedeutet, dass wir aus \(\mathbf{X}\) nichts über \(\mathbf{y}\)
+lernen können und Supervised Learning in diesem Fall keinen Sinn macht.
+
+\end{tcolorbox}
+
+Im Gegensatz zum Supervised Learning haben wir im \textbf{Unsupervised
+Learning} nur Input-Daten und \emph{keinen Output}. Im Unsupervised
+Learning geht es darum, aus den Input-Daten interessante Muster zu
+lernen, welche für bessere unternehmerische Entscheidungen verwendet
+werden können. Ein einfaches Beispiel ist das Clustering von Kundinnen
+und Kunden eines Unternehmens in ähnliche Kundengruppen, so dass die
+verschiedenen Kundengruppen gezielter mit Marketingaktionen angesprochen
+werden können. Techniken, um komplexe Datensätze zu visualisieren,
+werden typischerweise auch zum Unsupervised Learning gezählt. Im
+Unsupervised Learning geht es darum, Modelle für \(P(\mathbf{X})\) zu
+finden und zu rechnen.
+
+Etwas vereinfacht gesagt, sind ein grosser Teil der Modelle, die wir der
+\textbf{Generativen KI} zusprechen, nichts anderes als Modelle, die
+\(P(\mathbf{X})\) so gut wie möglich zu beschreiben versuchen.
+\(\mathbf{X}\) kann man sich als grosse Menge Text oder eine grosse
+Anzahl von Bildern vorstellen. Wenn wir nun also Text von einem LLM
+generieren lassen, dann ist das im Grunde nichts anderes als aus der
+gelernten Verteilung, die \(P(\mathbf{X})\) approximiert, zu
+\textbf{samplen}.
+
+Neben dem Supervised und dem Unsupervised Learning gibt es noch eine
+dritte Kategorie von Machine Learning, nämlich das \textbf{Reinforcement
+Learning} (RL). Dieser Kategorie gehören Modelle an, die (virtuelle)
+Agenten so trainieren, dass sie langfristig möglichst optimal handeln.
+Das bisher bekannteste Beispiel aus dem RL ist Googles AlphaGo Agent,
+welcher den menschlichen Go Weltmeister im Jahr 2017 schlug.\footnote{https://deepmind.google/technologies/alphago/}.
+Reinforcement Learning ist aber auch eine wichtige Komponente in der
+Optimierung von grossen Sprachmodellen wie ChatGPT. In einer ersten
+Fassung dieses Buchs werden wir uns nicht (oder nur am Rande) mit RL
+befassen.
+
+Die Unterscheidung zwischen den drei Arten von Machine Learning ist im
+oberen Teil der Abbildung~\ref{fig-slulrl} visualisiert:
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/SL_UL_RL.png}}
+
+}
+
+\caption{\label{fig-slulrl}Die verschiedenen Kategorien des Machine
+Learnings und deren Hierarchie.}
+
+\end{figure}%
+
+\section{Regression
+vs.~Klassifikation}\label{regression-vs.-klassifikation}
+
+In der Kategorie des Supervised Learnings unterscheiden wir weiter
+zwischen Regressions- und Klassifikationsproblemen (siehe auch
+Abbildung~\ref{fig-slulrl}).
+
+Beim \textbf{Regressionsproblem} ist der Output eine \textbf{stetige}
+Variable (Intervall- oder Verhältnisskalierung), d.h. die Variable
+enthält reelle (numerische) Werte. Mathematisch schreibt man dies als
+\(y_i \in \mathbb{R}\), wobei \(\mathbb{R}\) die Menge der reellen
+Zahlen beschreibt.
+
+Beim \textbf{Klassifikationsproblem} ist der Output bzw. die
+Zielvariable eine \textbf{kategorische} Variable (Nominal- oder
+Ordinalskalierung). Mathematisch schreibt man dies als
+\(y_i \in \{1, \dots, C\}\), wobei \(C\) die Anzahl Kategorien
+beschreibt. Wenn wir nur \(C=2\) Kategorien haben wie im Beispiel oben
+mit \(y_i \in \{0, 1\}\), sprechen wir von einem \textbf{binären}
+Klassifikationsproblem. Falls \(C>2\) sprechen wir vom
+\textbf{mehrklassigen} (engl. \emph{multiclass}) Klassifikationsproblem.
+
+\subsubsection*{Frage}\label{frage-2}
+\addcontentsline{toc}{subsubsection}{Frage}
+
+Welche der folgenden Probleme sind Regressionsprobleme?
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Vorhersage des Lohns der/des Leiter:in eines Unternehmens basierend
+  auf Profit, Marktkapitalisation, Anzahl Mitarbeitender, sowie Sektor,
+  in dem das Unternehmen tätig ist.
+\item
+  Basierend auf der aktuellen Marktlage und weiteren wirtschaftlichen
+  Aspekten wollen Sie den morgigen Preis einer bestimmten Aktie
+  vorhersagen.
+\item
+  Vorhersage ob eine Person, welche ein bestimmtes Youtube Video schauen
+  will, volljährig ist oder nicht.
+\item
+  Eine Bank möchte mithilfe von historischen Daten vorhersagen, ob ein
+  bestimmter Kunde zahlungsunfähig wird oder nicht.
+\item
+  Ein Detailhandelsunternehmen möchte vorhersagen, ob eine Kundin ein
+  Produkt aus der Kategorie A, B, C, oder kein Produkt kauft.
+\item
+  Vorhersage von Hauspreisen basierend auf Attributen wie der Grösse,
+  Anzahl Zimmer, Seeblick (ja/nein), Steuerlast, etc.
+\item
+  Ein Unternehmen lanciert ein neues Produkt und schätzt anhand von
+  Konkurrenzprodukten, ob das eigene Produkt ein Erfolg wird oder nicht.
+\end{enumerate}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Korrekt sind die Antworten \textbf{a}, \textbf{b} und \textbf{f}.
+
+Bei allen anderen Antworten handelt es sich um Klassifikationsprobleme.
+
+\end{tcolorbox}
+
+\section{Parametrische vs.~nicht-parametrische
+Modelle}\label{parametrische-vs.-nicht-parametrische-modelle}
+
+Ein ML Modell gehört entweder der Familie \textbf{parametrischer}
+Modelle oder der Familie \textbf{nicht-parametrischer} Modelle an. Dabei
+spielt es keine Rolle, ob wir mit dem Modell ein Regressions- oder ein
+Klassifikationsproblem lösen wollen.
+
+Womöglich sind Sie in Ihrer Ausbildung bereits \textbf{parametrischen
+Modellen} begegnet, denn das einfache lineare Regressionsmodell ist ein
+typisches Beispiel für ein parametrisches ML Modell. Das Modell ist
+vollkommen charakterisiert durch die beiden lernbaren Parameter \(w_0\)
+und \(w_1\)\footnote{In Statistikvorlesungen werden die beiden Parameter
+  oft eher mit \(b_0\) und \(b_1\) oder mit \(\beta_0\) und \(\beta_1\)
+  bezeichnet. Im Machine Learning nennt man Parameter oft Gewichte
+  (engl. \emph{Weights}), weshalb die Parameter typischerweise mit \(w\)
+  bezeichnet werden.} und kann wie folgt (mathematisch) aufgeschrieben
+werden:
+
+\[
+\hat{y}_i = f(x_i)=w_0 + w_1 \cdot x_i
+\]
+
+Wenn Ihnen der obige Ausdruck noch fremd vorkommt, dann ist das nicht
+schlimm. Wir werden im Kapitel~\ref{sec-linreg} ausführlich auf lineare
+Regressionsmodelle eingehen. Im Moment müssen Sie nur wissen, dass ein
+parametrisches Modell wie oben mit einer mathematischen Funktion
+beschrieben werden kann und dass diese Funktion durch lernbare
+\textbf{Parameter} (hier \(w_0\) und \(w_1\)) charakterisiert wird.
+
+\textbf{Nicht-parametrische Modelle} wiederum sind Modelle, welche nicht
+(oder zumindest nicht explizit) durch Parameter charakterisiert sind. Am
+besten schauen wir uns kurz ein einfaches nicht-parametrisches Modell
+an, nämlich das \textbf{K-Nearest-Neighbors} (KNN) Modell. Ein KNN
+Modell verwendet für die Vorhersage einer neuen Beobachtung die \(K\)
+nächsten bzw. ähnlichsten (Nachbars-)Beobachtungen. Doch wie werden die
+Vorhersagen gemacht?
+
+\begin{itemize}
+\tightlist
+\item
+  Klassifikationsproblem: die \textbf{häufigste} Outputkategorie unter
+  den \(K\) Nachbarn ist die Vorhersage für den neuen Datenpunkt.
+\item
+  Regressionsproblem: der \textbf{Mittelwert} der Outputwerte \(y_i\)
+  unter den \(K\) Nachbarn ist die Vorhersage für den neuen Datenpunkt.
+\end{itemize}
+
+Das KNN Modell ist ein sehr einfaches ML Modell, welches in der Praxis
+allerdings nicht allzu häufig angewendet wird. Warum nicht? Weil es am
+sogenannten \textbf{Fluch der Dimensionalität} (engl. \emph{Curse of
+Dimensionality}) leidet. Doch was bedeutet das? Je mehr Input-Variablen
+wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist
+etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir
+für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee,
+dass wir \(K\) nahe, ähnliche Beobachtungen für die Vorhersage
+verwenden. Wenn diese \(K\) nahen Beobachtungen im hochdimensionalen
+Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert
+auch das Modell nicht mehr gut. Wir werden uns in
+Kapitel~\ref{sec-linclass} ausführlicher mit dem KNN Modell und dem
+Fluch der Dimensionalität befassen.
+
+\section{Perceptron und erste mathematische
+Konzepte}\label{perceptron-und-erste-mathematische-konzepte}
+
+Wir versuchen nun hier die Anfänge des MLs auch aus technischer Sicht zu
+verstehen und zwar schauen wir uns die Funktionsweise von Frank
+Rosenblatt's Perceptron an. Der Einfachheit halber schauen wir uns ein
+Beispiel mit nur zwei Input-Variablen \(x_{i1}\) und \(x_{i2}\) an.
+Ausserdem befinden wir uns im binären Klassifikationsfall mit zwei
+möglichen Kategorien, die als \(y_i \in \{-1, 1\}\) kodiert sind (wir
+werden später sehen, warum wir hier nicht eine 0/1 Kodierung wählen).
+Dieser Abschnitt ist inspiriert durch (Ananthaswamy 2024, Kap. 2).
+
+\subsection{Datenpunkte als Vektoren}\label{datenpunkte-als-vektoren}
+
+Jeder Datenpunkt (bzw. Beobachtung) \(\mathbf{x}_i\) kann als
+\textbf{Vektor} im Koordinatensystem dargestellt werden. Da wir uns hier
+auf zwei Input-Variablen beschränken, kann dieses Koordinatensystem
+einfach visualisiert werden:
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{01_intro_files/figure-pdf/vec1-1.pdf}
+
+}
+
+\caption{Koordinatensystem mit zwei Dimensionen und einem Datenpunkt
+(-4.1, 3.5).}
+
+\end{figure}%
+
+Der Datenpunkt
+\(\mathbf{x}_i = \begin{pmatrix} -4.1 & 3.5 \end{pmatrix}'\)\footnote{Da
+  ein Spaltenvektor im Text nicht gut geschrieben werden kann, schreiben
+  wir \(\mathbf{x}_i\) als transponierten Zeilenvektor, was wiederum dem
+  Spaltenvektor entspricht} ist aus geometrischer Sicht ein Vektor in
+diesem zweidimensionalen Raum.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Definition eines Vektors}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-note-color-frame, titlerule=0mm]
+
+Ein Vektor ist definiert durch zwei Dinge: (i) seine \textbf{Richtung}
+im Koordinatensystem und (ii) seine \textbf{Länge}. Ein Vektor muss
+nicht zwingend am Ursprung des Koordinatensystems (0, 0) beginnen. Das
+heisst, zwei Vektoren mit identischer Richtung und Länge, aber an
+unterschiedlichen Orten im Koordinatensystem, gelten als identisch.
+
+Die Richtung des Vektors ist durch seine Koordinaten bereits definiert.
+
+Die Länge eines Vektors
+\(\mathbf{x}_i = \begin{pmatrix} x_{i1} & x_{i2} \end{pmatrix}'\)
+berechnet sich wie folgt:
+
+\[
+\| \mathbf{x}_i \| = \sqrt{x_{i1}^2 + x_{i2}^2}
+\]
+
+\end{tcolorbox}
+
+\subsubsection{Frage}\label{frage-3}
+
+Welche Länge hat unser Vektor
+\(\mathbf{x}_i = \begin{pmatrix} -4.1 & 3.5 \end{pmatrix}'\) im Beispiel
+oben?
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+\[
+\| \mathbf{x}_i \| = \sqrt{{-4.1}^2 + {3.5}^2} = 5.39
+\]
+
+\end{tcolorbox}
+
+Nun kommen wir bereits zu einem der aus meiner Sicht wichtigsten
+mathematischen Operationen im Machine Learning: das
+\textbf{Skalarprodukt}. Wenn Sie das Skalarprodukt gut verstehen, dann
+werden viele der Konzepte später massiv einfacher zu verstehen sein.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-caution-color!10!white, opacityback=0, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Skalarprodukt}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-caution-color-frame, titlerule=0mm]
+
+Das Skalarprodukt zwischen zwei Vektoren kann aus zwei Perspektiven
+betrachtet werden: einer geometrischen und einer algebraischen. Das
+Resultat ist aber in beiden Fällen dasselbe, nämlich ein \textbf{Skalar}
+(also irgendeine reelle Zahl).
+
+In der \textbf{geometrischen} Perspektive entspricht das Skalarprodukt
+zwischen zwei Vektoren \(\mathbf{a}\) und \(\mathbf{b}\) dem Produkt der
+Länge von \(\mathbf{a}\) sowie der Länge der orthogonalen Projektion von
+\(\mathbf{b}\) auf \(\mathbf{a}\). Wir können das selbstverständlich als
+Formel aufschreiben. Weil wir das ganze aus einer geometrischen
+Perspektive betrachten, verwenden wir die geomtrische Schreibweise von
+Vektoren (mit Pfeilen oberhalb der Variablennamen):
+
+\[
+\vec{a} \cdot \vec{b} = \| \vec{a} \| \; \| \vec{b} \| \cos(\varphi)
+\] Wir multiplizieren also die Länge von \(\mathbf{a}\) (also
+\(\| \vec{a} \|\)) mit der Länge der orthogonalen Projektion von
+\(\mathbf{b}\) auf \(\mathbf{a}\) (definiert durch
+\(\| \vec{b} \| \cos(\varphi)\)). Der Winkel \(\varphi\) ist der Winkel
+zwischen den beiden Vektoren.
+
+Folgendes Beispiel hilft das ganze zu veranschaulichen. Die Projektion
+des roten Vektors \(\vec{b}\) auf den blauen Vektor \(\vec{a}\) ist
+dargestellt durch die gestrichelte Linie, die vom roten Vektor senkrecht
+auf den blauen trifft. Der Winkel zwischen den beiden Vektoren beträgt
+40.6 Grad.
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{images/skalarprodukt.png}
+
+}
+
+\caption{\label{fig-skalarprodukt}Skalarprodukt aus geometrischer
+Sicht.}
+
+\end{figure}%
+
+Mit obiger Formel können wir nun problemlos das Skalarprodukt zwischen
+den beiden Vektoren berechnen:
+
+\[
+\vec{a} \cdot \vec{b} = \sqrt{{3}^2 + {1}^2} \cdot  \sqrt{{3}^2 + {5}^2} \cdot \cos(40.6) = \sqrt{10} \cdot \sqrt{34} \cdot 0.76 = 14
+\]
+
+Doch was genau misst eigentlich das Skalarprodukt? Es misst, wie stark
+ein Vektor in die Richtung des anderen Vektors zeigt.
+
+Es gibt weitere wichtige Eigenschaften des Skalarprodukts:
+
+\begin{itemize}
+\tightlist
+\item
+  Zeigen die beiden Vektoren in die gleiche Richtung ist der Winkel
+  zwischen den Vektoren 0 Grad und \(\cos(0)=1\). In diesem Fall
+  reduziert sich das Skalarprodukt auf das Produkt der beiden Längen.
+\item
+  Stehen die Vektoren in einem rechten Winkel zueinander, dann ist
+  \(\cos(90)=0\) und das Skalarprodukt wird immer 0 sein. Diese
+  Eigenschaft müssen Sie sich unbedingt merken, denn sie taucht überall
+  im ML immer wieder auf!
+\item
+  Das Skalarprodukt ist symmetrisch. Es spiel also keine Rolle, ob wir
+  das Skalarprodukt zwischen \(\vec{a}\) und \(\vec{b}\) oder das
+  Skalarprodukt zwischen \(\vec{b}\) und \(\vec{a}\) rechnen. Das
+  Resultat wird dasselbe sein.
+\end{itemize}
+
+Aus der \textbf{algebraischen} Perspektive ist die Berechnung zum Glück
+noch einfacher. Wir berechnen das Skalarprodukt hier einfach als Summe
+über die elementweisen Multiplikationen der Koordinaten:
+
+\[
+\vec{a} \cdot \vec{b} = a_1\,b_1 + a_2\,b_2 = 3 \cdot 3 + 1 \cdot 5 = 14
+\]
+
+Im Machine Learning ist es üblich, das Skalarprodukt als Produkt des
+\textbf{transponierten} Vektors \(\mathbf{a}\) und des Vektors
+\(\mathbf{b}\) zu schreiben, also:
+
+\[
+\mathbf{a}'\, \mathbf{b} = \begin{pmatrix} 3 & 1 \end{pmatrix} \begin{pmatrix} 3 \\ 5 \end{pmatrix} = 3 \cdot 3 + 1 \cdot 5 = 14
+\]
+
+\end{tcolorbox}
+
+Nun sind wir bereit, uns das Perceptron erst aus mathematischer und dann
+aus geometrischer Sicht anzuschauen.
+
+\subsection{Das Perceptron (mathematische
+Sicht)}\label{das-perceptron-mathematische-sicht}
+
+Das Perceptron ist ein parametrisches Modell und wird in unserem
+Beispiel mit zwei Input-Variablen durch drei Parameter (oder Gewichte)
+\(w_0\), \(w_1\) und \(w_2\) charakterisiert.
+
+In einem \textbf{ersten Schritt} werden diese drei Gewichte verwendet,
+um eine \textbf{gewichtete Summe} der Input-Variablenwerte zu rechnen:
+
+\[
+w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2}
+\]
+
+Vielleicht erkennen Sie bereits, dass diese gewichtete Summe dem
+Skalarprodukt ähnelt. Mit einem kleinen Trick können wir diese
+gewichtete Summe tatsächlich als Skalarprodukt ausdrücken, nämlich indem
+wir dem Input-Datenvektor \(\mathbf{x}_i\) noch eine 1 voranhängen:
+
+\[
+\mathbf{w}'\,\mathbf{x}_i = \begin{pmatrix} w_0 & w_1 & w_2 \end{pmatrix} \begin{pmatrix} 1 \\ x_{i1} \\ x_{i2} \end{pmatrix} = w_0 \cdot 1 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2}
+\]
+
+In einem \textbf{zweiten Schritt} wird der Wert der gewichteten Summe
+verglichen mit dem Schwellenwert 0, um zu entscheiden, ob der Output
+\(\hat{y}_i\) des Perceptrons -1 oder +1 ist. Man nennt dies eine
+sogenannte \textbf{Step-Funktion}, die folgendermassen geschrieben
+werden kann:
+
+\[
+\hat{y}_i = \begin{cases}
+            -1, & \mathbf{w}'\,\mathbf{x}_i < 0\\
+      +1, & \mathbf{w}'\,\mathbf{x}_i \geq 0
+        \end{cases}
+\]
+
+Wir können diese zwei Schritte auch grafisch darstellen. Das
+Summenzeichen im grünen Kreis in Abbildung~\ref{fig-perceptron} soll den
+ersten Schritt, die Berechnung der gewichteten Summe der
+Input-Variablenwerte, darstellen. Das Zeichen rechts davon stellt die
+Step-Funktion dar, etwas, das wir später als sogenannte
+\textbf{Aktivierung} verallgemeinern werden.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{images/perceptron.png}
+
+}
+
+\caption{\label{fig-perceptron}Ein Perceptron mit einer Einheit.}
+
+\end{figure}%
+
+\subsection{Das Perceptron (geometrische
+Sicht)}\label{das-perceptron-geometrische-sicht}
+
+Aus geometrischer Sicht kann man sich das Perceptron mit zwei
+Input-Variablen als Gerade im Koordinatensystem vorstellen, welche die
+Beobachtungen der einen Kategorie von den Beobachtungen der anderen
+Kategorie trennt.\footnote{In höherdimensionalen Räumen sind es anstelle
+  von Geraden sogenannte Hyperebenen.}
+
+Für jeden Datenpunkt, der genau auf dieser trennenden Geraden liegt,
+muss gelten, dass \(\mathbf{w}'\,\mathbf{x}_i = 0\). Aus der Einführung
+zum Skalarprodukt wissen wir, dass wenn das Skalarprodukt 0 ist die
+Vektoren in einem rechten Winkel zueinander stehen, oder in anderen
+Worten, orthogonal sind.
+
+Wir sehen in untenstehender Abbildung, dass dies tatsächlich so ist. Die
+Gerade (in Grün) trennt die 5 Datenpunkte perfekt auf in die zwei
+Kategorien (blaue Kreise und rote Dreiecke). Der Gewichtsvektor
+(definiert durch die Gewichte \(w_1\) und \(w_2\)) steht in einem
+\textbf{rechten Winkel} zur Geraden. Der Gewichtsvektor charakterisiert
+also indirekt die Gerade (oder allgemeiner: die Hyperebene), weil diese
+Orthogonalität immer gegeben ist.
+
+Doch was ist der Zweck des Gewichts \(w_0\)? Dieser Parameter stellt
+sicher, dass die Gerade nicht durch den Nullpunkt (0, 0) gehen muss.
+\(w_0\) erlaubt dem Perceptron also mehr Flexibilität. Man spricht bei
+\(w_0\) in der Fachsprache häufig vom \textbf{Bias Term}. Sie sehen
+anhand der Grafik, dass eine Gerade, die durch den Nullpunkt gehen muss,
+die zwei Kategorien nicht voneinander trennen könnte.
+
+\begin{center}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{01_intro_files/figure-pdf/percep-1.pdf}
+\end{center}
+
+\subsubsection{Frage}\label{frage-4}
+
+Wie können wir aus der Gleichung
+\(w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} = 0\) die Steigung der
+Geraden und den Punkt, wo die Gerade die y-Achse schneidet, berechnen?
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Wir können die Gleichung nach den Regeln der Algebra umformen, so dass
+wir auf der linken Seite der Gleichung nur noch \(x_2\) haben:
+
+\[
+\begin{align}
+w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} &= 0 \\
+w_2 \cdot x_{i2} &= - w_0 - w_1 \cdot x_{i1} \\
+x_{i2} &= - \frac{w_0}{w_2} - \frac{w_1}{w_2} \cdot x_{i1}
+\end{align}
+\]
+
+Daran erkennen wir, dass die Gerade eine Steigung von
+\(- \frac{w_1}{w_2}\) und eine Konstante von \(- \frac{w_0}{w_2}\) hat.
+In unserem Beispiel wäre die Steigung -0.49 und die Konstante 1.14.
+
+\end{tcolorbox}
+
+\subsection{Wie lernt das Perceptron?}\label{wie-lernt-das-perceptron}
+
+Im vorherigen Abschnitt waren die optimalen Gewichte gegeben, doch das
+eigentlich Erstaunliche am Perceptron ist der von Rosenblatt
+vorgeschlagene \textbf{Perceptron Learning Algorithm}, welcher nach
+einer gewissen Anzahl Iterationen Werte für die Gewichte findet, so dass
+die beiden Kategorien perfekt voneinander getrennt werden.
+
+Doch wie funktioniert dieser Algorithmus? Er ist enorm simpel und
+verfährt in drei Schritten:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Die Gewichte werden mit 0 initialisiert also \(\mathbf{w}=0\).
+\item
+  Nun iterieren wir. Jede Iteration geht durch die Datenpunkte und
+  berechnet \(y_i\,\mathbf{w}'\,\mathbf{x}_i\). Falls
+  \(y_i\,\mathbf{w}'\,\mathbf{x}_i \leq 0\), werden die Gewichte
+  angepasst und zwar wie folgt: \[
+  \mathbf{w} := \mathbf{w} + y_i\,\mathbf{x}_i
+  \]
+\item
+  Wenn in Schritt 2 der Gewichtsvektor für keinen Datenpunkt angepasst
+  werden musste, dann sind wir fertig und beenden die Iteration.
+\end{enumerate}
+
+Doch wie funktioniert Schritt 2? Wenn die Berechnung
+\(\mathbf{w}'\,\mathbf{x}_i\) einen negativen Wert ergibt und
+\(y_i = -1\), dann sind die Gewichte für den Datenpunkt \(i\) gut und
+müssen nicht aktualisiert werden. Dasselbe gilt, wenn sowohl
+\(\mathbf{w}'\,\mathbf{x}_i\) und \(y_i\) positiv sind.
+
+Wenn \(\mathbf{w}'\,\mathbf{x}_i\) und \(y_i\) jedoch
+\textbf{unterschiedliche Vorzeichen} haben, dann bedeutet dies, dass
+eine falsche Klassifikation vorliegt. Der Datenpunkt liegt auf der
+falschen Seite der Geraden. Im Panel oben links in untenstehender
+Abbildung ist das für das rote Dreieck, das oberhalb der Geraden liegt
+der Fall. In der Iteration 2 machen wir für diesen Datenpunkt folgende
+Anpassung:
+
+\[
+\mathbf{w} := \begin{pmatrix} 0 \\ 2.1 \\ -2.5 \end{pmatrix} + 1\,\begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 \\ 0.1 \\ -1.5 \end{pmatrix}
+\]
+
+Im Panel oben rechts (Resultat nach Iteration 2) sehen wir mit dieser
+Operation die Gerade so verschieben, dass der falsch klassifizierte
+Datenpunkt etwas näher an der korrekten Seite der Gerade liegt. Der
+Algorithmus lernt also von Fehlern und tastet sich iterativ an das
+Optimum heran - eine Idee, die wir in späteren Kapiteln häufig antreffen
+werden.
+
+Im Panel rechts unten sehen wir, dass der Algorithmus nach 10
+Iterationen die Datenpunkte bereits korrekt klassifiziert. Wow!
+
+\begin{center}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{01_intro_files/figure-pdf/percep-learn-1.pdf}
+\end{center}
+
+\subsection{Das XOR Problem}\label{das-xor-problem}
+
+Als das Perceptron und der Lernalgorithmus in den 50er und 60er Jahre
+bekannt wurde, herrschte eine regelrechte Euphorie. Man hatte ein Modell
+und einen Lernalgorithmus gefunden, die aus Datenpunkten korrekte
+Klassifizierungsregeln \textbf{selbständig} lernen konnten, und zwar
+nicht nur in zwei Dimensionen, wo man das korrekte Resultat von Auge
+sieht, sondern auch in hochdimensionalen Räumen, wo die Aufgabe viel
+schwieriger ist.
+
+Doch bald legte sich die Euphorie und der erste ``KI-Winter''\footnote{https://en.wikipedia.org/wiki/AI\_winter}
+trat ein: das Interesse an KI verschwand und auch der Wille weitere
+Forschung zu finanzieren war massiv kleiner. Doch warum? Weil man bald
+merkte, dass das Perceptron nur für \textbf{linear separierbare}
+Probleme funktioniert. Auf unser Beispiel übertragen heisst das, nur
+wenn wir die Datenpunkte mit einer Geraden in die zwei Kategorien
+aufteilen können.
+
+Um das Problem zu veranschaulichen, wird oft auf das \textbf{Exclusive
+OR} (XOR) Problem zurück gegriffen. Im XOR Problem haben wir zwei
+Input-Variablen \(x_{i1}\) und \(x_{i2}\), welche beide nur die Werte 0
+oder 1 annehmen können. Der Output für eine Beobachtung folgt einer
+exklusiven ODER Logik, welche von den Input-Variablenwerte abhängt.
+Folgende vier Fälle sind möglich:
+
+\begin{itemize}
+\tightlist
+\item
+  Falls \(x_{i1}=0\) und \(x_{i2}=0\), dann ist \(y_i=-1\).
+\item
+  Falls \(x_{i1}=1\) und \(x_{i2}=1\), dann ist \(y_i=-1\).
+\item
+  Falls \(x_{i1}=1\) und \(x_{i2}=0\), dann ist \(y_i=+1\).
+\item
+  Falls \(x_{i1}=0\) und \(x_{i2}=1\), dann ist \(y_i=+1\).
+\end{itemize}
+
+Eine Beobachtung \(i\) hat also nur dann einen Outputwert von +1, wenn
+\textbf{eine} der Input-Variablen den Wert 1 annimmt. In der
+nicht-exklusiven ODER Logik würden auch \(x_{i1}=1\) und \(x_{i2}=1\) zu
+einem Outputwert von +1 führen.
+
+Grafisch kann das XOR Problem durch folgende vier Datenpunkte
+visualisiert werden:
+
+\begin{center}
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{01_intro_files/figure-pdf/xor-1.pdf}
+\end{center}
+
+Ich hoffe Sie sehen, dass hier keine Gerade gezeichnet werden kann,
+welche die zwei Kategorien korrekt voneinander trennt. Ironischerweise
+wäre die Lösung für dieses Problem nicht schwierig gewesen: man musste
+einfach mindestens zwei Perceptron-Einheiten nacheinander anordnen und
+das Problem wäre lösbar gewesen. Aber um darauf zu kommen und die
+mathematischen Grundlagen zu schaffen, brauchte es erst ein paar
+Jahrzehnte mehr Forschung von Leuten, die sich von der Enttäuschung
+nicht aufhalten liessen. Wir werden im zweiten Teil dieses Buchs auf das
+Perceptron und das XOR Problem zurückkommen.
+
+\part{Klassisches Machine Learning}
+
+Nachdem wir in Kapitel~\ref{sec-intro} in das Thema Machine Learning
+eingestiegen sind, befassen wir uns nun in einem ersten Teil des Buchs
+mit den klassischen Methoden des \textbf{Supervised Learnings}.
+
+Es ist jedoch wichtig zu erwähnen, dass die folgenden Kapitel lediglich
+einen ersten Einblick in dieses Thema geben. Es gibt zahlreiche weitere
+Themen, Modelle und Methoden aus dem Supervised Learnings. Ausserdem
+ignorieren wir das Thema Unsupervised Learning fast komplett.
+
+Nichtsdestotrotz haben Sie nach Bearbeitung der folgenden Kapitel eine
+sehr gute Basis, um tiefer in das Thema einzusteigen. Sie sollten nach
+dem Lesen ausserdem auch die Notation und die wichtigsten mathematischen
+Grundlagen in ihrem Köcher haben, damit Sie weiterführende Bücher und
+Materialien gut verstehen sollten.
+
+\chapter{Lineare Regression}\label{sec-linreg}
+
+In diesem Kapitel werden wir uns eingehend mit dem einfachsten Modell
+für das Regressionsproblem auseinander setzen, nämlich dem linearen
+Regressionsmodell. Liegt ein Regressionsproblem vor, dann macht es in
+der Praxis fast immer Sinn mit diesem Modell zu starten und dann die
+Komplexität nach Bedarf zu erhöhen.
+
+\section{ML-Modelle im Allgemeinen}\label{ml-modelle-im-allgemeinen}
+
+Wie bereits in Kapitel~\ref{sec-intro} gesehen, geht es beim
+Regressionsproblem darum, eine stetige Variable \(y_i \in \mathbb{R}\)
+möglichst optimal vorherzusagen. Dazu verwenden wir eine oder mehrere
+Input-Variablen, welche wir kompakt als Vektor \(\mathbf{x}_i\)
+schreiben.
+
+Das Problem ist nur sinnvoll lösbar, falls es tatsächlich einen
+Zusammenhang zwischen den Input-Variablen \(\mathbf{x}_i\) und dem
+Output \(y_i\) gibt, wenn wir also aus \(\mathbf{x}_i\) etwas über
+\(y_i\) lernen können. Wir nehmen ganz allgemein an, dass der
+Zusammenhang zwischen dem Output \(y_i\) und den Input-Variablen
+\(\mathbf{x}_i\) mathematisch wie folgt ausgedrückt werden kann (James
+u.~a. 2021, Kap. 2):
+
+\[
+y_i = f(\mathbf{x}_i) + \epsilon
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  Die Funktion \(f(\mathbf{x}_i)\) bezeichnet die \textbf{systematische
+  Information}, die wir aus \(\mathbf{x}_i\) im Hinblick auf \(y_i\)
+  lernen können. Oder in anderen Worten: \(f\) mappt die Input-Werte
+  \(\mathbf{x}_i\) auf die Output-Werte \(y_i\).
+\item
+  \(\epsilon\) ist ein Fehlerterm, der die Differenz zwischen \(y_i\)
+  und \(f(\mathbf{x}_i)\) abbildet,\footnote{\(\epsilon = y_i - f(\mathbf{x}_i)\)}
+  also den \textbf{nicht-lernbaren} (unsystematischen) \textbf{Teil}.
+  Der Fehlerterm beinhaltet einerseits den Effekt von Variablen, die uns
+  nicht zur Verfügung stehen, aber einen Einfluss auf den Output \(y_i\)
+  haben und andererseits nicht-messbare Variation in \(y_i\), oft auch
+  einfach \emph{Noise} genannt. Grob gesagt: alles nicht-messbare. Auch
+  wichtig zu sehen: der Fehler ist \textbf{additiv}, wir addieren ihn
+  zum lernbaren Teil hinzu.
+\end{itemize}
+
+Der Output \(y_i\) ergibt sich also aus der Addition des systematischen
+Teils \(f(\mathbf{x}_i)\) sowie des Fehlerterms \(\epsilon\).
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Ziel des Machine Learnings}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-note-color-frame, titlerule=0mm]
+
+Ziel des Machine Learnings ist es, eine Funktion
+\(\hat{f}(\mathbf{x}_i)\) zu trainieren (schätzen), die der wahren aber
+unbekannten Funktion \(f(\mathbf{x}_i)\) so nahe wie möglich kommt. Im
+(unrealistischen) Idealfall ist unser trainiertes Modell gleich der
+wahren Funktion, also \(\hat{f}(\mathbf{x}_i) = f(\mathbf{x}_i)\) und
+wir haben die systematische Information perfekt gelernt.
+
+Sobald wir \(\hat{f}(\mathbf{x}_i)\) trainiert haben, können wir damit
+Vorhersagen machen, denn die Vorhersage für eine neue Beobachtung
+\(\mathbf{x}_0\) ist nichts anderes als der Wert der trainierten
+Funktion an diesem Punkt, also \(\hat{y}_0 = \hat{f}(\mathbf{x}_0)\).
+
+Jedes ML-Modell, das wir uns in diesem Buch anschauen werden, kann als
+eine mathematische Funktion \(\hat{f}(\mathbf{x}_i)\) der
+Input-Variablen \(\mathbf{x}_i\) aufgeschrieben werden.
+
+\end{tcolorbox}
+
+\section{Das Modell (ausgeschrieben)}\label{das-modell-ausgeschrieben}
+
+Nun wollen wir uns konkret mit dem \textbf{linearen Regressionsmodell}
+befassen. Das bedeutet nun nichts anderes, als dass wir die allgemein
+geschriebene Funktion \(f(\mathbf{x}_i)\) durch eine konkrete
+mathematische Funktion ersetzen. Im Machine Learning ist das der erste
+wichtige Schritt, nämlich die Modellwahl (engl. \emph{Model Selection}).
+Das Modell kann wie folgt geschrieben werden:
+
+\[
+f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
+\] Wir verzichten hier bewusst darauf, den Hut für \(f\) zu schreiben,
+da es sich lediglich um eine allgemein gültige Funktion handelt und noch
+nichts geschätzt bzw. trainiert wurde. Dieses Modell bzw. diese Funktion
+hat sogenannte \textbf{Parameter}, die es zu schätzen gilt. Es handelt
+sich also auch hier um ein parametrisches Modell. Hier sind dies die
+Parameter \(w_0,\; w_1,\; \ldots,\; w_p\). Wegen der Konstante \(w_0\)
+haben wir immer einen Parameter mehr als es Input-Variablen hat, also
+\(p+1\) Parameter.
+
+Diese Parameter sind die Schlüsselzutat in einem ML-Modell. Wir wollen
+sie \textbf{optimieren}, so dass die trainierte Funktion
+\(\hat{f}(\mathbf{x}_i)\) der wahren Funktion \(f(\mathbf{x}_i)\)
+möglichst nahe kommt und die beobachteten Daten möglichst gut
+beschreibt.
+
+Wir schauen uns in diesem Kapitel ein ganz einfaches Beispiel mit nur
+einer Input-Variable \(x_i\) an, so dass der Zusammenhang zwischen dem
+Output \(y_i\) und dem Input \(x_i\) in 2D dargestellt werden kann. In
+diesem Zusammenhang spricht man vom \textbf{einfachen linearen
+Regressionsmodell}. Ausserdem haben wir nur vier Beobachtungen, welche
+in folgender Abbildung in einem Streudiagramm dargestellt werden:
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{02_linreg_files/figure-pdf/simple-reg-1.pdf}
+
+}
+
+\caption{Einfaches Regressionsbeispiel. Die vier Beobachtungen werden in
+einem Streudiagramm dargestellt. Auf der x-Achse ist der Wert der
+Input-Variable und auf der y-Achse der Wert der Output-Variable
+ablesbar.}
+
+\end{figure}%
+
+Obwohl obige Abbildung ähnlich aussieht wie die Abbildungen zum
+Perceptron, gibt es hier einen bedeutenden Unterschied. Auf der y-Achse
+des Streudiagramm wird der Outputwert der Beobachtungen dargestellt,
+während auf der x-Achse der Input-Wert angezeigt wird. Es wird nun darum
+gehen, eine \textbf{Gerade} zu finden, welche die Daten bestmöglich
+repräsentiert.
+
+\section{Das Modell (kompakt)}\label{das-modell-kompakt}
+
+Sie haben oben gesehen, dass es ziemlich umständlich sein kann, das
+lineare Regressionsmodell aufzuschreiben, insbesondere wenn wir viele
+Input-Variablen haben. Mithilfe von \textbf{Vektoren und Matrizen}
+können wir das Modell viel kompakter aufschreiben.
+
+Wir haben in Kapitel~\ref{sec-intro} bereits gesehen, dass die
+Input-Variablen für eine Beobachtung \(i\) als Spaltenvektor geschrieben
+werden können. Wir modifizieren diesen Spaltenvektor in einem ersten
+Schritt, indem wir an erster Stelle eine 1 einfügen,\footnote{So müssen
+  wir die Konstante \(w_0\) nicht separat aufschreiben.} also:
+
+\[\mathbf{x}_i=\begin{pmatrix} 1\\ x_{i1} \\ x_{i2} \\ \vdots \\ x_{ip} \end{pmatrix}\]
+
+Nun stecken wir die Parameter des Modells ebenfalls in einen
+Spaltenvektor:
+
+\[\mathbf{w}=\begin{pmatrix} w_0 \\ w_1 \\ w_2 \\ \vdots \\ w_p \end{pmatrix}\]
+
+Wie bereits für das Perceptron gesehen, können wir das lineare
+Regressionsmodell (für die Beobachtung \(i\)) als \textbf{Skalarprodukt}
+dieser beiden Vektoren aufschreiben:
+
+\begin{align}
+f(\mathbf{x}_i) &= \mathbf{w}' \mathbf{x_i}\\ 
+&= \begin{pmatrix} w_0 & w_1 & w_2 & \dots & w_p \end{pmatrix} \begin{pmatrix} 1\\ x_{i1} \\ x_{i2} \\ \vdots \\ x_{ip} \end{pmatrix}\\
+&= w_0 \cdot 1 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \dots + w_p \cdot x_{ip}
+\end{align}
+
+\subsubsection*{Frage}\label{frage-5}
+\addcontentsline{toc}{subsubsection}{Frage}
+
+Doch Moment mal, das lineare Regressionsmodell sieht ja genau gleich wie
+ein Perceptron aus. Wie unterscheiden sich die beiden Modelle im
+Hinblick darauf, was mit \(\mathbf{w}' \mathbf{x_i}\) gemacht wird?
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Grundsätzlich gilt: das Perceptron ist ein Klassifikationsmodell,
+während das lineare Regressionsmodell zur Lösung von
+Regressionsproblemen dient.
+
+Beim Perceptron haben wir \(\mathbf{w}' \mathbf{x_i}\) verglichen mit
+dem Schwellenwert 0, um zu entscheiden, ob wir eine Beobachtung der
+Kategorie -1 oder +1 zuweisen.
+
+Hier, beim linearen Regressionsmodell, soll \(\mathbf{w}' \mathbf{x_i}\)
+den stetigen (numerischen) Outputwert \(y_i\) möglichst gut abbilden.
+
+\end{tcolorbox}
+
+Die Form \(\mathbf{w}' \mathbf{x_i}\) ist schon ziemlich kompakt, aber
+es geht noch besser. Wir können nämlich das Modell gleich für alle \(n\)
+Beobachtungen (und nicht nur für die \(i\)-te Beobachtung) aufschreiben.
+Dazu müssen wir die Input-Variablen für jede Beobachtung \(i\) in einer
+Matrix anordnen:
+
+\[
+\mathbf{X} = \begin{pmatrix}
+1 & x_{11} & x_{12} & \cdots & x_{1p}\\ 
+1 & x_{21} & x_{22} & \cdots & x_{2p}\\
+\vdots & \cdots & \cdots & \ddots & \vdots\\
+1 & x_{n1} & x_{n2} & \cdots & x_{np}\\
+\end{pmatrix}
+\]
+
+Die Matrix \(\mathbf{X}\) wird typischerweise \textbf{Design Matrix}
+genannt. Die erste Zeile enthält die Input-Variablen für die erste
+Beobachtung, die zweite Zeile die Input-Variablen für die zweite
+Beobachtung, usw. Nun können wir das Modell mithilfe einer
+Multiplikation zwischen der Design Matrix \(\mathbf{X}\) und dem
+Spaltenvektor \(\mathbf{w}\) in einem Schritt für alle Beobachtungen
+aufschreiben:
+
+\begin{align}
+f(\mathbf{X}) &= \mathbf{X}\mathbf{w}\\
+&= \begin{pmatrix}
+1 & x_{11} & x_{12} & \cdots & x_{1p}\\ 
+1 & x_{21} & x_{22} & \cdots & x_{2p}\\
+\vdots & \cdots & \cdots & \ddots & \vdots\\
+1 & x_{n1} & x_{n2} & \cdots & x_{np}\\
+\end{pmatrix}\begin{pmatrix} w_0 \\ w_1 \\ w_2 \\ \dots \\ w_p \end{pmatrix}\\
+&= \begin{pmatrix} 
+w_0 \cdot 1 + w_1 \cdot x_{11} + w_2 \cdot x_{12} + \dots + w_p \cdot x_{1p} \\
+w_0 \cdot 1 + w_1 \cdot x_{21} + w_2 \cdot x_{22} + \dots + w_p \cdot x_{2p} \\ 
+\cdots \\ 
+w_0 \cdot 1 + w_1 \cdot x_{n1} + w_2 \cdot x_{n2} + \dots + w_p \cdot x_{np}\end{pmatrix}
+\end{align}
+
+Überprüfen wir doch noch kurz die Dimensionen von obigem Matrix-Vektor
+Produkt. Die Matrix \(\mathbf{X}\) hat \(n\) Zeilen und \(p+1\) Spalten
+und darum eine Dimensionalität von \(n \times (p+1)\). Der Spaltenvektor
+\(\mathbf{w}\) hat Dimensionalität \((p+1) \times 1\). Das Matrix-Vektor
+Produkt hat dementsprechend eine Dimensionalität von \(n \times 1\),
+genau was wir erwarten würden, nämlich einen Vektor mit den Vorhersagen
+für alle \(n\) Beobachtungen.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-caution-color!10!white, opacityback=0, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Matrixprodukt}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-caution-color-frame, titlerule=0mm]
+
+Blabla\ldots{}
+
+\end{tcolorbox}
+
+Für unser einfaches Beispiel kann das Modell wie folgt in Matrixform
+geschrieben werden:
+
+\begin{align}
+f(\mathbf{X}) &= \mathbf{X}\mathbf{w}\\
+&= \begin{pmatrix}
+1 & -4.1 \\ 
+1 & -0.5 \\
+1 & 1.4 \\
+1 & 4.4 \\
+\end{pmatrix}\begin{pmatrix} w_0 \\ w_1 \end{pmatrix}\\
+&= \begin{pmatrix} 
+w_0 \cdot 1 - w_1 \cdot 4.1 \\
+w_0 \cdot 1 - w_1 \cdot 0.5 \\ 
+w_0 \cdot 1 + w_1 \cdot 1.4 \\ 
+w_0 \cdot 1 + w_1 \cdot 4.4 \end{pmatrix}
+\end{align}
+
+Warum wir all das tun, werden wir weiter unten sehen. Es wird unser
+Leben viel einfacher machen! Versuchen Sie diesen Abschnitt hier gut zu
+verstehen, so dass Sie sobald wie möglich mit der Matrixschreibweise von
+Modellen vertraut sind.
+
+\section{Modelltraining}\label{modelltraining}
+
+Wir werden uns hier anschauen, dass für das Training (oft auch
+\emph{Fitting} genannt) des linearen Regressionsmodells \textbf{zwei
+verschiedene Perspektiven} eingenommen werden können, welche am Schluss
+beide zum selben Resultat führen.
+
+\subsection{Perspektive 1:
+Funktionsoptimierung}\label{perspektive-1-funktionsoptimierung}
+
+In der ersten Perspektive behandeln wir das Modelltraining als
+Optimierungsproblem. Wir wollen nämlich eine sogenannte
+\textbf{Kostenfunktion} (engl. \emph{Loss Function}) aufstellen, die es
+danach zu minimieren gilt. Sie werden gleich sehen, dass die
+Kostenfunktion für das lineare Regressionsmodell von den Modellparameter
+\(w_0,w_1,\dots,w_p\) abhängt. Das Ziel wird also sein, die optimalen
+Werte für die Modellparameter zu finden, so dass die Kostenfunktion so
+klein wie möglich ist.
+
+Doch wie sieht denn nun diese Kostenfunktion für das lineare
+Regressionsmodell konkret aus? Wir werden uns hier der Einfachheit
+halber nur ein \textbf{einfaches lineares Regressionsmodell} mit nur
+einer Input-Variable \(x_i\) anschauen (wie in unserem einfachen
+Beispiel). Die Kostenfunktion sieht in diesem Fall so aus:
+
+\[
+J(\hat{w}_0,\hat{w}_1) = \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(x_i) \right)^2
+\]
+
+Sie sehen, dass die Kostenfunktion \(J(\hat{w}_0,\hat{w}_1)\) eine
+Funktion der beiden (trainierten) Modellparameter ist. Vielleicht
+wundern Sie sich nun, wie diese Kostenfunktion von den Modellparameter
+abhängt, da diese in obiger Formel ja gar nicht direkt ersichtlich sind.
+Schreiben wir die Kostenfunktion doch mal etwas um:
+
+\begin{align}
+J(\hat{w}_0, \hat{w}_1) &= \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(x_i) \right)^2 \\
+&= \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - (\hat{w}_0 + \hat{w}_1 \cdot x_i) \right)^2 \\
+&= \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{w}_0 - \hat{w}_1 \cdot x_i \right)^2 \\
+\end{align}
+
+Nun ist offensichtlich, wie die Kostenfunktion \(J\) von den
+Modellparameter \(\hat{w}_0\) und \(\hat{w}_1\) abhängt. Im ML gibt es
+nun viele verschiedene Arten, wie man für die beiden Modellparameter die
+optimalen Werte findet. Hier ist die Lösung zum Glück einfach, denn es
+gibt eine sogenannte \textbf{analytische Lösung}, d.h. es ist möglich
+für \(\hat{w}_0\) und \(\hat{w}_1\) je eine Formel zu finden, die uns
+erlaubt die optimalen Parameterwerte direkt auszurechnen. Die Herleitung
+dieser Formeln ist nicht besonders schwierig, denn wir wenden nämlich
+ein altbekanntes Prinzip aus der \textbf{Differenzialrechnung} an: wir
+berechnen die erste Ableitung der Funktion nach den Modellparameter,
+setzen sie gleich Null und lösen nach dem Parameter auf.
+
+Im folgenden Matheteil sehen Sie, wie wir die Formeln für die Berechnung
+der optimalen Parameterwerte des einfachen linearen Regressionsmodells
+herleiten können. Diese Methode wird \textbf{Kleinstquadratemethode}
+(engl. \emph{Least Squares}) genannt, weil die optimalen Parameter die
+Summe über die \textbf{quadrierten} Differenzen zwischen \(y_i\) und den
+Vorhersagen \(\hat{f}(x_i)\) minimieren.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-caution-color!10!white, opacityback=0, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Kleinstquadratemethode}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-caution-color-frame, titlerule=0mm]
+
+Wir leiten zuerst die Formel für \(\hat{w}_0\) her:
+
+\begin{align}
+\frac{\partial J(\hat{w}_0, \hat{w}_1)}{\partial \hat{w}_0} &= \frac{1}{2n} \sum_{i=1}^{n} 2 \cdot \left(y_i - \hat{w}_0 - \hat{w}_1 \cdot x_i \right) \cdot (-1) \\
+&= -\frac{1}{n} \sum_{i=1}^{n} \left(y_i - \hat{w}_0 - \hat{w}_1 \cdot x_i \right) \\
+&= -\frac{1}{n} \sum_{i=1}^{n} y_i +  \frac{1}{n} \sum_{i=1}^{n} \hat{w}_0 + \frac{1}{n} \sum_{i=1}^{n} \hat{w}_1 \cdot x_i \\
+&= -\bar{y} + \frac{1}{n} \cdot n \cdot \hat{w}_0 + \hat{w}_1 \cdot \bar{x} \\
+&= -\bar{y} + \hat{w}_0 + \hat{w}_1 \cdot \bar{x}
+\end{align}
+
+Nun setzten wir die Ableitung gleich Null und lösen nach \(\hat{w}_0\)
+auf:
+
+\begin{align}
+-\bar{y} + \hat{w}_0 + \hat{w}_1 \cdot \bar{x} &= 0 \\
+\hat{w}_0 &= \bar{y} - \hat{w}_1 \cdot \bar{x}
+\end{align}
+
+Wir sehen, dass die Lösung für \(\hat{w}_0\) von den beiden Mittelwerten
+\(\bar{y}\) und \(\bar{x}\) sowie von \(\hat{w}_1\) abhängt. Suchen wir
+nun also in einem zweiten Schritt die Lösung für \(\hat{w}_1\):
+
+\begin{align}
+\frac{\partial J(\hat{w}_0, \hat{w}_1)}{\partial \hat{w}_1} &= \frac{1}{2n} \sum_{i=1}^{n} 2 \cdot \left(y_i - \hat{w}_0 - \hat{w}_1 \cdot x_i \right) \cdot (-x_i) \\
+&= -\frac{1}{n} \sum_{i=1}^{n} \left(y_i \cdot x_i - \hat{w}_0 \cdot x_i - \hat{w}_1 \cdot x_i^2 \right) \\
+&= -\frac{1}{n} \sum_{i=1}^{n} y_i \cdot x_i + \hat{w}_0 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 \\
+&= -\frac{1}{n} \sum_{i=1}^{n} y_i \cdot x_i + \hat{w}_0 \cdot \bar{x} + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 \\
+\end{align}
+
+Nun können wir wiederum die Ableitung gleich Null setzen und für
+\(\hat{w}_0\) setzen wir unsere Lösung von oben ein. Danach lösen wir
+nach \(\hat{w}_1\) auf:
+
+\begin{align}
+-\frac{1}{n} \sum_{i=1}^{n} y_i \cdot x_i + \hat{w}_0 \cdot \bar{x} + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 &= 0 \\
+(\bar{y} - \hat{w}_1 \cdot \bar{x}) \cdot \bar{x} + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 &= \frac{1}{n} \sum_{i=1}^{n} y_i \cdot x_i \\
+\bar{y} \cdot \bar{x} - \hat{w}_1 \cdot \bar{x}^2 + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 &= \frac{1}{n} \sum_{i=1}^{n} y_i \cdot x_i \\
+\hat{w}_1 \left(\frac{1}{n} \sum_{i=1}^{n} x_i^2 - \bar{x}^2 \right) &= \frac{1}{n} \sum_{i=1}^{n} y_i \cdot x_i - \bar{y} \cdot \bar{x} \\
+\hat{w}_1 &= \frac{\frac{1}{n} \sum_{i=1}^{n} y_i \cdot x_i - \bar{y} \cdot \bar{x}}{\frac{1}{n} \sum_{i=1}^{n} x_i^2 - \bar{x}^2}
+\end{align}
+
+Vielleicht erkennen Sie die Ausdrücke im Zähler und Nenner der Lösung
+für \(\hat{w}_1\): es sind dies die \textbf{Kovarianz} zwischen \(y_i\)
+und \(x_i\) im Zähler und die \textbf{Varianz} von \(x_i\) im Nenner.
+Man kan die Formel also auch wie folgt aufschreiben:
+
+\[
+\hat{w}_1 = \frac{\text{Cov}(x, y)}{\text{Var}(x)}
+\]
+
+\end{tcolorbox}
+
+\subsubsection*{Frage}\label{frage-6}
+\addcontentsline{toc}{subsubsection}{Frage}
+
+Rechnen Sie nun die optimalen Parameterwerte für unser einfaches
+lineares Regressionsmodell aus. Sie können die verschiedenen
+statistischen Grössen entweder mithilfe von R rechnen oder von Hand bzw.
+mit dem Taschenrechner.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Wir rechnen als erstes die Mittelwerte für die beiden Variablen:
+
+\[
+\bar{x} = \frac{-4.1 + (-0.5) + 1.4 + 4.4}{4} = 0.3
+\]
+
+\[
+\bar{y} = \frac{3.50 + 1.95 + (-2.50) + (-2.05)}{4} = 0.225
+\]
+
+Danach rechnen wir die mittlere Summe über die Produkte der jeweiligen
+Variablenwerte (erster Teil des Zählers der Formel für \(\hat{w}_1\)):
+
+\[
+\frac{3.50 \cdot (-4.1) + 1.95 \cdot (-0.5) + (-2.50) \cdot 1.4 + (-2.05) \cdot 4.4}{4}
+= -6.96125
+\]
+
+Nun rechnen wir die mittlere Summe über die quadrierten \(x\)-Werte
+(erster Teil des Nenners der Formel für \(\hat{w}_1\)):
+
+\[
+\frac{(-4.1)^2 + (-0.5)^2 + 1.4^2 + 4.4^2}{4} = 9.595
+\]
+
+Nun können wir den optimalen Parameterwert für \(\hat{w}_1\) berechnen:
+
+\[
+\hat{w}_1 = \frac{-6.96125 - 0.225 \cdot 0.3}{9.595 - 0.3^2} = -0.7395
+\]
+
+Und nun haben wir auch gleich alle Zutaten, um den optimalen
+Parameterwert für \(\hat{w}_0\) zu berechnen:
+
+\[
+\hat{w}_0 = 0.225 - (-0.7395) \cdot 0.3 = 0.4469
+\]
+
+Unser trainiertes optimales Modell sieht also wie folgt aus:
+
+\[
+\hat{f}(x_i) = 0.4469 - 0.7395 \cdot x_i
+\]
+
+\end{tcolorbox}
+
+Das in der obigen Aufgabe berechnete Modell ist in der folgenden
+Abbildung (links) grafisch als blaue Gerade dargestellt. Der Parameter
+\(\hat{w}_0\) ist der Ort, an dem die Gerade die y-Achse durchkreuzt,
+während der Parameter \(\hat{w}_1\) der Steigung der Geraden entspricht.
+Unser optimales Modell minimiert die Summe über die quadrierten
+Differenzen zwischen den tatsächlichen \(y_i\) Werten und den
+Vorhersagen gemäss unserem Modell \(\hat{f}(x_i)\) (als rot gestrichelte
+Linien dargestellt).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{02_linreg_files/figure-pdf/simple-reg-cost-1.pdf}
+
+}
+
+\caption{Einfaches Regressionsbeispiel. Das geschätzte Modell ist als
+blaue Gerade eingezeichnet. Die vertikalen roten Linien stellen die
+Abweichungen der wahren Outputs von den Vorhersagen dar. Rechts ist ein
+Konturplot der Kostenfunktion mit der optimalen
+Parameterwert-Kombination dargestellt.}
+
+\end{figure}%
+
+Die Abbildung (rechts) zeigt sogennante \textbf{Konturlinien} unserer
+Kostenfunktion. Die optimale Parameterwert-Kombination ist als roter
+Punkt eingezeichnet. Jede Konturlinie zeigt alle
+Parameterwert-Kombination, welche jeweils zum gleichen Kostenwert
+führen. Die fünf eingezeichneten Linien zeigen beispielsweise die
+Parameterwert-Kombination für die Kostenwerte 1 bis 5 (von innen nach
+aussen). Man kann sich unsere Kostenfunktion also wie eine Schüssel
+vorstellen mit dem roten Punkt als Boden der Schüssel. Es handelt sich
+bei unserer Kostenfunktion um eine Funktion, die \textbf{quadratisch} in
+den Parameterwerten \(\hat{w}_0\) und \(\hat{w}_1\) ist. In diesem Fall
+finden wir immer \textbf{genau eine Parameterwert-Kombination}, welche
+dem absoluten Minimum der Kostenfunktion entspricht. Manchmal spricht
+man auch von einer \textbf{konvexen} Kostenfunktion.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-caution-color!10!white, opacityback=0, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Kleinstquadratemethode in Matrixform (optional)}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-caution-color-frame, titlerule=0mm]
+
+Die obige Herleitung funktioniert nur für das einfache lineare
+Regressionsmodell mit einer Input-Variable \(x_i\). Wir schauen uns hier
+nun kurz die allgemeine Lösung in Matrixform an. Wir nehmen an, dass die
+Werte unseres Outputs alle in einem Spaltenvektor \(\mathbf{y}\)
+organisiert sind und unsere Modellvorhersagen als
+\(\mathbf{X}\mathbf{\hat{w}}\) geschrieben werden können.
+
+Dann können wir unsere Kostenfunktion von oben wie folgt in Matrixform
+schreiben:
+
+\begin{align}
+J(\mathbf{\hat{w}}) &= \frac{1}{2n} (\mathbf{y} - \mathbf{X}\mathbf{\hat{w}})' (\mathbf{y} - \mathbf{X}\mathbf{\hat{w}})
+\end{align}
+
+Das sieht schlimmer aus als es ist, denn
+\((\mathbf{y} - \mathbf{X}\mathbf{\hat{w}})\) ist lediglich ein
+Spaltenvektor mit den Differenzen zwischen den wahren \(y_i\) und den
+Vorhersagen unseres Modells. Wenn wir diesen Spaltenvektor
+\(\mathbf{e}\) nennen, dann kann obiger Ausdruck als
+\(\frac{1}{2n} \mathbf{e}'\mathbf{e}\) geschrieben werden, wobei
+\(\mathbf{e}'\mathbf{e}\) ein Skalarprodukt ist und dementsprechend
+einen Skalar bzw. eine einzige Zahl zurück gibt. Diese Zahl
+multipliziert mit \(\frac{1}{2n}\) ist dann nichts anderes als der Wert
+unserer Kostenfunktion. Sie sehen also, dass wir mit dem Skalarprodukt
+\(\mathbf{e}'\mathbf{e}\) die Summe ersetzen können.
+
+Nun wenden wir die bekannten Matrix-Rechenregeln an, um die
+Kostenfunktion umzuschreiben:
+
+\begin{align}
+J(\mathbf{\hat{w}}) &= \frac{1}{2n} (\mathbf{y} - \mathbf{X}\mathbf{\hat{w}})' (\mathbf{y} - \mathbf{X}\mathbf{\hat{w}}) \\
+&= \frac{1}{2n} (\mathbf{y}' - \mathbf{\hat{w}}' \mathbf{X}') (\mathbf{y} - \mathbf{X}\mathbf{\hat{w}}) \\
+&= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - \mathbf{y}'\mathbf{X}\mathbf{\hat{w}} - \mathbf{\hat{w}}' \mathbf{X}'\mathbf{y} + \mathbf{\hat{w}}' \mathbf{X}'\mathbf{X}\mathbf{\hat{w}})
+\end{align}
+
+Wenn Sie sich kurz anhand der Dimensionalität der einzelnen Komponenten
+überlegen, was das Endprodukt des Ausdrucks
+\(\mathbf{y}'\mathbf{X}\mathbf{\hat{w}}\) ist, dann werden Sie sehen,
+dass ein Skalar (Dimensionalität \(1 \times 1\)) resultiert. Darum muss
+zwingend auch die transponierte Form davon,
+\((\mathbf{y}'\mathbf{X}\mathbf{\hat{w}})'=\mathbf{\hat{w}}' \mathbf{X}'\mathbf{y}\)
+ein Skalar sein, was dazu führt, dass die beiden mittleren Terme in der
+letzten Zeile von obiger Kostenfunktion identisch sein müssen. Deshalb
+können wir die Kostenfunktion wie folgt umschreiben:
+
+\begin{align}
+J(\mathbf{\hat{w}}) &= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\mathbf{X}\mathbf{\hat{w}} + \mathbf{\hat{w}}' \mathbf{X}'\mathbf{X}\mathbf{\hat{w}})
+\end{align}
+
+So, nun können wir die Kostenfunktion nach dem Spaltenvektor mit den
+Modellparameter \(\mathbf{\hat{w}}\) ableiten. Man spricht in diesem
+Fall nun nicht von einer Ableitung, sondern von einem
+\textbf{Gradienten}. Auch die mathematische Schreibweise ist etwas
+anders:
+
+\begin{align}
+\nabla_{\mathbf{\hat{w}}} J(\mathbf{\hat{w}}) &= \frac{1}{2n} (- 2\mathbf{X}'\mathbf{y} + 2\mathbf{X}'\mathbf{X}\mathbf{\hat{w}}) \\
+&= \frac{1}{n} (-\mathbf{X}'\mathbf{y} + \mathbf{X}'\mathbf{X}\mathbf{\hat{w}})
+\end{align}
+
+Diesen Ausdruck können wir nun wie gewohnt gleich Null setzen (wobei wir
+hier rechts einen Nullvektor \(\mathbf{0}\) setzen) und mit den
+Matrix-Rechenregeln nach \(\mathbf{\hat{w}}\) auflösen:
+
+\begin{align}
+\frac{1}{n} (-\mathbf{X}'\mathbf{y} + \mathbf{X}'\mathbf{X}\mathbf{\hat{w}}) &= \mathbf{0} \\
+\mathbf{X}'\mathbf{X}\mathbf{\hat{w}} &= \mathbf{X}'\mathbf{y} \\
+\mathbf{\hat{w}} &= (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}
+\end{align}
+
+\textbf{Wichtig}: Die Matrix \(\mathbf{X}'\mathbf{X}\) hat eine
+Dimensionalität von \((p+1) \times (p+1)\), ist also quadratisch. Sie
+ist nur invertierbar, wenn die Design Matrix mehr Zeilen als Spalten
+hat, also wenn \(n > (p+1)\).
+
+\end{tcolorbox}
+
+\subsection{Perspektive 2:
+Wahrscheinlichkeitstheorie}\label{perspektive-2-wahrscheinlichkeitstheorie}
+
+Nun werden wir sehen, dass wir die Lösung oben (aus Perspektive 1) auch
+mit einer probabilistischen Sicht auf die Dinge erhalten. Dazu schreiben
+wir nochmals kurz den allgemein angenommenen Zusammenhang zwischen dem
+wahren Output \(y_i\) und den Input-Variablen auf und konkretisieren ihn
+dann gleich für das lineare Regressionsmodell:
+
+\begin{align}
+y_i &= f(\mathbf{x}_i) + \epsilon \\
+&= \mathbf{w}' \mathbf{x_i} + \epsilon \\
+\end{align}
+
+Nun nehmen wir an, dass der Fehlerterm \(\epsilon\) normalverteilt ist
+mit Mittelwert 0 und Varianz \(\sigma^2\), also
+\(\epsilon \sim N(0,\sigma^2)\). Weil wir annehmen, dass
+\(\mathbf{w}' \mathbf{x_i}\) fix ist (also keine Zufallsvariable), ist
+unser Output \(y_i\) normalverteilt mit Mittelwert
+\(\mathbf{w}' \mathbf{x_i}\) und Varianz \(\sigma^2\):
+
+\[
+y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)
+\]
+
+Folgende Abbildung illlustriert diese Annahme: an jedem Ort \(x_i\) ist
+der entsprechende Outputwert \(y_i\) eine Realisierung aus einer
+Normalverteilung mit Mittelwert \(\mathbf{w}' \mathbf{x_i}\) und Varianz
+\(\sigma^2\).
+
+\begin{center}
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{02_linreg_files/figure-pdf/simple-reg-maxlik-1.pdf}
+\end{center}
+
+Nun möchten wir wissen, was die \textbf{gemeinsame Verteilung} aller
+Output-Werte in unserem Datensatz ist. D.h. wie sieht die
+Wahrscheinlichkeit
+\(p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2)\) aus? Weil wir
+annehmen, dass alle Beobachtungen \(i\) in unserem Datensatz
+\textbf{unabhängig} sind und die Wahrscheinlichkeiten der einzelnen
+Beobachtungen \(i\) darum multipliziert werden können, sieht die Antwort
+auf die Frage folgendermassen aus:
+
+\[
+p(y_1,y_2,\dots,y_n\mid\mathbf{w},\mathbf{X},\sigma^2) = \prod_{i=1}^n \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)
+\]
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Maximum Likelihood}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-note-color-frame, titlerule=0mm]
+
+Die gemeinsame Wahrscheinlichkeit
+\(p(y_1,y_2,\dots,y_n\mid\mathbf{w},\mathbf{X},\sigma^2)\) der
+beobachteten Output-Werte, gegeben die Input-Werte und das Modell
+(charakterisiert durch dessen Parameter \(\mathbf{w}\) und
+\(\sigma^2\)), wird in der Fachsprache \textbf{Likelihood} genannt.
+
+Die zentrale Idee hier ist, dass wir die Modellparameter \(\mathbf{w}\)
+so wählen, dass die \emph{Likelihood} maximal wird. Der daraus folgende
+Ausdruck für \(\mathbf{w}\) wird \textbf{Maximum Likelihood} Schätzer
+genannt und oft als ML abgekürzt, was sehr verwirrlich sein kann, da wir
+ja auch Machine Learning so abkürzen.
+
+Mit dem ML-Schätzer finden wir also dasjenige (lineare) Modell, das die
+beobachteten \(y_i\)-Werte maximal wahrscheinlich macht.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-caution-color!10!white, opacityback=0, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Maximum Likelihood Herleitung (optional)}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-caution-color-frame, titlerule=0mm]
+
+Wir können nun in der Likelihood oben anstelle von
+\(\mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)\) jeweils
+die Dichtefunktion der Normalverteilung einsetzen:
+
+\begin{align}
+p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2) &= \prod_{i=1}^n \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right) \\
+&= \prod_{i=1}^n \frac{1}{\sigma\sqrt{2\pi}} \exp\left( -\frac{1}{2}\left(\frac{y_i - \mathbf{w}' \mathbf{x_i}}{\sigma}\right)^{\!2}\,\right)
+\end{align}
+
+Nun vollziehen wir einen kleinen mathematischen Trick, der vielfach
+angewendet wird: anstelle der \emph{Likelihood} verwenden wir nun den
+natürlichen Logarithmus der \emph{Likelihood} (\emph{Log-Likelihood}).
+Das ist möglich, weil sich so das Optimierungsproblem nicht verändert.
+Das Logarithmieren vereinfacht das Problem ungemein, denn der
+Logarithmus eines Produkts wird zu einer Summe der logarithmierten
+Elemente:
+
+\begin{align}
+\text{ln}\; p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2) &= \text{ln}\left(\prod_{i=1}^n \frac{1}{\sigma\sqrt{2\pi}} \exp\left( -\frac{1}{2}\left(\frac{y_i - \mathbf{w}' \mathbf{x_i}}{\sigma}\right)^{\!2}\,\right)\right) \\
+&= \sum_{i=1}^n \text{ln}\left(\frac{1}{\sigma\sqrt{2\pi}} \exp\left( -\frac{1}{2}\left(\frac{y_i - \mathbf{w}' \mathbf{x_i}}{\sigma}\right)^{\!2}\,\right) \right) \\
+&= \sum_{i=1}^n \text{ln}\left(1\right) - \text{ln}\left(\sigma\sqrt{2\pi}\right) - \frac{1}{2}\left(\frac{y_i - \mathbf{w}' \mathbf{x_i}}{\sigma}\right)^{\!2} \\
+&= \sum_{i=1}^n \text{ln}\left(1\right) - \sum_{i=1}^n \text{ln}\left(\sigma\sqrt{2\pi}\right) - \sum_{i=1}^n \frac{1}{2}\left(\frac{y_i - \mathbf{w}' \mathbf{x_i}}{\sigma}\right)^{\!2} \\
+&= n \cdot \text{ln}\left(1\right) - n \cdot \text{ln}\left(\sigma\sqrt{2\pi}\right) - \frac{1}{2\sigma^2} \sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2}
+\end{align}
+
+Wow, nun haben wir ein tolles Resultat gefunden: je kleiner der Term
+\(\sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2}\) in
+obiger Gleichung, desto grösser ist der natürliche Logarithmus der
+\emph{Likelihood}. Das heisst nichts anderes, als dass die
+Kleinstquadratemethode auch der \emph{Maximum Likelihood} Schätzer ist.
+
+Wir haben diesen Abschnitt damit begonnen anzunehmen, dass unser Output
+\(y_i\) normalverteilt ist, d.h.
+\(y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)\).
+Wir haben nun herausgefunden, dass wir den Spaltenvektor mit den
+Parameter mit der Kleinstquadratemethode berechnen können. Um die
+Normalverteilung vollkommen zu spezifizieren, benötigen wir nun noch
+eine Formel, um die Varianz \(\sigma^2\) zu rechnen. Dazu leiten wir den
+obigen Ausdruck der \emph{Log-Likelihood} nach \(\sigma\) ab:
+
+\begin{align}
+\frac{\partial \text{ln}\; p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2)}{\partial \sigma} &= -n\cdot \frac{\sqrt{2\pi}}{\sigma\sqrt{2\pi}} - (-\frac{2}{\sigma^3}) \cdot \frac{1}{2} \sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2} \\
+&= -\frac{n}{\sigma} + \frac{1}{\sigma^3} \sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2}
+\end{align}
+
+Nun können wir wie gewohnt die Ableitung gleich Null setzen und nach
+\(\sigma\) auflösen:
+
+\begin{align}
+-\frac{n}{\hat{\sigma}} + \frac{1}{\hat{\sigma}^3} \sum_{i=1}^n \left(y_i - \mathbf{\hat{w}}' \mathbf{x_i}\right)^{\!2} &= 0 \\
+\frac{n}{\hat{\sigma}} &= \frac{1}{\hat{\sigma}^3} \sum_{i=1}^n \left(y_i - \mathbf{\hat{w}}' \mathbf{x_i}\right)^{\!2} \\
+\frac{\hat{\sigma}^3}{\hat{\sigma}} &= \frac{1}{n} \sum_{i=1}^n \left(y_i - \mathbf{\hat{w}}' \mathbf{x_i}\right)^{\!2} \\
+\hat{\sigma}^2 &= \frac{1}{n} \sum_{i=1}^n \left(y_i - \mathbf{\hat{w}}' \mathbf{x_i}\right)^{\!2} \\
+\end{align}
+
+Sehr schön, dieses Resultat macht ebenfalls viel Sinn. Die geschätzte
+Varianz \(\hat{\sigma}^2\) ist nichts anderes als der durchschnittliche
+quadrierte Fehler (engl. \emph{Mean Squared Error}).
+
+\end{tcolorbox}
+
+\section{Regularisierte Regression}\label{regularisierte-regression}
+
+Das zentrale Problem der oben kennen gelernten Kleinstquadratemethode
+ist, dass sie extrem anfällig auf \textbf{Overfitting} ist. Vereinfacht
+gesagt bedeutet Overfitting, dass sich das Modell zu fest an die
+Trainingsdaten anpasst und die aus den Daten gelernten Muster nicht mehr
+generalisierbar sind.
+
+Beim linearen Regressionsmodell ist Overfitting vor allem dann ein
+Problem, wenn die Anzahl Input-Variablen \(p\) relativ gross ist im
+Vergleich zur Anzahl Beobachtungen \(n\). Im Extremfall haben wir mehr
+Input-Variablen als Beobachtungen (\((p+1)>n\)), was dazu führt, dass
+der Kleinstquadrateschätzer mathematisch nicht rechenbar ist.\footnote{In
+  diesem Fall ist die Matrix \(\mathbf{X}'\mathbf{X}\) nicht
+  invertierbar.} Das sollte auch intuitiv Sinn machen, denn wie soll
+eine Schätzung funktionieren, wenn wir im Schnitt weniger als eine
+Beobachtung pro zu schätzenden Parameter haben.
+
+Wir können das Problem des Overfittings weitgehend lösen, indem wir ein
+\textbf{regularisiertes} Regressionsmodell rechnen. Regularisierung
+bedeutet eigentlich nichts anderes, als dass wir die ursprüngliche
+Kostenfunktion für das lineare Regressionsmodell modifizieren. Dabei
+gibt es zwei bekannte Regularisierungsarten, nämlich \textbf{Ridge} oder
+\textbf{LASSO}. Wir fokussieren in einem ersten Schritt auf die Ridge
+Regularisierung, weil wir in diesem Fall wiederum eine analytische
+Lösung finden.
+
+\subsection{Ridge Regressionsmodell}\label{ridge-regressionsmodell}
+
+Die Kostenfunktion für das Ridge Regressionsmodell sieht wie folgt aus:
+
+\[
+J(\mathbf{w}) = \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \right)^2 + \frac{\lambda}{2} \cdot \sum_{j=1}^p w_j^2
+\]
+
+Diese modifizierte Kostenfunktion hat etwas Erklärungsbedarf:
+
+\begin{itemize}
+\tightlist
+\item
+  Wir versuchen hier Modellparameter \(\mathbf{w}\) zu finden, welche
+  \textbf{gleichzeitig} den durchschnittlichen quadrierten Fehler sowie
+  eine Summe über die quadrierten Modellparameter so klein wie möglich
+  machen. Das sind zwei \textbf{konkurrenzierende Ziele} und während des
+  Modelltrainings muss der beste Tradeoff gefunden werden.
+\item
+  Der Regularisierungsterm ist eine Summe über die quadrierten
+  Modellparameter. Das Quadrieren stellt sicher, dass sich positive und
+  negative Parameterwerte nicht gegenseitig kompensieren.
+\item
+  Der \textbf{Hyperparameter} \(\lambda\) legt fest, wie viel
+  (relatives) Gewicht der Regularisierungsterm im Verhältnis zum
+  durchschnittlichen quadrierten Fehler bekommt. Je grösser \(\lambda\),
+  desto stärker ``bestrafen'' wir komplexe Modelle. Wir werden später
+  sehen, wir wir den optimalen Wert für \(\lambda\) via
+  \textbf{Cross-Validation} finden können.
+\item
+  Der Regularisierungsterm enthält die Konstante \(w_0\) \textbf{nicht}
+  (Summe startet bei \(j=1\) und nicht bei \(j=0\)). Die Konstante des
+  Modells wird also nie regularisiert.
+\end{itemize}
+
+\subsubsection*{Fragen}\label{fragen}
+\addcontentsline{toc}{subsubsection}{Fragen}
+
+\begin{itemize}
+\tightlist
+\item
+  Was passiert wenn \(\lambda=0\)?
+\item
+  Was passiert wenn \(\lambda \rightarrow \infty\)?
+\end{itemize}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+\begin{itemize}
+\tightlist
+\item
+  Wenn \(\lambda=0\), dann entfällt der Regularisierungsterm und wir
+  haben die altbekannte Kostenfunktion. Die resultierenden Parameter
+  entsprechen dem Kleinstquadrateschätzer.
+\item
+  Wenn \(\lambda \rightarrow \infty\), dann wird der
+  Regularisierungsterm so wichtig, dass alle Gewichte \(w_1,\dots, w_p\)
+  auf 0 gesetzt werden. Es resultiert folgendes Modell:
+  \(\hat{f}(\mathbf{x_i}) = \hat{w}_0\).
+\end{itemize}
+
+\end{tcolorbox}
+
+Berechnen Sie hier nun den optimalen Parameter \(\hat{w}_1\) für ein
+einfaches regularisiertes Regressionsmodell mit nur einer
+\(x_i\)-Variable.
+
+\begin{itemize}
+\tightlist
+\item
+  Leiten Sie dazu die obige Kostenfunktion nach \(\hat{w}_1\) ab, setzen
+  Sie sie gleich Null und lösen Sie nach \(\hat{w}_1\) auf.
+\item
+  Für \(\hat{w}_0\) können Sie die Lösung aus dem unregularisierten Fall
+  einsetzen, also \(\hat{w}_0 = \bar{y} - \hat{w}_1 \cdot \bar{x}\).
+\end{itemize}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Die Kostenfunktion für das einfache regularisierte Modell sieht konkret
+wie folgt aus:
+
+\[
+\begin{aligned}
+J(\hat{w}_0, \hat{w}_1) &= \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{w}_0 - \hat{w}_1 \cdot x_i \right)^2 + \frac{\lambda}{2} \hat{w}_1^2
+\end{aligned}
+\]
+
+Nun leiten wir diese Kostenfunktion nach \(\hat{w}_1\) ab und gehen
+durch sehr ähnliche Schritte wie im unregularisierten Fall:
+
+\[
+\begin{aligned}
+\frac{\partial J(\hat{w}_0, \hat{w}_1)}{\partial \hat{w}_1} &= \frac{1}{2n} \sum_{i=1}^{n} 2 \cdot \left(y_i - \hat{w}_0 - \hat{w}_1 \cdot x_i \right) \cdot (-x_i) + \frac{2\lambda}{2} \hat{w}_1 \\[6pt]
+&= -\frac{1}{n} \sum_{i=1}^{n} \left(y_i x_i - \hat{w}_0 x_i - \hat{w}_1 x_i^2 \right) + \lambda \hat{w}_1 \\[6pt]
+&= -\frac{1}{n} \sum_{i=1}^{n} y_i x_i + \hat{w}_0 \bar{x} + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 + \lambda \hat{w}_1 \\[6pt]
+&= -\frac{1}{n} \sum_{i=1}^{n} y_i x_i + (\bar{y} - \hat{w}_1 \bar{x}) \cdot \bar{x} + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 + \lambda \hat{w}_1 \\[6pt]
+&= -\frac{1}{n} \sum_{i=1}^{n} y_i x_i + \bar{y}\bar{x} - \hat{w}_1 \bar{x}^2 + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 + \lambda \hat{w}_1
+\end{aligned}
+\]
+
+Nun setzen wir die Ableitung gleich Null und lösen nach \(\hat{w}_1\)
+auf:
+
+\[
+\begin{aligned}
+-\frac{1}{n} \sum_{i=1}^{n} y_i x_i + \bar{y}\bar{x} - \hat{w}_1 \bar{x}^2 + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 + \lambda \hat{w}_1 &= 0 \\[6pt]
+-\hat{w}_1 \bar{x}^2 + \hat{w}_1 \cdot \frac{1}{n} \sum_{i=1}^{n} x_i^2 + \lambda \hat{w}_1 &= \frac{1}{n} \sum_{i=1}^{n} y_i x_i - \bar{y}\bar{x} \\[6pt]
+\hat{w}_1 \left( \frac{1}{n} \sum_{i=1}^{n} x_i^2 - \bar{x}^2 + \lambda \right) &= \frac{1}{n} \sum_{i=1}^{n} y_i x_i - \bar{y}\bar{x} \\[6pt]
+\hat{w}_1 &= \frac{\mathrm{Cov}(y,x)}{\mathrm{Var}(x) + \lambda}
+\end{aligned}
+\]
+
+Ha, das macht ja irgendwie Sinn. Je größer der Wert für \(\lambda\),
+desto grösser der Nenner und desto stärker wird der trainierte Wert für
+\(\hat{w}_1\) beschränkt.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-caution-color!10!white, opacityback=0, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Ridge Regression in Matrixform (optional)}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-caution-color-frame, titlerule=0mm]
+
+Der Einfachheit halber nehmen wir hier an, dass die Outputwerte \(y_i\)
+hier standardisiert\footnotemark{} wurden, so dass der Mittelwert über
+die standardisierten Outputwerte Null ist. So entfällt die Konstante
+\(w_0\) aus dem Modell, was uns die Matrixform für das Ridge Modell
+erleichtert, denn der Regularisierungsterm soll ja die Konstante nicht
+enthalten und wenn es diese nicht gibt, dann gibt es keine Probleme.
+
+Wie weiter oben gesehen, können wir die Kostenfunktion für das
+nicht-regularisierte Modell wie folgt schreiben:
+
+\begin{align}
+J(\mathbf{\hat{w}}) &= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\mathbf{X}\mathbf{\hat{w}} + \mathbf{\hat{w}}' \mathbf{X}'\mathbf{X}\mathbf{\hat{w}})
+\end{align}
+
+Der Regularisierungsterm kann sehr einfach in Matrixform geschrieben
+werden, nämlich als Skalarprodukt
+\(\frac{\lambda}{2}\mathbf{\hat{w}}'\mathbf{\hat{w}}\). Damit kriegen
+wir folgende Kostenfunktion:
+
+\begin{align}
+J(\mathbf{\hat{w}}) &= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\mathbf{X}\mathbf{\hat{w}} + \mathbf{\hat{w}}' \mathbf{X}'\mathbf{X}\mathbf{\hat{w}}) + \frac{\lambda}{2}\mathbf{\hat{w}}'\mathbf{\hat{w}}
+\end{align}
+
+Um den Gradienten dieser Kostenfunktion zu finden, gehen wir nun sehr
+ähnlich wie oben vor:
+
+\begin{align}
+\nabla_{\mathbf{\hat{w}}} J(\mathbf{\hat{w}}) &= \frac{1}{2n} (- 2\mathbf{X}'\mathbf{y} + 2\mathbf{X}'\mathbf{X}\mathbf{\hat{w}}) + \frac{2\lambda}{2}\mathbf{\hat{w}} \\
+&= \frac{1}{n} (-\mathbf{X}'\mathbf{y} + \mathbf{X}'\mathbf{X}\mathbf{\hat{w}}) + \lambda \mathbf{\hat{w}}
+\end{align}
+
+Diesen Ausdruck können wir nun wie gewohnt gleich Null setzen und mit
+den Matrix-Rechenregeln nach \(\mathbf{\hat{w}}\) auflösen:
+
+\begin{align}
+\frac{1}{n} (-\mathbf{X}'\mathbf{y} + \mathbf{X}'\mathbf{X}\mathbf{\hat{w}}) + \lambda \mathbf{\hat{w}} &= \mathbf{0} \\
+\mathbf{X}'\mathbf{X}\mathbf{\hat{w}} + \lambda \mathbf{\hat{w}} &= \mathbf{X}'\mathbf{y} \\
+(\mathbf{X}'\mathbf{X} + \lambda \mathbf{I}) \mathbf{\hat{w}} &= \mathbf{X}'\mathbf{y} \\
+\mathbf{\hat{w}} &= (\mathbf{X}'\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}'\mathbf{y} \\
+\end{align}
+
+\textbf{Wichtig}: \((\mathbf{X}'\mathbf{X} + \lambda \mathbf{I})\) ist
+immer invertierbar, auch wenn \(p>n\). Wir haben nun also ein analytisch
+lösbares Regressionsmodell gefunden, dass gut gegen Overfitting schützt.
+
+\end{tcolorbox}
+
+\footnotetext{Formel für die Standardisierung:
+\(\frac{y_i-\bar{y}}{s_y}\)}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Standardisierung der Input-Variablen}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-note-color-frame, titlerule=0mm]
+
+Es ist eminent wichtig, dass Sie alle numerischen Input-Variablen vor
+der Anwendung eines regularisierten Modells standardisieren, so dass
+alle Variablen auf der selben Skala ``leben''. Warum ist das so wichtig?
+Sie haben gesehen, dass wir beim Ridge Modell die Grösse der Parameter
+mit dem Regularisierungsterm beschränken. Wenn jedoch die
+Input-Variablen alle auf unterschiedlichen Skalen ``leben'', dann sind
+die Parameter nur schon deshalb unterschiedlich. Durch die
+Standardisierung der Input-Variablen erreichen wir, dass die
+Parametergrössen vergleichbar werden und die Regularisierung so auch
+korrekt funktioniert.
+
+\end{tcolorbox}
+
+\subsection{LASSO Regressionsmodell}\label{lasso-regressionsmodell}
+
+Coming soon.
+
+\section{Bias-Variance Tradeoff}\label{bias-variance-tradeoff}
+
+Wir haben oben bereits gesehen, dass der Hyperparameter \(\lambda\) die
+Komplexität des regularisierten Regressionsmodells bestimmt. Um noch
+besser zu verstehen, warum diese Komplexität überhaupt wichtig ist,
+wollen wir uns nun mit einem ganz wichtigen Konzept im Machine Learning
+beschäftigen, nämlich dem \textbf{Bias-Variance Tradeoff}. Dieses
+Konzept kann \emph{intuitiv} für alle Bereiche des Supervised Learnings
+angewendet werden. Für das Regressionsproblem können wir diesen Tradeoff
+jedoch auch \emph{mathematisch} herleiten (siehe auch James u.~a. 2021)
+und genau das tun wir jetzt hier.
+
+Stellen Sie sich vor, dass wir eine grosse Anzahl Trainingsdatensätze
+zur Verfügung haben und mit jedem dieser Datensätze versuchen wir den
+wahren funktionalen Zusammenhang \(f(\mathbf{x}_i)\) möglichst gut mit
+\(\hat{f}(\mathbf{x}_i)\) zu schätzen. Für jeden Datensatz sieht das
+geschätzte Modell \(\hat{f}(\mathbf{x}_i)\) etwas anders aus. Das
+geschätzte Modell \(\hat{f}\) variiert also je nach Datensatz und ist
+dementsprechend eine \textbf{Zufallsvariable}.
+
+Ausserdem treffen wir folgende Annahmen:
+
+\begin{itemize}
+\tightlist
+\item
+  Von oben wissen wir, dass \(y_i = f(\mathbf{x}_i) + \epsilon\) gilt.
+\item
+  Wir nehmen an, dass der Erwartungswert des nicht-lernbaren Teils
+  \(\epsilon\) Null ist, also \(\mathbb{E}[\epsilon]=0\).
+\item
+  Allgemeine Regel zur Varianz einer Zufallsvariable:
+  \(\text{Var}(\epsilon) = \mathbb{E}[\epsilon^2] - \mathbb{E}[\epsilon]^2 = \mathbb{E}[\epsilon^2] - 0^2 = \mathbb{E}[\epsilon^2]\).
+\end{itemize}
+
+Um den Bias-Variance Tradeoff zu zeigen, leiten wir nun den
+\textbf{Erwartungswert des quadrierten Fehlers} für eine gegebene
+Testbeobachtung her, die wir als \((y_0,\mathbf{x}_0)\) bezeichnen. Dies
+wäre der durchschnittliche quadrierte Fehler, den wir für diese
+Beobachtung kriegen würden, wenn wir mit jedem geschätzten Modell (jedes
+auf einem unterschiedlichen Datensatz trainiert) die Vorhersage für
+diese Testbeobachtung rechnen würden.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-caution-color!10!white, opacityback=0, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Herleitung (optional)}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-caution-color-frame, titlerule=0mm]
+
+In einem ersten Schritt erweitern wir den quadrierten Fehler, indem wir
+einmal den wahren Funktionswert an der Stelle \(\mathbf{x}_0\) abziehen
+und einmal hinzuzählen. Zusammen gibt das Null und verändert darum die
+rechte Seite der Gleichung nicht:
+
+\begin{align}
+\mathbb{E}\left[\left(y_0 - \hat{f}(\mathbf{x}_0)\right)^2\right] &= \mathbb{E}\left[\left(y_0 - f(\mathbf{x}_0) + f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0)\right)^2\right]
+\end{align}
+
+Nun verwenden wir die bekannte polynomische Expansion
+\((a+b)^2=a^2+2ab+b^2\), aber hier behandeln wir
+\(y_0 - f(\mathbf{x}_0)\) als \(a\) und
+\(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0)\) als \(b\). Dadurch kriegen
+wir folgende Gleichung:
+
+\begin{align}
+\mathbb{E}\left[\left(y_0 - \hat{f}(\mathbf{x}_0)\right)^2\right] &= \mathbb{E}\biggl[\left(y_0 - f(\mathbf{x}_0)\right)^2 \\
+&+ 2\left(y_0 - f(\mathbf{x}_0)\right)(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0)) \\
+&+ (f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\biggr]
+\end{align}
+
+Nun wissen wir aus obigen Annahmen, dass der Erwartungswert von \(y_0\)
+folgender ist:
+\(\mathbb{E}[y_0]=\mathbb{E}[f(\mathbf{x}_0) + \epsilon]=f(\mathbf{x}_0)\).
+Dadurch entfällt der erste Teil des zweiten Terms, weil
+\(\mathbb{E}[\left(y_0 - f(\mathbf{x}_0)\right)]=f(\mathbf{x}_0) - f(\mathbf{x}_0)=0\).
+Dadurch lässt sich das Ganze massiv vereinfachen zu:
+
+\begin{align}
+\mathbb{E}\left[\left(y_0 - \hat{f}(\mathbf{x}_0)\right)^2\right] &= \mathbb{E}\left[\left(y_0 - f(\mathbf{x}_0)\right)^2\right] + \mathbb{E}\left[(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\right]
+\end{align}
+
+Nun setzen wir im ersten Erwartungswert auf der rechten Seite anstelle
+von \(y_0\) den Term \(f(\mathbf{x}_0) + \epsilon\) ein und kriegen
+folgendes:
+
+\begin{align}
+\mathbb{E}\left[\left(y_0 - \hat{f}(\mathbf{x}_0)\right)^2\right] &= \mathbb{E}\left[\left(f(\mathbf{x}_0) + \epsilon - f(\mathbf{x}_0)\right)^2\right] + \mathbb{E}\left[(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\right] \\
+&= \mathbb{E}\left[\epsilon^2\right] + \mathbb{E}\left[(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\right] \\
+&= \text{Var}(\epsilon) + \mathbb{E}\left[(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\right]
+\end{align}
+
+Das ist schon mal ein erstes wichtiges Zwischenresultat. Der
+Erwartungswert des quadrierten Fehlers wird eine untere Grenze haben,
+die genau der Varianz des Fehlerterms, \(\text{Var}(\epsilon)\),
+entspricht. Diese untere Grenze des erwarteten Fehlers wird dann
+erreicht, wenn unser geschätztes Modell genau dem wahren entspricht und
+darum der zweite Term oben entfällt.
+
+Nun wollen wir diesen zweiten Term oben noch etwas weiter aufspalten.
+Dazu brauchen wir wiederum den Trick, den wir oben bereits angewendet
+haben. Wir ziehen den Erwartungswert des geschätzten Modells
+\(\mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\) einmal ab und fügen ihn
+einmal hinzu:
+
+\begin{align}
+\mathbb{E}\left[(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\right] &= \mathbb{E}\left[\left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right] + \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right] - \hat{f}(\mathbf{x}_0)\right)^2\right] \\
+&= \mathbb{E}\left[\left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right] - \left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)\right)^2\right]
+\end{align}
+
+Ähnlich wie weiter oben können wir diese Gleichung mit einer
+polynomischen Expansion wie folgt umschreiben:
+
+\begin{align}
+\mathbb{E}\left[(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\right] &= \mathbb{E}\biggl[\left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2 \\ 
+&- 2\left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)\left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right) \\
+&+ \left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\biggr]
+\end{align}
+
+Auch hier entfällt der mittlere Term, wenn wir den Erwartungswert in die
+Klammern reinnehmen, weil der zweite Teil
+\(\left(\mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right] - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)=0\)
+ist.
+
+Was übrig bleibt ist folgendes:
+
+\begin{align}
+\mathbb{E}\left[(f(\mathbf{x}_0) - \hat{f}(\mathbf{x}_0))^2\right] &= \mathbb{E}\left[\left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\right] + \mathbb{E}\left[\left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\right] \\
+&= \left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2 + \mathbb{E}\left[\left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\right]
+\end{align}
+
+Schauen wir uns kurz die beiden Komponenten auf der rechten Seite etwas
+genauer an:
+
+\begin{itemize}
+\tightlist
+\item
+  \(\left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\)
+  ist der \textbf{quadrierte Bias} und misst die systematische
+  Abweichung unseres geschätzten Modells \(\hat{f}\) vom wahren
+  unbekannten Modell \(f\). Je kleiner der Bias, desto tiefer der
+  erwartete quadrierte Fehler. Wir können diesen Term der Einfachheit
+  halber mit
+  \(\left[\text{Bias}\left(\hat{f}(\mathbf{x}_0)\right)\right]^2\)
+  bezeichnen.
+\item
+  \(\mathbb{E}\left[\left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\right]\)
+  ist nichts anderes als die Varianz unseres geschätzten Modells
+  \(\hat{f}\). Sie misst, wie stark sich \(\hat{f}\) im Schnitt
+  verändert, wenn wir einen anderen Datensatz für das Training
+  verwenden. Ein Modell mit hoher Varianz passt sich jeweils sehr stark
+  an die Daten an. Je kleiner diese Varianz, desto tiefer der erwartete
+  quadrierte Fehler. Wir bezeichnen diesen Term der Einfachheit halber
+  als \(\text{Var}\left(\hat{f}(\mathbf{x}_0)\right)\).
+\end{itemize}
+
+Nun sind wir endlich am Ziel angelangt und können den erwarteten
+quadrierten Fehler für die Beobachtung \((y_0,\mathbf{x}_0)\) wie folgt
+aufschreiben:
+
+\[
+\mathbb{E}\left[\left(y_0 - \hat{f}(\mathbf{x}_0)\right)^2\right] = \text{Var}(\epsilon) + \left[\text{Bias}\left(\hat{f}(\mathbf{x}_0)\right)\right]^2 + \text{Var}\left(\hat{f}(\mathbf{x}_0)\right)
+\]
+
+\end{tcolorbox}
+
+Der erwartete quadrierte Fehler für die Beobachtung
+\((y_0,\mathbf{x}_0)\) kann wie folgt beschrieben werden:
+
+\[
+\mathbb{E}\left[\left(y_0 - \hat{f}(\mathbf{x}_0)\right)^2\right] = \text{Var}(\epsilon) + \left[\text{Bias}\left(\hat{f}(\mathbf{x}_0)\right)\right]^2 + \text{Var}\left(\hat{f}(\mathbf{x}_0)\right)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  Ein Modell mit \textbf{viel Bias}, also
+  \(\text{Bias}\left(\hat{f}(\mathbf{x}_0)\right)\), führt zu einer
+  schlechten Vorhersagequalität (auf Trainings- und Testdaten), weil das
+  Modell zu rigide ist, um den wahren Zusammenhang zwischen der
+  Output-Variable und den Input-Variablen zu modellieren. Beispiel: wir
+  verwenden ein einfaches lineares Regressionsmodell, um einen stark
+  nicht-linearen Zusammenhang zwischen \(y_i\) und \(\mathbf{x}_i\) zu
+  modellieren. Im Fall von Modellen mit viel Bias spricht man auch von
+  \textbf{Underfitting}.
+\item
+  Ein Modell mit \textbf{viel Varianz} führt zu einer hervorragenden
+  Vorhersagequalität auf den Trainingsdaten, aber zu einer sehr
+  schlechten Vorhersagequalität auf den Testdaten. Das Problem hier ist,
+  dass das Model zu flexibel ist gemessen an der Grösse des
+  Trainingsdatensatzes. Das Modell passt sich so zu stark an die
+  Trainingsdaten an und modelliert auch sogenanntes \textbf{Noise}, also
+  \(\epsilon\) (und nicht nur das \textbf{Signal} in den Daten).
+  Beispiel: wir modellieren ein neuronales Netzwerk, haben aber nur
+  einen Trainingsdatensatz von einigen hundert Beobachtungen. Im Fall
+  von Modellen mit viel Varianz spricht man auch von
+  \textbf{Overfitting}.
+\end{itemize}
+
+Warum spricht man von einem \textbf{Tradeoff}? Flexiblere Modelle haben
+oft einen kleinen Bias, aber hohe Varianz, während unflexible Modelle
+oft eine kleine Varianz, aber einen hohen Bias haben. Es existiert also
+ein Tradeoff zwischen Bias und Varianz und wir wollen beim Modellieren
+und vor allem beim Hyperparameter Tuning (ein Hyperparameter ist zum
+Beispiel \(\lambda\)) den optimalen Tradeoff finden.
+
+In unserem Beispiel wenden wir ein regularisiertes Regressionsmodell an.
+Hier spielt der Hyperparameter \(\lambda\) eine zentrale Rolle für den
+Tradeoff zwischen Bias und Variance. Ein zu tiefer Wert für \(\lambda\)
+kann zu einem zu flexiblen Modell mit viel Varianz führen. Ein zu hoher
+Wert für \(\lambda\) führt zu einem zu rigiden Modell mit viel Bias.
+
+\section{Polynomische Regression}\label{polynomische-regression}
+
+Coming soon.
+
+\section{Lineare Regression in R}\label{lineare-regression-in-r}
+
+In \textbf{Base R} lassen sich Regressionsmodelle einfach mit der
+\texttt{lm()} Funktion (\texttt{lm} steht für \emph{linear model})
+rechnen.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Datenpunkte}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{4.1}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{, }\FloatTok{1.4}\NormalTok{, }\FloatTok{4.4}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{3.5}\NormalTok{, }\FloatTok{1.95}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{2.5}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{2.05}\NormalTok{)}
+
+\CommentTok{\# Dataframe}
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y)}
+
+\CommentTok{\# Modellrechnung (Kleinsquadrateschätzer)}
+\NormalTok{mod }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x, }\AttributeTok{data =}\NormalTok{ df)}
+
+\CommentTok{\# Modelloutput}
+\FunctionTok{summary}\NormalTok{(mod)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = y ~ x, data = df)
+
+Residuals:
+       1        2        3        4 
+ 0.02129  1.13342 -1.91157  0.75686 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   0.4468     0.8340   0.536    0.646
+x            -0.7395     0.2692  -2.747    0.111
+
+Residual standard error: 1.66 on 2 degrees of freedom
+Multiple R-squared:  0.7904,    Adjusted R-squared:  0.6857 
+F-statistic: 7.544 on 1 and 2 DF,  p-value: 0.1109
+\end{verbatim}
+
+Blabla\ldots{}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Modellvorhersagen}
+\NormalTok{yp }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod, }\AttributeTok{newdata =} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(}\FloatTok{2.5}\NormalTok{, }\FloatTok{5.1}\NormalTok{)))}
+\NormalTok{yp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+        1         2 
+-1.401854 -3.324500 
+\end{verbatim}
+
+Für regularisierte Regressionsmodelle eignet sich der
+\texttt{tidymodels} Framework.
+
+\chapter{Lineare Klassifikation}\label{sec-linclass}
+
+\section{Logistische Regression}\label{logistische-regression}
+
+Coming soon.
+
+\section{Naive Bayes}\label{naive-bayes}
+
+Coming soon.
+
+\section{K-Nearest Neighbors}\label{k-nearest-neighbors}
+
+\textbf{Nicht-parametrische Modelle} wiederum sind Modelle, welche nicht
+(oder zumindest nicht explizit) durch Parameter charakterisiert sind. Am
+besten schauen wir uns gleich ein einfaches nicht-parametrisches Modell
+an, nämlich das \textbf{K-Nearest-Neighbors} (KNN) Modell. Stellen Sie
+sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem
+Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf
+Tiktok durch Influencer*innen bewerben lassen. Für jedes der 55 Produkte
+hatten Sie ein Werbebudget für Instagram (\(x_{i1}\)) und ein
+Werbebudget für Tiktok (\(x_{i2}\)). Am Ende des Geschäftsjahrs haben
+Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht
+wurden oder nicht (Output \(y_i\)). Die erfolgreichen Produkte (=
+Absatzziel erreicht) sind in untenstehender App als blaue Punkte
+eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen
+Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere
+Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche
+Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte
+automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das
+die \(K\) nächsten Nachbarn unter den 55 gegebenen Produkten sucht und
+dann die häufigste Beobachtung unter den \(K\) nächsten Nachbarn
+vorhersagt. In anderen Worten: wir suchen die \(K\) \textbf{ähnlichsten}
+Beobachtungen und nutzen diese, um eine Vorhersage zu machen.
+
+Selbstverständlich spielt der konkrete Wert von \(K\) hier eine grosse
+Rolle - sollen wir nur \(K=1\) Nachbarn berücksichtigen? Oder \(K=10\)
+Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55
+Datenpunkte, sondern auch die \textbf{Entscheidungsgrenze} (in schwarz).
+Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn
+Sie \(K\) erhöhen oder reduzieren.
+
+Ausserdem können Sie in der ersten Abbildung auch den schwarzen Punkt
+mit der Maus setzen, wodurch Ihnen die \(K\) nächsten Punkte des
+schwarzen Punkts angezeigt werden.
+
+Die zweite Abbildung zeigt die Entscheidungsregionen mit
+unterschiedlicher Intensität je nachdem wie sicher sich das Modell ist.
+In einer Region, in der alle \(K\) Nachbarn nicht-erfolgreiche Produkte
+sind, sind wir uns eher sicher bezüglich der Vorhersage als in einer
+Region, in der die Anteile zwischen erfolgreichen und
+nicht-erfolgreichen Produkten ausgeglichen sind.
+
+Um die \(K\) nächsten Nachbarn zu finden, müssen wir die Distanzen
+zwischen Punkten rechnen können. Dazu verwenden wir die Euklidische
+Distanz, welche wir in Kapitel @ref(basics) kennen lernen werden.
+
+Das KNN Modell ist ein sehr einfaches ML Modell, welches in der Praxis
+allerdings nicht allzu häufig angewendet wird. Warum nicht? Weil es am
+sogenannten \textbf{Fluch der Dimensionalität} (engl. Curse of
+Dimensionality) leidet. Doch was bedeutet das? Je mehr Input-Variablen
+wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist
+etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir
+für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee,
+dass wir \(K\) nahe, ähnliche Beobachtungen für die Vorhersage
+verwenden. Wenn diese \(K\) nahen Beobachtungen im hochdimensionalen
+Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert
+auch das Modell nicht mehr gut.
+
+\subsubsection*{Fragen}\label{fragen-1}
+\addcontentsline{toc}{subsubsection}{Fragen}
+
+Stellen Sie sich vor, Sie haben folgendes Klassifikationsproblem, das
+Sie mit KNN lösen wollen. Welche Kategorie prognostiziert ein KNN Modell
+für den Punkt \(x\) in der unten stehenden Abbildung?
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Blauer Kreis.
+\item
+  Beide Klassen sind gleich wahrscheinlich.
+\item
+  Rotes Kreuz.
+\end{enumerate}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Es hat drei rote Kreuze und zwei blaue Kreise in der Nachbarschaft. Die
+roten Kreuze sind darum in der Mehrheit, weshalb Antwort \textbf{c}
+korrekt ist.
+
+\end{tcolorbox}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/knn.PNG}}
+
+}
+
+\caption{\label{fig-knn}KNN Modell für binäres Klassifikationsproblem}
+
+\end{figure}%
+
+Was ist der Wert für \(K\) für das KNN Modell in der oben stehenden
+Abbildung?
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  5
+\item
+  2
+\item
+  3
+\item
+  10
+\end{enumerate}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Die Nachbarschaft, dargestellt durch den Kreis, enthält 5 Beobachtungen.
+Deshalb ist Antwort \textbf{a} korrekt.
+
+\end{tcolorbox}
+
+Stellen Sie sich vor, Sie haben folgendes Regressionsproblem, das Sie
+mit KNN lösen wollen. Was ist die Vorhersage für den Punkt \(x\) für das
+KNN-Regressionsmodell in der unten stehenden Abbildung? Die Zahlen neben
+den Datenpunkten stellen die entsprechenden \(y_i\)-Werte dar.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  4
+\item
+  20
+\item
+  5
+\end{enumerate}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, coltitle=black, bottomrule=.15mm, colback=white, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Lösung}, left=2mm, rightrule=.15mm, arc=.35mm, toprule=.15mm, toptitle=1mm, breakable, opacitybacktitle=0.6, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm]
+
+Der Durchschnitt über die 5 \(y_i\)-Werte in der Nachbarschaft beträgt
+4, weshalb Antwort \textbf{a} korrekt ist.
+
+\end{tcolorbox}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/knnreg.PNG}}
+
+}
+
+\caption{\label{fig-knnreg}KNN Modell für Regressionsproblem}
+
+\end{figure}%
+
+\chapter{ML Pipeline}\label{sec-pipeline}
+
+Abbildung~\ref{fig-pipeline} zeigt, wie eine typische ML-Pipeline
+aussieht.\footnote{Icons stammen von https://thenounproject.com/.}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/Pipeline.png}}
+
+}
+
+\caption{\label{fig-pipeline}Eine typische ML-Pipeline.}
+
+\end{figure}%
+
+Sie starten typischerweise mit einem \textbf{Problem} oder einer
+Herausforderung. Ihr ganzes Projekt sollte darauf ausgelegt sein, dieses
+Problem zu lösen. Es ist grundsätzlich nicht ratsam, auf Biegen und
+Brechen eine ML Lösung zu implementieren, wenn kein klar definiertes
+Problem vorliegt. Nehmen Sie sich also zu Beginn eines Projekts Zeit,
+das Problem grundlegend zu definieren. Sprechen Sie auch mit den
+entsprechenden Fachexpert*innen im Unternehmen, um genau zu verstehen,
+was verbessert oder effizienter gemacht werden soll und was die
+technischen oder ökonomischen Einschränkungen sind.
+
+Sobald das Problemverständnis vorhanden ist, beginnen Sie, sich mit den
+\textbf{verfügbaren Daten} zu befassen. Auch hier müssen Sie sich
+wahrscheinlich mit den entsprechenden Expert*innen im Unternehmen (z.B.
+Datenbankadministrator*innen) austauschen. Es geht hier unter anderem
+darum abzuklären, welche Daten verfügbar sind, in welchem Format die
+Daten vorhanden sind wie die Datenqualität ist.
+
+Danach beginnen Sie mit den Datenarbeiten. Häufig wird dieser Schritt
+\textbf{Preprocessing} oder \textbf{Data Cleaning} genannt. Oft
+verschlingt dieser Arbeitsschritt sehr viel Zeit und es ist nicht
+unüblich, dass 80\% der Projektzeit hier aufgewendet werden. Es ist auch
+völlig normal, wenn Sie von diesem Schritt zurück zur Problemdefinition
+gehen und sie verfeinern oder anpassen müssen oder zum Beispiel nochmals
+Fragen mit den Datenbankexpert*innen klären müssen, weil Ihr
+Datenverständnis noch nicht vollständig ist.
+
+Nachdem die Daten vorbereitet wurden, gehen Sie typischerweise zu einer
+\textbf{explorativen Analyse} der Daten über. Das heisst, Sie
+visualisieren die vorhandenen Variablen univariat (d.h. jede Variable
+einzeln) oder multivariat (d.h. zwei oder mehr Variablen zusammen). Ein
+Beispiel einer univariaten Visualisierung ist ein Histogramm einer
+quantitativen Variable (z.B. Quartalsumsätze). Ein Beispiel einer
+multivariaten Visualisierung ist ein Streudiagramm zweier quantitativer
+Variablen (z.B. Quartalsumsätze und Wechselkurse). Auch hier ist es
+üblich, dass Sie einen Schritt zurück gehen und weitere
+Datenbereinigungen vornehmen müssen.
+
+Nach der explorativen Analyse der Daten sollten Sie eine erste Idee von
+den wichtigsten Zusammenhängen in den Daten haben. Basierend darauf
+können Sie Ihr erstes Modell wählen und trainieren und mit der
+eigentlichen \textbf{Analyse} bzw. der Lösung des Problems beginnen.
+
+Einer der wichtigsten Schritte ist die saubere und gründliche
+\textbf{Evaluation} Ihrer Modelle. Dieser Schritt dient einerseits dazu
+das beste Modell auszuwählen und andererseits dazu die Qualität Ihrer
+Lösung bzw. Ihres Modells abzuschätzen. Mit diesem zweiten Schritt
+wollen Sie nämlich bereits während der Projektphase einschätzen können,
+wie gut Ihr Modell das gegebene Problem löst oder einen bestehenden
+Betriebsprozess verbessert oder effizienter macht. Die beiden Schritte
+Analyse und Evaluation werden typischerweise ein paar Mal iteriert, bis
+Sie das beste Modell gefunden haben.
+
+Am Schluss geht es darum, dass Sie Ihr Wissen und Ihre Erkenntnisse an
+die relevanten Fachexpert*innen weitergeben (\textbf{Wissenstransfer})
+und Ihr finales Modell in einer produktiven Umgebung implementieren (oft
+\textbf{Deployment} genannt). Zum Beispiel können Sie Ihr Modell in
+einer mobilen App einbetten oder als REST API Service zur Verfügung
+stellen.
+
+\chapter{Entscheidungsbäume}\label{sec-tree}
+
+Coming soon.
+
+\chapter{Ensembles}\label{sec-ensemble}
+
+Coming soon.
+
+\chapter{Support Vector Machines}\label{sec-svm}
+
+Coming soon.
+
+\part{Deep Learning}
+
+In diesem zweiten Teil des Buchs befassen wir uns nun mit den modernen
+Entwicklungen im Machine Learning, nämlich dem Deep Learning.
+
+Wir bauen hierfür jedoch auf dem ersten Teil auf. Es macht also Sinn,
+die Kapitel in diesem Buch wirklich in der von mir vorgeschlagenen
+Reihenfolge zu lesen.
+
+\chapter{Artificial Neural Networks}\label{sec-ann}
+
+Coming soon.
+
+\chapter{Convolutional Neural Networks}\label{sec-cnn}
+
+Coming soon.
+
+\chapter{Recurrent Neural Networks}\label{sec-rnn}
+
+Coming soon.
+
+\chapter{Transformers}\label{sec-transformer}
+
+Coming soon.
+
+\bookmarksetup{startatroot}
+
+\chapter*{Quellenverzeichnis}\label{quellenverzeichnis}
+\addcontentsline{toc}{chapter}{Quellenverzeichnis}
+
+\markboth{Quellenverzeichnis}{Quellenverzeichnis}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Ananthaswamy}
+Ananthaswamy, Anil. 2024. \emph{Why Machines Learn: The Elegant Math
+Behind Modern AI}. Dutton.
+
+\bibitem[\citeproctext]{ref-Geron}
+Géron, Aurélien. 2022. \emph{Hands-On Machine Learning with
+Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to
+Build Intelligent Systems}. 3. Aufl. O'Reilly.
+
+\bibitem[\citeproctext]{ref-islr}
+James, Gareth, Daniela Witten, Trevor Hastie, und Robert Tibshirani.
+2021. \emph{An Introduction to Statistical Learning: with Applications
+in R}. 2. Aufl. Springer. \url{https://www.statlearning.com/}.
+
+\end{CSLReferences}
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{part}{Anhang}
+\appendix
+
+\chapter{Mathe- und Statistik-Grundlagen}\label{sec-math}
+
+In diesem Kapitel repetieren wir die wichtigsten Grundlagen aus der
+Mathematik und Statistik, die es braucht, um Machine Learning Modelle zu
+verstehen. Das Thema \emph{Lineare Algebra} wird für die meisten von
+Ihnen wahrscheinlich Neuland sein.
+
+\section{Funktionen}\label{funktionen}
+
+Eine Funktion, die wir in der Mathematik typischerweise mit \(f\)
+bezeichnen, ordnet jedem \textbf{Argument} \(x\) aus dem
+Definitionsbereich \(D\) (engl. \emph{Domain}) \textbf{genau einen Wert
+\(y\)} aus dem Wertebereich \(W\) (engl. \emph{Codomain}) zu. Oft sind
+\(D\) und \(W\) die Menge der reellen Zahlen, also \(\mathbb{R}\). Die
+Menge der reellen Zahlen enthält alle möglichen Zahlen, die Sie sich
+vorstellen können.\footnote{Einzige Ausnahme sind die komplexen Zahlen.}
+Zum Beispiel die Zahlen \(3\), \(-4.247\), \(\sqrt{14}\), \(5/8\), etc.
+
+Wie eine Funktion grafisch aussieht, ist aus Panel (a) der Abbildung
+@ref(fig:functions) ersichtlich. Hier zeigen wir die Form einer Funktion
+in einem kartesischen Koordinatensystem. Die Funktionskurve weist jedem
+Wert \(x\) auf der x-Achse genau einen Wert \(y\) auf der y-Achse zu.
+Der wichtigste Teil der oben aufgeführten Definition ist der Teil
+``genau einen Wert'', denn eine Funktion kann einem Element \(x\) nicht
+zwei oder mehr Werte zuweisen, sondern nur genau einen. Genau aus diesem
+Grund handelt es sich bei Panel (b) in Abbildung @ref(fig:functions)
+\emph{nicht} um eine Funktion, da gewissen \(x\)-Werten mehrere Werte
+\(y\) zugeordnet werden. \emph{Wichtig}: das heisst aber nicht, dass
+zwei verschiedenen \(x\)-Werten, nennen wir sie \(x'\) und \(x''\),
+derselbe \(y\)-Wert zugeordnet werden kann (vgl. Panel (a)).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{images/Functions.png}
+
+}
+
+\caption{(a) Eine Funktion, die jedem x-Wert genau einen y-Wert zuweist.
+(b) Keine Funktion.}
+
+\end{figure}%
+
+Mathematisch wird diese allgemeine Definition einer Funktion häufig wie
+folgt beschrieben:
+
+\[
+f : x \mapsto y
+\] Wir haben also eine Funktion \(f\), die jedem Element \(x\) genau
+einen Wert \(y\) zuweist. Der Pfeil in obiger mathematischer
+Schreibweise beschreibt genau dieses Mapping. Wie genau dieses Mapping
+einem Argument \(x\) den entsprechenden \(y\)-Wert zuordnet, wird durch
+die Funktion \(f(x)\) beschrieben. In den folgenden Abschnitten schauen
+wir uns typische Beispiele von Funktionen an, angefangen mit linearen
+Funktionen. Doch vorher wollen wir uns kurz überlegen, warum Funktionen
+für das Machine Learning überhaupt wichtig sind. Ein grosser Teil des
+Machine Learnings, der \textbf{Supervised Learning} genannt wird,
+befasst sich mit dem Problem, wie eine Zielvariable \(y\) mithilfe von
+einem oder mehreren Prädiktoren \(x\) vorhergesagt werden kann. Ein
+Machine Learning Modell ist darum nichts anderes als eine Funktion
+\(y=f(x)\), die basierend auf den Prädiktoren \(x\) die Zielvariable
+\(y\) möglichst gut beschreiben kann.\footnote{Zumindest aus einer
+  nicht-probabilistischen Perspektive.}
+
+\subsection{Lineare Funktionen}\label{lineare-funktionen}
+
+Nun schauen wir uns an, wie eine \textbf{lineare} Funktion aussieht.
+Eine lineare Funktion kann allgemein wie folgt geschrieben werden:
+
+\[
+y = f(x) = a \cdot x + b
+\] Obige Funktionsgleichung besagt, dass wir den entsprechenden
+\(y\)-Wert kriegen, indem wir den Wert des Arguments \(x\) mit \(a\)
+multiplizieren und danach eine Konstante \(b\) addieren. \(a\) und \(b\)
+sind die \textbf{Parameter} dieser Funktion. Die konkreten Zahlenwerte
+dieser beiden Parameter definieren, wie die Funktion am Schluss genau
+aussieht.
+
+Eine lineare Funktion hat auch eine geometrische Interpretation und zwar
+entspricht eine lineare Funktion einer Gerade. Das ist auch der Grund,
+warum wir diese Funktionen \textbf{linear} nennen, sie können graphisch
+durch eine ``Linie'' dargestellt werden. Der Parameter \(a\) ist die
+Steigung dieser Geraden und der Parameter \(b\) entspricht dem Ort, wo
+die Gerade die y-Achse schneidet (sogenannter y-Achsenabschnitt).
+
+Am besten schauen wir uns ein paar konkrete Beispiele an (Abb.
+@ref(fig:lin-func)).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{math_files/figure-pdf/lin-func-1.pdf}
+
+}
+
+\caption{Beispiele linearer Funktionen.}
+
+\end{figure}%
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{math_files/figure-pdf/lin-func-2.pdf}
+
+}
+
+\caption{Beispiele linearer Funktionen.}
+
+\end{figure}%
+
+Aus der linken Abbildung können wir ablesen, dass die Steigung dieser
+Geraden \(\frac{\Delta y}{\Delta x}=\frac{2}{2}=1\) ist und dass die
+Gerade die y-Achse am Ort \(1\) schneidet. Die entsprechende lineare
+Funktion kann dementsprechend als \(y = x + 1\) geschrieben
+werden.\footnote{Wir müssen hier die Steigung \(1\) nicht explizit
+  schreiben, aber selbstverständlich ist es nicht falsch die lineare
+  Funktion als \(y = 1\cdot x + 1\) zu schreiben.}
+
+Aus der rechten Abbildung können wir ablesen, dass die Steigung
+\(\frac{\Delta y}{\Delta x}=\frac{-1}{2}=-0.5\) ist und dass die Gerade
+die y-Achse am Ort \(-2\) schneidet. Die entsprechende lineare Funktion
+kann dementsprechend als \(y = -0.5\cdot x -2\) geschrieben werden.
+
+Es ist wichtig zu sehen, dass der Effekt einer Veränderung von \(x\)
+(also \(\Delta x\)) auf \(y\) überall derselbe ist. Es spielt also keine
+Rolle, ob wir von \(x=-2\) zu \(x=-1\) gehen oder von \(x=100\) zu
+\(x=101\), die entsprechende Veränderung in \(y\) (also \(\Delta y\))
+wird dieselbe sein. Das muss so sein, denn die Gerade steigt (oder
+sinkt) mit konstanter Steigung.
+
+\textbf{Aufgaben}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Zeichnen Sie die Funktion \(y = 2\cdot x\) in ein Koordinatensystem
+  ein. Warum fehlt der Parameter \(b\)?
+\item
+  Zeichnen Sie die Funktion \(y=-3\) in ein Koordinatensystem ein. Ist
+  das überhaupt eine Funktion nach obiger Definition?
+\end{enumerate}
+
+\subsection{Quadratische Funktionen}\label{quadratische-funktionen}
+
+Nun wollen wir uns eine etwas interessantere (und flexiblere) Familie
+von Funktionen anschauen, nämlich \textbf{quadratische} Funktionen. Auch
+hier wollen wir die Funktion erstmal allgemein aufschreiben:
+
+\[
+y = f(x) = a \cdot x^2 + b \cdot x + c
+\] Eine quadratische Funktion hat drei \textbf{Parameter}, nämlich
+\(a\), \(b\) und \(c\). Grafisch entspricht die quadratische Funktion
+einer \textbf{Parabel} (vgl. Abb. @ref(fig:quad-func)). Die Parameter
+sind hier nicht mehr so einfach grafisch zu interpretieren, aber die
+vier Beispiele in unten stehender Abbildung geben Anhaltspunkte, was
+passiert, wenn die Parameterwerte sich ändern.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{math_files/figure-pdf/quad-func-1.pdf}
+
+}
+
+\caption{Beispiele quadratischer Funktionen.}
+
+\end{figure}%
+
+\textbf{Aufgaben}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sie haben folgende quadratische Gleichung:
+  \(y = 2 \cdot x^2 + x - 2\). Berechnen Sie mit der bekannten
+  Lösungsformel \(x_{1,2}=\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\) die Orte
+  auf der x-Achse, wo die Parabel die Achse schneidet (oder einfacher
+  gesagt die Nullstellen).
+\item
+  Verwenden Sie folgenden R-Code, um beliebige quadratische Funktionen
+  grafisch darzustellen, indem Sie die Parameterwerte auf der ersten
+  Code-Zeile verändern.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Parameter setzen}
+\NormalTok{a }\OtherTok{\textless{}{-}} \DecValTok{2}\NormalTok{; b }\OtherTok{\textless{}{-}} \DecValTok{0}\NormalTok{; c }\OtherTok{\textless{}{-}} \DecValTok{1}
+\CommentTok{\# Quadratische Funktion}
+\NormalTok{quad }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, a, b, c) \{a }\SpecialCharTok{*}\NormalTok{ x}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{+}\NormalTok{ b }\SpecialCharTok{*}\NormalTok{ x }\SpecialCharTok{+}\NormalTok{ c\}}
+\CommentTok{\# x{-}Werte}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{, }\FloatTok{0.01}\NormalTok{)}
+\CommentTok{\# y{-}Werte}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{quad}\NormalTok{(x, a, b, c)}
+\CommentTok{\# Plot}
+\FunctionTok{plot}\NormalTok{(x, y, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{, }\AttributeTok{col =} \StringTok{"darkcyan"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Sie wundern sich nun vielleicht, könnte man nicht auch eine Funktion
+antreffen, in der \(x^3\), \(x^4\), etc. vorkommen? Das ist
+selbstverständlich möglich. In diesem Fall spricht man dann von einem
+sogenannten \textbf{Polynom}. Die höchste Potenz des Arguments \(x\)
+definiert den Grad des Polynoms.
+
+Schauen wir uns doch am besten gleich wieder ein Beispiel an:
+
+\[
+y = f(x) = 1 \cdot x^4 - 2 \cdot x^3 - 5 \cdot x^2 + 8 \cdot x - 2
+\] Die Visualisierung dieser Funktion ist in Abb. @ref(fig:poly-func)
+gegeben. Diese Funktion ist nun bereits enorm flexibel und kann je nach
+Parameterwerten ganz unterschiedliche Zusammenhänge abbilden.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{math_files/figure-pdf/poly-func-1.pdf}
+
+}
+
+\caption{Beispiel einer polynomischen Funktion vierten Grades.}
+
+\end{figure}%
+
+\textbf{Aufgaben}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Eine quadratische Funktion ist ein Polynom welchen Grades?
+\item
+  Handelt es sich bei der Funktion \(y=2x^5 + x + 1\) immer noch um ein
+  Polynom? Falls ja, ein Polynom welchen Grades?
+\item
+  Handelt es sich bei der Funktion \(y = x^{0.5} + 2\) um ein Polynom?
+\end{enumerate}
+
+\subsection{Funktionen mehrerer
+Argumente}\label{funktionen-mehrerer-argumente}
+
+Bisher haben wir nur Funktionen mit \textbf{einem Argument} \(x\)
+angeschaut, doch die meisten für das Machine Learning interessanten
+Funktionen sind Funktionen \textbf{mehrerer Argumente}.
+
+Der Einfachheit halber schauen wir uns hier nur mal eine
+\textbf{lineare} Funktion zweier Argumente, nennen wir sie \(x_1\) und
+\(x_2\), an, denn diese können wir in 3D immer noch visualisieren. Wir
+betrachten folgende Funktion:
+\(y = f(x_1,x_2) = 1 \cdot x_1 + 0.5 \cdot x_2 + 5\).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{math_files/figure-pdf/plane-1.pdf}
+
+}
+
+\caption{Lineare Funktion zweier Argumente (Ebene).}
+
+\end{figure}%
+
+Aha! Während eine lineare Funktion eines Arguments grafisch einer Gerade
+entspricht, sehen wir nun, dass eine lineare Funktion zweier Argumente
+nichts anderes als eine Ebene darstellt. Wir sehen, dass die Ebene die
+y-Achse am Punkt \(5\) schneidet. Etwas schwieriger zu sehen ist die
+Steigung der Ebene in die Richtung der \(x_1\)-Achse und in die Richtung
+der \(x_2\)-Achse. Sie können aber vielleicht bereits erraten, dass die
+(partiellen) Steigungen \(1\) und \(0.5\) betragen.
+
+Die Funktion ordnet jeden möglichen Punkt \((x_1,x_2)\) einem Punkt auf
+der Ebene zu. Wir können zum Beispiel für den in Abb. @ref(fig:plane)
+eingezeichneten Punkt \((6,4)\) den entsprechenden Punkt auf der Ebene
+ausrechnen:
+
+\[ \begin{split}
+y &= 1 \cdot x_1 + 0.5 \cdot x_2 + 5\\
+&= 1 \cdot 6 + 0.5 \cdot 4 + 5\\
+&= 13
+\end{split}\]
+
+Selbstverständlich könnten wir uns nun auch quadratische Funktionen oder
+Polynome mehrerer Argumente anschauen, aber darauf verzichten wir
+vorerst.
+
+\subsection{Potenzen und Logarithmen}\label{potenzen-und-logarithmen}
+
+Blabla\ldots{}
+
+\section{Integral- und
+Differentialrechnung}\label{integral--und-differentialrechnung}
+
+Olteanu materials: Local vs.~global minima From a maximization to a
+minimization problem Basic definition of derivative Differentiation
+rules local min., max. and saddle point Second derivative test Partial
+derivatives What is a gradient? What is Hessian? What is Jacobian? Chain
+rules Lagrange optimization
+
+\section{Lineare Algebra}\label{lineare-algebra}
+
+Olteanu materials: What is a scalar? What is a vector? What is a matrix?
+Vector norms Inner products Symmetric, diagonal, square and identity
+matrix Associative, commutative laws for matrices Matrix addition and
+multiplication Matrix inversion Eigenvectors and eigenvalues Quadratic
+form and positive (semi-) definiteness Differentiation rules for
+matrices
+
+\section{Wahrscheinlichkeitsrechnung}\label{wahrscheinlichkeitsrechnung}
+
+Olteanu materials: Sample space and axioms of probability Conditional
+probability definition Discrete vs.~continuous random variables Joint
+probability distributions Expectation and variance, covariance (always
+for discrete and continuous) Bernoulli, Binomial, Normal, Multivariate
+Normal, Laplace
+
+\subsection{Diskrete Zufallsvariablen}\label{diskrete-zufallsvariablen}
+
+Wir werden später sehen, dass im Machine Learning oftmals Dinge als
+\textbf{Zufallsvariablen} modelliert werden. Eine Zufallsvariable \(X\)
+ist eine Variable, für die der konkrete Wert nicht von vornherein klar
+ist. Wir können mit \(X\) zum Beispiel das Resultat eines Münzwurfs
+modellieren. Die zwei möglichen Resultate sind Kopf und Zahl. Vor dem
+Münzwurf ist nicht klar, ob Kopf oder Zahl erscheinen wird. Genau darum
+modellieren wir das Resultat des Münzwurfs als Zufallsvariable.
+
+Es gibt in diesem einfachen Beispiel nur zwei mögliche Resultate (Kopf
+und Zahl), d.h. die Anzahl möglicher Resultate ist endlich (= nicht
+unendlich). Darum handelt es sich in diesem Fall um eine
+\textbf{diskrete} Zufallsvariable.
+
+\section{Verteilungen}\label{verteilungen}
+
+\chapter{R und Python}\label{sec-programming}
+
+Coming soon.
+
+
+
+
+\end{document}

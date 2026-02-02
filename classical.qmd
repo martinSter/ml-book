@@ -1,0 +1,8 @@
+# Klassisches Machine Learning
+
+Nachdem wir in @sec-intro in das Thema Machine Learning eingestiegen sind, befassen wir uns nun in einem ersten Teil des Buchs mit den klassischen Methoden des **Supervised Learnings**.
+
+Es ist jedoch wichtig zu erwähnen, dass die folgenden Kapitel lediglich einen ersten Einblick in dieses Thema geben. Es gibt zahlreiche weitere Themen, Modelle und Methoden aus dem Supervised Learnings. Ausserdem ignorieren wir das Thema Unsupervised Learning fast komplett.
+
+Nichtsdestotrotz haben Sie nach Bearbeitung der folgenden Kapitel eine sehr gute Basis, um tiefer in das Thema einzusteigen. Sie sollten nach dem Lesen ausserdem auch die Notation und die wichtigsten mathematischen Grundlagen in ihrem Köcher haben, damit Sie weiterführende Bücher und Materialien gut verstehen sollten.
+

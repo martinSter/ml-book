@@ -1,0 +1,363 @@
+# Mathe- und Statistik-Grundlagen {#sec-math}
+
+In diesem Kapitel repetieren wir die wichtigsten Grundlagen aus der Mathematik und Statistik, die es braucht, um Machine Learning Modelle zu verstehen. Das Thema *Lineare Algebra* wird für die meisten von Ihnen wahrscheinlich Neuland sein.
+
+## Funktionen
+
+Eine Funktion, die wir in der Mathematik typischerweise mit $f$ bezeichnen, ordnet jedem **Argument** $x$ aus dem Definitionsbereich $D$ (engl. *Domain*) **genau einen Wert $y$** aus dem Wertebereich $W$ (engl. *Codomain*) zu. Oft sind $D$ und $W$ die Menge der reellen Zahlen, also $\mathbb{R}$. Die Menge der reellen Zahlen enthält alle möglichen Zahlen, die Sie sich vorstellen können.^[Einzige Ausnahme sind die komplexen Zahlen.] Zum Beispiel die Zahlen $3$, $-4.247$, $\sqrt{14}$, $5/8$, etc.
+
+Wie eine Funktion grafisch aussieht, ist aus Panel (a) der Abbildung \@ref(fig:functions) ersichtlich. Hier zeigen wir die Form einer Funktion in einem kartesischen Koordinatensystem. Die Funktionskurve weist jedem Wert $x$ auf der x-Achse genau einen Wert $y$ auf der y-Achse zu. Der wichtigste Teil der oben aufgeführten Definition ist der Teil "genau einen Wert", denn eine Funktion kann einem Element $x$ nicht zwei oder mehr Werte zuweisen, sondern nur genau einen. Genau aus diesem Grund handelt es sich bei Panel (b) in Abbildung \@ref(fig:functions) *nicht* um eine Funktion, da gewissen $x$-Werten mehrere Werte $y$ zugeordnet werden. *Wichtig*: das heisst aber nicht, dass zwei verschiedenen $x$-Werten, nennen wir sie $x'$ und $x''$, derselbe $y$-Wert zugeordnet werden kann (vgl. Panel (a)).
+
+```{r functions, echo = FALSE, fig.cap = '(a) Eine Funktion, die jedem x-Wert genau einen y-Wert zuweist. (b) Keine Funktion. ', out.width='80%', fig.align='center'}
+knitr::include_graphics("images/Functions.png")
+```
+
+Mathematisch wird diese allgemeine Definition einer Funktion häufig wie folgt beschrieben:
+
+$$
+f : x \mapsto y
+$$
+Wir haben also eine Funktion $f$, die jedem Element $x$ genau einen Wert $y$ zuweist. Der Pfeil in obiger mathematischer Schreibweise beschreibt genau dieses Mapping. Wie genau dieses Mapping einem Argument $x$ den entsprechenden $y$-Wert zuordnet, wird durch die Funktion $f(x)$ beschrieben. In den folgenden Abschnitten schauen wir uns typische Beispiele von Funktionen an, angefangen mit linearen Funktionen. Doch vorher wollen wir uns kurz überlegen, warum Funktionen für das Machine Learning überhaupt wichtig sind. Ein grosser Teil des Machine Learnings, der **Supervised Learning** genannt wird, befasst sich mit dem Problem, wie eine Zielvariable $y$ mithilfe von einem oder mehreren Prädiktoren $x$ vorhergesagt werden kann. Ein Machine Learning Modell ist darum nichts anderes als eine Funktion $y=f(x)$, die basierend auf den Prädiktoren $x$ die Zielvariable $y$ möglichst gut beschreiben kann.^[Zumindest aus einer nicht-probabilistischen Perspektive.]
+
+### Lineare Funktionen
+
+Nun schauen wir uns an, wie eine **lineare** Funktion aussieht. Eine lineare Funktion kann allgemein wie folgt geschrieben werden:
+
+$$
+y = f(x) = a \cdot x + b
+$$
+Obige Funktionsgleichung besagt, dass wir den entsprechenden $y$-Wert kriegen, indem wir den Wert des Arguments $x$ mit $a$ multiplizieren und danach eine Konstante $b$ addieren. $a$ und $b$ sind die **Parameter** dieser Funktion. Die konkreten Zahlenwerte dieser beiden Parameter definieren, wie die Funktion am Schluss genau aussieht.
+
+Eine lineare Funktion hat auch eine geometrische Interpretation und zwar entspricht eine lineare Funktion einer Gerade. Das ist auch der Grund, warum wir diese Funktionen **linear** nennen, sie können graphisch durch eine "Linie" dargestellt werden. Der Parameter $a$ ist die Steigung dieser Geraden und der Parameter $b$ entspricht dem Ort, wo die Gerade die y-Achse schneidet (sogenannter y-Achsenabschnitt).
+
+Am besten schauen wir uns ein paar konkrete Beispiele an (Abb. \@ref(fig:lin-func)).
+
+```{r lin-func, echo=FALSE, fig.show = 'hold', fig.cap='Beispiele linearer Funktionen.', out.width='50%', fig.asp=1, fig.align='center', fig.alt='Beispiele linearer Funktionen.'}
+library(latex2exp)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 4, 0.5, 0.5), pty = "s")
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-6, 6), xlim = c(-6, 6),
+     xlab = "x", ylab = "y",
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 2, cex.axis = 2)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey"); abline(v = 0, lty = 1, lwd = 1, col = "grey")
+# Add vertical segments
+segments(2, -6, 2, 3, lwd = 1, lty = 2, col = "darkcyan")
+segments(4, -6, 4, 5, lwd = 1, lty = 2, col = "darkcyan")
+# Add horizontal segments
+segments(-6, 3, 2, 3, lwd = 1, lty = 2, col = "darkcyan")
+segments(-6, 5, 4, 5, lwd = 1, lty = 2, col = "darkcyan")
+segments(-6, 1, 0, 1, lwd = 1, lty = 2, col = "darkorange3")
+# Add small distances
+segments(2, 3, 4, 3, lwd = 3, lty = 1, col = "blue")
+segments(4, 3, 4, 5, lwd = 3, lty = 1, col = "deeppink")
+# Add line indicating intercept
+segments(0, 0, 0, 1, lwd = 3, lty = 1, col = "darkorange3")
+# Add line
+abline(a = 1, b = 1, lwd = 3, lty = 1, col = "darkcyan")
+# Add text elements
+text(x = 2, y = 2.2, labels = TeX(r'($\Delta x = 2$)'), pos = 4, col = "blue", cex = 1.8)
+text(x = 4, y = 4, labels = TeX(r'($\Delta y = 2$)'), pos = 4, col = "deeppink", cex = 1.8)
+text(x = 0, y = 0.5, labels = TeX(r'($\b = 1$)'), pos = 4, col = "darkorange3", cex = 1.8)
+# ----------------------------------------------------------------------------------------------
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 4, 0.5, 0.5), pty = "s")
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-6, 6), xlim = c(-6, 6),
+     xlab = "x", ylab = "y",
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 2)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey"); abline(v = 0, lty = 1, lwd = 1, col = "grey")
+# Add vertical segments
+segments(2, -6, 2, -3, lwd = 1, lty = 2, col = "darkcyan")
+segments(4, -6, 4, -4, lwd = 1, lty = 2, col = "darkcyan")
+# Add horizontal segments
+segments(-6, -3, 2, -3, lwd = 1, lty = 2, col = "darkcyan")
+segments(-6, -4, 4, -4, lwd = 1, lty = 2, col = "darkcyan")
+segments(-6, -2, 0, -2, lwd = 1, lty = 2, col = "darkorange3")
+# Add small distances
+segments(2, -4, 4, -4, lwd = 3, lty = 1, col = "blue")
+segments(2, -4, 2, -3, lwd = 3, lty = 1, col = "deeppink")
+# Add line indicating intercept
+segments(0, 0, 0, -2, lwd = 3, lty = 1, col = "darkorange3")
+# Add line
+abline(a = -2, b = -0.5, lwd = 3, lty = 1, col = "darkcyan")
+# Add text elements
+text(x = 2, y = -4.5, labels = TeX(r'($\Delta x = 2$)'), pos = 4, col = "blue", cex = 1.8)
+text(x = -0.5, y = -3.5, labels = TeX(r'($\Delta y = -1$)'), pos = 4, col = "deeppink", cex = 1.8)
+text(x = 0, y = -1, labels = TeX(r'($\b = -2$)'), pos = 4, col = "darkorange3", cex = 1.8)
+```
+
+Aus der linken Abbildung können wir ablesen, dass die Steigung dieser Geraden $\frac{\Delta y}{\Delta x}=\frac{2}{2}=1$ ist und dass die Gerade die y-Achse am Ort $1$ schneidet. Die entsprechende lineare Funktion kann dementsprechend als $y = x + 1$ geschrieben werden.^[Wir müssen hier die Steigung $1$ nicht explizit schreiben, aber selbstverständlich ist es nicht falsch die lineare Funktion als $y = 1\cdot x + 1$ zu schreiben.]
+
+Aus der rechten Abbildung können wir ablesen, dass die Steigung $\frac{\Delta y}{\Delta x}=\frac{-1}{2}=-0.5$ ist und dass die Gerade die y-Achse am Ort $-2$ schneidet. Die entsprechende lineare Funktion kann dementsprechend als $y = -0.5\cdot x -2$ geschrieben werden.
+
+Es ist wichtig zu sehen, dass der Effekt einer Veränderung von $x$ (also $\Delta x$) auf $y$ überall derselbe ist. Es spielt also keine Rolle, ob wir von $x=-2$ zu $x=-1$ gehen oder von $x=100$ zu $x=101$, die entsprechende Veränderung in $y$ (also $\Delta y$) wird dieselbe sein. Das muss so sein, denn die Gerade steigt (oder sinkt) mit konstanter Steigung.
+
+::: {.rmdtip}
+**Aufgaben**
+
+1. Zeichnen Sie die Funktion $y = 2\cdot x$ in ein Koordinatensystem ein. Warum fehlt der Parameter $b$?
+2. Zeichnen Sie die Funktion $y=-3$ in ein Koordinatensystem ein. Ist das überhaupt eine Funktion nach obiger Definition?
+:::
+
+### Quadratische Funktionen
+
+Nun wollen wir uns eine etwas interessantere (und flexiblere) Familie von Funktionen anschauen, nämlich **quadratische** Funktionen. Auch hier wollen wir die Funktion erstmal allgemein aufschreiben:
+
+$$
+y = f(x) = a \cdot x^2 + b \cdot x + c
+$$
+Eine quadratische Funktion hat drei **Parameter**, nämlich $a$, $b$ und $c$. Grafisch entspricht die quadratische Funktion einer **Parabel** (vgl. Abb. \@ref(fig:quad-func)). Die Parameter sind hier nicht mehr so einfach grafisch zu interpretieren, aber die vier Beispiele in unten stehender Abbildung geben Anhaltspunkte, was passiert, wenn die Parameterwerte sich ändern.
+
+```{r quad-func, echo=FALSE, fig.cap='Beispiele quadratischer Funktionen.', out.width='80%', fig.asp=1, fig.align='center', fig.alt='Beispiele quadratischer Funktionen.'}
+library(latex2exp)
+# Quadratic function
+quad <- function(x, a, b, c) {a * x^2 + b * x + c}
+# x-values
+x <- seq(-6, 6, 0.01)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 4, 0.5, 0.5), pty = "s")
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-30, 30), xlim = c(-6, 6),
+     xlab = "x", ylab = "y",
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 2)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(-30, 30, 10), labels = seq(-30, 30, 10), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey"); abline(v = 0, lty = 1, lwd = 1, col = "grey")
+# Add parabolas
+lines(x, quad(x, 1, 0, 0), lwd = 3, lty = 1, col = "darkcyan")
+lines(x, quad(x, 3, 0, 5), lwd = 3, lty = 1, col = "blue")
+lines(x, quad(x, -1, 2, -3), lwd = 3, lty = 1, col = "darkorange3")
+lines(x, quad(x, -1, 0, -3), lwd = 3, lty = 1, col = "deeppink")
+# Add text elements
+text(x = 2, y = 2, labels = TeX(r'($\a = 1, b = 0, c = 0$)'), pos = 4, col = "darkcyan", cex = 1.5)
+text(x = -2.5, y = 25, labels = TeX(r'($\a = 3, b = 0, c = 5$)'), pos = 4, col = "blue", cex = 1.5)
+text(x = -3.5, y = -25, labels = TeX(r'($\a = -1, b = 2, c = -3$)'), pos = 4, col = "darkorange3", cex = 1.5)
+text(x = -6, y = -3, labels = TeX(r'($\a = -1, b = 0, c = -3$)'), pos = 4, col = "deeppink", cex = 1.5)
+```
+
+::: {.rmdtip}
+**Aufgaben**
+
+1. Sie haben folgende quadratische Gleichung: $y = 2 \cdot x^2 + x - 2$. Berechnen Sie mit der bekannten Lösungsformel $x_{1,2}=\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$ die Orte auf der x-Achse, wo die Parabel die Achse schneidet (oder einfacher gesagt die Nullstellen).
+2. Verwenden Sie folgenden R-Code, um beliebige quadratische Funktionen grafisch darzustellen, indem Sie die Parameterwerte auf der ersten Code-Zeile verändern.
+```{r, eval=FALSE}
+# Parameter setzen
+a <- 2; b <- 0; c <- 1
+# Quadratische Funktion
+quad <- function(x, a, b, c) {a * x^2 + b * x + c}
+# x-Werte
+x <- seq(-6, 6, 0.01)
+# y-Werte
+y <- quad(x, a, b, c)
+# Plot
+plot(x, y, type = "l", lwd = 2, col = "darkcyan")
+```
+:::
+
+Sie wundern sich nun vielleicht, könnte man nicht auch eine Funktion antreffen, in der $x^3$, $x^4$, etc. vorkommen? Das ist selbstverständlich möglich. In diesem Fall spricht man dann von einem sogenannten **Polynom**. Die höchste Potenz des Arguments $x$ definiert den Grad des Polynoms. 
+
+Schauen wir uns doch am besten gleich wieder ein Beispiel an:
+
+$$
+y = f(x) = 1 \cdot x^4 - 2 \cdot x^3 - 5 \cdot x^2 + 8 \cdot x - 2
+$$
+Die Visualisierung dieser Funktion ist in Abb. \@ref(fig:poly-func) gegeben. Diese Funktion ist nun bereits enorm flexibel und kann je nach Parameterwerten ganz unterschiedliche Zusammenhänge abbilden.
+
+```{r poly-func, echo=FALSE, fig.cap='Beispiel einer polynomischen Funktion vierten Grades.', out.width='80%', fig.asp=1, fig.align='center', fig.alt='Beispiel einer polynomischen Funktion vierten Grades'}
+# Quadratic function
+poly <- function(x, a, b, c, d, e) {a * x^4 + b * x^3 + c * x^2 + d * x + e}
+# x-values
+x <- seq(-6, 6, 0.01)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 4, 0.5, 0.5), pty = "s")
+# Scatterplot
+plot(1, 1,
+     axes = F, xlim = c(-6, 6), ylim = c(-40, 60),
+     xlab = "x", ylab = "y",
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 2)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(-40, 60, 20), labels = seq(-40, 60, 20), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey"); abline(v = 0, lty = 1, lwd = 1, col = "grey")
+# Add parabolas
+lines(x, poly(x, 1, -2, -5, 8, -2), lwd = 3, lty = 1, col = "darkcyan")
+```
+
+::: {.rmdtip}
+**Aufgaben**
+
+1. Eine quadratische Funktion ist ein Polynom welchen Grades?
+2. Handelt es sich bei der Funktion $y=2x^5 + x + 1$ immer noch um ein Polynom? Falls ja, ein Polynom welchen Grades?
+3. Handelt es sich bei der Funktion $y = x^{0.5} + 2$ um ein Polynom?
+:::
+
+### Funktionen mehrerer Argumente
+
+Bisher haben wir nur Funktionen mit **einem Argument** $x$ angeschaut, doch die meisten für das Machine Learning interessanten Funktionen sind Funktionen **mehrerer Argumente**.
+
+Der Einfachheit halber schauen wir uns hier nur mal eine **lineare** Funktion zweier Argumente, nennen wir sie $x_1$ und $x_2$, an, denn diese können wir in 3D immer noch visualisieren. Wir betrachten folgende Funktion: $y = f(x_1,x_2) = 1 \cdot x_1 + 0.5 \cdot x_2 + 5$.
+
+```{r plane, echo=FALSE, fig.cap='Lineare Funktion zweier Argumente (Ebene).', out.width='80%', fig.asp=1, fig.align='center', fig.alt='Lineare Funktion zweier Argumente (Ebene).'}
+library(scatterplot3d)
+x1 <- seq(0, 10, 0.1)
+x2 <- seq(0, 10, 0.1)
+y <- 2 * x1 + 3 * x2 + 1
+# 3D Plot
+out <- scatterplot3d(x1, x2, y, type = "n", highlight.3d = TRUE,
+                     xlim = c(0, 10), ylim = c(0, 10), zlim = c(0, 20), cex.axis = 1.2, cex.lab = 1.5)
+# Add plane
+out$plane3d(5, 1, 0.5, draw_polygon = TRUE)
+# Add lines and point
+out$points3d(x = c(6, 6), y = c(0, 4), z = c(0, 0), type = "l", lty = 2, col = "blue", lwd = 2)
+out$points3d(x = c(6, 10), y = c(4, 4), z = c(0, 0), type = "l", lty = 2, col = "blue", lwd = 2)
+out$points3d(x = c(6, 6), y = c(4, 4), z = c(0, 13), type = "l", lty = 2, col = "blue", lwd = 2)
+# out$points3d(x = c(6, 0), y = c(4, 0), z = c(13, 13), type = "l", lty = 2, col = "blue", lwd = 2)
+out$points3d(x = 6, y = 4, z = 13, col = "blue", pch = 16)
+```
+
+Aha! Während eine lineare Funktion eines Arguments grafisch einer Gerade entspricht, sehen wir nun, dass eine lineare Funktion zweier Argumente nichts anderes als eine Ebene darstellt. Wir sehen, dass die Ebene die y-Achse am Punkt $5$ schneidet. Etwas schwieriger zu sehen ist die Steigung der Ebene in die Richtung der $x_1$-Achse und in die Richtung der $x_2$-Achse. Sie können aber vielleicht bereits erraten, dass die (partiellen) Steigungen $1$ und $0.5$ betragen.
+
+Die Funktion ordnet jeden möglichen Punkt $(x_1,x_2)$ einem Punkt auf der Ebene zu. Wir können zum Beispiel für den in Abb. \@ref(fig:plane) eingezeichneten Punkt $(6,4)$ den entsprechenden Punkt auf der Ebene ausrechnen:
+
+$$ \begin{split}
+y &= 1 \cdot x_1 + 0.5 \cdot x_2 + 5\\
+&= 1 \cdot 6 + 0.5 \cdot 4 + 5\\
+&= 13
+\end{split}$$
+
+Selbstverständlich könnten wir uns nun auch quadratische Funktionen oder Polynome mehrerer Argumente anschauen, aber darauf verzichten wir vorerst.
+
+### Potenzen und Logarithmen
+
+Blabla...
+
+
+## Integral- und Differentialrechnung
+
+Olteanu materials:
+Local vs. global minima
+From a maximization to a minimization problem
+Basic definition of derivative
+Differentiation rules
+local min., max. and saddle point
+Second derivative test
+Partial derivatives
+What is a gradient? What is Hessian? What is Jacobian?
+Chain rules
+Lagrange optimization
+
+
+## Lineare Algebra
+
+<!-- used to describe linear systems -->
+<!-- show example of linear system -->
+<!-- general linear system of m equations in n unknowns -->
+<!-- we want to find values for the n unknowns that satisfies all m equations -->
+
+<!-- 3 ways to solve such systems -->
+<!-- - substitution -->
+<!-- - elimination of variables (Gaussian elimination or Gauss-Jordan elimination) -->
+<!-- - matrix methods -->
+
+<!-- can write a linear system in matrix form -->
+<!-- row echelon form -->
+<!-- reduced row echelon form -->
+
+<!-- a system of two equations in two unknowns can have none, one or infinitely many solutions -->
+<!-- it comes down to two lines crossing (one solution), being parallel (no solution) or coinciding (infinitely many solutions) -->
+
+<!-- reduced row echelon form of augmented matrix is key to determine solutions -->
+<!-- distinguish basic and free/nonbasic variables -->
+
+<!-- The rank of a matrix is the number of nonzero rows in its row echelon form. -->
+
+<!-- When does a particular system of linear equations have a solution? If and only if rank(A) = rank(\hat{A}). -->
+
+<!-- How many solutions does it have? How do we compute them? see Facts 7.3 - 7.6 -->
+
+<!-- What conditions on the coefficient matrix will guarantee the existence of at least one solution for any choice of bi's on the right-hand side? If and only if rank(A) = number of rows of A. -->
+
+<!-- What conditions on the coefficient matrix will guarantee the existence of at most one solution for any choice of bi's on the right-hand side? If and only if rank(A) = number of columns of A. -->
+
+<!-- What conditions on the coefficient matrix will guarantee the existence of a unique solution for any choice of bi's on the right-hand side? If and only if number of rows of A = number of columns of A = rank(A). Such a matrix A is nonsingular! -->
+<!-- This implies that there must be as many equations as unknowns. A is a square matrix. -->
+
+<!-- The problem of determining whether a square matrix has maximal rank is a cetral on in lin. alg. One can use the determinant of the matrix to find out. -->
+
+Olteanu materials:
+What is a scalar? What is a vector? What is a matrix?
+Vector norms
+Inner products
+Symmetric, diagonal, square and identity matrix
+Associative, commutative laws for matrices
+Matrix addition and multiplication
+Matrix inversion
+Eigenvectors and eigenvalues
+Quadratic form and positive (semi-) definiteness
+Differentiation rules for matrices
+
+
+
+## Wahrscheinlichkeitsrechnung
+
+Olteanu materials:
+Sample space and axioms of probability
+Conditional probability definition
+Discrete vs. continuous random variables
+Joint probability distributions
+Expectation and variance, covariance (always for discrete and continuous)
+Bernoulli, Binomial, Normal, Multivariate Normal, Laplace
+
+
+
+### Diskrete Zufallsvariablen
+
+Wir werden später sehen, dass im Machine Learning oftmals Dinge als **Zufallsvariablen** modelliert werden. Eine Zufallsvariable $X$ ist eine Variable, für die der konkrete Wert nicht von vornherein klar ist. Wir können mit $X$ zum Beispiel das Resultat eines Münzwurfs modellieren. Die zwei möglichen Resultate sind Kopf und Zahl. Vor dem Münzwurf ist nicht klar, ob Kopf oder Zahl erscheinen wird. Genau darum modellieren wir das Resultat des Münzwurfs als Zufallsvariable.
+
+Es gibt in diesem einfachen Beispiel nur zwei mögliche Resultate (Kopf und Zahl), d.h. die Anzahl möglicher Resultate ist endlich (= nicht unendlich). Darum handelt es sich in diesem Fall um eine **diskrete** Zufallsvariable.
+
+
+
+
+## Verteilungen
+
+
