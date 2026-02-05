@@ -742,17 +742,19 @@ Der **Nachteil** von LASSO im Vergleich zu Ridge ist, dass es keine analytische 
 
 ## Bias-Variance Tradeoff
 
-Wir haben oben bereits gesehen, dass der Hyperparameter $\lambda$ die Komplexität des regularisierten Regressionsmodells bestimmt. Um noch besser zu verstehen, warum diese Komplexität überhaupt wichtig ist, wollen wir uns nun mit einem ganz wichtigen Konzept im Machine Learning beschäftigen, nämlich dem **Bias-Variance Tradeoff**. Dieses Konzept kann *intuitiv* für alle Bereiche des Supervised Learnings angewendet werden. Für das Regressionsproblem können wir diesen Tradeoff jedoch auch *mathematisch* herleiten [siehe auch @islr] und genau das tun wir jetzt hier.
+Wir haben oben bereits gesehen, dass der Hyperparameter $\lambda$ bestimmt, wie stark die Komplexität des Regressionsmodells eingeschränkt wird (oder in anderen Worten, die Parameter richtung Null geschrumpft werden).
 
-Stellen Sie sich vor, dass wir eine grosse Anzahl Trainingsdatensätze zur Verfügung haben und mit jedem dieser Datensätze versuchen wir den wahren funktionalen Zusammenhang $f(\mathbf{x}_i)$ möglichst gut mit $\hat{f}(\mathbf{x}_i)$ zu schätzen. Für jeden Datensatz sieht das geschätzte Modell $\hat{f}(\mathbf{x}_i)$ etwas anders aus. Das geschätzte Modell $\hat{f}$ variiert also je nach Datensatz und ist dementsprechend eine **Zufallsvariable**.
+Um noch besser zu verstehen, warum es so wichtig ist, die Komplexität eines Modells korrekt einzustellen, wollen wir uns nun mit einem ganz wichtigen Konzept im Machine Learning beschäftigen, nämlich dem **Bias-Variance Tradeoff**. Dieses Konzept kann *intuitiv* für alle Bereiche des Supervised Learnings angewendet werden. Für das Regressionsproblem können wir diesen Tradeoff jedoch auch *mathematisch* herleiten [siehe auch @islr] und genau das tun wir jetzt hier.
+
+Stellen Sie sich vor, dass wir eine grosse Anzahl Trainingsdatensätze zur Verfügung haben und mit jedem dieser Datensätze versuchen wir den wahren funktionalen Zusammenhang $f(\mathbf{x}_i)$ möglichst gut mit $\hat{f}(\mathbf{x}_i)$ zu schätzen. Für jeden Datensatz sieht das geschätzte Modell $\hat{f}(\mathbf{x}_i)$ etwas anders aus (da es auf einem unterschiedlichen Datensatz trainiert wurde). Das geschätzte Modell, kurz $\hat{f}$, variiert also je nach Datensatz und ist dementsprechend eine **Zufallsvariable**.
 
 Ausserdem treffen wir folgende Annahmen:
 
-* Von oben wissen wir, dass $y_i = f(\mathbf{x}_i) + \epsilon$ gilt.
+* Von oben wissen wir, dass $y_i = f(\mathbf{x}_i) + \epsilon$ immer gilt.
 * Wir nehmen an, dass der Erwartungswert des nicht-lernbaren Teils $\epsilon$ Null ist, also $\mathbb{E}[\epsilon]=0$.
-* Allgemeine Regel zur Varianz einer Zufallsvariable: $\text{Var}(\epsilon) = \mathbb{E}[\epsilon^2] - \mathbb{E}[\epsilon]^2 = \mathbb{E}[\epsilon^2] - 0^2 = \mathbb{E}[\epsilon^2]$.
+* Ausserdem gilt für die Varianz einer Zufallsvariable (in Kombination mit der zweiten Annahme, dass $\mathbb{E}[\epsilon]=0$): $\text{Var}(\epsilon) = \mathbb{E}[\epsilon^2] - \mathbb{E}[\epsilon]^2 = \mathbb{E}[\epsilon^2] - 0^2 = \mathbb{E}[\epsilon^2]$.
 
-Um den Bias-Variance Tradeoff zu zeigen, leiten wir nun den **Erwartungswert des quadrierten Fehlers** für eine gegebene Testbeobachtung her, die wir als $(y_0,\mathbf{x}_0)$ bezeichnen. Dies wäre der durchschnittliche quadrierte Fehler, den wir für diese Beobachtung kriegen würden, wenn wir mit jedem geschätzten Modell (jedes auf einem unterschiedlichen Datensatz trainiert) die Vorhersage für diese Testbeobachtung rechnen würden.
+Um den Bias-Variance Tradeoff zu zeigen, leiten wir nun den **Erwartungswert des quadrierten Fehlers** für eine gegebene Testbeobachtung her, die wir als $(y_0,\mathbf{x}_0)$ bezeichnen. Dies wäre der durchschnittliche quadrierte Fehler, den wir für diese Beobachtung kriegen würden, wenn wir mit jedem geschätzten Modell die Vorhersage für diese Testbeobachtung rechnen würden.
 
 ::: {.callout-caution collapse="true"}
 ## Herleitung (optional)
@@ -814,7 +816,7 @@ Was übrig bleibt ist folgendes:
 Schauen wir uns kurz die beiden Komponenten auf der rechten Seite etwas genauer an:
 
 * $\left(f(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2$ ist der **quadrierte Bias** und misst die systematische Abweichung unseres geschätzten Modells $\hat{f}$ vom wahren unbekannten Modell $f$. Je kleiner der Bias, desto tiefer der erwartete quadrierte Fehler. Wir können diesen Term der Einfachheit halber mit $\left[\text{Bias}\left(\hat{f}(\mathbf{x}_0)\right)\right]^2$ bezeichnen.
-* $\mathbb{E}\left[\left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\right]$ ist nichts anderes als die Varianz unseres geschätzten Modells $\hat{f}$. Sie misst, wie stark sich $\hat{f}$ im Schnitt verändert, wenn wir einen anderen Datensatz für das Training verwenden. Ein Modell mit hoher Varianz passt sich jeweils sehr stark an die Daten an. Je kleiner diese Varianz, desto tiefer der erwartete quadrierte Fehler. Wir bezeichnen diesen Term der Einfachheit halber als $\text{Var}\left(\hat{f}(\mathbf{x}_0)\right)$. 
+* $\mathbb{E}\left[\left(\hat{f}(\mathbf{x}_0) - \mathbb{E}\left[\hat{f}(\mathbf{x}_0)\right]\right)^2\right]$ ist nichts anderes als die Varianz unseres geschätzten Modells $\hat{f}$. Sie misst, wie stark sich $\hat{f}$ im Schnitt verändert, wenn wir einen anderen Datensatz für das Training verwenden. Ein Modell mit hoher Varianz passt sich jeweils sehr stark an die Daten an. Je kleiner diese Varianz, desto tiefer der erwartete quadrierte Fehler. Wir bezeichnen diesen Term der Einfachheit halber als $\text{Var}\left(\hat{f}(\mathbf{x}_0)\right)$.
 
 Nun sind wir endlich am Ziel angelangt und können den erwarteten quadrierten Fehler für die Beobachtung $(y_0,\mathbf{x}_0)$ wie folgt aufschreiben:
 
@@ -831,23 +833,26 @@ $$
 
 * Ein Modell mit **viel Bias**, also $\text{Bias}\left(\hat{f}(\mathbf{x}_0)\right)$, führt zu einer schlechten Vorhersagequalität (auf Trainings- und Testdaten), weil das Modell zu rigide ist, um den wahren Zusammenhang zwischen der Output-Variable und den Input-Variablen zu modellieren. Beispiel: wir verwenden ein einfaches lineares Regressionsmodell, um einen stark nicht-linearen Zusammenhang zwischen $y_i$ und $\mathbf{x}_i$ zu modellieren. Im Fall von Modellen mit viel Bias spricht man auch von **Underfitting**.
 * Ein Modell mit **viel Varianz** führt zu einer hervorragenden Vorhersagequalität auf den Trainingsdaten, aber zu einer sehr schlechten Vorhersagequalität auf den Testdaten. Das Problem hier ist, dass das Model zu flexibel ist gemessen an der Grösse des Trainingsdatensatzes. Das Modell passt sich so zu stark an die Trainingsdaten an und modelliert auch sogenanntes **Noise**, also $\epsilon$ (und nicht nur das **Signal** in den Daten). Beispiel: wir modellieren ein neuronales Netzwerk, haben aber nur einen Trainingsdatensatz von einigen hundert Beobachtungen. Im Fall von Modellen mit viel Varianz spricht man auch von **Overfitting**.
+* Der dritte Term, $\text{Var}(\epsilon)$, ist die Varianz des Fehlerterms. Es ist der nicht-reduzierbare Teil des erwartbaren Vorhersagefehlers, d.h., wir erwarten selbst wenn wir das bestmögliche Modell gefunden haben einen gewissen Fehler.
 
-Warum spricht man von einem **Tradeoff**? Flexiblere Modelle haben oft einen kleinen Bias, aber hohe Varianz, während unflexible Modelle oft eine kleine Varianz, aber einen hohen Bias haben. Es existiert also ein Tradeoff zwischen Bias und Varianz und wir wollen beim Modellieren und vor allem beim Hyperparameter Tuning (ein Hyperparameter ist zum Beispiel $\lambda$) den optimalen Tradeoff finden.
+Warum spricht man von einem **Tradeoff**? Flexiblere Modelle haben oft einen kleinen Bias, aber hohe Varianz, während unflexible Modelle oft eine kleine Varianz, aber einen hohen Bias haben. Es existiert also ein Tradeoff zwischen Bias und Varianz und wir wollen beim Modellieren und vor allem beim Hyperparameter Tuning (zum Beispiel $\lambda$) den optimalen Tradeoff finden.
 
-In unserem Beispiel wenden wir ein regularisiertes Regressionsmodell an. Hier spielt der Hyperparameter $\lambda$ eine zentrale Rolle für den Tradeoff zwischen Bias und Variance. Ein zu tiefer Wert für $\lambda$ kann zu einem zu flexiblen Modell mit viel Varianz führen. Ein zu hoher Wert für $\lambda$ führt zu einem zu rigiden Modell mit viel Bias.
+#### Regularisierte Regression revisited
 
-Im folgenden Beispiel haben wir $N = 50$ Beobachtungen. Das wahre Modell, welches die Beobachtungen generiert, sieht wie folgt aus:
+Der Hyperparameter $\lambda$ spielt bei der regularisierten Regression eine zentrale Rolle für den Tradeoff zwischen Bias und Variance. Ein zu tiefer Wert für $\lambda$ kann zu einem zu flexiblen Modell mit viel Varianz führen. Ein zu hoher Wert für $\lambda$ führt zu einem zu rigiden Modell mit viel Bias.
+
+Im folgenden Beispiel haben wir $n = 50$ Beobachtungen. Die Daten wurden durch folgenden Prozess generiert:
 
 $$
 y_i = 2 + 1 \cdot x_{i,1} + \epsilon_i
 $$
-wobei $\epsilon_i \sim N(0, 0.2)$.
+wobei $\epsilon_i \sim N(0, 0.2)$. Das wahre Modell ist dementsprechend $f(\mathbf{x}_i) = 2 + 1 \cdot x_{i,1}$.
 
-Der Datensatz enthält aber 49 weitere Prädiktoren $x_{i,2}, x_{i,3}, \dots, x_{i,50}$, welche nicht mit der Output-Variable $y_i$ korreliert sind.
+Der Datensatz enthält aber 49 weitere Prädiktoren $x_{i,2}, x_{i,3}, \dots, x_{i,50}$, welche nicht mit der Output-Variable $y_i$ korreliert sind. Als Analyst:in wissen Sie das jedoch nicht. Sie sehen lediglich die 50 Input-Variablen und die Output-Variable.
 
-Entscheiden Sie sich nun für das optimale regularisierte Modell. Welcher Regularisierungsgrad führt zu viel Bias? Welcher zu viel Varianz?
+Folgende Abbildung zeigt die Resultate von vier LASSO Modellen mit unterschiedlichen Werten für $\lambda$.
 
-```{r lasso-params, echo=FALSE, fig.show = 'hold', fig.cap='Resultate eines LASSO Modells für vier verschiedene Werte des Hyperparameters. Links: die trainierten Parameterwerte für die Konstante sowie die 50 Input-Variablen. Rechts: Vorhersagegüte (gemessen als MSE) auf Trainings- und Testdaten.', fig.width=12, fig.height=14, out.width='100%', fig.align='center', fig.alt='Einfluss von Hyperparameter auf Modellparameter.'}
+```{r lasso-params, echo=FALSE, fig.show = 'hold', fig.cap='Resultate eines LASSO Modells für vier verschiedene Werte des Hyperparameters. Links: die trainierten Parameterwerte für die Konstante sowie die 50 Input-Variablen. Rechts: Vorhersagegüte (gemessen als RMSE) auf Trainings- und Testdaten. Für die Testdaten wurden weitere 50 Beobachtungen generiert, die aber nicht für das Training verwendet wurden.', fig.width=12, fig.height=14, out.width='100%', fig.align='center', fig.alt='Einfluss von Hyperparameter auf Modellparameter.'}
 suppressPackageStartupMessages(
   library(glmnet)
 )
@@ -937,29 +942,52 @@ layout(1)
 
 ```
 
+#### Frage {.unnumbered}
+
+Welches der vier abgebildeten Modelle mit entsprechendem Wert für $\lambda$ ist optimal?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Das dritte Modell mit $\lambda = 0.1$ ist optimal. Wir sehen, dass in diesem Fall nur die Gewichte $w_0 \approx 2$ und $w_1 \approx 1$ nicht Null sind. Ausserdem sind die beiden RMSE Werte auf Trainings- und Testdaten ähnlich und auf tiefem Niveau.
+
+Das erste Modell ($\lambda = 0$) entspricht der Kleinstquadratemethode und ist ein gutes Beispiel für Overfitting. Das Modell verwendet alle 50 Input-Variablen und kann so den RMSE auf den Trainingsdaten fast auf 0 reduzieren. Der Testdaten-RMSE ist dann aber vergleichsweise hoch - ein typisches Zeichen von Overfitting.
+
+Der vierte Modell ($\lambda = 10$) ist ein perfektes Beispiel von Underfitting. Der Regularisierungsterm $\lambda$ ist so gross, dass nur noch ein Modell mit einer Konstante $w_0 \approx 2$ geschätzt wurde. Entsprechend sind sowohl der RMSE auf den Trainingsdaten als auch der RMSE auf den Testdaten hoch - ein typisches Zeichen von Underfitting.
+
+Das zweite Modell ist nicht schlecht, aber zeigt immer noch leichte Anzeichen von Overfitting.
+:::
+
 **Wichtig:**
 
-* Indem wir den Hyperparameter via Resampling optimieren, wählen wir automatisch ein Modell mit einem guten Tradeoff zwischen Bias und Varianz!
-* Mit grossen Datensätzen ist das Problem des Overfittings weniger dramatisch. Wir haben genügend Trainingsdaten, dass selbst flexible Modelle nicht zu stark overfitten. Das ist bei unserem Beispiel der Fall (wir haben einen ziemlich grossen Trainingsdatensatz). Darum ist der optimale Hyperparameter in unserem Beispiel `penalty = 0.001`, also eher einer der kleineren Werte.
+* Indem wir den Hyperparameter via Resampling (z.B. K-Fold Cross Validation, später mehr dazu) optimieren, wählen wir automatisch ein Modell mit einem guten Tradeoff zwischen Bias und Varianz!
+* Mit grossen Datensätzen ist das Problem des Overfittings weniger dramatisch. Haben wir genügend Trainingsdaten, dann können selbst flexible Modelle nicht zu stark overfitten. Die Anzahl Trainingsdaten hat also einen regulierenden Einfluss.
 
 Eine letzte Überlegung bezüglich Modellselektion geht folgendermassen: wenn wir mehrere Modelle haben, die ähnlich gut performen, dann wählen wir das einfachste (kleinste) oder **am wenigsten komplexe Modell**. Man nennt dies **Occam's Razor**. William of Occam war ein Englischer Mönch und hat dieses Prinzip in einem anderen Kontext erstmals formuliert.
 
 ## Polynomische Regression
 
-Wir machen hier nun einen kurzen Abstecher in die polynomische Regression, denn diese eignet sich sehr gut, um den Bias-Variance Tradeoff zu illustrieren.
+Wir machen hier nun einen kurzen Abstecher und lernen die **polynomische Regression** kennen, denn diese eignet sich auch sehr gut, um den Bias-Variance Tradeoff zu illustrieren.
 
-In dieser Demo schauen wir uns den Bias-Variance Tradeoff anhand der polynomischen Regression an. Das polynomische Regressionsmodell sieht folgendermassen aus:
+Das polynomische Regressionsmodell sieht im Fall von *einer* Input-Variable $x_i$ folgendermassen aus:
 
 $$
 y_i = w_0 + w_1 \cdot x_i^1 + w_2 \cdot x_i^2 + w_3 \cdot x_i^3 + \dotsb + w_M \cdot x_i^M + \epsilon_i
 $$
-$M$ bezeichnet hier den Grad des Polynoms. Mit einem Datensatz der Grösse $n$, trifft eine polynomische Regression mit Grad $M = n−1$ die Daten perfekt. Das Modell hat in diesem Fall so viele Freiheitsgrade wie der Trainingsdatensatz Beobachtungen hat. Das ermöglicht dem Modell die Datenpunkte perfekt abzubilden. Dabei handelt es sich um ein **extremes Beispiel von Overfitting**. Je mehr Daten unser Trainingsdatensatz enthält, desto mehr schwächt sich das Problem des Overfittings ab.
 
-Die blauen Punkte unten links zeigen die Trainingsdatenpunkte. Die rote Kurve zeigt das jeweils geschätzte Modell je nach gewähltem Grad des Polynoms $M$ und die schwarze Kurve zeigt das wahre Modell.
+Es handelt sich also um ein Regressionsmodell wie wir es kennen gelernt haben, einfach mit den Polynomen von $x_i$ bis zum $M$-ten Grad als Input-Variablen.
 
-Rechts sehen Sie jeweils den RMSE auf Trainings- sowie auf Testset.
+Mit einem Datensatz der Grösse $n$, kann ein polynomisches Regressionsmodell mit Grad $M = n−1$ die Daten perfekt abbilden. Das Modell hat in diesem Fall so viele Freiheitsgrade wie der Trainingsdatensatz Beobachtungen hat. Dabei handelt es sich um ein **extremes Beispiel von Overfitting**.
 
-```{r poly-reg, echo=FALSE, fig.show = 'hold', fig.cap='Bla.', fig.width=12, fig.height=10, out.width='100%', fig.align='center', fig.alt='Polynomische Regression.'}
+Wir sehen in untenstehender Abbildung drei Fälle einer polynomischen Regression. Die schwarze Kurve zeigt das wahre Modell, von dem die blauen Datenpunkte unter Hinzufügen von etwas Noise generiert wurden. Die braune Kurve zeigt das jeweils geschätzte Modell. Rechts sehen Sie ähnlich wie oben jeweils den RMSE auf Trainings- und auf Testdaten.
+
+Folgende Punkte gilt es festzuhalten:
+
+* Das erste Modell ist eine polynomische Regression mit Grad $M=0$, in der nur die Konstante $w_0$ in das Modell einfliesst. Ein klarer Fall von **Underfitting**.
+* Das zweite Modell ist eine polynomische Regression mit Grad $M=9$, das mit $n=10$ Beobachtungen trainiert wird - das bereits angesprochene Beispiel von extremem **Overfitting**.
+* Beim dritten Modell zeigt sich der regulierende Effekt von mehr Trainingsdaten. Das komplexe Modell mit $M=9$ führt im Fall von $n=100$ Trainingsbeobachtungen zu einem sehr guten Fit.
+
+```{r poly-reg, echo=FALSE, fig.show = 'hold', fig.cap='Polynomische Regression für drei verschiedene Fälle mit unterschiedlichen polynomischen Graden und Anzahl Trainingsbeobachtungen. Rechts: Vorhersagegüte (gemessen als RMSE) auf Trainings- und Testdaten. Für die Testdaten wurden weitere n Beobachtungen generiert, die aber nicht für das Training verwendet wurden.', fig.width=12, fig.height=10, out.width='100%', fig.align='center', fig.alt='Polynomische Regression.'}
 set.seed(123)
 
 ## -----------------------
@@ -1055,14 +1083,14 @@ par(
 ## Scenarios
 ## -----------------------
 run_scenario(n = 10,  degree = 0)
-run_scenario(n = 10,  degree = 10)
-run_scenario(n = 100, degree = 10)
+run_scenario(n = 10,  degree = 9)
+run_scenario(n = 100, degree = 9)
 
 layout(1)
 
 ```
 
-Ein **ganz wichtiger Punkt**: das polynomische Regressionsmodell ist immer noch **linear in den Parametern**, es handelt sich also immer noch um ein lineares Modell. Sie sehen aber an obigen Modellkurven, dass dieses "lineare" Modell sehr wohl in der Lage ist, nicht-lineare Zusammenhänge zwischen $x$ und $y$ zu fitten!
+**Wichtig**: das polynomische Regressionsmodell ist immer noch **linear in den Parametern**, es handelt sich also immer noch um ein lineares Modell. Sie sehen aber an obigen Modellkurven, dass dieses "lineare" Modell sehr wohl in der Lage ist, nicht-lineare Zusammenhänge zwischen $x$ und $y$ zu fitten!
 
 ## Lineare Regression in R
 
@@ -1097,15 +1125,65 @@ yp
 
 ### `tidymodels` + `glmnet`
 
-Für regularisierte Regressionsmodelle eignet sich der `tidymodels` Framework.
+Für regularisierte Regressionsmodelle eignet sich der `tidymodels` [Framework](https://www.tidymodels.org/) in Kombination mit `glmnet` (letzteres ist die Engine für regularisierte Modelle aller Art). Wir laden als erstes die beiden Packages. Beim ersten Mal müssen diese Packages mit `install.packages(c("tidymodels", "glmnet"))` installiert werden.
 
+```{r output=FALSE}
+library(tidymodels)
+library(glmnet)
+```
 
+Wir generieren hier dieselben Daten wie in einer der Demos oben, wo wir die regularisierte Regression demonstriert haben. Die Daten werden wie oben nach folgendem Modell generiert:
 
+$$
+y_i = 2 + 1 \cdot x_{i,1} + \epsilon_i
+$$
+Der folgende Code-Block generiert die Daten:
 
+```{r}
+# Seed für Reproduzierbarkeit
+set.seed(123)
 
+# Wir definieren die Anzahl Beobachtungen, die Anzahl Input-Var.
+# und die Standardabweichung des Fehlerterms.
+n <- 50
+p <- 50
+sd <- 0.2
 
+# Nun simulieren wir die Input-Variablenwerte aus einer Normalverteilung.
+Xtrain <- matrix(rnorm(n * p), nrow = n)
 
+# Generierung der y-Werte mit normalverteiltem Noise.
+ytrain <- 2 + Xtrain[, 1] + rnorm(n, 0, sd)
 
+# Wir fassen die Input-Variablen und den Output zu einem Dataframe zusammen.
+train <- as.data.frame(Xtrain)
+train$y <- ytrain
+```
 
+Im folgenden Code verwenden wir `tidymodels`, um ein lineares Regressionsmodell mit `linear_reg()` zu initialisieren. In `tidymodels` heisst der Hyperparameter $\lambda$ `penalty` und mit `mixture = 1` definieren wir, dass ein LASSO Modell gerechnet werden soll (`mixture = 0` würde einem Ridge Modell entsprechen).
 
+```{r}
+# Modellspezifikation für lineares Modell mit Regularisierung
+lm_mod <- 
+  linear_reg(penalty = 0.1, mixture = 1) |> 
+  set_engine("glmnet")
+```
 
+Nun fitten wir das Modell mit `fit()`. Mit `formula = y ~ .` legen wir fest, dass `y` die Outputvariable ist und dass alle anderen Variablen im Dataframe `train` als Input-Variablen verwendet werden sollen.
+
+```{r}
+# Modelltraining
+lm_fit <-
+  lm_mod |> 
+  fit(formula = y ~ ., data = train)
+```
+
+Nun können wir uns noch die trainierten Modellparameter (in der Spalte `estimate`) anschauen.
+
+```{r}
+# Parameter des Modells
+tidy(lm_fit) %>% 
+  print(n = 51)
+```
+
+**Vorschlag**: Kopieren Sie die Codezeilen in ein lokales Skript und probieren Sie andere Werte für den Hyperparameter $\lambda$ (`penalty`) aus.
