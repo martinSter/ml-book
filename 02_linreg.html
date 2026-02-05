@@ -340,7 +340,11 @@ window.Quarto = {
   </ul></li>
   <li><a href="#bias-variance-tradeoff" id="toc-bias-variance-tradeoff" class="nav-link" data-scroll-target="#bias-variance-tradeoff"><span class="header-section-number">2.6</span> Bias-Variance Tradeoff</a></li>
   <li><a href="#polynomische-regression" id="toc-polynomische-regression" class="nav-link" data-scroll-target="#polynomische-regression"><span class="header-section-number">2.7</span> Polynomische Regression</a></li>
-  <li><a href="#lineare-regression-in-r" id="toc-lineare-regression-in-r" class="nav-link" data-scroll-target="#lineare-regression-in-r"><span class="header-section-number">2.8</span> Lineare Regression in R</a></li>
+  <li><a href="#lineare-regression-in-r" id="toc-lineare-regression-in-r" class="nav-link" data-scroll-target="#lineare-regression-in-r"><span class="header-section-number">2.8</span> Lineare Regression in R</a>
+  <ul class="collapse">
+  <li><a href="#base-r" id="toc-base-r" class="nav-link" data-scroll-target="#base-r"><span class="header-section-number">2.8.1</span> Base <code>R</code></a></li>
+  <li><a href="#tidymodels-glmnet" id="toc-tidymodels-glmnet" class="nav-link" data-scroll-target="#tidymodels-glmnet"><span class="header-section-number">2.8.2</span> <code>tidymodels</code> + <code>glmnet</code></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -397,12 +401,12 @@ y_i = f(\mathbf{x}_i) + \epsilon
 </section>
 <section id="das-modell-ausgeschrieben" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="das-modell-ausgeschrieben"><span class="header-section-number">2.2</span> Das Modell (ausgeschrieben)</h2>
-<p>Nun wollen wir uns konkret mit dem <strong>linearen Regressionsmodell</strong> befassen. Das bedeutet nun nichts anderes, als dass wir die allgemein geschriebene Funktion <span class="math inline">\(f(\mathbf{x}_i)\)</span> durch eine konkrete mathematische Funktion ersetzen. Im Machine Learning ist das der erste wichtige Schritt, nämlich die Modellwahl (engl. <em>Model Selection</em>). Das Modell kann wie folgt geschrieben werden:</p>
+<p>Nun wollen wir uns konkret mit dem <strong>linearen Regressionsmodell</strong> befassen. Das bedeutet nun nichts anderes, als dass wir die allgemein geschriebene Funktion <span class="math inline">\(f(\mathbf{x}_i)\)</span> durch eine konkrete mathematische Funktion ersetzen. Im Machine Learning ist das der erste wichtige Schritt, nämlich die <strong>Modellwahl</strong> (engl. <em>Model Selection</em>). Das Modell kann wie folgt geschrieben werden:</p>
 <p><span class="math display">\[
 f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
 \]</span> Wir verzichten hier bewusst darauf, den Hut für <span class="math inline">\(f\)</span> zu schreiben, da es sich lediglich um eine allgemein gültige Funktion handelt und noch nichts geschätzt bzw. trainiert wurde. Dieses Modell bzw. diese Funktion hat sogenannte <strong>Parameter</strong>, die es zu schätzen gilt. Es handelt sich also auch hier um ein parametrisches Modell. Hier sind dies die Parameter <span class="math inline">\(w_0,\; w_1,\; \ldots,\; w_p\)</span>. Wegen der Konstante <span class="math inline">\(w_0\)</span> haben wir immer einen Parameter mehr als es Input-Variablen hat, also <span class="math inline">\(p+1\)</span> Parameter.</p>
 <p>Diese Parameter sind die Schlüsselzutat in einem ML-Modell. Wir wollen sie <strong>optimieren</strong>, so dass die trainierte Funktion <span class="math inline">\(\hat{f}(\mathbf{x}_i)\)</span> der wahren Funktion <span class="math inline">\(f(\mathbf{x}_i)\)</span> möglichst nahe kommt und die beobachteten Daten möglichst gut beschreibt.</p>
-<p>Wir schauen uns in diesem Kapitel ein ganz einfaches Beispiel mit nur einer Input-Variable <span class="math inline">\(x_i\)</span> an, so dass der Zusammenhang zwischen dem Output <span class="math inline">\(y_i\)</span> und dem Input <span class="math inline">\(x_i\)</span> in 2D dargestellt werden kann. In diesem Zusammenhang spricht man vom <strong>einfachen linearen Regressionsmodell</strong>. Ausserdem haben wir nur vier Beobachtungen, welche in folgender Abbildung in einem Streudiagramm dargestellt werden:</p>
+<p>Wir schauen uns in diesem Kapitel ein ganz einfaches Beispiel mit nur <strong>einer Input-Variable</strong> <span class="math inline">\(x_i\)</span> an, so dass der Zusammenhang zwischen dem Output <span class="math inline">\(y_i\)</span> und dem Input <span class="math inline">\(x_i\)</span> in 2D dargestellt werden kann. In diesem Zusammenhang spricht man vom <strong>einfachen linearen Regressionsmodell</strong>. Ausserdem haben wir nur vier Beobachtungen, welche in folgender Abbildung in einem Streudiagramm dargestellt werden:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -413,7 +417,7 @@ f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot
 </div>
 </div>
 </div>
-<p>Obwohl obige Abbildung ähnlich aussieht wie die Abbildungen zum Perceptron, gibt es hier einen bedeutenden Unterschied. Auf der y-Achse des Streudiagramm wird der Outputwert der Beobachtungen dargestellt, während auf der x-Achse der Input-Wert angezeigt wird. Es wird nun darum gehen, eine <strong>Gerade</strong> zu finden, welche die Daten bestmöglich repräsentiert.</p>
+<p>Obwohl obige Abbildung ähnlich aussieht wie die Abbildungen zum Perceptron, gibt es hier einen bedeutenden Unterschied. Auf der y-Achse des Streudiagramm wird der Outputwert der Beobachtungen dargestellt, während auf der x-Achse der Input-Wert angezeigt wird. Es wird nun darum gehen, eine <strong>Gerade</strong> zu finden, welche die vier Beobachtungen bestmöglich repräsentiert.</p>
 </section>
 <section id="das-modell-kompakt" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="das-modell-kompakt"><span class="header-section-number">2.3</span> Das Modell (kompakt)</h2>
@@ -473,7 +477,7 @@ w_0 \cdot 1 + w_1 \cdot x_{21} + w_2 \cdot x_{22} + \dots + w_p \cdot x_{2p} \\
 \cdots \\
 w_0 \cdot 1 + w_1 \cdot x_{n1} + w_2 \cdot x_{n2} + \dots + w_p \cdot x_{np}\end{pmatrix}
 \end{align}\]</span></p>
-<p>Überprüfen wir doch noch kurz die Dimensionen von obigem Matrix-Vektor Produkt. Die Matrix <span class="math inline">\(\mathbf{X}\)</span> hat <span class="math inline">\(n\)</span> Zeilen und <span class="math inline">\(p+1\)</span> Spalten und darum eine Dimensionalität von <span class="math inline">\(n \times (p+1)\)</span>. Der Spaltenvektor <span class="math inline">\(\mathbf{w}\)</span> hat Dimensionalität <span class="math inline">\((p+1) \times 1\)</span>. Das Matrix-Vektor Produkt hat dementsprechend eine Dimensionalität von <span class="math inline">\(n \times 1\)</span>, genau was wir erwarten würden, nämlich einen Vektor mit den Vorhersagen für alle <span class="math inline">\(n\)</span> Beobachtungen.</p>
+<p>Überprüfen wir doch noch kurz die Dimensionen von obigem Matrix-Vektor Produkt. Die Matrix <span class="math inline">\(\mathbf{X}\)</span> hat <span class="math inline">\(n\)</span> Zeilen und <span class="math inline">\(p+1\)</span> Spalten und darum eine Dimensionalität von <span class="math inline">\(n \times (p+1)\)</span>. Der Spaltenvektor <span class="math inline">\(\mathbf{w}\)</span> hat Dimensionalität <span class="math inline">\((p+1) \times 1\)</span>. Das Matrix-Vektor Produkt hat dementsprechend eine Dimensionalität von <span class="math inline">\(n \times 1\)</span>, genau was wir erwarten würden, nämlich einen (Spalten-)Vektor mit den Vorhersagen für alle <span class="math inline">\(n\)</span> Beobachtungen.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -486,7 +490,39 @@ w_0 \cdot 1 + w_1 \cdot x_{n1} + w_2 \cdot x_{n2} + \dots + w_p \cdot x_{np}\end
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Blabla…</p>
+<p>Wenn das Produkt zweier Matrizen <span class="math inline">\(\mathbf{A}\)</span> und <span class="math inline">\(\mathbf{B}\)</span> gerechnet werden soll, dann gilt es immer zuerst die Dimensionen der beiden Matrizen zu prüfen. Warum? Die Multiplikation <span class="math inline">\(\mathbf{A}\mathbf{B}\)</span> funktioniert nämlich nur dann, wenn die Anzahl Spalten von <span class="math inline">\(\mathbf{A}\)</span> gleich der Anzahl Zeilen von <span class="math inline">\(\mathbf{B}\)</span> ist.</p>
+<p>Nehmen wir an, dass <span class="math inline">\(\mathbf{A}\)</span> eine Dimensionalität von <span class="math inline">\(m \times n\)</span> hat (<span class="math inline">\(\mathbf{A}\)</span> hat also <span class="math inline">\(m\)</span> Zeilen und <span class="math inline">\(n\)</span> Spalten). Die Matrix <span class="math inline">\(\mathbf{B}\)</span> hat eine Dimensionalität von <span class="math inline">\(n \times p\)</span>.</p>
+<p>In diesem Fall ist obige Bedingung schon mal erfüllt, denn die Anzahl Spalten von <span class="math inline">\(\mathbf{A}\)</span> (also <span class="math inline">\(n\)</span>) ist gleich der Anzahl Zeilen von <span class="math inline">\(\mathbf{B}\)</span>.</p>
+<p>Weiter gilt, dass die resultierenden Matrix <span class="math inline">\(\mathbf{C}=\mathbf{A}\mathbf{B}\)</span> eine Dimensionalität von <span class="math inline">\(m \times p\)</span> hat.</p>
+<p>Doch wie berechnet man die Element der resultierenden Matrix <span class="math inline">\(\mathbf{C}\)</span>?</p>
+<p>Das erste Element links oben in der Matrix (man kann es als <span class="math inline">\(\mathbf{C}_{1,1}\)</span> beschreiben) ist die Summe über die elementweisen Multiplikationen der Element in der ersten Zeile von <span class="math inline">\(\mathbf{A}\)</span> und der ersten Spalte von <span class="math inline">\(\mathbf{B}\)</span>.</p>
+<p>Oder allgemeiner: <span class="math inline">\(\mathbf{C}_{i,j} = \sum_{k=1}^n \mathbf{A}_{i,k} \cdot \mathbf{B}_{k,j}\)</span>.</p>
+<p>Am einfachsten lässt sich das ganze an einem Beispiel anschauen:</p>
+<p><span class="math display">\[\begin{align}
+\begin{pmatrix}
+2 &amp; -3 \\
+1 &amp; 2
+\end{pmatrix}
+\begin{pmatrix}
+1.3 &amp; -3 &amp; 0 \\
+1 &amp; 0.5 &amp; 1
+\end{pmatrix}
+&amp;=
+\begin{pmatrix}
+2\cdot 1.3 + (-3)\cdot 1
+&amp; 2\cdot (-3) + (-3)\cdot 0.5
+&amp; 2\cdot 0 + (-3)\cdot 1
+\\
+1\cdot 1.3 + 2\cdot 1
+&amp; 1\cdot (-3) + 2\cdot 0.5
+&amp; 1\cdot 0 + 2\cdot 1
+\end{pmatrix}\\
+&amp;=
+\begin{pmatrix}
+-0.4 &amp; -7.5 &amp; -3 \\
+3.3 &amp; -2 &amp; 2
+\end{pmatrix}.
+\end{align}\]</span></p>
 </div>
 </div>
 </div>
@@ -510,7 +546,7 @@ w_0 \cdot 1 + w_1 \cdot 4.4 \end{pmatrix}
 </section>
 <section id="modelltraining" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="modelltraining"><span class="header-section-number">2.4</span> Modelltraining</h2>
-<p>Wir werden uns hier anschauen, dass für das Training (oft auch <em>Fitting</em> genannt) des linearen Regressionsmodells <strong>zwei verschiedene Perspektiven</strong> eingenommen werden können, welche am Schluss beide zum selben Resultat führen.</p>
+<p>Wir werden uns hier anschauen, wie für das Training (oft auch <em>Fitting</em> genannt) des linearen Regressionsmodells <strong>zwei verschiedene Perspektiven</strong> eingenommen werden können, welche am Schluss beide zum selben Resultat führen.</p>
 <section id="perspektive-1-funktionsoptimierung" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="perspektive-1-funktionsoptimierung"><span class="header-section-number">2.4.1</span> Perspektive 1: Funktionsoptimierung</h3>
 <p>In der ersten Perspektive behandeln wir das Modelltraining als Optimierungsproblem. Wir wollen nämlich eine sogenannte <strong>Kostenfunktion</strong> (engl. <em>Loss Function</em>) aufstellen, die es danach zu minimieren gilt. Sie werden gleich sehen, dass die Kostenfunktion für das lineare Regressionsmodell von den Modellparameter <span class="math inline">\(w_0,w_1,\dots,w_p\)</span> abhängt. Das Ziel wird also sein, die optimalen Werte für die Modellparameter zu finden, so dass die Kostenfunktion so klein wie möglich ist.</p>
@@ -619,7 +655,7 @@ J(\hat{w}_0, \hat{w}_1) &amp;= \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(x
 </div>
 </div>
 </div>
-<p>Das in der obigen Aufgabe berechnete Modell ist in der folgenden Abbildung (links) grafisch als blaue Gerade dargestellt. Der Parameter <span class="math inline">\(\hat{w}_0\)</span> ist der Ort, an dem die Gerade die y-Achse durchkreuzt, während der Parameter <span class="math inline">\(\hat{w}_1\)</span> der Steigung der Geraden entspricht. Unser optimales Modell minimiert die Summe über die quadrierten Differenzen zwischen den tatsächlichen <span class="math inline">\(y_i\)</span> Werten und den Vorhersagen gemäss unserem Modell <span class="math inline">\(\hat{f}(x_i)\)</span> (als rot gestrichelte Linien dargestellt).</p>
+<p>Das in der obigen Aufgabe berechnete Modell ist in der folgenden Abbildung (links) grafisch als blaue Gerade dargestellt. Der Parameter <span class="math inline">\(\hat{w}_0\)</span> ist der Ort, an dem die Gerade die y-Achse durchkreuzt, während der Parameter <span class="math inline">\(\hat{w}_1\)</span> der Steigung der Geraden entspricht. Unser optimales Modell minimiert die Summe über die quadrierten Differenzen zwischen den tatsächlichen <span class="math inline">\(y_i\)</span> Werten und den Vorhersagen gemäss unserem Modell <span class="math inline">\(\hat{f}(x_i)\)</span> (die Differenzen sind als rot gestrichelte Linien eingetragen).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -675,6 +711,18 @@ J(\mathbf{\hat{w}}) &amp;= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\ma
 </div>
 </div>
 </section>
+<section id="gütemasse-für-die-regression" class="level4">
+<h4 class="anchored" data-anchor-id="gütemasse-für-die-regression">Gütemasse für die Regression</h4>
+<p>Eine Form der hier verwendeten Kostenfunktion wird oft auch als Gütemass für die Vorhersagen eines Regressionsmodells verwendet. In diesem Zusammenhang sprechen wir dann vom <strong>Mean Squared Error</strong> (MSE). Mit diesen Gütemassen beurteilen wir die Vorhersagegüte von fertig trainierten Modellen; sie haben also nichts mit dem Training zu tun.</p>
+<p>Häufig wird nicht der MSE sondern der <strong>Root Mean Squared Error</strong> (RMSE) verwendet, so dass das resultierende Fehlermass auf derselben Skala wie die Vorhersagen “lebt”. Oder anders gesagt, wir neutralisieren den Effekt des Quadrierens wieder. Die Formel für den RMSE sieht wie folgt aus:</p>
+<p><span class="math display">\[
+RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left(y_i - \hat{f}(x_i) \right)^2}
+\]</span></p>
+<p>Eine Alternative zum RMSE ist der <strong>Mean Absolute Error</strong> (MAE), der wie folgt definiert ist:</p>
+<p><span class="math display">\[
+MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{f}(x_i)|
+\]</span> Der MAE hat im Vergleich zum RMSE den Vorteil, dass er wengier stark auf grosse Differenzen zwischen dem wahren und vorhergesagten Wert für <span class="math inline">\(y\)</span> reagiert, oder, in anderen Worten, robuster gegen Ausreisser ist.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+</section>
 </section>
 <section id="perspektive-2-wahrscheinlichkeitstheorie" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="perspektive-2-wahrscheinlichkeitstheorie"><span class="header-section-number">2.4.2</span> Perspektive 2: Wahrscheinlichkeitstheorie</h3>
@@ -687,7 +735,7 @@ y_i &amp;= f(\mathbf{x}_i) + \epsilon \\
 <p><span class="math display">\[
 y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)
 \]</span></p>
-<p>Folgende Abbildung illlustriert diese Annahme: an jedem Ort <span class="math inline">\(x_i\)</span> ist der entsprechende Outputwert <span class="math inline">\(y_i\)</span> eine Realisierung aus einer Normalverteilung mit Mittelwert <span class="math inline">\(\mathbf{w}' \mathbf{x_i}\)</span> und Varianz <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Folgende Abbildung illlustriert diese Annahme: an jedem Ort <span class="math inline">\(x_i\)</span> ist der entsprechende Outputwert <span class="math inline">\(y_i\)</span> eine Realisierung (oder Ziehung) aus einer Normalverteilung mit Mittelwert <span class="math inline">\(\mathbf{w}' \mathbf{x_i}\)</span> und Varianz <span class="math inline">\(\sigma^2\)</span>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -713,7 +761,7 @@ p(y_1,y_2,\dots,y_n\mid\mathbf{w},\mathbf{X},\sigma^2) = \prod_{i=1}^n \mathcal{
 <div class="callout-body-container callout-body">
 <p>Die gemeinsame Wahrscheinlichkeit <span class="math inline">\(p(y_1,y_2,\dots,y_n\mid\mathbf{w},\mathbf{X},\sigma^2)\)</span> der beobachteten Output-Werte, gegeben die Input-Werte und das Modell (charakterisiert durch dessen Parameter <span class="math inline">\(\mathbf{w}\)</span> und <span class="math inline">\(\sigma^2\)</span>), wird in der Fachsprache <strong>Likelihood</strong> genannt.</p>
 <p>Die zentrale Idee hier ist, dass wir die Modellparameter <span class="math inline">\(\mathbf{w}\)</span> so wählen, dass die <em>Likelihood</em> maximal wird. Der daraus folgende Ausdruck für <span class="math inline">\(\mathbf{w}\)</span> wird <strong>Maximum Likelihood</strong> Schätzer genannt und oft als ML abgekürzt, was sehr verwirrlich sein kann, da wir ja auch Machine Learning so abkürzen.</p>
-<p>Mit dem ML-Schätzer finden wir also dasjenige (lineare) Modell, das die beobachteten <span class="math inline">\(y_i\)</span>-Werte maximal wahrscheinlich macht.</p>
+<p>Mit dem ML-Schätzer finden wir also dasjenige (lineare) Modell (bzw. dessen Parameterwerte), das die beobachteten <span class="math inline">\(y_i\)</span>-Werte maximal wahrscheinlich macht.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
@@ -742,7 +790,7 @@ p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2) &amp;= \prod_{i=1}^n \mathca
 &amp;= n \cdot \text{ln}\left(1\right) - n \cdot \text{ln}\left(\sigma\sqrt{2\pi}\right) - \frac{1}{2\sigma^2} \sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2}
 \end{align}\]</span></p>
 <p>Wow, nun haben wir ein tolles Resultat gefunden: je kleiner der Term <span class="math inline">\(\sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2}\)</span> in obiger Gleichung, desto grösser ist der natürliche Logarithmus der <em>Likelihood</em>. Das heisst nichts anderes, als dass die Kleinstquadratemethode auch der <em>Maximum Likelihood</em> Schätzer ist.</p>
-<p>Wir haben diesen Abschnitt damit begonnen anzunehmen, dass unser Output <span class="math inline">\(y_i\)</span> normalverteilt ist, d.h. <span class="math inline">\(y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)\)</span>. Wir haben nun herausgefunden, dass wir den Spaltenvektor mit den Parameter mit der Kleinstquadratemethode berechnen können. Um die Normalverteilung vollkommen zu spezifizieren, benötigen wir nun noch eine Formel, um die Varianz <span class="math inline">\(\sigma^2\)</span> zu rechnen. Dazu leiten wir den obigen Ausdruck der <em>Log-Likelihood</em> nach <span class="math inline">\(\sigma\)</span> ab:</p>
+<p>Wir haben mit der Annahme begonnen, dass unser Output <span class="math inline">\(y_i\)</span> normalverteilt ist, d.h. <span class="math inline">\(y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)\)</span>. Wir haben nun herausgefunden, dass der mit der Kleinstquadratemethode berechnete Vektor <span class="math inline">\(\mathbf{w}\)</span> auch glech dem ML-Schätzer entspricht. Um die Normalverteilung vollkommen zu spezifizieren, benötigen wir nun noch eine Formel, um die Varianz <span class="math inline">\(\sigma^2\)</span> zu rechnen. Dazu leiten wir den obigen Ausdruck der <em>Log-Likelihood</em> nach <span class="math inline">\(\sigma\)</span> ab:</p>
 <p><span class="math display">\[\begin{align}
 \frac{\partial \text{ln}\; p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2)}{\partial \sigma} &amp;= -n\cdot \frac{\sqrt{2\pi}}{\sigma\sqrt{2\pi}} - (-\frac{2}{\sigma^3}) \cdot \frac{1}{2} \sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2} \\
 &amp;= -\frac{n}{\sigma} + \frac{1}{\sigma^3} \sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2}
@@ -758,12 +806,18 @@ p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2) &amp;= \prod_{i=1}^n \mathca
 </div>
 </div>
 </div>
+<!-- Was heisst das auf unser kleines Beispiel übertragen? Der oben gefundene Kleinstquadrateschätzer $\mathbf{w}=\begin{pmatrix}0.4469 & -0.7395\end{pmatrix}'$ ist auch gleich der ML-Schätzer. Zusätzlich können wir mit dieser zweiten Perspektive eine Schätzung über die Unsicherheit vornehmen, und zwar indem wir den ML-Schätzer für $\sigma^2$ auf unser Beispiel anwenden: -->
+<!-- \begin{align} -->
+<!-- \hat{\sigma}^2 &= \frac{1}{n} \sum_{i=1}^n \left(y_i - \mathbf{\hat{w}}' \mathbf{x_i}\right)^{\!2}\\ -->
+<!-- &= \frac{1}{4}((3.5 - 3.48)^2 + (1.95 - 0.82)^2 + (-2.5 - (-0.59))^2 + (-2.05 - (-2.81))^2)\\ -->
+<!-- &= 1.37801 -->
+<!-- \end{align}  -->
 </section>
 </section>
 <section id="regularisierte-regression" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="regularisierte-regression"><span class="header-section-number">2.5</span> Regularisierte Regression</h2>
-<p>Das zentrale Problem der oben kennen gelernten Kleinstquadratemethode ist, dass sie extrem anfällig auf <strong>Overfitting</strong> ist. Vereinfacht gesagt bedeutet Overfitting, dass sich das Modell zu fest an die Trainingsdaten anpasst und die aus den Daten gelernten Muster nicht mehr generalisierbar sind.</p>
-<p>Beim linearen Regressionsmodell ist Overfitting vor allem dann ein Problem, wenn die Anzahl Input-Variablen <span class="math inline">\(p\)</span> relativ gross ist im Vergleich zur Anzahl Beobachtungen <span class="math inline">\(n\)</span>. Im Extremfall haben wir mehr Input-Variablen als Beobachtungen (<span class="math inline">\((p+1)&gt;n\)</span>), was dazu führt, dass der Kleinstquadrateschätzer mathematisch nicht rechenbar ist.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Das sollte auch intuitiv Sinn machen, denn wie soll eine Schätzung funktionieren, wenn wir im Schnitt weniger als eine Beobachtung pro zu schätzenden Parameter haben.</p>
+<p>Das zentrale Problem der oben kennen gelernten Kleinstquadratemethode ist, dass sie extrem anfällig auf <strong>Overfitting</strong> ist. Vereinfacht gesagt bedeutet Overfitting, dass sich das Modell zu fest an die Trainingsdaten anpasst und die aus den Daten gelernten Muster <strong>nicht mehr generalisierbar</strong> sind.</p>
+<p>Beim linearen Regressionsmodell ist Overfitting vor allem dann ein Problem, wenn die Anzahl Input-Variablen <span class="math inline">\(p\)</span> relativ gross ist im Vergleich zur Anzahl Beobachtungen <span class="math inline">\(n\)</span>. Im Extremfall haben wir mehr Input-Variablen als Beobachtungen (<span class="math inline">\((p+1)&gt;n\)</span>), was dazu führt, dass der Kleinstquadrateschätzer mathematisch nicht rechenbar ist.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Das sollte auch intuitiv Sinn machen, denn wie soll eine Schätzung funktionieren, wenn wir im Schnitt weniger als eine Beobachtung pro zu schätzenden Parameter haben.</p>
 <p>Wir können das Problem des Overfittings weitgehend lösen, indem wir ein <strong>regularisiertes</strong> Regressionsmodell rechnen. Regularisierung bedeutet eigentlich nichts anderes, als dass wir die ursprüngliche Kostenfunktion für das lineare Regressionsmodell modifizieren. Dabei gibt es zwei bekannte Regularisierungsarten, nämlich <strong>Ridge</strong> oder <strong>LASSO</strong>. Wir fokussieren in einem ersten Schritt auf die Ridge Regularisierung, weil wir in diesem Fall wiederum eine analytische Lösung finden.</p>
 <section id="ridge-regressionsmodell" class="level3" data-number="2.5.1">
 <h3 data-number="2.5.1" class="anchored" data-anchor-id="ridge-regressionsmodell"><span class="header-section-number">2.5.1</span> Ridge Regressionsmodell</h3>
@@ -776,7 +830,7 @@ J(\mathbf{w}) = \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \r
 <li>Wir versuchen hier Modellparameter <span class="math inline">\(\mathbf{w}\)</span> zu finden, welche <strong>gleichzeitig</strong> den durchschnittlichen quadrierten Fehler sowie eine Summe über die quadrierten Modellparameter so klein wie möglich machen. Das sind zwei <strong>konkurrenzierende Ziele</strong> und während des Modelltrainings muss der beste Tradeoff gefunden werden.</li>
 <li>Der Regularisierungsterm ist eine Summe über die quadrierten Modellparameter. Das Quadrieren stellt sicher, dass sich positive und negative Parameterwerte nicht gegenseitig kompensieren.</li>
 <li>Der <strong>Hyperparameter</strong> <span class="math inline">\(\lambda\)</span> legt fest, wie viel (relatives) Gewicht der Regularisierungsterm im Verhältnis zum durchschnittlichen quadrierten Fehler bekommt. Je grösser <span class="math inline">\(\lambda\)</span>, desto stärker “bestrafen” wir komplexe Modelle. Wir werden später sehen, wir wir den optimalen Wert für <span class="math inline">\(\lambda\)</span> via <strong>Cross-Validation</strong> finden können.</li>
-<li>Der Regularisierungsterm enthält die Konstante <span class="math inline">\(w_0\)</span> <strong>nicht</strong> (Summe startet bei <span class="math inline">\(j=1\)</span> und nicht bei <span class="math inline">\(j=0\)</span>). Die Konstante des Modells wird also nie regularisiert.</li>
+<li>Der Regularisierungsterm enthält die Konstante <span class="math inline">\(w_0\)</span> <strong>nicht</strong> (die Summe startet bei <span class="math inline">\(j=1\)</span> und nicht bei <span class="math inline">\(j=0\)</span>). Die Konstante des Modells wird also nie regularisiert, denn sie definiert lediglich den Punkt, wo die Gerade (oder die Hyperebene im Fall von mehr als einer Input-Variable) die y-Achse schneidet. Dieser Parameter soll flexibel bleiben.</li>
 </ul>
 <section id="fragen" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="fragen">Fragen</h4>
@@ -861,7 +915,7 @@ J(\hat{w}_0, \hat{w}_1) &amp;= \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{w}_0
 </div>
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Der Einfachheit halber nehmen wir hier an, dass die Outputwerte <span class="math inline">\(y_i\)</span> hier standardisiert<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> wurden, so dass der Mittelwert über die standardisierten Outputwerte Null ist. So entfällt die Konstante <span class="math inline">\(w_0\)</span> aus dem Modell, was uns die Matrixform für das Ridge Modell erleichtert, denn der Regularisierungsterm soll ja die Konstante nicht enthalten und wenn es diese nicht gibt, dann gibt es keine Probleme.</p>
+<p>Der Einfachheit halber nehmen wir hier an, dass die Outputwerte <span class="math inline">\(y_i\)</span> hier standardisiert<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> wurden, so dass der Mittelwert über die standardisierten Outputwerte Null ist. So entfällt die Konstante <span class="math inline">\(w_0\)</span> aus dem Modell, was uns die Matrixform für das Ridge Modell erleichtert, denn der Regularisierungsterm soll ja die Konstante nicht enthalten und wenn es diese nicht gibt, dann gibt es keine Probleme.</p>
 <p>Wie weiter oben gesehen, können wir die Kostenfunktion für das nicht-regularisierte Modell wie folgt schreiben:</p>
 <p><span class="math display">\[\begin{align}
 J(\mathbf{\hat{w}}) &amp;= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\mathbf{X}\mathbf{\hat{w}} + \mathbf{\hat{w}}' \mathbf{X}'\mathbf{X}\mathbf{\hat{w}})
@@ -896,14 +950,53 @@ J(\mathbf{\hat{w}}) &amp;= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\ma
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Es ist eminent wichtig, dass Sie alle numerischen Input-Variablen vor der Anwendung eines regularisierten Modells standardisieren, so dass alle Variablen auf der selben Skala “leben”. Warum ist das so wichtig? Sie haben gesehen, dass wir beim Ridge Modell die Grösse der Parameter mit dem Regularisierungsterm beschränken. Wenn jedoch die Input-Variablen alle auf unterschiedlichen Skalen “leben”, dann sind die Parameter nur schon deshalb unterschiedlich. Durch die Standardisierung der Input-Variablen erreichen wir, dass die Parametergrössen vergleichbar werden und die Regularisierung so auch korrekt funktioniert.</p>
+<p>Es ist eminent wichtig, dass Sie <strong>alle numerischen Input-Variablen</strong> vor der Anwendung eines regularisierten Modells <strong>standardisieren</strong>, so dass alle Variablen auf der selben Skala “leben”. Warum ist das so wichtig? Sie haben gesehen, dass wir beim Ridge Modell die Grösse der Parameter mit dem Regularisierungsterm beschränken. Wenn jedoch die Input-Variablen alle auf unterschiedlichen Skalen “leben”, dann sind die Parameter nur schon deshalb unterschiedlich. Durch die Standardisierung der Input-Variablen erreichen wir, dass die Parametergrössen vergleichbar werden und die Regularisierung so auch korrekt funktioniert.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="lasso-regressionsmodell" class="level3" data-number="2.5.2">
 <h3 data-number="2.5.2" class="anchored" data-anchor-id="lasso-regressionsmodell"><span class="header-section-number">2.5.2</span> LASSO Regressionsmodell</h3>
-<p>Coming soon.</p>
+<p>Beim LASSO<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Modell verwenden wir einen anderen Regularisierungsterm als bei Ridge. Anstatt die Parameter zu quadrieren (um Kompensationseffekte zu vermeiden), verwenden wir den <strong>absoluten Wert</strong>, d.h. wir ignorieren die Vorzeichen der Parameter:</p>
+<p><span class="math display">\[
+J(\mathbf{w}) = \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \right)^2 + \lambda \cdot \sum_{j=1}^p |w_j|
+\]</span></p>
+<p>Die Optimierung der LASSO Kostenfunktion hat allerdings einen gewichtigen <strong>Vorteil</strong> gegenüber Ridge, der nicht so offensichtlich ist: unwichtige Parameter werden bei LASSO auf 0 gesetzt, während Ridge die Parameter einfach kleiner macht, sie aber nie auf genau 0 setzt (ausser wenn <span class="math inline">\(\lambda \to \infty\)</span>). Das Modell nimmt also selbständig eine <strong>Selektion der wichtigen Variablen</strong> vor. Diese Eigenschaft macht das Modell auch gut interpretierbar, weil bei korrekter Anwendung von LASSE nur die relevanten Input-Variablen im Modell verbleiben.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Wie funktioniert diese Variablenselektion bei LASSO? (optional)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Um besser zu verstehen, warum LASSO eine automatische Variablenselektion vornimmt und die Modellparameter unwichtiger Input-Variablen auf Null setzt, muss das Optimierungsproblem in die <strong>Lagrange</strong>-Form (eingeschränkte Optimierung) gebracht werden:</p>
+<p><span class="math display">\[
+\text{Minimiere}\quad \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \right)^2 \text{unter der Bedingung}\quad \sum_{j=1}^p |w_j| \leq s
+\]</span> <span class="math inline">\(s\)</span> kann als <strong>Budget</strong> interpretiert werden <span class="citation" data-cites="islr">(<a href="references.html#ref-islr" role="doc-biblioref">James u.&nbsp;a. 2021</a>, pp.&nbsp;241 - 245)</span> und die Summe über die absoluten Werte der Modellparameter kann dieses Budget nicht übersteigen.</p>
+<p>Jedes Budget <span class="math inline">\(s\)</span> matcht einen Wert für <span class="math inline">\(\lambda\)</span>, so dass dieselben Modellparameter resultieren. Oder in anderen Worten: die Problemformulierung hier ist identisch zu der obigen mit dem Unterschied, dass sie hier durch <span class="math inline">\(s\)</span> charakterisiert ist und oben durch <span class="math inline">\(\lambda\)</span>.</p>
+<p>Die Bedingung <span class="math inline">\(\sum_{j=1}^p |w_j| \leq s\)</span> kann im Fall von zwei Input-Variablen mit den entsprechenden Modellparameter <span class="math inline">\(w_1\)</span> und <span class="math inline">\(w_2\)</span> gut visualisert werden:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_linreg_files/figure-html/lasso-contours-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Konturplot für LASSO."></p>
+<figcaption>Konturplots der LASSO-Bedingung für drei verschiedene Budgets (1,2,3).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Die drei abgebildeten Rauten entsprechend den Budgets <span class="math inline">\(s=1,2,3\)</span>. Jede Raute enthalt alle Kombinationen von Parameterwerten, welche zusammen genau das Budget ergeben. Wenn wir uns beispielsweise den Eckpunkt ganz oben in der äussersten Raute anschauen, dann haben wir dort die Parameterwerte <span class="math inline">\(w_1=0\)</span> und <span class="math inline">\(w_2=3\)</span>; die Summe der absoluten Werte ist also genau 3.</p>
+<p>Die optimalen LASSO Modellparameter befinden sich nun an dem Punkt, wo die Konturlinien für den ersten Teil der Kostenfunktion (die Summe der quadrierten Differenzen, siehe auch Konturlinien oben für Kleinstquadratemethode) die Konturlinie der LASSO-Bedingung für ein gegebenes Budget <span class="math inline">\(s\)</span> berühren. Ganz oft ist dieser Berührungspunkt in einer der Ecken. <strong>Wichtig</strong>: eine Ecke ist immer eine Parameterkombination, wo einer der Parameter den Wert 0 hat.</p>
+</div>
+</div>
+</div>
+<p>Der <strong>Nachteil</strong> von LASSO im Vergleich zu Ridge ist, dass es keine analytische Lösung gibt. In der praktischen Arbeit stört uns dies allerdings nur wenig, da <code>R</code> oder <code>Python</code> Packages gut gerüstet sind, um das Optimierungsproblem für LASSO zu lösen.</p>
+<p><strong>Wichtig</strong>: wie bei Ridge müssen auch hier alle numerischen Input-Variablen zwingend standardisiert sein.</p>
 </section>
 </section>
 <section id="bias-variance-tradeoff" class="level2" data-number="2.6">
@@ -918,7 +1011,7 @@ J(\mathbf{\hat{w}}) &amp;= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\ma
 </ul>
 <p>Um den Bias-Variance Tradeoff zu zeigen, leiten wir nun den <strong>Erwartungswert des quadrierten Fehlers</strong> für eine gegebene Testbeobachtung her, die wir als <span class="math inline">\((y_0,\mathbf{x}_0)\)</span> bezeichnen. Dies wäre der durchschnittliche quadrierte Fehler, den wir für diese Beobachtung kriegen würden, wenn wir mit jedem geschätzten Modell (jedes auf einem unterschiedlichen Datensatz trainiert) die Vorhersage für diese Testbeobachtung rechnen würden.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -927,7 +1020,7 @@ J(\mathbf{\hat{w}}) &amp;= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\ma
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In einem ersten Schritt erweitern wir den quadrierten Fehler, indem wir einmal den wahren Funktionswert an der Stelle <span class="math inline">\(\mathbf{x}_0\)</span> abziehen und einmal hinzuzählen. Zusammen gibt das Null und verändert darum die rechte Seite der Gleichung nicht:</p>
 <p><span class="math display">\[\begin{align}
@@ -989,16 +1082,55 @@ J(\mathbf{\hat{w}}) &amp;= \frac{1}{2n} (\mathbf{y}'\mathbf{y} - 2\mathbf{y}'\ma
 </ul>
 <p>Warum spricht man von einem <strong>Tradeoff</strong>? Flexiblere Modelle haben oft einen kleinen Bias, aber hohe Varianz, während unflexible Modelle oft eine kleine Varianz, aber einen hohen Bias haben. Es existiert also ein Tradeoff zwischen Bias und Varianz und wir wollen beim Modellieren und vor allem beim Hyperparameter Tuning (ein Hyperparameter ist zum Beispiel <span class="math inline">\(\lambda\)</span>) den optimalen Tradeoff finden.</p>
 <p>In unserem Beispiel wenden wir ein regularisiertes Regressionsmodell an. Hier spielt der Hyperparameter <span class="math inline">\(\lambda\)</span> eine zentrale Rolle für den Tradeoff zwischen Bias und Variance. Ein zu tiefer Wert für <span class="math inline">\(\lambda\)</span> kann zu einem zu flexiblen Modell mit viel Varianz führen. Ein zu hoher Wert für <span class="math inline">\(\lambda\)</span> führt zu einem zu rigiden Modell mit viel Bias.</p>
+<p>Im folgenden Beispiel haben wir <span class="math inline">\(N = 50\)</span> Beobachtungen. Das wahre Modell, welches die Beobachtungen generiert, sieht wie folgt aus:</p>
+<p><span class="math display">\[
+y_i = 2 + 1 \cdot x_{i,1} + \epsilon_i
+\]</span> wobei <span class="math inline">\(\epsilon_i \sim N(0, 0.2)\)</span>.</p>
+<p>Der Datensatz enthält aber 49 weitere Prädiktoren <span class="math inline">\(x_{i,2}, x_{i,3}, \dots, x_{i,50}\)</span>, welche nicht mit der Output-Variable <span class="math inline">\(y_i\)</span> korreliert sind.</p>
+<p>Entscheiden Sie sich nun für das optimale regularisierte Modell. Welcher Regularisierungsgrad führt zu viel Bias? Welcher zu viel Varianz?</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_linreg_files/figure-html/lasso-params-1.png" class="img-fluid figure-img" style="width:100.0%" alt="Einfluss von Hyperparameter auf Modellparameter."></p>
+<figcaption>Resultate eines LASSO Modells für vier verschiedene Werte des Hyperparameters. Links: die trainierten Parameterwerte für die Konstante sowie die 50 Input-Variablen. Rechts: Vorhersagegüte (gemessen als MSE) auf Trainings- und Testdaten.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Wichtig:</strong></p>
+<ul>
+<li>Indem wir den Hyperparameter via Resampling optimieren, wählen wir automatisch ein Modell mit einem guten Tradeoff zwischen Bias und Varianz!</li>
+<li>Mit grossen Datensätzen ist das Problem des Overfittings weniger dramatisch. Wir haben genügend Trainingsdaten, dass selbst flexible Modelle nicht zu stark overfitten. Das ist bei unserem Beispiel der Fall (wir haben einen ziemlich grossen Trainingsdatensatz). Darum ist der optimale Hyperparameter in unserem Beispiel <code>penalty = 0.001</code>, also eher einer der kleineren Werte.</li>
+</ul>
+<p>Eine letzte Überlegung bezüglich Modellselektion geht folgendermassen: wenn wir mehrere Modelle haben, die ähnlich gut performen, dann wählen wir das einfachste (kleinste) oder <strong>am wenigsten komplexe Modell</strong>. Man nennt dies <strong>Occam’s Razor</strong>. William of Occam war ein Englischer Mönch und hat dieses Prinzip in einem anderen Kontext erstmals formuliert.</p>
 </section>
 <section id="polynomische-regression" class="level2" data-number="2.7">
 <h2 data-number="2.7" class="anchored" data-anchor-id="polynomische-regression"><span class="header-section-number">2.7</span> Polynomische Regression</h2>
-<p>Coming soon.</p>
-<!-- Wir machen hier nun einen kurzen Abstecher in die **polynomische Regression**, denn diese eignet sich sehr gut, um den Bias-Variance Tradeoff zu illustrieren. -->
-<!-- Ein **ganz wichtiger Punkt**: das polynomische Regressionsmodell ist immer noch **linear in den Parametern**, es handelt sich also immer noch um ein lineares Modell. Sie sehen aber an obigen Modellkurven, dass dieses "lineare" Modell sehr wohl in der Lage ist, nicht-lineare Zusammenhänge zwischen $x$ und $y$ zu fitten! -->
+<p>Wir machen hier nun einen kurzen Abstecher in die polynomische Regression, denn diese eignet sich sehr gut, um den Bias-Variance Tradeoff zu illustrieren.</p>
+<p>In dieser Demo schauen wir uns den Bias-Variance Tradeoff anhand der polynomischen Regression an. Das polynomische Regressionsmodell sieht folgendermassen aus:</p>
+<p><span class="math display">\[
+y_i = w_0 + w_1 \cdot x_i^1 + w_2 \cdot x_i^2 + w_3 \cdot x_i^3 + \dotsb + w_M \cdot x_i^M + \epsilon_i
+\]</span> <span class="math inline">\(M\)</span> bezeichnet hier den Grad des Polynoms. Mit einem Datensatz der Grösse <span class="math inline">\(n\)</span>, trifft eine polynomische Regression mit Grad <span class="math inline">\(M = n−1\)</span> die Daten perfekt. Das Modell hat in diesem Fall so viele Freiheitsgrade wie der Trainingsdatensatz Beobachtungen hat. Das ermöglicht dem Modell die Datenpunkte perfekt abzubilden. Dabei handelt es sich um ein <strong>extremes Beispiel von Overfitting</strong>. Je mehr Daten unser Trainingsdatensatz enthält, desto mehr schwächt sich das Problem des Overfittings ab.</p>
+<p>Die blauen Punkte unten links zeigen die Trainingsdatenpunkte. Die rote Kurve zeigt das jeweils geschätzte Modell je nach gewähltem Grad des Polynoms <span class="math inline">\(M\)</span> und die schwarze Kurve zeigt das wahre Modell.</p>
+<p>Rechts sehen Sie jeweils den RMSE auf Trainings- sowie auf Testset.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_linreg_files/figure-html/poly-reg-1.png" class="img-fluid figure-img" style="width:100.0%" alt="Polynomische Regression."></p>
+<figcaption>Bla.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Ein <strong>ganz wichtiger Punkt</strong>: das polynomische Regressionsmodell ist immer noch <strong>linear in den Parametern</strong>, es handelt sich also immer noch um ein lineares Modell. Sie sehen aber an obigen Modellkurven, dass dieses “lineare” Modell sehr wohl in der Lage ist, nicht-lineare Zusammenhänge zwischen <span class="math inline">\(x\)</span> und <span class="math inline">\(y\)</span> zu fitten!</p>
 </section>
 <section id="lineare-regression-in-r" class="level2" data-number="2.8">
 <h2 data-number="2.8" class="anchored" data-anchor-id="lineare-regression-in-r"><span class="header-section-number">2.8</span> Lineare Regression in R</h2>
-<p>In <strong>Base R</strong> lassen sich Regressionsmodelle einfach mit der <code>lm()</code> Funktion (<code>lm</code> steht für <em>linear model</em>) rechnen.</p>
+<section id="base-r" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="base-r"><span class="header-section-number">2.8.1</span> Base <code>R</code></h3>
+<p>In Base <code>R</code> lassen sich Regressionsmodelle einfach mit der <code>lm()</code> Funktion (<code>lm</code> steht für <em>linear model</em>) rechnen.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datenpunkte</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">4.1</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">1.4</span>, <span class="fl">4.4</span>)</span>
@@ -1031,7 +1163,8 @@ Multiple R-squared:  0.7904,    Adjusted R-squared:  0.6857
 F-statistic: 7.544 on 1 and 2 DF,  p-value: 0.1109</code></pre>
 </div>
 </div>
-<p>Blabla…</p>
+<p>Der obige <code>R</code> Output ist der klassische Regressionsoutput der <code>lm()</code> Funktion. In der Spalte <code>Estimate</code> sehen wir insbesondere die geschätzten (trainierten) Modellparameter.</p>
+<p>Wir können unser geschätztes Modell nun wie folgt verwenden, um Vorhersagen für zwei neue Input-Variablenwerte (2.5 und 5.1) zu machen.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modellvorhersagen</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>yp <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">5.1</span>)))</span>
@@ -1041,6 +1174,9 @@ F-statistic: 7.544 on 1 and 2 DF,  p-value: 0.1109</code></pre>
 -1.401854 -3.324500 </code></pre>
 </div>
 </div>
+</section>
+<section id="tidymodels-glmnet" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="tidymodels-glmnet"><span class="header-section-number">2.8.2</span> <code>tidymodels</code> + <code>glmnet</code></h3>
 <p>Für regularisierte Regressionsmodelle eignet sich der <code>tidymodels</code> Framework.</p>
 
 
@@ -1050,13 +1186,16 @@ James, Gareth, Daniela Witten, Trevor Hastie, und Robert Tibshirani. 2021. <em>A
 </div>
 </div>
 </section>
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn1"><p><span class="math inline">\(\epsilon = y_i - f(\mathbf{x}_i)\)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>So müssen wir die Konstante <span class="math inline">\(w_0\)</span> nicht separat aufschreiben.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>In diesem Fall ist die Matrix <span class="math inline">\(\mathbf{X}'\mathbf{X}\)</span> nicht invertierbar.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Formel für die Standardisierung: <span class="math inline">\(\frac{y_i-\bar{y}}{s_y}\)</span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Das Quadrieren führt dazu, dass grosse Differenzen die gesamte Summe der quadrierten Fehler dominieren.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Falls Sie den optionalen Teil “Kleinsquadratemethode in Matrixform” angeschaut haben: in diesem Fall ist die Matrix <span class="math inline">\(\mathbf{X}'\mathbf{X}\)</span> nicht invertierbar.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Formel für die Standardisierung: <span class="math inline">\(\frac{y_i-\bar{y}}{s_y}\)</span><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>LASSO ist die Abkürzung für <em>least absolute shrinkage and selection operator</em><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
