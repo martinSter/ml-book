@@ -28,7 +28,7 @@ Jedes ML-Modell, das wir uns in diesem Buch anschauen werden, kann als eine math
 
 ## Das Modell (ausgeschrieben)
 
-Nun wollen wir uns konkret mit dem **linearen Regressionsmodell** befassen. Das bedeutet nun nichts anderes, als dass wir die allgemein geschriebene Funktion $f(\mathbf{x}_i)$ durch eine konkrete mathematische Funktion ersetzen. Im Machine Learning ist das der erste wichtige Schritt, nämlich die Modellwahl (engl. *Model Selection*). Das Modell kann wie folgt geschrieben werden:
+Nun wollen wir uns konkret mit dem **linearen Regressionsmodell** befassen. Das bedeutet nun nichts anderes, als dass wir die allgemein geschriebene Funktion $f(\mathbf{x}_i)$ durch eine konkrete mathematische Funktion ersetzen. Im Machine Learning ist das der erste wichtige Schritt, nämlich die **Modellwahl** (engl. *Model Selection*). Das Modell kann wie folgt geschrieben werden:
 
 $$
 f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
@@ -37,7 +37,7 @@ Wir verzichten hier bewusst darauf, den Hut für $f$ zu schreiben, da es sich le
 
 Diese Parameter sind die Schlüsselzutat in einem ML-Modell. Wir wollen sie **optimieren**, so dass die trainierte Funktion $\hat{f}(\mathbf{x}_i)$ der wahren Funktion $f(\mathbf{x}_i)$ möglichst nahe kommt und die beobachteten Daten möglichst gut beschreibt.
 
-Wir schauen uns in diesem Kapitel ein ganz einfaches Beispiel mit nur einer Input-Variable $x_i$ an, so dass der Zusammenhang zwischen dem Output $y_i$ und dem Input $x_i$ in 2D dargestellt werden kann. In diesem Zusammenhang spricht man vom **einfachen linearen Regressionsmodell**. Ausserdem haben wir nur vier Beobachtungen, welche in folgender Abbildung in einem Streudiagramm dargestellt werden:
+Wir schauen uns in diesem Kapitel ein ganz einfaches Beispiel mit nur **einer Input-Variable** $x_i$ an, so dass der Zusammenhang zwischen dem Output $y_i$ und dem Input $x_i$ in 2D dargestellt werden kann. In diesem Zusammenhang spricht man vom **einfachen linearen Regressionsmodell**. Ausserdem haben wir nur vier Beobachtungen, welche in folgender Abbildung in einem Streudiagramm dargestellt werden:
 
 ```{r simple-reg, echo=FALSE, fig.show = 'hold', fig.cap='Einfaches Regressionsbeispiel. Die vier Beobachtungen werden in einem Streudiagramm dargestellt. Auf der x-Achse ist der Wert der Input-Variable und auf der y-Achse der Wert der Output-Variable ablesbar.', out.width='60%', fig.asp=1, fig.align='center', fig.alt='Einfaches Regressionsbeispiel.'}
 library(latex2exp)
@@ -68,7 +68,7 @@ points(x, y, pch = 16, cex = 2, col = rgb(0, 0, 1, 0.4))
 text(x, y, labels = paste0("(", x, ", ", y, ")"), pos = 1, col = "blue", cex = 1.2)
 ```
 
-Obwohl obige Abbildung ähnlich aussieht wie die Abbildungen zum Perceptron, gibt es hier einen bedeutenden Unterschied. Auf der y-Achse des Streudiagramm wird der Outputwert der Beobachtungen dargestellt, während auf der x-Achse der Input-Wert angezeigt wird. Es wird nun darum gehen, eine **Gerade** zu finden, welche die Daten bestmöglich repräsentiert.
+Obwohl obige Abbildung ähnlich aussieht wie die Abbildungen zum Perceptron, gibt es hier einen bedeutenden Unterschied. Auf der y-Achse des Streudiagramm wird der Outputwert der Beobachtungen dargestellt, während auf der x-Achse der Input-Wert angezeigt wird. Es wird nun darum gehen, eine **Gerade** zu finden, welche die vier Beobachtungen bestmöglich repräsentiert.
 
 ## Das Modell (kompakt)
 
@@ -132,12 +132,52 @@ w_0 \cdot 1 + w_1 \cdot x_{21} + w_2 \cdot x_{22} + \dots + w_p \cdot x_{2p} \\
 w_0 \cdot 1 + w_1 \cdot x_{n1} + w_2 \cdot x_{n2} + \dots + w_p \cdot x_{np}\end{pmatrix}
 \end{align}
 
-Überprüfen wir doch noch kurz die Dimensionen von obigem Matrix-Vektor Produkt. Die Matrix $\mathbf{X}$ hat $n$ Zeilen und $p+1$ Spalten und darum eine Dimensionalität von $n \times (p+1)$. Der Spaltenvektor $\mathbf{w}$ hat Dimensionalität $(p+1) \times 1$. Das Matrix-Vektor Produkt hat dementsprechend eine Dimensionalität von $n \times 1$, genau was wir erwarten würden, nämlich einen Vektor mit den Vorhersagen für alle $n$ Beobachtungen.
+Überprüfen wir doch noch kurz die Dimensionen von obigem Matrix-Vektor Produkt. Die Matrix $\mathbf{X}$ hat $n$ Zeilen und $p+1$ Spalten und darum eine Dimensionalität von $n \times (p+1)$. Der Spaltenvektor $\mathbf{w}$ hat Dimensionalität $(p+1) \times 1$. Das Matrix-Vektor Produkt hat dementsprechend eine Dimensionalität von $n \times 1$, genau was wir erwarten würden, nämlich einen (Spalten-)Vektor mit den Vorhersagen für alle $n$ Beobachtungen.
 
 ::: {.callout-caution collapse="true"}
 ## Matrixprodukt
 
-Blabla...
+Wenn das Produkt zweier Matrizen $\mathbf{A}$ und $\mathbf{B}$ gerechnet werden soll, dann gilt es immer zuerst die Dimensionen der beiden Matrizen zu prüfen. Warum? Die Multiplikation $\mathbf{A}\mathbf{B}$ funktioniert nämlich nur dann, wenn die Anzahl Spalten von $\mathbf{A}$ gleich der Anzahl Zeilen von $\mathbf{B}$ ist.
+
+Nehmen wir an, dass $\mathbf{A}$ eine Dimensionalität von $m \times n$ hat ($\mathbf{A}$ hat also $m$ Zeilen und $n$ Spalten). Die Matrix $\mathbf{B}$ hat eine Dimensionalität von $n \times p$.
+
+In diesem Fall ist obige Bedingung schon mal erfüllt, denn die Anzahl Spalten von $\mathbf{A}$ (also $n$) ist gleich der Anzahl Zeilen von $\mathbf{B}$.
+
+Weiter gilt, dass die resultierenden Matrix $\mathbf{C}=\mathbf{A}\mathbf{B}$ eine Dimensionalität von $m \times p$ hat.
+
+Doch wie berechnet man die Element der resultierenden Matrix $\mathbf{C}$?
+
+Das erste Element links oben in der Matrix (man kann es als $\mathbf{C}_{1,1}$ beschreiben) ist die Summe über die elementweisen Multiplikationen der Element in der ersten Zeile von $\mathbf{A}$ und der ersten Spalte von $\mathbf{B}$.
+
+Oder allgemeiner: $\mathbf{C}_{i,j} = \sum_{k=1}^n \mathbf{A}_{i,k} \cdot \mathbf{B}_{k,j}$.
+
+Am einfachsten lässt sich das ganze an einem Beispiel anschauen:
+
+\begin{align}
+\begin{pmatrix}
+2 & -3 \\
+1 & 2
+\end{pmatrix}
+\begin{pmatrix}
+1.3 & -3 & 0 \\
+1 & 0.5 & 1
+\end{pmatrix}
+&=
+\begin{pmatrix}
+2\cdot 1.3 + (-3)\cdot 1
+& 2\cdot (-3) + (-3)\cdot 0.5
+& 2\cdot 0 + (-3)\cdot 1
+\\
+1\cdot 1.3 + 2\cdot 1
+& 1\cdot (-3) + 2\cdot 0.5
+& 1\cdot 0 + 2\cdot 1
+\end{pmatrix}\\
+&=
+\begin{pmatrix}
+-0.4 & -7.5 & -3 \\
+3.3 & -2 & 2
+\end{pmatrix}.
+\end{align}
 :::
 
 Für unser einfaches Beispiel kann das Modell wie folgt in Matrixform geschrieben werden:
@@ -161,7 +201,7 @@ Warum wir all das tun, werden wir weiter unten sehen. Es wird unser Leben viel e
 
 ## Modelltraining
 
-Wir werden uns hier anschauen, dass für das Training (oft auch *Fitting* genannt) des linearen Regressionsmodells **zwei verschiedene Perspektiven** eingenommen werden können, welche am Schluss beide zum selben Resultat führen.
+Wir werden uns hier anschauen, wie für das Training (oft auch *Fitting* genannt) des linearen Regressionsmodells **zwei verschiedene Perspektiven** eingenommen werden können, welche am Schluss beide zum selben Resultat führen.
 
 ### Perspektive 1: Funktionsoptimierung
 
@@ -280,7 +320,7 @@ $$
 $$
 :::
 
-Das in der obigen Aufgabe berechnete Modell ist in der folgenden Abbildung (links) grafisch als blaue Gerade dargestellt. Der Parameter $\hat{w}_0$ ist der Ort, an dem die Gerade die y-Achse durchkreuzt, während der Parameter $\hat{w}_1$ der Steigung der Geraden entspricht. Unser optimales Modell minimiert die Summe über die quadrierten Differenzen zwischen den tatsächlichen $y_i$ Werten und den Vorhersagen gemäss unserem Modell $\hat{f}(x_i)$ (als rot gestrichelte Linien dargestellt).
+Das in der obigen Aufgabe berechnete Modell ist in der folgenden Abbildung (links) grafisch als blaue Gerade dargestellt. Der Parameter $\hat{w}_0$ ist der Ort, an dem die Gerade die y-Achse durchkreuzt, während der Parameter $\hat{w}_1$ der Steigung der Geraden entspricht. Unser optimales Modell minimiert die Summe über die quadrierten Differenzen zwischen den tatsächlichen $y_i$ Werten und den Vorhersagen gemäss unserem Modell $\hat{f}(x_i)$ (die Differenzen sind als rot gestrichelte Linien eingetragen).
 
 ```{r simple-reg-cost, echo=FALSE, fig.show = 'hold', fig.cap='Einfaches Regressionsbeispiel. Das geschätzte Modell ist als blaue Gerade eingezeichnet. Die vertikalen roten Linien stellen die Abweichungen der wahren Outputs von den Vorhersagen dar. Rechts ist ein Konturplot der Kostenfunktion mit der optimalen Parameterwert-Kombination dargestellt.', out.width='100%', fig.asp=NULL, fig.align='center', fig.alt='Einfaches Regressionsbeispiel.'}
 library(latex2exp)
@@ -386,6 +426,23 @@ Diesen Ausdruck können wir nun wie gewohnt gleich Null setzen (wobei wir hier r
 **Wichtig**: Die Matrix $\mathbf{X}'\mathbf{X}$ hat eine Dimensionalität von $(p+1) \times (p+1)$, ist also quadratisch. Sie ist nur invertierbar, wenn die Design Matrix mehr Zeilen als Spalten hat, also wenn $n > (p+1)$.
 :::
 
+#### Gütemasse für die Regression
+
+Eine Form der hier verwendeten Kostenfunktion wird oft auch als Gütemass für die Vorhersagen eines Regressionsmodells verwendet. In diesem Zusammenhang sprechen wir dann vom **Mean Squared Error** (MSE). Mit diesen Gütemassen beurteilen wir die Vorhersagegüte von fertig trainierten Modellen; sie haben also nichts mit dem Training zu tun.
+
+Häufig wird nicht der MSE sondern der **Root Mean Squared Error** (RMSE) verwendet, so dass das resultierende Fehlermass auf derselben Skala wie die Vorhersagen "lebt". Oder anders gesagt, wir neutralisieren den Effekt des Quadrierens wieder. Die Formel für den RMSE sieht wie folgt aus:
+
+$$
+RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left(y_i - \hat{f}(x_i) \right)^2}
+$$
+
+Eine Alternative zum RMSE ist der **Mean Absolute Error** (MAE), der wie folgt definiert ist:
+
+$$
+MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{f}(x_i)|
+$$
+Der MAE hat im Vergleich zum RMSE den Vorteil, dass er wengier stark auf grosse Differenzen zwischen dem wahren und vorhergesagten Wert für $y$ reagiert, oder, in anderen Worten, robuster gegen Ausreisser ist.^[Das Quadrieren führt dazu, dass grosse Differenzen die gesamte Summe der quadrierten Fehler dominieren.]
+
 ### Perspektive 2: Wahrscheinlichkeitstheorie
 
 Nun werden wir sehen, dass wir die Lösung oben (aus Perspektive 1) auch mit einer probabilistischen Sicht auf die Dinge erhalten. Dazu schreiben wir nochmals kurz den allgemein angenommenen Zusammenhang zwischen dem wahren Output $y_i$ und den Input-Variablen auf und konkretisieren ihn dann gleich für das lineare Regressionsmodell:
@@ -401,7 +458,7 @@ $$
 y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)
 $$
 
-Folgende Abbildung illlustriert diese Annahme: an jedem Ort $x_i$ ist der entsprechende Outputwert $y_i$ eine Realisierung aus einer Normalverteilung mit Mittelwert $\mathbf{w}' \mathbf{x_i}$ und Varianz $\sigma^2$.
+Folgende Abbildung illlustriert diese Annahme: an jedem Ort $x_i$ ist der entsprechende Outputwert $y_i$ eine Realisierung (oder Ziehung) aus einer Normalverteilung mit Mittelwert $\mathbf{w}' \mathbf{x_i}$ und Varianz $\sigma^2$.
 
 ```{r simple-reg-maxlik, echo=FALSE, fig.show = 'hold', out.width='60%', fig.asp=1, fig.align='center', fig.alt='Einfaches Regressionsbeispiel.'}
 library(latex2exp)
@@ -465,7 +522,7 @@ Die gemeinsame Wahrscheinlichkeit $p(y_1,y_2,\dots,y_n\mid\mathbf{w},\mathbf{X},
 
 Die zentrale Idee hier ist, dass wir die Modellparameter $\mathbf{w}$ so wählen, dass die *Likelihood* maximal wird. Der daraus folgende Ausdruck für $\mathbf{w}$ wird **Maximum Likelihood** Schätzer genannt und oft als ML abgekürzt, was sehr verwirrlich sein kann, da wir ja auch Machine Learning so abkürzen.
 
-Mit dem ML-Schätzer finden wir also dasjenige (lineare) Modell, das die beobachteten $y_i$-Werte maximal wahrscheinlich macht.
+Mit dem ML-Schätzer finden wir also dasjenige (lineare) Modell (bzw. dessen Parameterwerte), das die beobachteten $y_i$-Werte maximal wahrscheinlich macht.
 :::
 
 ::: {.callout-caution collapse="true"}
@@ -490,7 +547,7 @@ Nun vollziehen wir einen kleinen mathematischen Trick, der vielfach angewendet w
 
 Wow, nun haben wir ein tolles Resultat gefunden: je kleiner der Term $\sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2}$ in obiger Gleichung, desto grösser ist der natürliche Logarithmus der *Likelihood*. Das heisst nichts anderes, als dass die Kleinstquadratemethode auch der *Maximum Likelihood* Schätzer ist.
 
-Wir haben diesen Abschnitt damit begonnen anzunehmen, dass unser Output $y_i$ normalverteilt ist, d.h. $y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)$. Wir haben nun herausgefunden, dass wir den Spaltenvektor mit den Parameter mit der Kleinstquadratemethode berechnen können. Um die Normalverteilung vollkommen zu spezifizieren, benötigen wir nun noch eine Formel, um die Varianz $\sigma^2$ zu rechnen. Dazu leiten wir den obigen Ausdruck der *Log-Likelihood* nach $\sigma$ ab:
+Wir haben mit der Annahme begonnen, dass unser Output $y_i$ normalverteilt ist, d.h. $y_i \sim \mathcal{N}\left(\mathbf{w}' \mathbf{x_i}, \sigma^2\right)$. Wir haben nun herausgefunden, dass der mit der Kleinstquadratemethode berechnete Vektor $\mathbf{w}$ auch glech dem ML-Schätzer entspricht. Um die Normalverteilung vollkommen zu spezifizieren, benötigen wir nun noch eine Formel, um die Varianz $\sigma^2$ zu rechnen. Dazu leiten wir den obigen Ausdruck der *Log-Likelihood* nach $\sigma$ ab:
 
 \begin{align}
 \frac{\partial \text{ln}\; p(y_1,y_2,\dots,y_n|\mathbf{w},\mathbf{X},\sigma^2)}{\partial \sigma} &= -n\cdot \frac{\sqrt{2\pi}}{\sigma\sqrt{2\pi}} - (-\frac{2}{\sigma^3}) \cdot \frac{1}{2} \sum_{i=1}^n \left(y_i - \mathbf{w}' \mathbf{x_i}\right)^{\!2} \\
@@ -509,11 +566,19 @@ Nun können wir wie gewohnt die Ableitung gleich Null setzen und nach $\sigma$ a
 Sehr schön, dieses Resultat macht ebenfalls viel Sinn. Die geschätzte Varianz $\hat{\sigma}^2$ ist nichts anderes als der durchschnittliche quadrierte Fehler (engl. *Mean Squared Error*).
 :::
 
+<!-- Was heisst das auf unser kleines Beispiel übertragen? Der oben gefundene Kleinstquadrateschätzer $\mathbf{w}=\begin{pmatrix}0.4469 & -0.7395\end{pmatrix}'$ ist auch gleich der ML-Schätzer. Zusätzlich können wir mit dieser zweiten Perspektive eine Schätzung über die Unsicherheit vornehmen, und zwar indem wir den ML-Schätzer für $\sigma^2$ auf unser Beispiel anwenden: -->
+
+<!-- \begin{align} -->
+<!-- \hat{\sigma}^2 &= \frac{1}{n} \sum_{i=1}^n \left(y_i - \mathbf{\hat{w}}' \mathbf{x_i}\right)^{\!2}\\ -->
+<!-- &= \frac{1}{4}((3.5 - 3.48)^2 + (1.95 - 0.82)^2 + (-2.5 - (-0.59))^2 + (-2.05 - (-2.81))^2)\\ -->
+<!-- &= 1.37801 -->
+<!-- \end{align}  -->
+
 ## Regularisierte Regression
 
-Das zentrale Problem der oben kennen gelernten Kleinstquadratemethode ist, dass sie extrem anfällig auf **Overfitting** ist. Vereinfacht gesagt bedeutet Overfitting, dass sich das Modell zu fest an die Trainingsdaten anpasst und die aus den Daten gelernten Muster nicht mehr generalisierbar sind.
+Das zentrale Problem der oben kennen gelernten Kleinstquadratemethode ist, dass sie extrem anfällig auf **Overfitting** ist. Vereinfacht gesagt bedeutet Overfitting, dass sich das Modell zu fest an die Trainingsdaten anpasst und die aus den Daten gelernten Muster **nicht mehr generalisierbar** sind.
 
-Beim linearen Regressionsmodell ist Overfitting vor allem dann ein Problem, wenn die Anzahl Input-Variablen $p$ relativ gross ist im Vergleich zur Anzahl Beobachtungen $n$. Im Extremfall haben wir mehr Input-Variablen als Beobachtungen ($(p+1)>n$), was dazu führt, dass der Kleinstquadrateschätzer mathematisch nicht rechenbar ist.^[In diesem Fall ist die Matrix $\mathbf{X}'\mathbf{X}$ nicht invertierbar.] Das sollte auch intuitiv Sinn machen, denn wie soll eine Schätzung funktionieren, wenn wir im Schnitt weniger als eine Beobachtung pro zu schätzenden Parameter haben.
+Beim linearen Regressionsmodell ist Overfitting vor allem dann ein Problem, wenn die Anzahl Input-Variablen $p$ relativ gross ist im Vergleich zur Anzahl Beobachtungen $n$. Im Extremfall haben wir mehr Input-Variablen als Beobachtungen ($(p+1)>n$), was dazu führt, dass der Kleinstquadrateschätzer mathematisch nicht rechenbar ist.^[Falls Sie den optionalen Teil "Kleinsquadratemethode in Matrixform" angeschaut haben: in diesem Fall ist die Matrix $\mathbf{X}'\mathbf{X}$ nicht invertierbar.] Das sollte auch intuitiv Sinn machen, denn wie soll eine Schätzung funktionieren, wenn wir im Schnitt weniger als eine Beobachtung pro zu schätzenden Parameter haben.
 
 Wir können das Problem des Overfittings weitgehend lösen, indem wir ein **regularisiertes** Regressionsmodell rechnen. Regularisierung bedeutet eigentlich nichts anderes, als dass wir die ursprüngliche Kostenfunktion für das lineare Regressionsmodell modifizieren. Dabei gibt es zwei bekannte Regularisierungsarten, nämlich **Ridge** oder **LASSO**. Wir fokussieren in einem ersten Schritt auf die Ridge Regularisierung, weil wir in diesem Fall wiederum eine analytische Lösung finden.
 
@@ -530,7 +595,7 @@ Diese modifizierte Kostenfunktion hat etwas Erklärungsbedarf:
 * Wir versuchen hier Modellparameter $\mathbf{w}$ zu finden, welche **gleichzeitig** den durchschnittlichen quadrierten Fehler sowie eine Summe über die quadrierten Modellparameter so klein wie möglich machen. Das sind zwei **konkurrenzierende Ziele** und während des Modelltrainings muss der beste Tradeoff gefunden werden.
 * Der Regularisierungsterm ist eine Summe über die quadrierten Modellparameter. Das Quadrieren stellt sicher, dass sich positive und negative Parameterwerte nicht gegenseitig kompensieren.
 * Der **Hyperparameter** $\lambda$ legt fest, wie viel (relatives) Gewicht der Regularisierungsterm im Verhältnis zum durchschnittlichen quadrierten Fehler bekommt. Je grösser $\lambda$, desto stärker "bestrafen" wir komplexe Modelle. Wir werden später sehen, wir wir den optimalen Wert für $\lambda$ via **Cross-Validation** finden können.
-* Der Regularisierungsterm enthält die Konstante $w_0$ **nicht** (Summe startet bei $j=1$ und nicht bei $j=0$). Die Konstante des Modells wird also nie regularisiert.
+* Der Regularisierungsterm enthält die Konstante $w_0$ **nicht** (die Summe startet bei $j=1$ und nicht bei $j=0$). Die Konstante des Modells wird also nie regularisiert, denn sie definiert lediglich den Punkt, wo die Gerade (oder die Hyperebene im Fall von mehr als einer Input-Variable) die y-Achse schneidet. Dieser Parameter soll flexibel bleiben.
 
 #### Fragen {.unnumbered}
 
@@ -624,13 +689,56 @@ Diesen Ausdruck können wir nun wie gewohnt gleich Null setzen und mit den Matri
 
 ::: {.callout-note}
 ## Standardisierung der Input-Variablen
-Es ist eminent wichtig, dass Sie alle numerischen Input-Variablen vor der Anwendung eines regularisierten Modells standardisieren, so dass alle Variablen auf der selben Skala "leben". Warum ist das so wichtig? Sie haben gesehen, dass wir beim Ridge Modell die Grösse der Parameter mit dem Regularisierungsterm beschränken. Wenn jedoch die Input-Variablen alle auf unterschiedlichen Skalen "leben", dann sind die Parameter nur schon deshalb unterschiedlich. Durch die Standardisierung der Input-Variablen erreichen wir, dass die Parametergrössen vergleichbar werden und die Regularisierung so auch korrekt funktioniert.
+Es ist eminent wichtig, dass Sie **alle numerischen Input-Variablen** vor der Anwendung eines regularisierten Modells **standardisieren**, so dass alle Variablen auf der selben Skala "leben". Warum ist das so wichtig? Sie haben gesehen, dass wir beim Ridge Modell die Grösse der Parameter mit dem Regularisierungsterm beschränken. Wenn jedoch die Input-Variablen alle auf unterschiedlichen Skalen "leben", dann sind die Parameter nur schon deshalb unterschiedlich. Durch die Standardisierung der Input-Variablen erreichen wir, dass die Parametergrössen vergleichbar werden und die Regularisierung so auch korrekt funktioniert.
 :::
 
 ### LASSO Regressionsmodell
 
-Coming soon.
+Beim LASSO^[LASSO ist die Abkürzung für *least absolute shrinkage and selection operator*] Modell verwenden wir einen anderen Regularisierungsterm als bei Ridge. Anstatt die Parameter zu quadrieren (um Kompensationseffekte zu vermeiden), verwenden wir den **absoluten Wert**, d.h. wir ignorieren die Vorzeichen der Parameter:
 
+$$
+J(\mathbf{w}) = \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \right)^2 + \lambda \cdot \sum_{j=1}^p |w_j|
+$$
+
+Die Optimierung der LASSO Kostenfunktion hat allerdings einen gewichtigen **Vorteil** gegenüber Ridge, der nicht so offensichtlich ist: unwichtige Parameter werden bei LASSO auf 0 gesetzt, während Ridge die Parameter einfach kleiner macht, sie aber nie auf genau 0 setzt (ausser wenn $\lambda \to \infty$). Das Modell nimmt also selbständig eine **Selektion der wichtigen Variablen** vor. Diese Eigenschaft macht das Modell auch gut interpretierbar, weil bei korrekter Anwendung von LASSE nur die relevanten Input-Variablen im Modell verbleiben.
+
+::: {.callout-caution collapse="true"}
+## Wie funktioniert diese Variablenselektion bei LASSO? (optional)
+
+Um besser zu verstehen, warum LASSO eine automatische Variablenselektion vornimmt und die Modellparameter unwichtiger Input-Variablen auf Null setzt, muss das Optimierungsproblem in die **Lagrange**-Form (eingeschränkte Optimierung) gebracht werden:
+
+$$
+\text{Minimiere}\quad \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \right)^2 \text{unter der Bedingung}\quad \sum_{j=1}^p |w_j| \leq s
+$$
+$s$ kann als **Budget** interpretiert werden [@islr, pp. 241 - 245] und die Summe über die absoluten Werte der Modellparameter kann dieses Budget nicht übersteigen.
+
+Jedes Budget $s$ matcht einen Wert für $\lambda$, so dass dieselben Modellparameter resultieren. Oder in anderen Worten: die Problemformulierung hier ist identisch zu der obigen mit dem Unterschied, dass sie hier durch $s$ charakterisiert ist und oben durch $\lambda$.
+
+Die Bedingung $\sum_{j=1}^p |w_j| \leq s$ kann im Fall von zwei Input-Variablen mit den entsprechenden Modellparameter $w_1$ und $w_2$ gut visualisert werden:
+
+```{r lasso-contours, echo=FALSE, fig.show = 'hold', fig.cap='Konturplots der LASSO-Bedingung für drei verschiedene Budgets (1,2,3).', out.width='60%', fig.asp=1, fig.align='center', fig.alt='Konturplot für LASSO.'}
+# Define possible value range for parameters
+w1 <- seq(-3.1, 3.1, 0.1); w2 <- seq(-3.1, 3.1, 0.1)
+# Create grid
+g <- expand.grid(w1, w2)
+# Compute cost for all possible combinations
+g$J <- apply(g, 1, function(u) {sum(abs(u))})
+# Draw contour plot
+contour(w1, w2, matrix(g$J, nrow = length(w1)), levels = seq(0, 3, 1),
+        xlab = TeX(r'($w_1$)'), ylab = TeX(r'($w_2$)'),
+        xaxs = "i", yaxs = "i", cex = 1.2, cex.lab = 1.2, cex.axis = 1.2)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey"); abline(v = 0, lty = 1, lwd = 1, col = "grey")
+```
+
+Die drei abgebildeten Rauten entsprechend den Budgets $s=1,2,3$. Jede Raute enthalt alle Kombinationen von Parameterwerten, welche zusammen genau das Budget ergeben. Wenn wir uns beispielsweise den Eckpunkt ganz oben in der äussersten Raute anschauen, dann haben wir dort die Parameterwerte $w_1=0$ und $w_2=3$; die Summe der absoluten Werte ist also genau 3.
+
+Die optimalen LASSO Modellparameter befinden sich nun an dem Punkt, wo die Konturlinien für den ersten Teil der Kostenfunktion (die Summe der quadrierten Differenzen, siehe auch Konturlinien oben für Kleinstquadratemethode) die Konturlinie der LASSO-Bedingung für ein gegebenes Budget $s$ berühren. Ganz oft ist dieser Berührungspunkt in einer der Ecken. **Wichtig**: eine Ecke ist immer eine Parameterkombination, wo einer der Parameter den Wert 0 hat.
+:::
+
+Der **Nachteil** von LASSO im Vergleich zu Ridge ist, dass es keine analytische Lösung gibt. In der praktischen Arbeit stört uns dies allerdings nur wenig, da `R` oder `Python` Packages gut gerüstet sind, um das Optimierungsproblem für LASSO zu lösen.
+
+**Wichtig**: wie bei Ridge müssen auch hier alle numerischen Input-Variablen zwingend standardisiert sein.
 
 ## Bias-Variance Tradeoff
 
@@ -728,17 +836,239 @@ Warum spricht man von einem **Tradeoff**? Flexiblere Modelle haben oft einen kle
 
 In unserem Beispiel wenden wir ein regularisiertes Regressionsmodell an. Hier spielt der Hyperparameter $\lambda$ eine zentrale Rolle für den Tradeoff zwischen Bias und Variance. Ein zu tiefer Wert für $\lambda$ kann zu einem zu flexiblen Modell mit viel Varianz führen. Ein zu hoher Wert für $\lambda$ führt zu einem zu rigiden Modell mit viel Bias.
 
+Im folgenden Beispiel haben wir $N = 50$ Beobachtungen. Das wahre Modell, welches die Beobachtungen generiert, sieht wie folgt aus:
+
+$$
+y_i = 2 + 1 \cdot x_{i,1} + \epsilon_i
+$$
+wobei $\epsilon_i \sim N(0, 0.2)$.
+
+Der Datensatz enthält aber 49 weitere Prädiktoren $x_{i,2}, x_{i,3}, \dots, x_{i,50}$, welche nicht mit der Output-Variable $y_i$ korreliert sind.
+
+Entscheiden Sie sich nun für das optimale regularisierte Modell. Welcher Regularisierungsgrad führt zu viel Bias? Welcher zu viel Varianz?
+
+```{r lasso-params, echo=FALSE, fig.show = 'hold', fig.cap='Resultate eines LASSO Modells für vier verschiedene Werte des Hyperparameters. Links: die trainierten Parameterwerte für die Konstante sowie die 50 Input-Variablen. Rechts: Vorhersagegüte (gemessen als MSE) auf Trainings- und Testdaten.', fig.width=12, fig.height=14, out.width='100%', fig.align='center', fig.alt='Einfluss von Hyperparameter auf Modellparameter.'}
+suppressPackageStartupMessages(
+  library(glmnet)
+)
+
+set.seed(123)
+
+## -----------------------
+## Data
+## -----------------------
+n <- 50
+p <- 50
+sd <- 0.2
+
+Xtrain <- matrix(rnorm(n * p), nrow = n)
+Xtest  <- matrix(rnorm(n * p), nrow = n)
+
+ytrain <- 2 + Xtrain[, 1] + rnorm(n, 0, sd)
+ytest  <- 2 + Xtest[, 1]  + rnorm(n, 0, sd)
+
+## -----------------------
+## Lambdas to compare
+## -----------------------
+lambdas <- c(0, 0.01, 0.1, 10)
+
+## -----------------------
+## Precompute everything
+## -----------------------
+fits <- lapply(lambdas, function(lam) {
+  fit <- glmnet(Xtrain, ytrain, alpha = 1, lambda = lam)
+
+  yhat_train <- as.numeric(predict(fit, Xtrain, s = lam))
+  yhat_test  <- as.numeric(predict(fit, Xtest,  s = lam))
+
+  list(
+    coef = coef(fit)[, 1],  # drop intercept
+    rmse  = c(
+      Train = sqrt(mean((ytrain - yhat_train)^2)),
+      Test  = sqrt(mean((ytest  - yhat_test)^2))
+    )
+  )
+})
+
+## -----------------------
+## Shared y-limits
+## -----------------------
+ylim_coef <- range(unlist(lapply(fits, `[[`, "coef"))) * 1.1
+ylim_rmse  <- c(0, max(unlist(lapply(fits, `[[`, "rmse"))) * 1.1)
+
+layout(
+  matrix(seq_len(2 * length(lambdas)), ncol = 2, byrow = TRUE),
+  widths = c(3, 1)
+)
+
+par(
+  cex.axis = 1.4,
+  cex.lab  = 1.5,
+  cex.main = 1.6
+)
+
+for (i in seq_along(lambdas)) {
+
+  ## Coefficients
+  par(mar = c(5, 4, 3, 1))
+  barplot(
+    fits[[i]]$coef,
+    names = paste0("w", 0:50),
+    ylim = ylim_coef,
+    cex.names = 1.1,
+    main = bquote(lambda == .(lambdas[i])),
+    ylab = "Parameterwerte",
+    col = "rosybrown1"
+  )
+  abline(h = 0, lwd = 2)
+
+  ## RMSE
+  par(mar = c(5, 3, 3, 1))
+  barplot(
+    fits[[i]]$rmse,
+    ylim = ylim_rmse,
+    main = "RMSE",
+    col = "azure2"
+  )
+  abline(h = 0, lwd = 2)
+}
+
+layout(1)
+
+```
+
+**Wichtig:**
+
+* Indem wir den Hyperparameter via Resampling optimieren, wählen wir automatisch ein Modell mit einem guten Tradeoff zwischen Bias und Varianz!
+* Mit grossen Datensätzen ist das Problem des Overfittings weniger dramatisch. Wir haben genügend Trainingsdaten, dass selbst flexible Modelle nicht zu stark overfitten. Das ist bei unserem Beispiel der Fall (wir haben einen ziemlich grossen Trainingsdatensatz). Darum ist der optimale Hyperparameter in unserem Beispiel `penalty = 0.001`, also eher einer der kleineren Werte.
+
+Eine letzte Überlegung bezüglich Modellselektion geht folgendermassen: wenn wir mehrere Modelle haben, die ähnlich gut performen, dann wählen wir das einfachste (kleinste) oder **am wenigsten komplexe Modell**. Man nennt dies **Occam's Razor**. William of Occam war ein Englischer Mönch und hat dieses Prinzip in einem anderen Kontext erstmals formuliert.
+
 ## Polynomische Regression
 
-Coming soon.
+Wir machen hier nun einen kurzen Abstecher in die polynomische Regression, denn diese eignet sich sehr gut, um den Bias-Variance Tradeoff zu illustrieren.
 
-<!-- Wir machen hier nun einen kurzen Abstecher in die **polynomische Regression**, denn diese eignet sich sehr gut, um den Bias-Variance Tradeoff zu illustrieren. -->
+In dieser Demo schauen wir uns den Bias-Variance Tradeoff anhand der polynomischen Regression an. Das polynomische Regressionsmodell sieht folgendermassen aus:
 
-<!-- Ein **ganz wichtiger Punkt**: das polynomische Regressionsmodell ist immer noch **linear in den Parametern**, es handelt sich also immer noch um ein lineares Modell. Sie sehen aber an obigen Modellkurven, dass dieses "lineare" Modell sehr wohl in der Lage ist, nicht-lineare Zusammenhänge zwischen $x$ und $y$ zu fitten! -->
+$$
+y_i = w_0 + w_1 \cdot x_i^1 + w_2 \cdot x_i^2 + w_3 \cdot x_i^3 + \dotsb + w_M \cdot x_i^M + \epsilon_i
+$$
+$M$ bezeichnet hier den Grad des Polynoms. Mit einem Datensatz der Grösse $n$, trifft eine polynomische Regression mit Grad $M = n−1$ die Daten perfekt. Das Modell hat in diesem Fall so viele Freiheitsgrade wie der Trainingsdatensatz Beobachtungen hat. Das ermöglicht dem Modell die Datenpunkte perfekt abzubilden. Dabei handelt es sich um ein **extremes Beispiel von Overfitting**. Je mehr Daten unser Trainingsdatensatz enthält, desto mehr schwächt sich das Problem des Overfittings ab.
+
+Die blauen Punkte unten links zeigen die Trainingsdatenpunkte. Die rote Kurve zeigt das jeweils geschätzte Modell je nach gewähltem Grad des Polynoms $M$ und die schwarze Kurve zeigt das wahre Modell.
+
+Rechts sehen Sie jeweils den RMSE auf Trainings- sowie auf Testset.
+
+```{r poly-reg, echo=FALSE, fig.show = 'hold', fig.cap='Bla.', fig.width=12, fig.height=10, out.width='100%', fig.align='center', fig.alt='Polynomische Regression.'}
+set.seed(123)
+
+## -----------------------
+## True function
+## -----------------------
+true_f <- function(x) sin(2 * pi * x)
+
+## -----------------------
+## Design matrix
+## -----------------------
+design_matrix <- function(x, degree) {
+  m <- matrix(1, nrow = length(x), ncol = degree + 1)
+  if (degree > 0) {
+    for (i in 2:(degree + 1)) {
+      m[, i] <- x^(i - 1)
+    }
+  }
+  m
+}
+
+## -----------------------
+## One scenario = one row
+## -----------------------
+run_scenario <- function(n, degree) {
+
+  xtrain <- runif(n)
+  ytrain <- true_f(xtrain) + rnorm(n, 0, 0.4)
+  xtest  <- runif(n)
+  ytest  <- true_f(xtest)  + rnorm(n, 0, 0.4)
+
+  Xtrain <- design_matrix(xtrain, degree)
+  Xtest  <- design_matrix(xtest, degree)
+
+  coef <- solve(qr(Xtrain, LAPACK = TRUE), ytrain)
+
+  xx <- seq(0, 1, length.out = 300)
+  XX <- design_matrix(xx, degree)
+
+  pred_train <- Xtrain %*% coef
+  pred_test  <- Xtest  %*% coef
+
+  rmse <- c(
+    Train = sqrt(mean((ytrain - pred_train)^2)),
+    Test  = sqrt(mean((ytest  - pred_test)^2))
+  )
+
+  ## ---- Left panel: data + fit ----
+  par(mar = c(5, 4, 3, 1))
+  plot(
+    xtrain, ytrain,
+    pch = 16, cex = 2, col = "steelblue",
+    ylim = c(-2, 2),
+    xlab = "x", ylab = "y",
+    main = paste("n =", n, ", degree =", degree)
+  )
+
+  lines(xx, true_f(xx), lwd = 2)
+  lines(xx, XX %*% coef, col = "rosybrown3", lwd = 2)
+
+  ## ---- Right panel: RMSE ----
+  par(mar = c(5, 3, 3, 1))
+  barplot(
+    rmse,
+    main = "RMSE",
+    col = "azure2",
+    ylim = c(0, 1)
+  )
+  abline(h = 0, lwd = 2)
+
+  text(
+    x = c(0.7, 1.9),
+    y = 0.05,
+    labels = round(rmse, 2),
+    pos = 3, cex = 1.3
+  )
+}
+
+## -----------------------
+## Layout: 3 rows × 2 cols
+## -----------------------
+layout(
+  matrix(1:6, nrow = 3, byrow = TRUE),
+  widths = c(3, 1)
+)
+
+par(
+  cex.axis = 1.4,
+  cex.lab  = 1.5,
+  cex.main = 1.6
+)
+
+## -----------------------
+## Scenarios
+## -----------------------
+run_scenario(n = 10,  degree = 0)
+run_scenario(n = 10,  degree = 10)
+run_scenario(n = 100, degree = 10)
+
+layout(1)
+
+```
+
+Ein **ganz wichtiger Punkt**: das polynomische Regressionsmodell ist immer noch **linear in den Parametern**, es handelt sich also immer noch um ein lineares Modell. Sie sehen aber an obigen Modellkurven, dass dieses "lineare" Modell sehr wohl in der Lage ist, nicht-lineare Zusammenhänge zwischen $x$ und $y$ zu fitten!
 
 ## Lineare Regression in R
 
-In **Base R** lassen sich Regressionsmodelle einfach mit der `lm()` Funktion (`lm` steht für *linear model*) rechnen.
+### Base `R`
+
+In Base `R` lassen sich Regressionsmodelle einfach mit der `lm()` Funktion (`lm` steht für *linear model*) rechnen.
 
 ```{r}
 # Datenpunkte
@@ -755,8 +1085,9 @@ mod <- lm(y ~ x, data = df)
 summary(mod)
 ```
 
-Blabla...
+Der obige `R` Output ist der klassische Regressionsoutput der `lm()` Funktion. In der Spalte `Estimate` sehen wir insbesondere die geschätzten (trainierten) Modellparameter.
 
+Wir können unser geschätztes Modell nun wie folgt verwenden, um Vorhersagen für zwei neue Input-Variablenwerte (2.5 und 5.1) zu machen.
 
 ```{r}
 # Modellvorhersagen
@@ -764,4 +1095,17 @@ yp <- predict(mod, newdata = data.frame(x = c(2.5, 5.1)))
 yp
 ```
 
+### `tidymodels` + `glmnet`
+
 Für regularisierte Regressionsmodelle eignet sich der `tidymodels` Framework.
+
+
+
+
+
+
+
+
+
+
+

@@ -181,7 +181,7 @@ Im Gegensatz zum Supervised Learning haben wir im **Unsupervised Learning** nur 
 
 Etwas vereinfacht gesagt, sind ein grosser Teil der Modelle, die wir der **Generativen KI** zusprechen, nichts anderes als Modelle, die $P(\mathbf{X})$ so gut wie möglich zu beschreiben versuchen. $\mathbf{X}$ kann man sich als grosse Menge Text oder eine grosse Anzahl von Bildern vorstellen. Wenn wir nun also Text von einem LLM generieren lassen, dann ist das im Grunde nichts anderes als aus der gelernten Verteilung, die $P(\mathbf{X})$ approximiert, zu **samplen**.
 
-Neben dem Supervised und dem Unsupervised Learning gibt es noch eine dritte Kategorie von Machine Learning, nämlich das **Reinforcement Learning** (RL). Dieser Kategorie gehören Modelle an, die (virtuelle) Agenten so trainieren, dass sie langfristig möglichst optimal handeln. Das bisher bekannteste Beispiel aus dem RL ist Googles AlphaGo Agent, welcher den menschlichen Go Weltmeister im Jahr 2017 schlug.^[https://deepmind.google/technologies/alphago/]. Reinforcement Learning ist aber auch eine wichtige Komponente in der Optimierung von grossen Sprachmodellen wie ChatGPT. In einer ersten Fassung dieses Buchs werden wir uns nicht (oder nur am Rande) mit RL befassen.
+Neben dem Supervised und dem Unsupervised Learning gibt es noch eine dritte Kategorie von Machine Learning, nämlich das **Reinforcement Learning** (RL). Dieser Kategorie gehören Modelle an, die (virtuelle) Agenten so trainieren, dass sie langfristig möglichst optimal handeln. Das bisher bekannteste Beispiel aus dem RL ist Googles AlphaGo Agent, welcher den menschlichen Go Weltmeister im Jahr 2017 schlug.^[https://deepmind.google/technologies/alphago/] Reinforcement Learning ist aber auch eine wichtige Komponente in der Optimierung von grossen Sprachmodellen wie ChatGPT. In einer ersten Fassung dieses Buchs werden wir uns nicht (oder nur am Rande) mit RL befassen.
 
 Die Unterscheidung zwischen den drei Arten von Machine Learning ist im oberen Teil der @fig-slulrl visualisiert:
 
@@ -495,7 +495,7 @@ $$
 \mathbf{w} := \begin{pmatrix} 0 \\ 2.1 \\ -2.5 \end{pmatrix} + 1\,\begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 \\ 0.1 \\ -1.5 \end{pmatrix}
 $$
 
-Im Panel oben rechts (Resultat nach Iteration 2) sehen wir mit dieser Operation die Gerade so verschieben, dass der falsch klassifizierte Datenpunkt etwas näher an der korrekten Seite der Gerade liegt. Der Algorithmus lernt also von Fehlern und tastet sich iterativ an das Optimum heran - eine Idee, die wir in späteren Kapiteln häufig antreffen werden.
+Im Panel oben rechts (Resultat nach Iteration 2) sehen wir, dass mit dieser Operation die Gerade so verschoben wird, dass der falsch klassifizierte Datenpunkt etwas näher an der korrekten Seite der Gerade liegt. Der Algorithmus lernt also von Fehlern und tastet sich iterativ an das Optimum heran - eine Idee, die wir in späteren Kapiteln häufig antreffen werden.
 
 Im Panel rechts unten sehen wir, dass der Algorithmus nach 10 Iterationen die Datenpunkte bereits korrekt klassifiziert. Wow!
 

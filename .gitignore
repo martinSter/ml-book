@@ -10,3 +10,6 @@ _book/
 .Ruserdata
 
 images-creation/
+
+/.quarto/
+**/*.quarto_ipynb
