@@ -339,7 +339,7 @@ window.Quarto = {
   <li><a href="#lasso-regressionsmodell" id="toc-lasso-regressionsmodell" class="nav-link" data-scroll-target="#lasso-regressionsmodell"><span class="header-section-number">2.5.2</span> LASSO Regressionsmodell</a></li>
   </ul></li>
   <li><a href="#bias-variance-tradeoff" id="toc-bias-variance-tradeoff" class="nav-link" data-scroll-target="#bias-variance-tradeoff"><span class="header-section-number">2.6</span> Bias-Variance Tradeoff</a></li>
-  <li><a href="#polynomische-regression" id="toc-polynomische-regression" class="nav-link" data-scroll-target="#polynomische-regression"><span class="header-section-number">2.7</span> Polynomische Regression</a></li>
+  <li><a href="#sec-linregpoly" id="toc-sec-linregpoly" class="nav-link" data-scroll-target="#sec-linregpoly"><span class="header-section-number">2.7</span> Polynomische Regression</a></li>
   <li><a href="#lineare-regression-in-r" id="toc-lineare-regression-in-r" class="nav-link" data-scroll-target="#lineare-regression-in-r"><span class="header-section-number">2.8</span> Lineare Regression in R</a>
   <ul class="collapse">
   <li><a href="#base-r" id="toc-base-r" class="nav-link" data-scroll-target="#base-r"><span class="header-section-number">2.8.1</span> Base <code>R</code></a></li>
@@ -1133,8 +1133,8 @@ y_i = 2 + 1 \cdot x_{i,1} + \epsilon_i
 <p>Eine letzte Überlegung bezüglich Modellselektion geht folgendermassen: wenn wir mehrere Modelle haben, die ähnlich gut performen, dann wählen wir das einfachste (kleinste) oder <strong>am wenigsten komplexe Modell</strong>. Man nennt dies <strong>Occam’s Razor</strong>. William of Occam war ein Englischer Mönch und hat dieses Prinzip in einem anderen Kontext erstmals formuliert.</p>
 </section>
 </section>
-<section id="polynomische-regression" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="polynomische-regression"><span class="header-section-number">2.7</span> Polynomische Regression</h2>
+<section id="sec-linregpoly" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="sec-linregpoly"><span class="header-section-number">2.7</span> Polynomische Regression</h2>
 <p>Wir machen hier nun einen kurzen Abstecher und lernen die <strong>polynomische Regression</strong> kennen, denn diese eignet sich auch sehr gut, um den Bias-Variance Tradeoff zu illustrieren.</p>
 <p>Das polynomische Regressionsmodell sieht im Fall von <em>einer</em> Input-Variable <span class="math inline">\(x_i\)</span> folgendermassen aus:</p>
 <p><span class="math display">\[

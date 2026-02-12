@@ -270,9 +270,21 @@ window.Quarto = {
     <h2 id="toc-title">Inhaltsverzeichnis</h2>
    
   <ul>
-  <li><a href="#logistische-regression" id="toc-logistische-regression" class="nav-link active" data-scroll-target="#logistische-regression"><span class="header-section-number">3.1</span> Logistische Regression</a></li>
-  <li><a href="#naive-bayes" id="toc-naive-bayes" class="nav-link" data-scroll-target="#naive-bayes"><span class="header-section-number">3.2</span> Naive Bayes</a></li>
+  <li><a href="#logistische-regression" id="toc-logistische-regression" class="nav-link active" data-scroll-target="#logistische-regression"><span class="header-section-number">3.1</span> Logistische Regression</a>
+  <ul class="collapse">
+  <li><a href="#output-variable" id="toc-output-variable" class="nav-link" data-scroll-target="#output-variable"><span class="header-section-number">3.1.1</span> Output-Variable</a></li>
+  <li><a href="#modellspezifikation" id="toc-modellspezifikation" class="nav-link" data-scroll-target="#modellspezifikation"><span class="header-section-number">3.1.2</span> Modellspezifikation</a></li>
+  <li><a href="#modelltraining" id="toc-modelltraining" class="nav-link" data-scroll-target="#modelltraining"><span class="header-section-number">3.1.3</span> Modelltraining</a></li>
+  <li><a href="#decision-boundaries" id="toc-decision-boundaries" class="nav-link" data-scroll-target="#decision-boundaries"><span class="header-section-number">3.1.4</span> Decision Boundaries</a></li>
+  </ul></li>
+  <li><a href="#naive-bayes" id="toc-naive-bayes" class="nav-link" data-scroll-target="#naive-bayes"><span class="header-section-number">3.2</span> Naive Bayes</a>
+  <ul class="collapse">
+  <li><a href="#modellspezifikation-1" id="toc-modellspezifikation-1" class="nav-link" data-scroll-target="#modellspezifikation-1"><span class="header-section-number">3.2.1</span> Modellspezifikation</a></li>
+  <li><a href="#modelltraining-1" id="toc-modelltraining-1" class="nav-link" data-scroll-target="#modelltraining-1"><span class="header-section-number">3.2.2</span> Modelltraining</a></li>
+  <li><a href="#beispiel" id="toc-beispiel" class="nav-link" data-scroll-target="#beispiel"><span class="header-section-number">3.2.3</span> Beispiel</a></li>
+  </ul></li>
   <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</a></li>
+  <li><a href="#sec-logregR" id="toc-sec-logregR" class="nav-link" data-scroll-target="#sec-logregR"><span class="header-section-number">3.4</span> Modelle in R</a></li>
   </ul>
 </nav>
     </div>
@@ -298,13 +310,496 @@ window.Quarto = {
 </header>
 
 
+<p>Nachdem wir uns in <a href="02_linreg.html" class="quarto-xref"><span>Kapitel 2</span></a> bereits ausführlich mit dem Regressionsproblem befasst haben, lernen wir hier nun das andere grosse Supervised Learning Problem kennen: das <strong>Klassifikationsproblem</strong>. In der Praxis sind Klassifikationsprobleme fast häufiger anzutreffen als Regressionsprobleme.</p>
+<p>Wir fokussieren hier erstmal auf das <strong>binäre Klassifikationsproblem</strong>, bei dem unser Ziel ist vorherzusagen, ob eine Beobachtung der Kategorie 1 (<span class="math inline">\(y_i=1\)</span>) oder der Kategorie 0 (<span class="math inline">\(y_i=0\)</span>) angehört.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Unsere Output-Variable ist hier also nicht mehr quantitativer Natur, sondern <strong>qualitativ</strong> (d.h. kategorisch) und hat zwei mögliche Kategorien (oder Klassen).</p>
+<p>Wir werden uns in diesem Kapitel drei Modelle für das Klassifikationsproblem anschauen:</p>
+<ul>
+<li>Logistische Regression<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> (LR)</li>
+<li>Naive Bayes (NB)</li>
+<li>K-Nearest Neighbors (KNN)</li>
+</ul>
+<p><strong>Wichtig</strong>: der Titel des Kapitels besagt, dass wir uns hier <em>lineare</em> Klassifikationsmodelle anschauen. Das stimmt nicht ganz, denn während das logistische Regressionsmodell und Naive Bayes lineare Modelle sind, ist KNN ein sehr flexibles, nicht-lineares Modell.</p>
 <section id="logistische-regression" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="logistische-regression"><span class="header-section-number">3.1</span> Logistische Regression</h2>
-<p>Coming soon.</p>
+<p>Die logistische Regression ist das Gegenstück zur linearen Regression für das Klassifikationsproblem. Es ist ein einfaches Modell, das oft als guter Ausgangspunkt für jegliche Klassifikationsprobleme dient. Das heisst, es macht meist als <strong>erstes Modell</strong> ein logistisches Regressionsmodell zu trainieren.</p>
+<section id="output-variable" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="output-variable"><span class="header-section-number">3.1.1</span> Output-Variable</h3>
+<p>Die Output-Variable bzw. das Label im <strong>binären</strong> Klassifikationsproblem ist eine kategorische Variable mit zwei möglichen Kategorien (oder Klassen). Wie oben erwähnt nimmt die Output-Variable den Wert 1 an, also <span class="math inline">\(y_i=1\)</span>, falls eine Beobachtung der Kategorie 1 angehört und sonst den Wert 0, <span class="math inline">\(y_i=0\)</span>. Typischerweise geben wir den Wert 1 der Kategorie, die uns wirklich interessiert (z.B. Spam, Zahlungsunfähigkeit, Patient hat eine Krankheit).</p>
+<p>In folgender Abbildung ist ein Klassifikationsproblem mit 5 Beobachtungen dargestellt. Die drei blauen Datenpunkte gehören der Kategorie 1 an, während die zwei roten Datenpunkte der Kategorie 0 angehören. Wir werden weiter unten auf dieses Problem zurückkommen.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Einfaches Klassifikationsbeispiel."></p>
+<figcaption>Abgebildet ist die Ausgangslage eines einfachen Klassifikationsproblems mit einer Input-Variable (eingezeichnet auf der x-Achse) und der Output-Variable (eingezeichnet auf der y-Achse).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Bei den meisten Klassifikationsmodellen wird <em>nicht</em> direkt der Output <span class="math inline">\(y_i\)</span> modelliert (wie das bei den Regressionsproblemen der Fall ist), sondern die (bedingte) <strong>Wahrscheinlichkeit</strong>, dass <span class="math inline">\(y_i=1\)</span>, gegeben irgendwelche Input-Datenwerte. Mathematisch schreiben wir diese Wahrscheinlichkeit als <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span>. Alle unsere Modelle hier werden versuchen, möglichst genaue Schätzung für diese bedingte Wahrscheinlichkeit zu finden.</p>
+<section id="frage" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
+<p>Warum modellieren wir <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span> nicht mit dem linearen Regressionsmodell?</p>
+<ol type="a">
+<li>Je nach Input-Daten könnten wir negative Wahrscheinlichkeiten oder Wahrscheinlichkeiten grösser als 1 erhalten.</li>
+<li>Weil wir für die Klassifikation nie ein lineares Modell schätzen.</li>
+<li>Das lineare Regressionsmodell funktioniert gar nicht in diesem Fall.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die richtige Antwort ist <strong>a</strong>.</p>
+<p>Antwort b. stimmt nicht, weil es sich beim logistischen Regressionsmodell ja eben auch um ein lineares Modell handelt.</p>
+<p>Antwort c.&nbsp;stimmt nicht, weil das lineare Regressionsmodell technisch problemlos rechenbar ist, aber eben zum unerwünschten Resultat (beschrieben in a.) führt.</p>
+</div>
+</div>
+</div>
+<p>Nun wundern Sie sich vielleicht: wenn uns unser Modell eine Schätzung für <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span> zurück gibt, wie mache ich damit eine Vorhersage?</p>
+<p>Im einfachsten Fall ist unsere Vorhersage <span class="math inline">\(\hat{y}_i=1\)</span> (also Kategorie 1), falls die geschätzte Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i) &gt; 50\%\)</span>, und sonst <span class="math inline">\(\hat{y}_i=0\)</span>. Hier haben wir einen <strong>Threshold</strong> von 50% gewählt, aber grundsätzlich können wir auch andere Thresholds wählen (z.B. 20% oder 85%), um von den geschätzten Wahrscheinlichkeiten eine Vorhersage abzuleiten. Wir werden uns in <a href="04_pipeline.html" class="quarto-xref"><span>Kapitel 4</span></a> genauer mit dem optimalen Threshold befassen.</p>
+</section>
+</section>
+<section id="modellspezifikation" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="modellspezifikation"><span class="header-section-number">3.1.2</span> Modellspezifikation</h3>
+<p>Bevor wir das <strong>logistische</strong> Regressionsmodell spezifizieren, erinnern wir uns ganz kurz an die Modellspezifikation des <strong>linearen</strong> Regressionsmodells:</p>
+<p><span class="math display">\[
+f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
+\]</span> Diese gewichtete Summe der Input-Variablenwerte wird auch bei der logistischen Regression eine wichtige Rolle spielen. Wir haben in der ersten Frage zu diesem Kapitel bereits gesehen, dass folgende Modellgleichung leider nicht eine gute Idee ist:</p>
+<p><span class="math display">\[
+p(y_i = 1 | \mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
+\]</span> Warum nicht? Weil die gewichtete Summe je nach Input-Daten mal negativ sein kann oder auch grösser als 1. Gleichzeitig wissen wir aus der Wahrscheinlichkeitstheorie, dass eine Wahrscheinlichkeit immer zwischen 0 und 1 liegen muss. Folgende Abbildung zeigt, dass das lineare Regressionsmodell nur innerhalb der gestrichelten, vertikalen Linien eine Wahrscheinlichkeit zwischen 0 und 1 zurückgibt.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-lin-reg-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Lin. Reg. für einfaches Klassifikationsbeispiel."></p>
+<figcaption>Was passiert, wenn wir ein einfaches lineares Regressionsmodell schätzen für unser kleines Klassifikationsproblem.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Wir müssen also die gewichtete Summe in eine mathematische Funktion “verpacken”, so dass die Outputs dieser Funktion immer zwischen 0 und 1 liegen. Die <strong>Sigmoid Funktion</strong> (auch logistische Funktion genannt) tut genau das. Sie nimmt irgendeinen (reellen) Input <span class="math inline">\(z\)</span> und gibt immer einen Wert zwischen 0 und 1 zurück. Die Funktion sieht folgendermassen aus:</p>
+<p><span class="math display">\[
+g(z) = \frac{e^z}{1+e^z}=\frac{1}{1+e^{-z}}
+\]</span></p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Zwei Formen der Sigmoid Funktion (optional)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wir wollen uns hier anschauen, wie wir von der einen zur anderen Form der Sigmoid Funktion kommen:</p>
+<p><span class="math display">\[
+\frac{e^z}{1+e^z} \cdot \frac{e^{-z}}{e^{-z}} = \frac{e^z \cdot e^{-z}}{(1+e^z) \cdot e^{-z}} = \frac{e^0}{e^{-z} + e^0} = \frac{1}{1+e^{-z}}
+\]</span> Wir multiplizieren die erste Form der Sigmoid Funktion in einem ersten Schritt mit <span class="math inline">\(\frac{e^{-z}}{e^{-z}}\)</span>. Das ist erlaubt, weil dieser Ausdruck ja nichts anderes als 1 ist und durch diese Multiplikation die Sigmoid Funktion nicht verändert wird. Der Rest ist dann einfaches, algebraisches Umformen.</p>
+</div>
+</div>
+</div>
+<p>Für jeden Wert von <span class="math inline">\(z\)</span> gibt uns die Funktion <span class="math inline">\(g(z)\)</span> einen Wert zwischen 0 und 1 zurück. Grafisch sieht die Sigmoid Funktion folgendermassen aus:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/sigm-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Sigmoid Funktion"></p>
+<figcaption>Die Form der Sigmoid Funktion. Per Definition hat die Funktion bei einem Input-Wert von 0 den Wert 0.5. Das ist einfach aus der Formel oben ersichtlich, wenn man bedenkt, dass <span class="math inline">\(e^{0} = 1\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="frage-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-1">Frage</h4>
+<p>Was ist der Output der Sigmoid Funktion, wenn <span class="math inline">\(z=2.6\)</span>?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die korrekte Antwort ist 0.9309.</p>
+</div>
+</div>
+</div>
+<p>Nun können wir alles zusammensetzen, was ganz einfach bedeutet, dass wir nun anstelle von <span class="math inline">\(z\)</span> die gewichtete Summe der Input-Variablen in die Sigmoid Funktion einsetzen. Das logistische Regressionsmodell sieht dementsprechend dann wie folgt aus:</p>
+<p><span class="math display">\[\begin{align}
+p(y_i = 1 | \mathbf{x}_i) &amp;= \frac{1}{1+e^{-(w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip})}}\\
+&amp;= \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}
+\end{align}\]</span></p>
+<p>Im nächsten Abschnitt wollen wir herausfinden, wie die Parameter des Modells geschätzt werden.</p>
+</section>
+</section>
+<section id="modelltraining" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="modelltraining"><span class="header-section-number">3.1.3</span> Modelltraining</h3>
+<p>Modelltraining bedeutet auch hier nichts anderes, als dass wir die Parameter des Modells möglichst optimal schätzen wollen. Sie haben in <a href="02_linreg.html" class="quarto-xref"><span>Kapitel 2</span></a> (Perspektive 1 des Modelltrainings bei der lin. Regression) bereits gelernt, dass wir in der Phase des Modelltrainings eine <strong>Kostenfunktion</strong> aufstellen, die es dann zu minimieren gilt. Doch wie soll eine Kostenfunktion für das Klassifikationsproblem aussehen?</p>
+<p>Im <strong>Idealfall</strong> gibt unser Modell eine Wahrscheinlichkeit von 0 aus für alle Beobachtungen, bei denen <span class="math inline">\(y_i=0\)</span>, während für alle Beobachtungen, wo <span class="math inline">\(y_i=1\)</span>, eine Wahrscheinlichkeit von 1 zurückgegeben wird. In diesem Idealfall sollte die Kostenfunktion 0 betragen. Wie können wir das mathematisch abbilden?</p>
+<p>Die “Kosten” für eine <strong>einzelne Beobachtung</strong> mit dem (wahren) Outputwert <span class="math inline">\(y_i=1\)</span> schreiben wir als <span class="math inline">\(-\text{log}(p(y_i = 1 | \mathbf{x}_i))\)</span>. Für Beobachtungen mit dem (wahren) Label <span class="math inline">\(y_i=0\)</span> sind die “Kosten” dementsprechend <span class="math inline">\(-\text{log}(1-p(y_i = 1 | \mathbf{x}_i))\)</span>. Warum das Sinn macht, sehen Sie anhand folgender Abbildung:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/indiv-cost-1.png" class="img-fluid figure-img" style="width:100.0%" alt="Individuelle Kosten bei der log. Regression."></p>
+<figcaption>Links: individuelle Kostenfunktion für eine Beobachtung mit wahrem Label der Kategorie 1, also <span class="math inline">\(y_i=1\)</span>. Rechts: individuelle Kostenfunktion für eine Beobachtung mit wahrem Label der Kategorie 0, also <span class="math inline">\(y_i=0\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In der linken Abbildung sehen Sie einen Kostenwert, der immer kleiner wird, je grösser die Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span>. Rechts sehen wir genau das Gegenteil: je grösser diese Wahrscheinlichkeit, desto grösser die Kosten. Wir wollen in diesem Fall, dass die Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span> so klein wie möglich ist.</p>
+<p>Wir haben nun die Kosten für <strong>einzelne Beobachtungen</strong> angeschaut und gesehen, dass die Kosten je nach wahrem Label <span class="math inline">\(y_i\)</span> unterschiedlich sind. Die <strong>Gesamtkostenfunktion</strong> ist der Durchschnitt über die individuellen Kosten (gemittelt über alle Beobachtungen im Trainingsdatensatz). Mathematisch sieht das Ganze folgendermassen aus:</p>
+<p><span class="math display">\[
+J = -\frac{1}{n}\sum_{i=1}^n \left[y_i \cdot \log\left(p(y_i = 1 | \mathbf{x}_i)\right) + (1-y_i) \cdot \log\left(1-p(y_i = 1 | \mathbf{x}_i)\right)\right]
+\]</span></p>
+<p>Überlegen Sie sich kurz, warum diese Berechnung Sinn macht. Wenn die <span class="math inline">\(i\)</span>-te Beobachtung das Label <span class="math inline">\(y_i=1\)</span> hat, dann entfällt der zweite Teil in den eckigen Klammern, weil in diesem Fall <span class="math inline">\((1-y_i)=0\)</span> ist. Wenn die <span class="math inline">\(i\)</span>-te Beobachtung hingegen das Label <span class="math inline">\(y_i=0\)</span> hat, dann entfällt der erste Teil in den eckigen Klammern, weil die individuellen Kosten mit 0 multipliziert werden. Wir haben hier also eine kompakte mathematische Form, um die Gesamtkostenfunktion aufzuschreiben. In der Praxis wird diese Kostenfunktion häufig <strong>log-loss</strong> genannt.</p>
+<p>Wir suchen also nun die Parameterwerte <span class="math inline">\(w_0, w_1, \dots\)</span>, welche die obige Kostenfunktion minimieren. Leider gibt es <em>keine</em> analytische Lösung dafür. Wir können aber die optimalen Parameterwerte mit anderen (iterativen) Optimierungsmethoden finden. In <code>R</code> und <code>Python</code> sind diese Methoden effizient implementert (<a href="#sec-logregR" class="quarto-xref">Abschnitt&nbsp;<span>3.4</span></a>), so dass wir die Parameter, welche diese Kostenfunktion minimieren, oft in wenigen Millisekunden finden.</p>
+<p>Die folgende Abbildung zeigt das trainierte Modell:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-log-reg-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Log. Reg. für einfaches Klassifikationsbeispiel."></p>
+<figcaption>Trainiertes logistisches Regressionsmodell für unser einfaches Klassifikationsbeispiel.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Die optimalen Parameter sind <span class="math inline">\(w_0 = 0.15\)</span> und <span class="math inline">\(w_1 = 0.99\)</span>. Wir sehen, dass die gefittete Sigmoid Funktion nicht bei <span class="math inline">\(x_i=0\)</span> den Wert 0.5 hat, sondern etwas vorher (nämlich bei -0.15). Der Parameter <span class="math inline">\(w_0\)</span> gibt uns also in einem gewissen Sinn die horizontale “Flexibilität” beim Fitten des Modells bzw. der Funktion. Unser finales Modell sieht also wie folgt aus:</p>
+<p><span class="math display">\[
+p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot x_{i})}}
+\]</span></p>
+<section id="frage-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-2">Frage</h4>
+<p>Was ist die Vorhersage unseres Modells für den Input-Variablenwert <span class="math inline">\(x_i=-2\)</span>?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die korrekte Antwort ergibt sich durch Einsetzen des Werts in das trainierte Modell:</p>
+<p><span class="math display">\[
+p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot (-2))}} = \frac{1}{1+e^{-(-1.83)}} = 0.14
+\]</span> Gemäss unserem Modell ist die Wahrscheinlichkeit, dass <span class="math inline">\(y_i = 1\)</span> lediglich 14% für diesen Input-Variablenwert.</p>
+</div>
+</div>
+</div>
+<p>Zwei letzte wichtige Punkte in diesem Abschnitt:</p>
+<ul>
+<li>Wie bei der linearen Regression verwenden wir bei der logistischen Regression typischerweise <strong>Regularisierung</strong>, um dem Overfitting entgegenzuwirken. Von der Idee her funktioniert es genau gleich wie bei der linearen Regression.</li>
+<li>Die durchschnittliche Wahrscheinlichkeit, welche unser trainiertes Modell auf dem Trainingsdatensatz schätzt, entspricht bei der logistischen Regression jeweils genau dem Anteil an Beobachtungen (im Trainingsdatensatz) mit Label <span class="math inline">\(y_i=1\)</span>.</li>
+</ul>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Herleitung des zweiten Punkts (optional)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Bla…</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="decision-boundaries" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="decision-boundaries"><span class="header-section-number">3.1.4</span> Decision Boundaries</h3>
+<p>Wir haben nun gesehen, wie das logistische Regressionsmodell aussieht, wie es trainiert wird und wie es auf unser kleines Beispiel angewendet wird. Doch Ihnen ist wahrscheinlich immer noch nicht klar, warum wir dabei von einem <strong>linearen</strong> Klassifikationsmodell sprechen (die Sigmoid Funktion ist ja alles andere als linear).</p>
+<p>Um zu verstehen, warum es sich um ein lineares Modell handelt, schauen wir uns nun die so genannte <strong>Decision Boundary</strong> des Modells an.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Decision Boundary
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Die Decision Boundary ist in einem gewissen Sinn eine <strong>Grenze</strong>. Auf der einen Seite der Grenze ist der Wertebereich der Input-Variablen <span class="math inline">\(\mathbf{x}_i\)</span>, für den <span class="math inline">\(\hat{y}_i=1\)</span> vorhergesagt wird. Auf der anderen Seite der Grenze ist der Wertebereich, für den <span class="math inline">\(\hat{y}_i=0\)</span> vorhergesagt wird. Die Decision Boundary bezieht sich also auf die Input-Variablen und zeigt uns, wo welche Vorhersagen gemacht werden.</p>
+</div>
+</div>
+<p>Wir haben oben gesehen, dass das logistische Regressionsmodell (kompakt) wie folgt spezifiziert ist:</p>
+<p><span class="math display">\[
+p(y_i = 1 | \mathbf{x}_i) = \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}
+\]</span></p>
+<p>Wir schreiben dieses Modell nun etwas um, so dass wir am Schluss die Decision Boundary herleiten können. Dazu wollen wir die Gleichung so verändern, dass wir auf der linken Seite die <strong>Odds</strong> haben. Die Odds sind definiert als die <strong>Erfolgswahrscheinlichkeit</strong>, also <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span>, dividiert durch die Misserfolgswahrscheinlichkeit, also <span class="math inline">\(1 - p(y_i = 1 | \mathbf{x}_i)\)</span>.</p>
+<section id="fragen" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fragen">Fragen</h4>
+<ul>
+<li>Die Erfolgswahrscheinlichkeit ist 0.1. Was sind die Odds?</li>
+<li>Die Odds sind 1/1 (oder 1:1). Was ist die Erfolgswahrscheinlichkeit?</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die Erfolgswahrscheinlichkeit ist <span class="math inline">\(p=0.1\)</span>. Die Odds sind dementsprechend <span class="math inline">\(\frac{p}{1-p}=\frac{1/10}{9/10}=\frac{1}{10}\frac{10}{9}=\frac{1}{9}\)</span>. Die Odds sind also 1/9 oder 1:9.</p>
+<p>Wenn die Odds 1/1 sind, dann lässt sich die Erfolgschwahrscheinlichkeit wie folgt herleiten:</p>
+<p><span class="math display">\[\begin{align}
+\frac{p}{1-p} &amp;= 1\\
+p &amp;= 1-p\\
+2p &amp;= 1\\
+p &amp;= \frac{1}{2}
+\end{align}\]</span></p>
+</div>
+</div>
+</div>
+<p>Die mathematische Umformung für die logistische Regression geht wie folgt:</p>
+<p><span class="math display">\[\begin{align}
+\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)} &amp;= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{1 - \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
+&amp;= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{\frac{1+e^{-(\mathbf{w}' \mathbf{x_i})}}{1+e^{-(\mathbf{w}' \mathbf{x_i})}} - \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
+&amp;= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{\frac{e^{-(\mathbf{w}' \mathbf{x_i})}}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
+&amp;= \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}} \cdot \frac{1+e^{-(\mathbf{w}' \mathbf{x_i})}}{e^{-(\mathbf{w}' \mathbf{x_i})}}\\
+&amp;= e^{(\mathbf{w}' \mathbf{x_i})}
+\end{align}\]</span></p>
+<p>In einem letzten Schritt können wir nun noch auf beiden Seiten den Logarithmus nehmen:</p>
+<p><span class="math display">\[\begin{align}
+\log\left(\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)}\right) &amp;= \log\left(e^{(\mathbf{w}' \mathbf{x_i})}\right)\\
+&amp;= \mathbf{w}' \mathbf{x_i}
+\end{align}\]</span></p>
+<p>Diese letzte Form wird <strong>Log-Odds</strong> genannt, weil wir auf der linken Seite der Gleichung nun den Logarithmus der Odds haben. Warum haben wir all das gemacht? Sie sehen, dass wir auf der rechten Seite der Gleichung nun die altbekannte <strong>lineare Form</strong> haben. Diese letzte Gleichung ist darum nun einfach zu handhaben, wenn es um die Berechnung der Decision Boundary geht.</p>
+</section>
+<section id="eine-input-variable" class="level4">
+<h4 class="anchored" data-anchor-id="eine-input-variable">Eine Input-Variable</h4>
+<p>Schauen wir uns in einem ersten Schritt an, wie die Decision Boundary aussieht, wenn wir nur eine Input-Variable haben (wie in unserem kleinen Beispiel). Die Log-Odds sehen in diesem Fall wie folgt aus:</p>
+<p><span class="math display">\[
+\log\left(\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)}\right) = w_0 + w_1 \cdot x_{i1}
+\]</span></p>
+<p>Wir haben oben bereits kurz den <strong>Threshold</strong> angesprochen. Hier wählen wir einen Threshold von 50% (= 0.5). Die Decision Boundary wird die Input-Varablenwerte darstellen, die genau zu einem Modelloutput von 50% führen.</p>
+<p>Wir können den Threshold-Wert in obige Gleichung einsetzen und kriegen folgendes:</p>
+<p><span class="math display">\[
+\begin{split}
+\log\left(\frac{0.5}{1-0.5}\right) &amp;= w_0 + w_1 \cdot x_{i1}\\
+\log\left(1\right) &amp;= w_0 + w_1 \cdot x_{i1}\\
+0 &amp;= w_0 + w_1 \cdot x_{i1}
+\end{split}
+\]</span></p>
+<p>Indem wir nach <span class="math inline">\(x_{i1}\)</span> auflösen, kriegen wir eine Formel, die uns den Input-Variablenwert gibt, der zu einem Modelloutput von genau 50% führt:</p>
+<p><span class="math display">\[
+x_{i1} = -\frac{w_0}{w_1}
+\]</span></p>
+</section>
+<section id="frage-3" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-3">Frage</h4>
+<p>Wo liegt die Decision Boundary bei unserem kleinen Beispiel?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+x_{i1} = -\frac{w_0}{w_1} = - \frac{0.15}{0.99} \approx -0.15
+\]</span> Der Input-Variablenwert, der zu einer Wahrscheinlichkeit von 0.5 führt, ist ca. -0.15. Alle <span class="math inline">\(x\)</span>-Werte kleiner als -0.15 werden als <span class="math inline">\(\hat{y}_i=0\)</span> klassifiziert, alle <span class="math inline">\(x\)</span>-Werte grösser als -0.15 als <span class="math inline">\(\hat{y}_i=1\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Die folgende Abbildung zeigt die berechnete Decision Boundary auch noch grafisch:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-db1-1.png" class="img-fluid figure-img" style="width:60.0%" alt="DB für eine Input-Variable."></p>
+<figcaption>Decision Boundary für einen Threshold von 50% (bzw. 0.5) im Fall von einer Input-Variable (unser Beispiel).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Wenn wir also <strong>nur eine Input-Variable</strong> haben, dann ist die Decision Boundary eine <strong>Vertikale</strong> (hier am Punkt <span class="math inline">\(x=-0.15\)</span>). Wir werden später sehen, dass sich diese Vertikale je nach gewähltem Threshold verschiebt.</p>
+</section>
+<section id="zwei-input-variablen" class="level4">
+<h4 class="anchored" data-anchor-id="zwei-input-variablen">Zwei Input-Variablen</h4>
+<p>Wenn wir zwei Input-Variablen haben, dann können wir die Decision Boundary, gegeben ein Threshold <span class="math inline">\(p^*\)</span>, wie folgt herleiten:</p>
+<p><span class="math display">\[\begin{align}
+\log\left(\frac{p^*}{1-p^*}\right) &amp;= w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2}\\
+w_1 \cdot x_{i1} &amp;= \log\left(\frac{p^*}{1-p^*}\right) - w_0 - w_2 \cdot x_{i2}\\
+x_{i1} &amp;= \color{blue}{\frac{\log\left(\frac{p^*}{1-p^*}\right) - w_0}{w_1}} \color{red}{- \frac{w_2}{w_1}} \color{black}{\cdot x_{i2}}
+\end{align}\]</span></p>
+<p>Diese Form sollte Ihnen irgendwie bekannt vorkommen. Die Decision Boundary kann bei zwei Input-Variablen als <strong>Gerade</strong> im Koordinatensystem mit <span class="math inline">\(x_{i1}\)</span> auf der y-Achse und <span class="math inline">\(x_{i2}\)</span> auf der x-Achse dargestellt werden. Die Gerade hat eine Konstante (blauer Teil) und eine Steigung (roter Teil).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-db2-1.png" class="img-fluid figure-img" style="width:60.0%" alt="DB für zwei Input-Variablen."></p>
+<figcaption>Decision Boundary für einen Threshold von 50% (bzw. 0.5) im Fall von zwei Input-Variablen.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Die graue Gerade repräsentiert alle Kombinationen der Input-Variablen <span class="math inline">\(x_{i1}\)</span> und <span class="math inline">\(x_{i2}\)</span>, für welche das Modell eine Wahrscheinlichkeit ausspuckt, die genau dem gesetzten Threshold (hier 0.5) entspricht.</p>
+<p><strong>Wichtig</strong>: wir sehen vom ein- und zweidimensionalen Beispiel, das die Decision Boundary immer <strong>linear</strong> ist. Darum gilt das logistische Regressionsmodell als einfaches Modell: es kann (im Prinzip) nur <strong>lineare Decision Boundaries</strong> fitten.</p>
+</section>
+<section id="lineare-separierbarkeit" class="level4">
+<h4 class="anchored" data-anchor-id="lineare-separierbarkeit">Lineare Separierbarkeit</h4>
+<p>Weder in unserem kleinen Beispiel mit einer Input-Variable noch im obigen Beispiel mit zwei Input-Variablen sind die Daten <strong>linear separierbar</strong>. Das heisst, es gibt keinen Threshold-Wert, mit dem die Decision Boundary die Datenpunkte perfekt separieren könnte.</p>
+<p>Da die logistische Regression nur lineare Decision Boundaries modellieren kann, ist sie also dementsprechend limitiert. Jedoch gibt es, ähnlich wie bei der polynomischen Regression (<a href="02_linreg.html#sec-linregpoly" class="quarto-xref">Abschnitt&nbsp;<span>2.7</span></a>), die Möglichkeit neue Input-Variablen zu kreieren und das Modell so flexibler zu machen.</p>
+<p>Was zum Beispiel mit der Decision Boundary passiert, wenn wir in dem obigen Beispiel mit zwei Input-Variablen eine dritte Input-Variable <span class="math inline">\(x_{i1}^2\)</span> ins Modell nehmen, sehen Sie in folgender Abbildung:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-db3-1.png" class="img-fluid figure-img" style="width:60.0%" alt="DB für zwei Input-Variablen und Feature Engineering."></p>
+<figcaption>Decision Boundary für einen Threshold von 50% (bzw. 0.5) im Fall von den zwei ursprünglichen Input-Variablen und einem zusätzlichen Feature <span class="math inline">\(x_{i1}^2\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Wow, das Modell ist jetzt schon viel flexibler. Man muss jedoch aufpassen, denn man landet so schnell im <strong>Overfitting</strong>. Dem können wir mit einer Portion Regularisierung begegnen.</p>
+<!-- TODO: multi-class classification -->
+</section>
+</section>
 </section>
 <section id="naive-bayes" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="naive-bayes"><span class="header-section-number">3.2</span> Naive Bayes</h2>
-<p>Coming soon.</p>
+<p>Ein sehr einfaches, aber oft erstaunlich gut performendes Klassifikationsmodell ist <strong>Naive Bayes</strong>. Dieses Modell beruht auf dem <strong>Satz von Bayes</strong>, den Sie in Statistik 1 bereits kennen gelernt haben.</p>
+<p>Nachfolgend ein Ausschnitt aus den Folien von Prof.&nbsp;Dr.&nbsp;Tobias Schoch zum Satz von Bayes (falls Sie etwas repetieren möchten):</p>
+<section id="modellspezifikation-1" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="modellspezifikation-1"><span class="header-section-number">3.2.1</span> Modellspezifikation</h3>
+<p>Das Modell kann folgendermassen spezifiziert werden:</p>
+<p><span class="math display">\[
+p(y_i = 1 | \mathbf{x}_i) = \frac{p(\mathbf{x}_i | y_i = 1) \cdot p(y_i = 1)}{p(\mathbf{x}_i)}
+\]</span></p>
+<p>Es lohnt sich, hier kurz zu überlegen, was die Komponenten in dieser Modellspezifikation sind:</p>
+<ul>
+<li>Der linke Teil ist die Wahrscheinlichkeit, dass es sich bei der Email <span class="math inline">\(i\)</span> um Spam handelt, gegeben die Input-Werte. Es ist dieselbe Wahrscheinlichkeit, die wir auch bei der logistischen Regression zu modellieren versuchen. Man nennt diese Wahrscheinlichkeit in der Fachsprache <strong>Posterior</strong>.</li>
+<li>Der erste Teil rechts oben, <span class="math inline">\(p(\mathbf{x}_i | y_i = 1)\)</span>, ist die Wahrscheinlichkeit der konkreten Input-Werte der Email <span class="math inline">\(i\)</span>, gegeben es handelt sich um eine Spam-Email. Unsere Input-Werte sind ja im Spam Filter die wichtigsten Wörter gemäss dem Bag-of-Words Ansatz. D.h. wir rechnen hier die Wahrscheinlichkeit der beobachteten Wörter in einer Email, gegeben es ist eine Spam Email. Dieser Teil wird <strong>Likelihood</strong> genannt.</li>
+<li>Der zweite Teil rechts oben, <span class="math inline">\(p(y_i = 1)\)</span>, ist die a-priori Wahrscheinlichkeit einer Spam Email. Was ist die generelle Wahrscheinlichkeit, dass eine Email Spam ist. Diese Wahrscheinlichkeit wird in der Fachsprache <strong>Prior</strong> genannt.</li>
+<li>Der Nenner auf der rechten Seite ist die Wahrscheinlichkeit, dass wir für eine Email <span class="math inline">\(i\)</span> die konkreten Input-Werte beobachten, unabhängig davon ob es sich um Spam oder Ham handelt. Oft wird dieser Teil <strong>Evidence</strong> genannt. Mit dem <strong>Gesetz der totalen Wahrscheinlichkeit</strong> lässt sich die Evidence einfach rechnen:</li>
+</ul>
+<p><span class="math display">\[
+p(\mathbf{x}_i) = p(\mathbf{x}_i | y_i = 1) \cdot p(y_i = 1) + p(\mathbf{x}_i | y_i = 0) \cdot p(y_i = 0)
+\]</span></p>
+<div style="background-color:#fef9e7; padding:10px">
+<p><strong>Wichtig</strong>: der zentrale Aspekt beim Naive Bayes Modell ist eine <strong>Unabhängigkeitsannahme</strong>. Warum brauchen wir eine Unabhängigkeitsannahme? Weil es äusserst schwierig ist, die Likelihood <span class="math inline">\(p(\mathbf{x}_i | y_i = 1)\)</span> aus Daten zu schätzen. Für eine kurze Email mit dem Text “Hallo, wie geht es dir?” müssten wir die <strong>gemeinsame Wahrscheinlichkeit</strong> (<em>Joint Probability</em>), dass genau diese 5 Worte gemeinsam in einer Spam Email vorkommen und alle anderen Wörter nicht, schätzen. Das ist enorm schwierig. Darum machen wir folgende Unabhängigkeitsannahme:</p>
+<p><span class="math display">\[
+p(\mathbf{x}_i | y_i = 1) = p(x_{i1} | y_i = 1) \cdot p(x_{i2} | y_i = 1) \cdot \ldots \cdot p(x_{ip} | y_i = 1) \cdot
+\]</span></p>
+<p>Anstatt die gemeinsame Wahrscheinlichkeit müssen wir hier nur die <strong>Randwahrscheinlichkeiten</strong> für jedes Wort schätzen und diese dann miteinander multiplizieren.</p>
+<p>Das ist eine ziemliche Vereinfachung, denn wir nehmen nun an, dass beispielsweise die Wahrscheinlichkeit des Worts “geht” (gegeben eine Spam Email) <strong>unabhängig</strong> von der Wahrscheinlichkeit des Worts “wie” (gegeben eine Spam Email) ist. Wenn Sie daran denken, wie oft in einem Text die Phrase “wie geht…” vorkommt, dann dürften die beiden Wahrscheinlichkeiten kaum unabhängig voneinander sein. Aber in der Praxis funktioniert diese Annahme trotzdem erstaunlich gut.</p>
+<p>Wenn wir an den <strong>Bias-Variance-Tradeoff</strong> denken, dann passiert mit dieser Unabhängigkeitsannahme folgendes: wir erhöhen den Bias des Modells willentlich, indem wir diese Unabhängigkeitsannahme machen. Gleichzeitig reduzieren wir jedoch die Varianz substantiell, da das Modell so viel einfacher wird. Oft ist die Reduktion der Varianz grösser als der Anstieg des Bias, weshalb dieses Modell in der Praxis oft gut funktioniert.</p>
+</div>
+</section>
+<section id="modelltraining-1" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="modelltraining-1"><span class="header-section-number">3.2.2</span> Modelltraining</h3>
+<p>Aus obigen Ausführungen sehen wir, dass wir folgende Wahrscheinlichkeiten aus den Daten schätzen müssen:</p>
+<ul>
+<li>Priors <span class="math inline">\(p(y_i = 1)\)</span> und <span class="math inline">\(p(y_i = 0)\)</span></li>
+<li>Für alle <strong>Spam</strong> Emails die Randwahrscheinlichkeiten <span class="math inline">\(p(x_{i1} | y_i = 1)\)</span>, <span class="math inline">\(p(x_{i2} | y_i = 1)\)</span>, etc.</li>
+<li>Für alle <strong>Ham</strong> Emails die Randwahrscheinlichkeiten <span class="math inline">\(p(x_{i1} | y_i = 0)\)</span>, <span class="math inline">\(p(x_{i2} | y_i = 0)\)</span>, etc.</li>
+</ul>
+<p>Die Priors können ganz einfach als <strong>relative Häufigkeiten</strong> von Spam bzw. Ham Emails im Trainingsdatensatz geschätzt werden.</p>
+<p>Auch die Randwahrscheinlichkeiten lassen sich im Spam Filter Beispiel einfach schätzen. Für jedes Wort im Bag-of-Words (z.B. “price”) schätzen Sie die relative Häufigkeit in allen Spam Emails und in allen Ham Emails.</p>
+<p>Im Spam Filter Beispiel haben wir nur kategorische (qualitative) Input-Variablen, für die sich die Randwahrscheinlichkeiten als relative Häufigkeiten schätzen lassen. Es ist aber auch möglich, <strong>quantitative Input-Variablen</strong> zu haben, z.B. die Anzahl Worte in einer Email. In diesem Fall nehmen Sie alle Spam Emails und schätzen eine Normalverteilung für die Anzahl Worte in den Spam Emails. Mit der geschätzten Normalverteilung können Sie dann ebenfalls eine Randwahrscheinlichkeit (genauer gesagt einen Wert der Dichte) für eine bestimmte Anzahl Worte rechnen. Das Selbe tun Sie selbstverständlich auch mit den Ham Emails.</p>
+</section>
+<section id="beispiel" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="beispiel"><span class="header-section-number">3.2.3</span> Beispiel</h3>
+<p>Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort “afford” bzw. “price” in einer Email vorkommen oder nicht.</p>
+<p>Berechnen wir als erstes die Priors.</p>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "priors_mc", echo = FALSE} -->
+<!-- question("Der Trainingsdatensatz enthält insgesamt 4000 Emails. 1277 Emails sind Spam. Was sind die korrekten Priors?", -->
+<!--   answer("$p(y_i = 1) = 0.32$ und $p(y_i = 0) = 0.68$", correct = TRUE), -->
+<!--   answer("$p(y_i = 1) = 0.68$ und $p(y_i = 0) = 0.32$"), -->
+<!--   answer("$p(y_i = 1) = 0.5$ und $p(y_i = 0) = 0.5$"), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<p>Als nächstes rechnen wir die Randwahrscheinlichkeiten für die Spam Emails. In den 1277 Spam Emails enthalten 40 Emails das Wort “afford” und 223 Emails das Wort “price”.</p>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "randSpam_mc", echo = FALSE} -->
+<!-- question("Was sind die korrekten Randwahrscheinlichkeiten für die Spam Emails?", -->
+<!--   answer("$p(afford_i = 1 | y_i = 1) = 0.03$ und $p(price_i = 1 | y_i = 1) = 0.17$", correct = TRUE), -->
+<!--   answer("$p(afford_i = 1 | y_i = 1) = 0.97$ und $p(price_i = 1 | y_i = 1) = 0.83$"), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<p>Wichtig: die Wahrscheinlichkeit, dass das Wort “afford” bzw. “price” <em>nicht</em> vorkommt in einer Spam Email haben wir so indirekt auch bereits berechnet:</p>
+<p><span class="math display">\[
+p(afford_i = 0 | y_i = 1) = 1 - p(afford_i = 1 | y_i = 1) = 1 - 0.03 = 0.97
+\]</span> <span class="math display">\[
+p(price_i = 0 | y_i = 1) = 1 - p(price_i = 1 | y_i = 1) = 1 - 0.17 = 0.83
+\]</span></p>
+<p>Als letztes rechnen wir nun noch die Randwahrscheinlichkeiten für die Ham Emails. In den 2723 Ham Emails enthalten 27 Emails das Wort “afford” und 134 Emails das Wort “price”.</p>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "randHam_mc", echo = FALSE} -->
+<!-- question("Was sind die korrekten Randwahrscheinlichkeiten für die Ham Emails?", -->
+<!--   answer("$p(afford_i = 1 | y_i = 0) = 0.01$ und $p(price_i = 1 | y_i = 0) = 0.05$", correct = TRUE), -->
+<!--   answer("$p(afford_i = 1 | y_i = 0) = 0.99$ und $p(price_i = 1 | y_i = 0) = 0.95$"), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<p>Auch hier können die Wahrscheinlichkeiten für das “Gegenereignis” einfach gerechnet werden:</p>
+<p><span class="math display">\[
+p(afford_i = 0 | y_i = 0) = 1 - p(afford_i = 1 | y_i = 0) = 1 - 0.01 = 0.99
+\]</span> <span class="math display">\[
+p(price_i = 0 | y_i = 0) = 1 - p(price_i = 1 | y_i = 0) = 1 - 0.05 = 0.95
+\]</span></p>
+<p>Nun wollen wir die Posterior Wahrscheinlichkeit berechnen, dass eine Email, welche sowohl das Wort “afford” als auch das Wort “price” enthält, eine Spam Email ist:</p>
+<p><span class="math display">\[
+\begin{split}
+p(y_i = 1 | afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 | y_i = 1) \cdot p(price_i = 1 | y_i = 1) \cdot p(y_i = 1)}{p(afford_i = 1, price_i = 1)}\\
+&amp;= \frac{0.03 \cdot 0.17 \cdot 0.32}{0.03 \cdot 0.17 \cdot 0.32 + 0.01 \cdot 0.05 \cdot 0.68}\\
+&amp;= \frac{0.001632}{0.001632 + 0.00034}\\
+&amp;= 0.83
+\end{split}
+\]</span></p>
+<p>Wow, gegeben, dass die beiden Worte “afford” und “price” in einem Email vorkommen, sind wir also ziemlich sicher, dass es sich um eine Spam Email handelt.</p>
+<p><strong>Aufgabe</strong>: rechnen Sie die Wahrscheinlichkeit, dass es sich bei einer Email um Spam handelt, wenn nur das Wort “afford” vorkommt, nicht aber das Wort “price”. <em>Lösung</em>: 0.55</p>
+</section>
 </section>
 <section id="k-nearest-neighbors" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</h2>
@@ -321,8 +816,8 @@ window.Quarto = {
 </div>
 <p>Um die <span class="math inline">\(K\)</span> nächsten Nachbarn zu finden, müssen wir die Distanzen zwischen Punkten rechnen können. Dazu verwenden wir die Euklidische Distanz, welche wir in Kapitel @ref(basics) kennen lernen werden.</p>
 <p>Das KNN Modell ist ein sehr einfaches ML Modell, welches in der Praxis allerdings nicht allzu häufig angewendet wird. Warum nicht? Weil es am sogenannten <strong>Fluch der Dimensionalität</strong> (engl. Curse of Dimensionality) leidet. Doch was bedeutet das? Je mehr Input-Variablen wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee, dass wir <span class="math inline">\(K\)</span> nahe, ähnliche Beobachtungen für die Vorhersage verwenden. Wenn diese <span class="math inline">\(K\)</span> nahen Beobachtungen im hochdimensionalen Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert auch das Modell nicht mehr gut.</p>
-<section id="fragen" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="fragen">Fragen</h4>
+<section id="fragen-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fragen-1">Fragen</h4>
 <p>Stellen Sie sich vor, Sie haben folgendes Klassifikationsproblem, das Sie mit KNN lösen wollen. Welche Kategorie prognostiziert ein KNN Modell für den Punkt <span class="math inline">\(x\)</span> in der unten stehenden Abbildung?</p>
 <ol type="a">
 <li>Blauer Kreis.</li>
@@ -330,7 +825,7 @@ window.Quarto = {
 <li>Rotes Kreuz.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -339,7 +834,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Es hat drei rote Kreuze und zwei blaue Kreise in der Nachbarschaft. Die roten Kreuze sind darum in der Mehrheit, weshalb Antwort <strong>c</strong> korrekt ist.</p>
 </div>
@@ -363,7 +858,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 <li>10</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -372,7 +867,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Die Nachbarschaft, dargestellt durch den Kreis, enthält 5 Beobachtungen. Deshalb ist Antwort <strong>a</strong> korrekt.</p>
 </div>
@@ -385,7 +880,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 <li>5</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -394,7 +889,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Der Durchschnitt über die 5 <span class="math inline">\(y_i\)</span>-Werte in der Nachbarschaft beträgt 4, weshalb Antwort <strong>a</strong> korrekt ist.</p>
 </div>
@@ -410,9 +905,20 @@ Abbildung&nbsp;3.2: KNN Modell für Regressionsproblem
 </figcaption>
 </figure>
 </div>
+</section>
+</section>
+<section id="sec-logregR" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-logregR"><span class="header-section-number">3.4</span> Modelle in R</h2>
+<p>Coming soon</p>
 
 
 </section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Manchmal wird die Kategorie 1 auch mit “Erfolg” und die Kategorie 0 mit Misserfolg betitelt. Diese Bezeichnungen sind jedoch etwas irreführend. Versucht man vorherzusagen, ob jemand eine Krankheit hat, dann ist “krank” meist die Kategorie 1. Dieses Ereignis kann kaum als “Erfolg” gewertet werden. Im Prinzip ist es Ihnen überlassen, wie Sie die beiden möglichen Kategorien mit 0/1 kodieren. Meist wird Kategorie 1 für das uns primär interessierende Ereignis gesetzt: z.B. Krankheit, Lehrabbruch, Kreditkartenbetrug.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Auch hier einmal mehr im ML eine irreführende Namensgebung: das logistische <em>Regressionsmodell</em> ist ein <em>Klassifikationsmodell</em>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
