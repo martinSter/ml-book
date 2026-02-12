@@ -1,12 +1,721 @@
 # Lineare Klassifikation {#sec-linclass}
 
+Nachdem wir uns in @sec-linreg bereits ausführlich mit dem Regressionsproblem befasst haben, lernen wir hier nun das andere grosse Supervised Learning Problem kennen: das **Klassifikationsproblem**. In der Praxis sind Klassifikationsprobleme fast häufiger anzutreffen als Regressionsprobleme.
+
+Wir fokussieren hier erstmal auf das **binäre Klassifikationsproblem**, bei dem unser Ziel ist vorherzusagen, ob eine Beobachtung der Kategorie 1 ($y_i=1$) oder der Kategorie 0 ($y_i=0$) angehört.^[Manchmal wird die Kategorie 1 auch mit "Erfolg" und die Kategorie 0 mit Misserfolg betitelt. Diese Bezeichnungen sind jedoch etwas irreführend. Versucht man vorherzusagen, ob jemand eine Krankheit hat, dann ist "krank" meist die Kategorie 1. Dieses Ereignis kann kaum als "Erfolg" gewertet werden. Im Prinzip ist es Ihnen überlassen, wie Sie die beiden möglichen Kategorien mit 0/1 kodieren. Meist wird Kategorie 1 für das uns primär interessierende Ereignis gesetzt: z.B. Krankheit, Lehrabbruch, Kreditkartenbetrug.] Unsere Output-Variable ist hier also nicht mehr quantitativer Natur, sondern **qualitativ** (d.h. kategorisch) und hat zwei mögliche Kategorien (oder Klassen).
+
+Wir werden uns in diesem Kapitel drei Modelle für das Klassifikationsproblem anschauen:
+
+* Logistische Regression^[Auch hier einmal mehr im ML eine irreführende Namensgebung: das logistische *Regressionsmodell* ist ein *Klassifikationsmodell*.] (LR)
+* Naive Bayes (NB)
+* K-Nearest Neighbors (KNN)
+
+**Wichtig**: der Titel des Kapitels besagt, dass wir uns hier *lineare* Klassifikationsmodelle anschauen. Das stimmt nicht ganz, denn während das logistische Regressionsmodell und Naive Bayes lineare Modelle sind, ist KNN ein sehr flexibles, nicht-lineares Modell.
+
 ## Logistische Regression
 
-Coming soon.
+Die logistische Regression ist das Gegenstück zur linearen Regression für das Klassifikationsproblem. Es ist ein einfaches Modell, das oft als guter Ausgangspunkt für jegliche Klassifikationsprobleme dient. Das heisst, es macht meist als **erstes Modell** ein logistisches Regressionsmodell zu trainieren.
+
+### Output-Variable
+
+Die Output-Variable bzw. das Label im **binären** Klassifikationsproblem ist eine kategorische Variable mit zwei möglichen Kategorien (oder Klassen). Wie oben erwähnt nimmt die Output-Variable den Wert 1 an, also $y_i=1$, falls eine Beobachtung der Kategorie 1 angehört und sonst den Wert 0, $y_i=0$. Typischerweise geben wir den Wert 1 der Kategorie, die uns wirklich interessiert (z.B. Spam, Zahlungsunfähigkeit, Patient hat eine Krankheit).
+
+In folgender Abbildung ist ein Klassifikationsproblem mit 5 Beobachtungen dargestellt. Die drei blauen Datenpunkte gehören der Kategorie 1 an, während die zwei roten Datenpunkte der Kategorie 0 angehören. Wir werden weiter unten auf dieses Problem zurückkommen.
+
+```{r class-prob, echo=FALSE, fig.show = 'hold', fig.cap='Abgebildet ist die Ausgangslage eines einfachen Klassifikationsproblems mit einer Input-Variable (eingezeichnet auf der x-Achse) und der Output-Variable (eingezeichnet auf der y-Achse).', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='Einfaches Klassifikationsbeispiel.'}
+library(latex2exp)
+# Data points
+x <- c(-4.1, 0.5, -0.1, 1.4, 4.4)
+y <- c(0, 0, 1, 1, 1)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 5, 0.5, 0.5))
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-0.05, 1.05), xlim = c(-6, 6),
+     xlab = TeX(r'($x_i$)'), ylab = TeX(r'($y_i$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 1, 1), labels = seq(0, 1, 1), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey")
+abline(h = 1, lty = 1, lwd = 1, col = "grey")
+abline(v = 0, lty = 1, lwd = 1, col = "grey")
+# Add data points
+cols <- c(rgb(1, 0, 0, 0.4), rgb(1, 0, 0, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4))
+points(x, y, pch = 16, cex = 2, col = cols)
+```
+
+Bei den meisten Klassifikationsmodellen wird *nicht* direkt der Output $y_i$ modelliert (wie das bei den Regressionsproblemen der Fall ist), sondern die (bedingte) **Wahrscheinlichkeit**, dass $y_i=1$, gegeben irgendwelche Input-Datenwerte. Mathematisch schreiben wir diese Wahrscheinlichkeit als $p(y_i = 1 | \mathbf{x}_i)$. Alle unsere Modelle hier werden versuchen, möglichst genaue Schätzung für diese bedingte Wahrscheinlichkeit zu finden.
+
+#### Frage {.unnumbered}
+
+Warum modellieren wir $p(y_i = 1 | \mathbf{x}_i)$ nicht mit dem linearen Regressionsmodell?
+
+a. Je nach Input-Daten könnten wir negative Wahrscheinlichkeiten oder Wahrscheinlichkeiten grösser als 1 erhalten.
+b. Weil wir für die Klassifikation nie ein lineares Modell schätzen.
+c. Das lineare Regressionsmodell funktioniert gar nicht in diesem Fall.
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Die richtige Antwort ist **a**.
+
+Antwort b. stimmt nicht, weil es sich beim logistischen Regressionsmodell ja eben auch um ein lineares Modell handelt.
+
+Antwort c. stimmt nicht, weil das lineare Regressionsmodell technisch problemlos rechenbar ist, aber eben zum unerwünschten Resultat (beschrieben in a.) führt.
+:::
+
+Nun wundern Sie sich vielleicht: wenn uns unser Modell eine Schätzung für $p(y_i = 1 | \mathbf{x}_i)$ zurück gibt, wie mache ich damit eine Vorhersage?
+
+Im einfachsten Fall ist unsere Vorhersage $\hat{y}_i=1$ (also Kategorie 1), falls die geschätzte Wahrscheinlichkeit $p(y_i = 1 | \mathbf{x}_i) > 50\%$, und sonst $\hat{y}_i=0$. Hier haben wir einen **Threshold** von 50% gewählt, aber grundsätzlich können wir auch andere Thresholds wählen (z.B. 20% oder 85%), um von den geschätzten Wahrscheinlichkeiten eine Vorhersage abzuleiten. Wir werden uns in @sec-pipeline genauer mit dem optimalen Threshold befassen.
+
+### Modellspezifikation
+
+Bevor wir das **logistische** Regressionsmodell spezifizieren, erinnern wir uns ganz kurz an die Modellspezifikation des **linearen** Regressionsmodells:
+
+$$
+f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
+$$
+Diese gewichtete Summe der Input-Variablenwerte wird auch bei der logistischen Regression eine wichtige Rolle spielen. Wir haben in der ersten Frage zu diesem Kapitel bereits gesehen, dass folgende Modellgleichung leider nicht eine gute Idee ist:
+
+$$
+p(y_i = 1 | \mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
+$$
+Warum nicht? Weil die gewichtete Summe je nach Input-Daten mal negativ sein kann oder auch grösser als 1. Gleichzeitig wissen wir aus der Wahrscheinlichkeitstheorie, dass eine Wahrscheinlichkeit immer zwischen 0 und 1 liegen muss. Folgende Abbildung zeigt, dass das lineare Regressionsmodell nur innerhalb der gestrichelten, vertikalen Linien eine Wahrscheinlichkeit zwischen 0 und 1 zurückgibt.
+
+```{r class-prob-lin-reg, echo=FALSE, fig.show = 'hold', fig.cap='Was passiert, wenn wir ein einfaches lineares Regressionsmodell schätzen für unser kleines Klassifikationsproblem.', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='Lin. Reg. für einfaches Klassifikationsbeispiel.'}
+library(latex2exp)
+# Data points
+x <- c(-4.1, 0.5, -0.1, 1.4, 4.4)
+y <- c(0, 0, 1, 1, 1)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 5, 0.5, 0.5))
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-0.05, 1.05), xlim = c(-6, 6),
+     xlab = TeX(r'($x_i$)'), ylab = TeX(r'($y_i$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 1, 1), labels = seq(0, 1, 1), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey")
+abline(h = 1, lty = 1, lwd = 1, col = "grey")
+abline(v = 0, lty = 1, lwd = 1, col = "grey")
+# Add data points
+cols <- c(rgb(1, 0, 0, 0.4), rgb(1, 0, 0, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4))
+points(x, y, pch = 16, cex = 2, col = cols)
+# Add linear regression line
+mod <- lm(y ~ x)
+abline(mod, lty = 1, lwd = 2, col = "rosybrown3")
+# Add vertical lines
+abline(v = - (summary(mod)$coefficients[1, 1] / summary(mod)$coefficients[2, 1]), lty = 2, lwd = 1, col = "black")
+abline(v = ((1 - summary(mod)$coefficients[1, 1]) / summary(mod)$coefficients[2, 1]), lty = 2, lwd = 1, col = "black")
+```
+
+Wir müssen also die gewichtete Summe in eine mathematische Funktion "verpacken", so dass die Outputs dieser Funktion immer zwischen 0 und 1 liegen. Die **Sigmoid Funktion** (auch logistische Funktion genannt) tut genau das. Sie nimmt irgendeinen (reellen) Input $z$ und gibt immer einen Wert zwischen 0 und 1 zurück. Die Funktion sieht folgendermassen aus:
+
+$$
+g(z) = \frac{e^z}{1+e^z}=\frac{1}{1+e^{-z}}
+$$
+
+::: {.callout-caution collapse="true"}
+## Zwei Formen der Sigmoid Funktion (optional)
+
+Wir wollen uns hier anschauen, wie wir von der einen zur anderen Form der Sigmoid Funktion kommen:
+
+$$
+\frac{e^z}{1+e^z} \cdot \frac{e^{-z}}{e^{-z}} = \frac{e^z \cdot e^{-z}}{(1+e^z) \cdot e^{-z}} = \frac{e^0}{e^{-z} + e^0} = \frac{1}{1+e^{-z}}
+$$
+Wir multiplizieren die erste Form der Sigmoid Funktion in einem ersten Schritt mit $\frac{e^{-z}}{e^{-z}}$. Das ist erlaubt, weil dieser Ausdruck ja nichts anderes als 1 ist und durch diese Multiplikation die Sigmoid Funktion nicht verändert wird. Der Rest ist dann einfaches, algebraisches Umformen.
+:::
+
+Für jeden Wert von $z$ gibt uns die Funktion $g(z)$ einen Wert zwischen 0 und 1 zurück. Grafisch sieht die Sigmoid Funktion folgendermassen aus:
+
+```{r sigm, echo=FALSE, fig.show = 'hold', fig.cap='Die Form der Sigmoid Funktion. Per Definition hat die Funktion bei einem Input-Wert von 0 den Wert 0.5. Das ist einfach aus der Formel oben ersichtlich, wenn man bedenkt, dass $e^{0} = 1$.', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='Sigmoid Funktion'}
+library(latex2exp)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 5, 0.5, 0.5))
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-0.05, 1.05), xlim = c(-6, 6),
+     xlab = TeX(r'($z$)'), ylab = TeX(r'($g(z)$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 1, 0.5), labels = seq(0, 1, 0.5), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey")
+abline(h = 1, lty = 1, lwd = 1, col = "grey")
+abline(v = 0, lty = 1, lwd = 1, col = "grey")
+abline(h = 0.5, lty = 1, lwd = 1, col = "grey")
+# Add sigmoid
+sigmoid <- function(x){1 / (1 + exp(-x))}
+curve(sigmoid, from = -6, to = 6, add = TRUE, lwd = 2, col = "rosybrown3")
+```
+
+#### Frage {.unnumbered}
+
+Was ist der Output der Sigmoid Funktion, wenn $z=2.6$?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Die korrekte Antwort ist 0.9309.
+:::
+
+Nun können wir alles zusammensetzen, was ganz einfach bedeutet, dass wir nun anstelle von $z$ die gewichtete Summe der Input-Variablen in die Sigmoid Funktion einsetzen. Das logistische Regressionsmodell sieht dementsprechend dann wie folgt aus:
+
+\begin{align}
+p(y_i = 1 | \mathbf{x}_i) &= \frac{1}{1+e^{-(w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip})}}\\
+&= \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}
+\end{align}
+
+Im nächsten Abschnitt wollen wir herausfinden, wie die Parameter des Modells geschätzt werden.
+
+### Modelltraining
+
+Modelltraining bedeutet auch hier nichts anderes, als dass wir die Parameter des Modells möglichst optimal schätzen wollen. Sie haben in @sec-linreg (Perspektive 1 des Modelltrainings bei der lin. Regression) bereits gelernt, dass wir in der Phase des Modelltrainings eine **Kostenfunktion** aufstellen, die es dann zu minimieren gilt. Doch wie soll eine Kostenfunktion für das Klassifikationsproblem aussehen?
+
+Im **Idealfall** gibt unser Modell eine Wahrscheinlichkeit von 0 aus für alle Beobachtungen, bei denen $y_i=0$, während für alle Beobachtungen, wo $y_i=1$, eine Wahrscheinlichkeit von 1 zurückgegeben wird. In diesem Idealfall sollte die Kostenfunktion 0 betragen. Wie können wir das mathematisch abbilden?
+
+Die "Kosten" für eine **einzelne Beobachtung** mit dem (wahren) Outputwert $y_i=1$ schreiben wir als $-\text{log}(p(y_i = 1 | \mathbf{x}_i))$. Für Beobachtungen mit dem (wahren) Label $y_i=0$ sind die "Kosten" dementsprechend $-\text{log}(1-p(y_i = 1 | \mathbf{x}_i))$. Warum das Sinn macht, sehen Sie anhand folgender Abbildung:
+
+```{r indiv-cost, echo=FALSE, fig.show = 'hold', fig.cap='Links: individuelle Kostenfunktion für eine Beobachtung mit wahrem Label der Kategorie 1, also $y_i=1$. Rechts: individuelle Kostenfunktion für eine Beobachtung mit wahrem Label der Kategorie 0, also $y_i=0$.', fig.width=12, fig.height=4, out.width='100%', fig.align='center', fig.alt='Individuelle Kosten bei der log. Regression.'}
+library(latex2exp)
+par(mfrow=c(1,2), oma=c(.5,.5,.5,.5), mar=c(4,5,.5,.5))
+# ---------------------------------------------
+# First plot
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(0, 7), xlim = c(-0.05, 1.05),
+     xlab = TeX(r'($p\left(y_i = 1 | x_i\right)$)'), ylab = TeX(r'($-\log\left(p(y_i = 1 | x_i)\right)$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.2, cex.axis = 1.2)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(0, 1, 0.2), labels = seq(0, 1, 0.2), cex.axis = 1.2)
+axis(side = 2, at = seq(0, 7, 1), labels = seq(0, 7, 1), cex.axis = 1.2)
+# Lines through origin
+abline(v = 0, lty = 1, lwd = 1, col = "grey")
+abline(v = 1, lty = 1, lwd = 1, col = "grey")
+# Add sigmoid
+cost <- function(x){-log(x)}
+curve(cost, from = 1e-5, to = 1, add = TRUE, lwd = 2, col = "rosybrown3")
+# ---------------------------------------------
+# Second plot
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(0, 7), xlim = c(-0.05, 1.05),
+     xlab = TeX(r'($p\left(y_i = 1 | x_i\right)$)'), ylab = TeX(r'($-\log\left(1 - p(y_i = 1 | x_i)\right)$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.2, cex.axis = 1.2)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(0, 1, 0.2), labels = seq(0, 1, 0.2), cex.axis = 1.2)
+axis(side = 2, at = seq(0, 7, 1), labels = seq(0, 7, 1), cex.axis = 1.2)
+# Lines through origin
+abline(v = 0, lty = 1, lwd = 1, col = "grey")
+abline(v = 1, lty = 1, lwd = 1, col = "grey")
+# Add sigmoid
+cost <- function(x){-log(1 - x)}
+curve(cost, from = 0, to = 0.999999, add = TRUE, lwd = 2, col = "rosybrown3")
+```
+
+In der linken Abbildung sehen Sie einen Kostenwert, der immer kleiner wird, je grösser die Wahrscheinlichkeit $p(y_i = 1 | \mathbf{x}_i)$. Rechts sehen wir genau das Gegenteil: je grösser diese Wahrscheinlichkeit, desto grösser die Kosten. Wir wollen in diesem Fall, dass die Wahrscheinlichkeit $p(y_i = 1 | \mathbf{x}_i)$ so klein wie möglich ist.
+
+Wir haben nun die Kosten für **einzelne Beobachtungen** angeschaut und gesehen, dass die Kosten je nach wahrem Label $y_i$ unterschiedlich sind. Die **Gesamtkostenfunktion** ist der Durchschnitt über die individuellen Kosten (gemittelt über alle Beobachtungen im Trainingsdatensatz). Mathematisch sieht das Ganze folgendermassen aus:
+
+$$
+J = -\frac{1}{n}\sum_{i=1}^n \left[y_i \cdot \log\left(p(y_i = 1 | \mathbf{x}_i)\right) + (1-y_i) \cdot \log\left(1-p(y_i = 1 | \mathbf{x}_i)\right)\right]
+$$
+
+Überlegen Sie sich kurz, warum diese Berechnung Sinn macht. Wenn die $i$-te Beobachtung das Label $y_i=1$ hat, dann entfällt der zweite Teil in den eckigen Klammern, weil in diesem Fall $(1-y_i)=0$ ist. Wenn die $i$-te Beobachtung hingegen das Label $y_i=0$ hat, dann entfällt der erste Teil in den eckigen Klammern, weil die individuellen Kosten mit 0 multipliziert werden. Wir haben hier also eine kompakte mathematische Form, um die Gesamtkostenfunktion aufzuschreiben. In der Praxis wird diese Kostenfunktion häufig **log-loss** genannt.
+
+Wir suchen also nun die Parameterwerte $w_0, w_1, \dots$, welche die obige Kostenfunktion minimieren. Leider gibt es *keine* analytische Lösung dafür. Wir können aber die optimalen Parameterwerte mit anderen (iterativen) Optimierungsmethoden finden. In `R` und `Python` sind diese Methoden effizient implementert ([Abschnitt @sec-logregR]), so dass wir die Parameter, welche diese Kostenfunktion minimieren, oft in wenigen Millisekunden finden.
+
+Die folgende Abbildung zeigt das trainierte Modell:
+
+```{r class-prob-log-reg, echo=FALSE, fig.show = 'hold', fig.cap='Trainiertes logistisches Regressionsmodell für unser einfaches Klassifikationsbeispiel.', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='Log. Reg. für einfaches Klassifikationsbeispiel.'}
+library(latex2exp)
+# Data points
+x <- c(-4.1, 0.5, -0.1, 1.4, 4.4)
+y <- c(0, 0, 1, 1, 1)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 5, 0.5, 0.5))
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-0.05, 1.05), xlim = c(-6, 6),
+     xlab = TeX(r'($x_i$)'), ylab = TeX(r'($p\left(y_i = 1 | x_i\right)$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 1, 0.5), labels = seq(0, 1, 0.5), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey")
+abline(h = 1, lty = 1, lwd = 1, col = "grey")
+abline(v = 0, lty = 1, lwd = 1, col = "grey")
+abline(h = 0.5, lty = 1, lwd = 1, col = "grey")
+# Add data points
+cols <- c(rgb(1, 0, 0, 0.4), rgb(1, 0, 0, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4))
+points(x, y, pch = 16, cex = 2, col = cols)
+# Add logistic regression curve
+mod <- glm(y ~ x, family = "binomial")
+# Data for curve
+xplot <- seq(-6, 6, 0.1)
+yplot <- predict.glm(mod, data.frame(x = xplot), type = "response")
+# Plot curve
+lines(xplot, yplot, col = "rosybrown3", lwd = 2)
+```
+
+Die optimalen Parameter sind $w_0 = 0.15$ und $w_1 = 0.99$. Wir sehen, dass die gefittete Sigmoid Funktion nicht bei $x_i=0$ den Wert 0.5 hat, sondern etwas vorher (nämlich bei -0.15). Der Parameter $w_0$ gibt uns also in einem gewissen Sinn die horizontale "Flexibilität" beim Fitten des Modells bzw. der Funktion. Unser finales Modell sieht also wie folgt aus:
+
+$$
+p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot x_{i})}}
+$$
+
+#### Frage {.unnumbered}
+
+Was ist die Vorhersage unseres Modells für den Input-Variablenwert $x_i=-2$?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Die korrekte Antwort ergibt sich durch Einsetzen des Werts in das trainierte Modell:
+
+$$
+p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot (-2))}} = \frac{1}{1+e^{-(-1.83)}} = 0.14
+$$
+Gemäss unserem Modell ist die Wahrscheinlichkeit, dass $y_i = 1$ lediglich 14% für diesen Input-Variablenwert.
+:::
+
+Zwei letzte wichtige Punkte in diesem Abschnitt:
+
+* Wie bei der linearen Regression verwenden wir bei der logistischen Regression typischerweise **Regularisierung**, um dem Overfitting entgegenzuwirken. Von der Idee her funktioniert es genau gleich wie bei der linearen Regression.
+* Die durchschnittliche Wahrscheinlichkeit, welche unser trainiertes Modell auf dem Trainingsdatensatz schätzt, entspricht bei der logistischen Regression jeweils genau dem Anteil an Beobachtungen (im Trainingsdatensatz) mit Label $y_i=1$.
+
+::: {.callout-caution collapse="true"}
+## Herleitung des zweiten Punkts (optional)
+
+Bla...
+:::
+
+### Decision Boundaries
+
+Wir haben nun gesehen, wie das logistische Regressionsmodell aussieht, wie es trainiert wird und wie es auf unser kleines Beispiel angewendet wird. Doch Ihnen ist wahrscheinlich immer noch nicht klar, warum wir dabei von einem **linearen** Klassifikationsmodell sprechen (die Sigmoid Funktion ist ja alles andere als linear).
+
+Um zu verstehen, warum es sich um ein lineares Modell handelt, schauen wir uns nun die so genannte **Decision Boundary** des Modells an. 
+
+::: {.callout-note}
+## Decision Boundary
+
+Die Decision Boundary ist in einem gewissen Sinn eine **Grenze**. Auf der einen Seite der Grenze ist der Wertebereich der Input-Variablen $\mathbf{x}_i$, für den $\hat{y}_i=1$ vorhergesagt wird. Auf der anderen Seite der Grenze ist der Wertebereich, für den $\hat{y}_i=0$ vorhergesagt wird. Die Decision Boundary bezieht sich also auf die Input-Variablen und zeigt uns, wo welche Vorhersagen gemacht werden.
+:::
+
+Wir haben oben gesehen, dass das logistische Regressionsmodell (kompakt) wie folgt spezifiziert ist:
+
+$$
+p(y_i = 1 | \mathbf{x}_i) = \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}
+$$
+
+Wir schreiben dieses Modell nun etwas um, so dass wir am Schluss die Decision Boundary herleiten können. Dazu wollen wir die Gleichung so verändern, dass wir auf der linken Seite die **Odds** haben. Die Odds sind definiert als die **Erfolgswahrscheinlichkeit**, also $p(y_i = 1 | \mathbf{x}_i)$, dividiert durch die Misserfolgswahrscheinlichkeit, also $1 - p(y_i = 1 | \mathbf{x}_i)$.
+
+#### Fragen {.unnumbered}
+
+* Die Erfolgswahrscheinlichkeit ist 0.1. Was sind die Odds?
+* Die Odds sind 1/1 (oder 1:1). Was ist die Erfolgswahrscheinlichkeit?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Die Erfolgswahrscheinlichkeit ist $p=0.1$. Die Odds sind dementsprechend $\frac{p}{1-p}=\frac{1/10}{9/10}=\frac{1}{10}\frac{10}{9}=\frac{1}{9}$. Die Odds sind also 1/9 oder 1:9.
+
+Wenn die Odds 1/1 sind, dann lässt sich die Erfolgschwahrscheinlichkeit wie folgt herleiten:
+
+\begin{align}
+\frac{p}{1-p} &= 1\\
+p &= 1-p\\
+2p &= 1\\
+p &= \frac{1}{2}
+\end{align}
+:::
+
+Die mathematische Umformung für die logistische Regression geht wie folgt:
+
+\begin{align}
+\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)} &= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{1 - \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
+&= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{\frac{1+e^{-(\mathbf{w}' \mathbf{x_i})}}{1+e^{-(\mathbf{w}' \mathbf{x_i})}} - \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
+&= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{\frac{e^{-(\mathbf{w}' \mathbf{x_i})}}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
+&= \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}} \cdot \frac{1+e^{-(\mathbf{w}' \mathbf{x_i})}}{e^{-(\mathbf{w}' \mathbf{x_i})}}\\
+&= e^{(\mathbf{w}' \mathbf{x_i})}
+\end{align}
+
+In einem letzten Schritt können wir nun noch auf beiden Seiten den Logarithmus nehmen:
+
+\begin{align}
+\log\left(\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)}\right) &= \log\left(e^{(\mathbf{w}' \mathbf{x_i})}\right)\\
+&= \mathbf{w}' \mathbf{x_i}
+\end{align}
+
+Diese letzte Form wird **Log-Odds** genannt, weil wir auf der linken Seite der Gleichung nun den Logarithmus der Odds haben. Warum haben wir all das gemacht? Sie sehen, dass wir auf der rechten Seite der Gleichung nun die altbekannte **lineare Form** haben. Diese letzte Gleichung ist darum nun einfach zu handhaben, wenn es um die Berechnung der Decision Boundary geht.
+
+#### Eine Input-Variable
+
+Schauen wir uns in einem ersten Schritt an, wie die Decision Boundary aussieht, wenn wir nur eine Input-Variable haben (wie in unserem kleinen Beispiel). Die Log-Odds sehen in diesem Fall wie folgt aus:
+
+$$
+\log\left(\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)}\right) = w_0 + w_1 \cdot x_{i1}
+$$
+
+Wir haben oben bereits kurz den **Threshold** angesprochen. Hier wählen wir einen Threshold von 50% (= 0.5). Die Decision Boundary wird die Input-Varablenwerte darstellen, die genau zu einem Modelloutput von 50% führen. 
+
+Wir können den Threshold-Wert in obige Gleichung einsetzen und kriegen folgendes:
+
+$$
+\begin{split}
+\log\left(\frac{0.5}{1-0.5}\right) &= w_0 + w_1 \cdot x_{i1}\\
+\log\left(1\right) &= w_0 + w_1 \cdot x_{i1}\\
+0 &= w_0 + w_1 \cdot x_{i1}
+\end{split}
+$$
+
+Indem wir nach $x_{i1}$ auflösen, kriegen wir eine Formel, die uns den Input-Variablenwert gibt, der zu einem Modelloutput von genau 50% führt:
+
+$$
+x_{i1} = -\frac{w_0}{w_1}
+$$
+
+#### Frage {.unnumbered}
+
+Wo liegt die Decision Boundary bei unserem kleinen Beispiel?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+$$
+x_{i1} = -\frac{w_0}{w_1} = - \frac{0.15}{0.99} \approx -0.15
+$$
+Der Input-Variablenwert, der zu einer Wahrscheinlichkeit von 0.5 führt, ist ca. -0.15. Alle $x$-Werte kleiner als -0.15 werden als $\hat{y}_i=0$ klassifiziert, alle $x$-Werte grösser als -0.15 als $\hat{y}_i=1$.
+:::
+
+Die folgende Abbildung zeigt die berechnete Decision Boundary auch noch grafisch:
+
+```{r class-prob-db1, echo=FALSE, fig.show = 'hold', fig.cap='Decision Boundary für einen Threshold von 50% (bzw. 0.5) im Fall von einer Input-Variable (unser Beispiel).', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='DB für eine Input-Variable.'}
+library(latex2exp)
+# Select threshold
+thres <- 0.5
+# Data points
+x <- c(-4.1, 0.5, -0.1, 1.4, 4.4)
+y <- c(0, 0, 1, 1, 1)
+# Specify the outer margins (in margin lines)
+# - bottom, left, top, right
+par(oma = c(0.5, 0.5, 0.5, 0.5))
+# Inner margins
+par(mar = c(4, 5, 0.5, 0.5))
+# Scatterplot
+plot(1, 1,
+     axes = F, ylim = c(-0.05, 1.05), xlim = c(-6, 6),
+     xlab = TeX(r'($x_i$)'), ylab = TeX(r'($p\left(y_i = 1 | x_i\right)$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+# Box
+box(lwd = 1)
+# Custom axes
+axis(side = 1, at = seq(-6, 6, 2), labels = seq(-6, 6, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 1, 0.5), labels = seq(0, 1, 0.5), cex.axis = 1.5)
+# Lines through origin
+abline(h = 0, lty = 1, lwd = 1, col = "grey")
+abline(h = 1, lty = 1, lwd = 1, col = "grey")
+# Add data points
+cols <- c(rgb(1, 0, 0, 0.4), rgb(1, 0, 0, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4))
+points(x, y, pch = 16, cex = 2, col = cols)
+# Add logistic regression curve
+mod <- glm(y ~ x, family = "binomial")
+# Decision Boundary
+db <- (log(thres / (1 - thres)) - mod$coefficients[1]) / mod$coefficients[2]
+abline(v = db, lty = 1, lwd = 1, col = "grey")
+abline(h = 0.5, lty = 1, lwd = 1, col = "grey")
+# Add colored polygons
+polygon(x = c(-6, db, db, -6), 
+        y = c(-1, -1, 2, 2), 
+        col = rgb(1, 0, 0, 0.1),
+        border = NA)
+polygon(x = c(db, 6, 6, db), 
+        y = c(-1, -1, 2, 2), 
+        col = rgb(0, 0, 1, 0.1),
+        border = NA)
+# Data for curve
+xplot <- seq(-6, 6, 0.1)
+yplot <- predict.glm(mod, data.frame(x = xplot), type = "response")
+# Plot curve
+lines(xplot, yplot, col = "rosybrown3", lwd = 2)
+```
+
+Wenn wir also **nur eine Input-Variable** haben, dann ist die Decision Boundary eine **Vertikale** (hier am Punkt $x=-0.15$). Wir werden später sehen, dass sich diese Vertikale je nach gewähltem Threshold verschiebt.
+
+#### Zwei Input-Variablen
+
+Wenn wir zwei Input-Variablen haben, dann können wir die Decision Boundary, gegeben ein Threshold $p^*$, wie folgt herleiten:
+
+\begin{align}
+\log\left(\frac{p^*}{1-p^*}\right) &= w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2}\\
+w_1 \cdot x_{i1} &= \log\left(\frac{p^*}{1-p^*}\right) - w_0 - w_2 \cdot x_{i2}\\
+x_{i1} &= \color{blue}{\frac{\log\left(\frac{p^*}{1-p^*}\right) - w_0}{w_1}} \color{red}{- \frac{w_2}{w_1}} \color{black}{\cdot x_{i2}}
+\end{align}
+
+Diese Form sollte Ihnen irgendwie bekannt vorkommen. Die Decision Boundary kann bei zwei Input-Variablen als **Gerade** im Koordinatensystem mit $x_{i1}$ auf der y-Achse und $x_{i2}$ auf der x-Achse dargestellt werden. Die Gerade hat eine Konstante (blauer Teil) und eine Steigung (roter Teil).
+
+```{r class-prob-db2, echo=FALSE, fig.show = 'hold', fig.cap='Decision Boundary für einen Threshold von 50% (bzw. 0.5) im Fall von zwei Input-Variablen.', out.width='60%', fig.asp=1, fig.align='center', fig.alt='DB für zwei Input-Variablen.'}
+library(latex2exp)
+library(MASS)
+n <- 50
+thres <- 0.5
+set.seed(2)
+Sigma1 <- matrix(c(1,0,0,1.5), 2, 2)
+Sigma2 <- matrix(c(1,0.5,0.5,1), 2, 2)
+class1 <- mvrnorm(n/2, mu = c(4, 4), Sigma1)
+class2 <- mvrnorm(n/2, mu = c(6, 6), Sigma2)
+df <- data.frame(rbind(class1, class2))
+df$y <- c(rep(0, n/2), rep(1, n/2))
+cols <- c(rep(rgb(1, 0, 0, 0.4), n/2), rep(rgb(0, 0, 1, 0.4), n/2))
+lr_mod <- glm(y ~ X1 + X2, data = df, family = "binomial")
+par(oma = c(0.5, 0.5, 0.5, 0.5), pty = "s")
+par(mar = c(4, 5, 0.5, 0.5))
+plot(1, 1,
+     axes = F, ylim = c(0, 10), xlim = c(0, 10),
+     xlab = TeX(r'($x_{i2}$)'), ylab = TeX(r'($x_{i1}$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+box(lwd = 1)
+axis(side = 1, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+points(df$X2, df$X1, pch = 16, cex = 2, col = cols)
+a <- (log(thres / (1 - thres)) - lr_mod$coefficients[1]) / lr_mod$coefficients[2]
+b <- - lr_mod$coefficients[3] / lr_mod$coefficients[2]
+abline(a, b, lty = 1, lwd = 1, col = "grey")
+fc <- (log(thres / (1 - thres)) - lr_mod$coefficients[1]) / lr_mod$coefficients[3]
+polygon(x = c(0, fc, fc, 0), 
+        y = c(-1, -1, 0, a), 
+        col = rgb(1, 0, 0, 0.1),
+        border = NA)
+polygon(x = c(0, fc, 100, 100, 0), 
+        y = c(a, 0, 0, 10, 10), 
+        col = rgb(0, 0, 1, 0.1),
+        border = NA)
+```
+
+Die graue Gerade repräsentiert alle Kombinationen der Input-Variablen $x_{i1}$ und $x_{i2}$, für welche das Modell eine Wahrscheinlichkeit ausspuckt, die genau dem gesetzten Threshold (hier 0.5) entspricht.
+
+**Wichtig**: wir sehen vom ein- und zweidimensionalen Beispiel, das die Decision Boundary immer **linear** ist. Darum gilt das logistische Regressionsmodell als einfaches Modell: es kann (im Prinzip) nur **lineare Decision Boundaries** fitten.
+
+#### Lineare Separierbarkeit
+
+Weder in unserem kleinen Beispiel mit einer Input-Variable noch im obigen Beispiel mit zwei Input-Variablen sind die Daten **linear separierbar**. Das heisst, es gibt keinen Threshold-Wert, mit dem die Decision Boundary die Datenpunkte perfekt separieren könnte.
+
+Da die logistische Regression nur lineare Decision Boundaries modellieren kann, ist sie also dementsprechend limitiert. Jedoch gibt es, ähnlich wie bei der polynomischen Regression ([Abschnitt @sec-linregpoly]), die Möglichkeit neue Input-Variablen zu kreieren und das Modell so flexibler zu machen.
+
+Was zum Beispiel mit der Decision Boundary passiert, wenn wir in dem obigen Beispiel mit zwei Input-Variablen eine dritte Input-Variable $x_{i1}^2$ ins Modell nehmen, sehen Sie in folgender Abbildung:
+
+```{r class-prob-db3, echo=FALSE, fig.show = 'hold', fig.cap='Decision Boundary für einen Threshold von 50% (bzw. 0.5) im Fall von den zwei ursprünglichen Input-Variablen und einem zusätzlichen Feature $x_{i1}^2$.', out.width='60%', fig.asp=1, fig.align='center', fig.alt='DB für zwei Input-Variablen und Feature Engineering.'}
+library(latex2exp)
+library(MASS)
+n <- 50
+thres <- 0.5
+set.seed(2)
+Sigma1 <- matrix(c(1,0,0,1.5), 2, 2)
+Sigma2 <- matrix(c(1,0.5,0.5,1), 2, 2)
+class1 <- mvrnorm(n/2, mu = c(4, 4), Sigma1)
+class2 <- mvrnorm(n/2, mu = c(6, 6), Sigma2)
+df <- data.frame(rbind(class1, class2))
+df$y <- c(rep(0, n/2), rep(1, n/2))
+cols <- c(rep(rgb(1, 0, 0, 0.4), n/2), rep(rgb(0, 0, 1, 0.4), n/2))
+lr_mod <- glm(y ~ X1 + X2 + I(X1^2), data = df, family = "binomial")
+par(oma = c(0.5, 0.5, 0.5, 0.5), pty = "s")
+par(mar = c(4, 5, 0.5, 0.5))
+plot(1, 1,
+     axes = F, ylim = c(0, 10), xlim = c(0, 10),
+     xlab = TeX(r'($x_{i2}$)'), ylab = TeX(r'($x_{i1}$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+box(lwd = 1)
+axis(side = 1, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+x1 <- seq(0, 10, len = 300)
+x2 <- seq(0, 10, len = 300)
+grid <- expand.grid(X1 = x1, X2 = x2)
+z <- matrix(predict(lr_mod, grid, type = "response"), 300)
+image(x2, x1, z,  col = c(rgb(1,0,0,.1), rgb(0,0,1,.1)), breaks = c(0, .5, 1), add = TRUE)
+contour(x2, x1, z, levels = .5, add = TRUE, drawlabels = FALSE, lwd = 1, col = "grey")
+points(df$X2, df$X1, pch = 16, cex = 2, col = cols)
+```
+
+Wow, das Modell ist jetzt schon viel flexibler. Man muss jedoch aufpassen, denn man landet so schnell im **Overfitting**. Dem können wir mit einer Portion Regularisierung begegnen.
+
+<!-- TODO: multi-class classification -->
 
 ## Naive Bayes
 
-Coming soon.
+Ein sehr einfaches, aber oft erstaunlich gut performendes Klassifikationsmodell ist **Naive Bayes**. Dieses Modell beruht auf dem **Satz von Bayes**, den Sie in Statistik 1 bereits kennen gelernt haben.
+
+Nachfolgend ein Ausschnitt aus den Folien von Prof. Dr. Tobias Schoch zum Satz von Bayes (falls Sie etwas repetieren möchten):
+
+### Modellspezifikation
+
+Das Modell kann folgendermassen spezifiziert werden:
+
+$$
+p(y_i = 1 | \mathbf{x}_i) = \frac{p(\mathbf{x}_i | y_i = 1) \cdot p(y_i = 1)}{p(\mathbf{x}_i)}
+$$
+
+Es lohnt sich, hier kurz zu überlegen, was die Komponenten in dieser Modellspezifikation sind:
+
+* Der linke Teil ist die Wahrscheinlichkeit, dass es sich bei der Email $i$ um Spam handelt, gegeben die Input-Werte. Es ist dieselbe Wahrscheinlichkeit, die wir auch bei der logistischen Regression zu modellieren versuchen. Man nennt diese Wahrscheinlichkeit in der Fachsprache **Posterior**.
+* Der erste Teil rechts oben, $p(\mathbf{x}_i | y_i = 1)$, ist die Wahrscheinlichkeit der konkreten Input-Werte der Email $i$, gegeben es handelt sich um eine Spam-Email. Unsere Input-Werte sind ja im Spam Filter die wichtigsten Wörter gemäss dem Bag-of-Words Ansatz. D.h. wir rechnen hier die Wahrscheinlichkeit der beobachteten Wörter in einer Email, gegeben es ist eine Spam Email. Dieser Teil wird **Likelihood** genannt.
+* Der zweite Teil rechts oben, $p(y_i = 1)$, ist die a-priori Wahrscheinlichkeit einer Spam Email. Was ist die generelle Wahrscheinlichkeit, dass eine Email Spam ist. Diese Wahrscheinlichkeit wird in der Fachsprache **Prior** genannt.
+* Der Nenner auf der rechten Seite ist die Wahrscheinlichkeit, dass wir für eine Email $i$ die konkreten Input-Werte beobachten, unabhängig davon ob es sich um Spam oder Ham handelt. Oft wird dieser Teil **Evidence** genannt. Mit dem **Gesetz der totalen Wahrscheinlichkeit** lässt sich die Evidence einfach rechnen:
+
+$$
+p(\mathbf{x}_i) = p(\mathbf{x}_i | y_i = 1) \cdot p(y_i = 1) + p(\mathbf{x}_i | y_i = 0) \cdot p(y_i = 0)
+$$
+
+<div style = "background-color:#fef9e7; padding:10px">
+**Wichtig**: der zentrale Aspekt beim Naive Bayes Modell ist eine **Unabhängigkeitsannahme**. Warum brauchen wir eine Unabhängigkeitsannahme? Weil es äusserst schwierig ist, die Likelihood $p(\mathbf{x}_i | y_i = 1)$ aus Daten zu schätzen. Für eine kurze Email mit dem Text "Hallo, wie geht es dir?" müssten wir die **gemeinsame Wahrscheinlichkeit** (*Joint Probability*), dass genau diese 5 Worte gemeinsam in einer Spam Email vorkommen und alle anderen Wörter nicht, schätzen. Das ist enorm schwierig. Darum machen wir folgende Unabhängigkeitsannahme:
+
+$$
+p(\mathbf{x}_i | y_i = 1) = p(x_{i1} | y_i = 1) \cdot p(x_{i2} | y_i = 1) \cdot \ldots \cdot p(x_{ip} | y_i = 1) \cdot 
+$$
+
+Anstatt die gemeinsame Wahrscheinlichkeit müssen wir hier nur die **Randwahrscheinlichkeiten** für jedes Wort schätzen und diese dann miteinander multiplizieren.
+
+Das ist eine ziemliche Vereinfachung, denn wir nehmen nun an, dass beispielsweise die Wahrscheinlichkeit des Worts "geht" (gegeben eine Spam Email) **unabhängig** von der Wahrscheinlichkeit des Worts "wie" (gegeben eine Spam Email) ist. Wenn Sie daran denken, wie oft in einem Text die Phrase "wie geht..." vorkommt, dann dürften die beiden Wahrscheinlichkeiten kaum unabhängig voneinander sein. Aber in der Praxis funktioniert diese Annahme trotzdem erstaunlich gut.
+
+Wenn wir an den **Bias-Variance-Tradeoff** denken, dann passiert mit dieser Unabhängigkeitsannahme folgendes: wir erhöhen den Bias des Modells willentlich, indem wir diese Unabhängigkeitsannahme machen. Gleichzeitig reduzieren wir jedoch die Varianz substantiell, da das Modell so viel einfacher wird. Oft ist die Reduktion der Varianz grösser als der Anstieg des Bias, weshalb dieses Modell in der Praxis oft gut funktioniert.
+</div>
+
+### Modelltraining
+
+Aus obigen Ausführungen sehen wir, dass wir folgende Wahrscheinlichkeiten aus den Daten schätzen müssen:
+
+* Priors $p(y_i = 1)$ und $p(y_i = 0)$
+* Für alle **Spam** Emails die Randwahrscheinlichkeiten $p(x_{i1} | y_i = 1)$, $p(x_{i2} | y_i = 1)$, etc.
+* Für alle **Ham** Emails die Randwahrscheinlichkeiten $p(x_{i1} | y_i = 0)$, $p(x_{i2} | y_i = 0)$, etc.
+
+Die Priors können ganz einfach als **relative Häufigkeiten** von Spam bzw. Ham Emails im Trainingsdatensatz geschätzt werden.
+
+Auch die Randwahrscheinlichkeiten lassen sich im Spam Filter Beispiel einfach schätzen. Für jedes Wort im Bag-of-Words (z.B. "price") schätzen Sie die relative Häufigkeit in allen Spam Emails und in allen Ham Emails.
+
+Im Spam Filter Beispiel haben wir nur kategorische (qualitative) Input-Variablen, für die sich die Randwahrscheinlichkeiten als relative Häufigkeiten schätzen lassen. Es ist aber auch möglich, **quantitative Input-Variablen** zu haben, z.B. die Anzahl Worte in einer Email. In diesem Fall nehmen Sie alle Spam Emails und schätzen eine Normalverteilung für die Anzahl Worte in den Spam Emails. Mit der geschätzten Normalverteilung können Sie dann ebenfalls eine Randwahrscheinlichkeit (genauer gesagt einen Wert der Dichte) für eine bestimmte Anzahl Worte rechnen. Das Selbe tun Sie selbstverständlich auch mit den Ham Emails.
+
+### Beispiel
+
+Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort "afford" bzw. "price" in einer Email vorkommen oder nicht.
+
+Berechnen wir als erstes die Priors.
+
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "priors_mc", echo = FALSE} -->
+<!-- question("Der Trainingsdatensatz enthält insgesamt 4000 Emails. 1277 Emails sind Spam. Was sind die korrekten Priors?", -->
+<!--   answer("$p(y_i = 1) = 0.32$ und $p(y_i = 0) = 0.68$", correct = TRUE), -->
+<!--   answer("$p(y_i = 1) = 0.68$ und $p(y_i = 0) = 0.32$"), -->
+<!--   answer("$p(y_i = 1) = 0.5$ und $p(y_i = 0) = 0.5$"), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+
+Als nächstes rechnen wir die Randwahrscheinlichkeiten für die Spam Emails. In den 1277 Spam Emails enthalten 40 Emails das Wort "afford" und 223 Emails das Wort "price".
+
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "randSpam_mc", echo = FALSE} -->
+<!-- question("Was sind die korrekten Randwahrscheinlichkeiten für die Spam Emails?", -->
+<!--   answer("$p(afford_i = 1 | y_i = 1) = 0.03$ und $p(price_i = 1 | y_i = 1) = 0.17$", correct = TRUE), -->
+<!--   answer("$p(afford_i = 1 | y_i = 1) = 0.97$ und $p(price_i = 1 | y_i = 1) = 0.83$"), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+
+Wichtig: die Wahrscheinlichkeit, dass das Wort "afford" bzw. "price" *nicht* vorkommt in einer Spam Email haben wir so indirekt auch bereits berechnet:
+
+$$
+p(afford_i = 0 | y_i = 1) = 1 - p(afford_i = 1 | y_i = 1) = 1 - 0.03 = 0.97
+$$
+$$
+p(price_i = 0 | y_i = 1) = 1 - p(price_i = 1 | y_i = 1) = 1 - 0.17 = 0.83
+$$
+
+Als letztes rechnen wir nun noch die Randwahrscheinlichkeiten für die Ham Emails. In den 2723 Ham Emails enthalten 27 Emails das Wort "afford" und 134 Emails das Wort "price".
+
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "randHam_mc", echo = FALSE} -->
+<!-- question("Was sind die korrekten Randwahrscheinlichkeiten für die Ham Emails?", -->
+<!--   answer("$p(afford_i = 1 | y_i = 0) = 0.01$ und $p(price_i = 1 | y_i = 0) = 0.05$", correct = TRUE), -->
+<!--   answer("$p(afford_i = 1 | y_i = 0) = 0.99$ und $p(price_i = 1 | y_i = 0) = 0.95$"), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+
+Auch hier können die Wahrscheinlichkeiten für das "Gegenereignis" einfach gerechnet werden:
+
+$$
+p(afford_i = 0 | y_i = 0) = 1 - p(afford_i = 1 | y_i = 0) = 1 - 0.01 = 0.99
+$$
+$$
+p(price_i = 0 | y_i = 0) = 1 - p(price_i = 1 | y_i = 0) = 1 - 0.05 = 0.95
+$$
+
+Nun wollen wir die Posterior Wahrscheinlichkeit berechnen, dass eine Email, welche sowohl das Wort "afford" als auch das Wort "price" enthält, eine Spam Email ist:
+
+$$
+\begin{split}
+p(y_i = 1 | afford_i = 1, price_i = 1) &= \frac{p(afford_i = 1 | y_i = 1) \cdot p(price_i = 1 | y_i = 1) \cdot p(y_i = 1)}{p(afford_i = 1, price_i = 1)}\\
+&= \frac{0.03 \cdot 0.17 \cdot 0.32}{0.03 \cdot 0.17 \cdot 0.32 + 0.01 \cdot 0.05 \cdot 0.68}\\
+&= \frac{0.001632}{0.001632 + 0.00034}\\
+&= 0.83
+\end{split}
+$$
+
+Wow, gegeben, dass die beiden Worte "afford" und "price" in einem Email vorkommen, sind wir also ziemlich sicher, dass es sich um eine Spam Email handelt.
+
+**Aufgabe**: rechnen Sie die Wahrscheinlichkeit, dass es sich bei einer Email um Spam handelt, wenn nur das Wort "afford" vorkommt, nicht aber das Wort "price".
+*Lösung*: 0.55
 
 ## K-Nearest Neighbors
 
@@ -74,3 +783,14 @@ Der Durchschnitt über die 5 $y_i$-Werte in der Nachbarschaft beträgt 4, weshal
 :::
 
 ![KNN Modell für Regressionsproblem](images/knnreg.PNG){#fig-knnreg}
+
+## Modelle in R {#sec-logregR}
+
+Coming soon
+
+
+
+
+
+
+

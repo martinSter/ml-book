@@ -965,7 +965,7 @@ Das zweite Modell ist nicht schlecht, aber zeigt immer noch leichte Anzeichen vo
 
 Eine letzte Überlegung bezüglich Modellselektion geht folgendermassen: wenn wir mehrere Modelle haben, die ähnlich gut performen, dann wählen wir das einfachste (kleinste) oder **am wenigsten komplexe Modell**. Man nennt dies **Occam's Razor**. William of Occam war ein Englischer Mönch und hat dieses Prinzip in einem anderen Kontext erstmals formuliert.
 
-## Polynomische Regression
+## Polynomische Regression {#sec-linregpoly}
 
 Wir machen hier nun einen kurzen Abstecher und lernen die **polynomische Regression** kennen, denn diese eignet sich auch sehr gut, um den Bias-Variance Tradeoff zu illustrieren.
 
