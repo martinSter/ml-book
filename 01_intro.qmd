@@ -154,7 +154,7 @@ Wir haben $n = 5000$ Beobachtungen und $p = 3$ Variablen.
 
 Die $n$ Beobachtungen, die für das Training eines Modells zur Verfügung stehen werden meist **Trainingsdaten** oder **Trainingset** genannt.
 
-### Taxonomie des Machine Learnings
+### Taxonomie des Machine Learnings {#sec-taxonomie}
 
 Beim **Supervised Learning** geht es um ML Probleme, in denen **sowohl Input-Daten als auch ein Output** vorhanden ist. Ziel beim Supervised Learning ist es, ein Modell zu trainieren, das basierend auf den Input-Daten möglichst gute Vorhersagen für den Output macht. Es geht also hier um Vorhersageprobleme. In einem gewissen Sinn ist der Output die überwachende Instanz (engl. *Supervisor*), welche den Lernprozess des Modells kontrolliert.
 
