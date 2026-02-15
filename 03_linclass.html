@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-60bb1717b56a62d0d19126c2c8ec626d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e83ed3172a0847c3b1a4e9a3dee0bd66.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -281,7 +281,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#modellspezifikation-1" id="toc-modellspezifikation-1" class="nav-link" data-scroll-target="#modellspezifikation-1"><span class="header-section-number">3.2.1</span> Modellspezifikation</a></li>
   <li><a href="#modelltraining-1" id="toc-modelltraining-1" class="nav-link" data-scroll-target="#modelltraining-1"><span class="header-section-number">3.2.2</span> Modelltraining</a></li>
-  <li><a href="#beispiel" id="toc-beispiel" class="nav-link" data-scroll-target="#beispiel"><span class="header-section-number">3.2.3</span> Beispiel</a></li>
+  <li><a href="#spam-filter" id="toc-spam-filter" class="nav-link" data-scroll-target="#spam-filter"><span class="header-section-number">3.2.3</span> Spam Filter</a></li>
   </ul></li>
   <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</a></li>
   <li><a href="#sec-logregR" id="toc-sec-logregR" class="nav-link" data-scroll-target="#sec-logregR"><span class="header-section-number">3.4</span> Modelle in R</a></li>
@@ -336,10 +336,10 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Bei den meisten Klassifikationsmodellen wird <em>nicht</em> direkt der Output <span class="math inline">\(y_i\)</span> modelliert (wie das bei den Regressionsproblemen der Fall ist), sondern die (bedingte) <strong>Wahrscheinlichkeit</strong>, dass <span class="math inline">\(y_i=1\)</span>, gegeben irgendwelche Input-Datenwerte. Mathematisch schreiben wir diese Wahrscheinlichkeit als <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span>. Alle unsere Modelle hier werden versuchen, möglichst genaue Schätzung für diese bedingte Wahrscheinlichkeit zu finden.</p>
+<p>Bei den meisten Klassifikationsmodellen wird <em>nicht</em> direkt der Output <span class="math inline">\(y_i\)</span> modelliert (wie das bei den Regressionsproblemen der Fall ist), sondern die (bedingte) <strong>Wahrscheinlichkeit</strong>, dass <span class="math inline">\(y_i=1\)</span>, gegeben irgendwelche Input-Datenwerte. Mathematisch schreiben wir diese Wahrscheinlichkeit als <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span>. Alle unsere Modelle hier werden versuchen, möglichst genaue Schätzung für diese bedingte Wahrscheinlichkeit zu finden.</p>
 <section id="frage" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
-<p>Warum modellieren wir <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span> nicht mit dem linearen Regressionsmodell?</p>
+<p>Warum modellieren wir <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span> nicht mit dem linearen Regressionsmodell?</p>
 <ol type="a">
 <li>Je nach Input-Daten könnten wir negative Wahrscheinlichkeiten oder Wahrscheinlichkeiten grösser als 1 erhalten.</li>
 <li>Weil wir für die Klassifikation nie ein lineares Modell schätzen.</li>
@@ -363,8 +363,8 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Nun wundern Sie sich vielleicht: wenn uns unser Modell eine Schätzung für <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span> zurück gibt, wie mache ich damit eine Vorhersage?</p>
-<p>Im einfachsten Fall ist unsere Vorhersage <span class="math inline">\(\hat{y}_i=1\)</span> (also Kategorie 1), falls die geschätzte Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i) &gt; 50\%\)</span>, und sonst <span class="math inline">\(\hat{y}_i=0\)</span>. Hier haben wir einen <strong>Threshold</strong> von 50% gewählt, aber grundsätzlich können wir auch andere Thresholds wählen (z.B. 20% oder 85%), um von den geschätzten Wahrscheinlichkeiten eine Vorhersage abzuleiten. Wir werden uns in <a href="04_pipeline.html" class="quarto-xref"><span>Kapitel 4</span></a> genauer mit dem optimalen Threshold befassen.</p>
+<p>Nun wundern Sie sich vielleicht: wenn uns unser Modell eine Schätzung für <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span> zurück gibt, wie mache ich damit eine Vorhersage?</p>
+<p>Im einfachsten Fall ist unsere Vorhersage <span class="math inline">\(\hat{y}_i=1\)</span> (also Kategorie 1), falls die geschätzte Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i) &gt; 50\%\)</span>, und sonst <span class="math inline">\(\hat{y}_i=0\)</span>. Hier haben wir einen <strong>Threshold</strong> von 50% gewählt, aber grundsätzlich können wir auch andere Thresholds wählen (z.B. 20% oder 85%), um von den geschätzten Wahrscheinlichkeiten eine Vorhersage abzuleiten. Wir werden uns in <a href="04_pipeline.html" class="quarto-xref"><span>Kapitel 4</span></a> genauer mit dem optimalen Threshold befassen.</p>
 </section>
 </section>
 <section id="modellspezifikation" class="level3" data-number="3.1.2">
@@ -374,7 +374,7 @@ window.Quarto = {
 f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
 \]</span> Diese gewichtete Summe der Input-Variablenwerte wird auch bei der logistischen Regression eine wichtige Rolle spielen. Wir haben in der ersten Frage zu diesem Kapitel bereits gesehen, dass folgende Modellgleichung leider nicht eine gute Idee ist:</p>
 <p><span class="math display">\[
-p(y_i = 1 | \mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
+p(y_i = 1 \mid \mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
 \]</span> Warum nicht? Weil die gewichtete Summe je nach Input-Daten mal negativ sein kann oder auch grösser als 1. Gleichzeitig wissen wir aus der Wahrscheinlichkeitstheorie, dass eine Wahrscheinlichkeit immer zwischen 0 und 1 liegen muss. Folgende Abbildung zeigt, dass das lineare Regressionsmodell nur innerhalb der gestrichelten, vertikalen Linien eine Wahrscheinlichkeit zwischen 0 und 1 zurückgibt.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -441,7 +441,7 @@ g(z) = \frac{e^z}{1+e^z}=\frac{1}{1+e^{-z}}
 </div>
 <p>Nun können wir alles zusammensetzen, was ganz einfach bedeutet, dass wir nun anstelle von <span class="math inline">\(z\)</span> die gewichtete Summe der Input-Variablen in die Sigmoid Funktion einsetzen. Das logistische Regressionsmodell sieht dementsprechend dann wie folgt aus:</p>
 <p><span class="math display">\[\begin{align}
-p(y_i = 1 | \mathbf{x}_i) &amp;= \frac{1}{1+e^{-(w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip})}}\\
+p(y_i = 1 \mid \mathbf{x}_i) &amp;= \frac{1}{1+e^{-(w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip})}}\\
 &amp;= \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}
 \end{align}\]</span></p>
 <p>Im nächsten Abschnitt wollen wir herausfinden, wie die Parameter des Modells geschätzt werden.</p>
@@ -451,7 +451,7 @@ p(y_i = 1 | \mathbf{x}_i) &amp;= \frac{1}{1+e^{-(w_0 + w_1 \cdot x_{i1} + w_2 \c
 <h3 data-number="3.1.3" class="anchored" data-anchor-id="modelltraining"><span class="header-section-number">3.1.3</span> Modelltraining</h3>
 <p>Modelltraining bedeutet auch hier nichts anderes, als dass wir die Parameter des Modells möglichst optimal schätzen wollen. Sie haben in <a href="02_linreg.html" class="quarto-xref"><span>Kapitel 2</span></a> (Perspektive 1 des Modelltrainings bei der lin. Regression) bereits gelernt, dass wir in der Phase des Modelltrainings eine <strong>Kostenfunktion</strong> aufstellen, die es dann zu minimieren gilt. Doch wie soll eine Kostenfunktion für das Klassifikationsproblem aussehen?</p>
 <p>Im <strong>Idealfall</strong> gibt unser Modell eine Wahrscheinlichkeit von 0 aus für alle Beobachtungen, bei denen <span class="math inline">\(y_i=0\)</span>, während für alle Beobachtungen, wo <span class="math inline">\(y_i=1\)</span>, eine Wahrscheinlichkeit von 1 zurückgegeben wird. In diesem Idealfall sollte die Kostenfunktion 0 betragen. Wie können wir das mathematisch abbilden?</p>
-<p>Die “Kosten” für eine <strong>einzelne Beobachtung</strong> mit dem (wahren) Outputwert <span class="math inline">\(y_i=1\)</span> schreiben wir als <span class="math inline">\(-\text{log}(p(y_i = 1 | \mathbf{x}_i))\)</span>. Für Beobachtungen mit dem (wahren) Label <span class="math inline">\(y_i=0\)</span> sind die “Kosten” dementsprechend <span class="math inline">\(-\text{log}(1-p(y_i = 1 | \mathbf{x}_i))\)</span>. Warum das Sinn macht, sehen Sie anhand folgender Abbildung:</p>
+<p>Die “Kosten” für eine <strong>einzelne Beobachtung</strong> mit dem (wahren) Outputwert <span class="math inline">\(y_i=1\)</span> schreiben wir als <span class="math inline">\(-\text{log}(p(y_i = 1 \mid \mathbf{x}_i))\)</span>. Für Beobachtungen mit dem (wahren) Label <span class="math inline">\(y_i=0\)</span> sind die “Kosten” dementsprechend <span class="math inline">\(-\text{log}(1-p(y_i = 1 \mid \mathbf{x}_i))\)</span>. Warum das Sinn macht, sehen Sie anhand folgender Abbildung:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -462,10 +462,10 @@ p(y_i = 1 | \mathbf{x}_i) &amp;= \frac{1}{1+e^{-(w_0 + w_1 \cdot x_{i1} + w_2 \c
 </div>
 </div>
 </div>
-<p>In der linken Abbildung sehen Sie einen Kostenwert, der immer kleiner wird, je grösser die Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span>. Rechts sehen wir genau das Gegenteil: je grösser diese Wahrscheinlichkeit, desto grösser die Kosten. Wir wollen in diesem Fall, dass die Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span> so klein wie möglich ist.</p>
+<p>In der linken Abbildung sehen Sie einen Kostenwert, der immer kleiner wird, je grösser die Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span>. Rechts sehen wir genau das Gegenteil: je grösser diese Wahrscheinlichkeit, desto grösser die Kosten. Wir wollen in diesem Fall, dass die Wahrscheinlichkeit <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span> so klein wie möglich ist.</p>
 <p>Wir haben nun die Kosten für <strong>einzelne Beobachtungen</strong> angeschaut und gesehen, dass die Kosten je nach wahrem Label <span class="math inline">\(y_i\)</span> unterschiedlich sind. Die <strong>Gesamtkostenfunktion</strong> ist der Durchschnitt über die individuellen Kosten (gemittelt über alle Beobachtungen im Trainingsdatensatz). Mathematisch sieht das Ganze folgendermassen aus:</p>
 <p><span class="math display">\[
-J = -\frac{1}{n}\sum_{i=1}^n \left[y_i \cdot \log\left(p(y_i = 1 | \mathbf{x}_i)\right) + (1-y_i) \cdot \log\left(1-p(y_i = 1 | \mathbf{x}_i)\right)\right]
+J = -\frac{1}{n}\sum_{i=1}^n \left[y_i \cdot \log\left(p(y_i = 1 \mid \mathbf{x}_i)\right) + (1-y_i) \cdot \log\left(1-p(y_i = 1 \mid \mathbf{x}_i)\right)\right]
 \]</span></p>
 <p>Überlegen Sie sich kurz, warum diese Berechnung Sinn macht. Wenn die <span class="math inline">\(i\)</span>-te Beobachtung das Label <span class="math inline">\(y_i=1\)</span> hat, dann entfällt der zweite Teil in den eckigen Klammern, weil in diesem Fall <span class="math inline">\((1-y_i)=0\)</span> ist. Wenn die <span class="math inline">\(i\)</span>-te Beobachtung hingegen das Label <span class="math inline">\(y_i=0\)</span> hat, dann entfällt der erste Teil in den eckigen Klammern, weil die individuellen Kosten mit 0 multipliziert werden. Wir haben hier also eine kompakte mathematische Form, um die Gesamtkostenfunktion aufzuschreiben. In der Praxis wird diese Kostenfunktion häufig <strong>log-loss</strong> genannt.</p>
 <p>Wir suchen also nun die Parameterwerte <span class="math inline">\(w_0, w_1, \dots\)</span>, welche die obige Kostenfunktion minimieren. Leider gibt es <em>keine</em> analytische Lösung dafür. Wir können aber die optimalen Parameterwerte mit anderen (iterativen) Optimierungsmethoden finden. In <code>R</code> und <code>Python</code> sind diese Methoden effizient implementert (<a href="#sec-logregR" class="quarto-xref">Abschnitt&nbsp;<span>3.4</span></a>), so dass wir die Parameter, welche diese Kostenfunktion minimieren, oft in wenigen Millisekunden finden.</p>
@@ -482,7 +482,7 @@ J = -\frac{1}{n}\sum_{i=1}^n \left[y_i \cdot \log\left(p(y_i = 1 | \mathbf{x}_i)
 </div>
 <p>Die optimalen Parameter sind <span class="math inline">\(w_0 = 0.15\)</span> und <span class="math inline">\(w_1 = 0.99\)</span>. Wir sehen, dass die gefittete Sigmoid Funktion nicht bei <span class="math inline">\(x_i=0\)</span> den Wert 0.5 hat, sondern etwas vorher (nämlich bei -0.15). Der Parameter <span class="math inline">\(w_0\)</span> gibt uns also in einem gewissen Sinn die horizontale “Flexibilität” beim Fitten des Modells bzw. der Funktion. Unser finales Modell sieht also wie folgt aus:</p>
 <p><span class="math display">\[
-p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot x_{i})}}
+p(y_i = 1 \mid x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot x_{i})}}
 \]</span></p>
 <section id="frage-2" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="frage-2">Frage</h4>
@@ -501,7 +501,7 @@ p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot x_{i})}}
 <div class="callout-body-container callout-body">
 <p>Die korrekte Antwort ergibt sich durch Einsetzen des Werts in das trainierte Modell:</p>
 <p><span class="math display">\[
-p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot (-2))}} = \frac{1}{1+e^{-(-1.83)}} = 0.14
+p(y_i = 1 \mid x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot (-2))}} = \frac{1}{1+e^{-(-1.83)}} = 0.14
 \]</span> Gemäss unserem Modell ist die Wahrscheinlichkeit, dass <span class="math inline">\(y_i = 1\)</span> lediglich 14% für diesen Input-Variablenwert.</p>
 </div>
 </div>
@@ -523,7 +523,46 @@ p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot (-2))}} = \frac{1}{1+e^{-(-
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Bla…</p>
+<p>Wir können das logistische Regressionsmodell schreiben als</p>
+<p><span class="math display">\[
+p(y_i = 1 \mid x_i) = g(\mathbf{w}' \mathbf{x_i})\,,
+\]</span> wobei <span class="math inline">\(g()\)</span> die Sigmoid Funktion bezeichnet.</p>
+<p>Die erste Ableitung der <em>allgemeinen</em> Form der Sigmoid Funktion <span class="math inline">\(g(z)\)</span> hat folgende einfache Form:</p>
+<p><span class="math display">\[
+\frac{d\,g(z)}{dz} = g(z) \cdot (1 - g(z))
+\]</span></p>
+<p>Nun können wir die Ableitung der Kostenfunktion nach den Modellparameter <span class="math inline">\(\mathbf{w}\)</span> rechnen. Dazu verwenden wir die obigen zwei Resultate, die Tatsache, dass die Ableitung der Logarithmusfunktion <span class="math inline">\(\log(z)=\frac{1}{z}\)</span> ist und die bekannte <strong>Kettenregel</strong> für Ableitungen:</p>
+<p><span class="math display">\[
+\begin{split}
+\frac{\partial J}{\partial \mathbf{w}}
+&amp;= -\frac{1}{n} \sum_{i=1}^n \Bigl[
+y_i \cdot \frac{1}{g(\mathbf{w}' \mathbf{x_i})} \cdot g(\mathbf{w}' \mathbf{x_i})
+\cdot (1 - g(\mathbf{w}' \mathbf{x_i})) \cdot \mathbf{x}_i \\
+&amp;\qquad + (1- y_i) \cdot \frac{1}{1 - g(\mathbf{w}' \mathbf{x_i})} \cdot (-1)
+\cdot g(\mathbf{w}' \mathbf{x_i}) \cdot (1 - g(\mathbf{w}' \mathbf{x_i}))
+\cdot \mathbf{x}_i
+\Bigr]
+\\
+&amp;= -\frac{1}{n} \sum_{i=1}^n \left[y_i \cdot (1 - g(\mathbf{w}' \mathbf{x_i})) \cdot \mathbf{x}_i - (1- y_i) \cdot g(\mathbf{w}' \mathbf{x_i}) \cdot \mathbf{x}_i\right]\\
+&amp;= -\frac{1}{n} \sum_{i=1}^n \left[y_i \cdot \mathbf{x}_i - y_i \cdot \mathbf{x}_i \cdot g(\mathbf{w}' \mathbf{x_i}) -  \mathbf{x}_i \cdot g(\mathbf{w}' \mathbf{x_i}) + y_i \cdot \mathbf{x}_i \cdot g(\mathbf{w}' \mathbf{x_i})\right]\\
+&amp;= -\frac{1}{n} \sum_{i=1}^n \left[y_i \cdot \mathbf{x}_i -  \mathbf{x}_i \cdot g(\mathbf{w}' \mathbf{x_i})\right]\\
+&amp;= -\frac{1}{n} \sum_{i=1}^n \left[(y_i - g(\mathbf{w}' \mathbf{x_i})) \cdot \mathbf{x}_i\right]\\
+\end{split}
+\]</span> Obschon obige Umformung der Ableitung etwas wild daherkommt, sehen Sie vielleicht, dass wir mit simplen algebraischen Umformungen zu einem einfachen Ausdruck der ersten Ableitung in der letzten Zeile kommen.</p>
+<p>Wir sehen nun folgende Elemente in dieser Ableitung:</p>
+<ul>
+<li>Der Term <span class="math inline">\((y_i - g(\mathbf{w}' \mathbf{x_i}))\)</span> ist nichts anderes als eine Zahl (= Skalar), die den Fehler für die <span class="math inline">\(i\)</span>-te Beobachtung beschreibt. Wie stark weicht die Vorhersage des Modells <span class="math inline">\(g(\mathbf{w}' \mathbf{x_i})\)</span> vom wahren Output <span class="math inline">\(y_i\)</span> ab?</li>
+<li><span class="math inline">\(\mathbf{x_i}\)</span> hingegen ist ein Vektor, weshalb die Ableitung oben im Prinzip die Ableitungen nach allen <span class="math inline">\(p\)</span> Modellparameter enthält.</li>
+</ul>
+<p>Aus letzterem Punkt folgt, dass wenn wir nun die Ableitung gleich Null setzen, um die optimalen Parameter zu finden, wir eigentlich ein Gleichungssystem mit <span class="math inline">\(p\)</span> Gleichungen haben. Wir schauen uns hier nun aber nur die Ableitung nach der Konstante <span class="math inline">\(w_0\)</span> an, für die <span class="math inline">\(\mathbf{x}_i\)</span> an erster Stelle eine 1 enthält:</p>
+<p><span class="math display">\[
+\begin{split}
+-\frac{1}{n} \sum_{i=1}^n (y_i - g(\mathbf{w}' \mathbf{x_i})) \cdot 1 &amp;= 0\\
+-\frac{1}{n} \sum_{i=1}^n y_i + \frac{1}{n} \sum_{i=1}^n g(\mathbf{w}' \mathbf{x_i}) &amp;= 0\\
+\frac{1}{n} \sum_{i=1}^n g(\mathbf{w}' \mathbf{x_i}) &amp;= \frac{1}{n} \sum_{i=1}^n y_i\\
+\end{split}
+\]</span></p>
+<p>Wow, in der letzten Zeile sehen wir nun genau das gesuchte Resultat. Am Optimum (der Modellparameter) <strong>muss gelten</strong>, dass der Durchschnitt über die <span class="math inline">\(y\)</span>-Werte genau dem Durchschnitt über die Modelloutputs entspricht.</p>
 </div>
 </div>
 </div>
@@ -548,9 +587,9 @@ p(y_i = 1 | x_i) = \frac{1}{1+e^{-(0.15 + 0.99 \cdot (-2))}} = \frac{1}{1+e^{-(-
 </div>
 <p>Wir haben oben gesehen, dass das logistische Regressionsmodell (kompakt) wie folgt spezifiziert ist:</p>
 <p><span class="math display">\[
-p(y_i = 1 | \mathbf{x}_i) = \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}
+p(y_i = 1 \mid \mathbf{x}_i) = \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}
 \]</span></p>
-<p>Wir schreiben dieses Modell nun etwas um, so dass wir am Schluss die Decision Boundary herleiten können. Dazu wollen wir die Gleichung so verändern, dass wir auf der linken Seite die <strong>Odds</strong> haben. Die Odds sind definiert als die <strong>Erfolgswahrscheinlichkeit</strong>, also <span class="math inline">\(p(y_i = 1 | \mathbf{x}_i)\)</span>, dividiert durch die Misserfolgswahrscheinlichkeit, also <span class="math inline">\(1 - p(y_i = 1 | \mathbf{x}_i)\)</span>.</p>
+<p>Wir schreiben dieses Modell nun etwas um, so dass wir am Schluss die Decision Boundary herleiten können. Dazu wollen wir die Gleichung so verändern, dass wir auf der linken Seite die <strong>Odds</strong> haben. Die Odds sind definiert als die <strong>Erfolgswahrscheinlichkeit</strong>, also <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span>, dividiert durch die Misserfolgswahrscheinlichkeit, also <span class="math inline">\(1 - p(y_i = 1 \mid \mathbf{x}_i)\)</span>.</p>
 <section id="fragen" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="fragen">Fragen</h4>
 <ul>
@@ -582,7 +621,7 @@ p &amp;= \frac{1}{2}
 </div>
 <p>Die mathematische Umformung für die logistische Regression geht wie folgt:</p>
 <p><span class="math display">\[\begin{align}
-\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)} &amp;= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{1 - \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
+\frac{p(y_i = 1 \mid \mathbf{x}_i)}{1-p(y_i = 1 \mid \mathbf{x}_i)} &amp;= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{1 - \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
 &amp;= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{\frac{1+e^{-(\mathbf{w}' \mathbf{x_i})}}{1+e^{-(\mathbf{w}' \mathbf{x_i})}} - \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
 &amp;= \frac{\frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}{\frac{e^{-(\mathbf{w}' \mathbf{x_i})}}{1+e^{-(\mathbf{w}' \mathbf{x_i})}}}\\
 &amp;= \frac{1}{1+e^{-(\mathbf{w}' \mathbf{x_i})}} \cdot \frac{1+e^{-(\mathbf{w}' \mathbf{x_i})}}{e^{-(\mathbf{w}' \mathbf{x_i})}}\\
@@ -590,7 +629,7 @@ p &amp;= \frac{1}{2}
 \end{align}\]</span></p>
 <p>In einem letzten Schritt können wir nun noch auf beiden Seiten den Logarithmus nehmen:</p>
 <p><span class="math display">\[\begin{align}
-\log\left(\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)}\right) &amp;= \log\left(e^{(\mathbf{w}' \mathbf{x_i})}\right)\\
+\log\left(\frac{p(y_i = 1 \mid \mathbf{x}_i)}{1-p(y_i = 1 \mid \mathbf{x}_i)}\right) &amp;= \log\left(e^{(\mathbf{w}' \mathbf{x_i})}\right)\\
 &amp;= \mathbf{w}' \mathbf{x_i}
 \end{align}\]</span></p>
 <p>Diese letzte Form wird <strong>Log-Odds</strong> genannt, weil wir auf der linken Seite der Gleichung nun den Logarithmus der Odds haben. Warum haben wir all das gemacht? Sie sehen, dass wir auf der rechten Seite der Gleichung nun die altbekannte <strong>lineare Form</strong> haben. Diese letzte Gleichung ist darum nun einfach zu handhaben, wenn es um die Berechnung der Decision Boundary geht.</p>
@@ -599,7 +638,7 @@ p &amp;= \frac{1}{2}
 <h4 class="anchored" data-anchor-id="eine-input-variable">Eine Input-Variable</h4>
 <p>Schauen wir uns in einem ersten Schritt an, wie die Decision Boundary aussieht, wenn wir nur eine Input-Variable haben (wie in unserem kleinen Beispiel). Die Log-Odds sehen in diesem Fall wie folgt aus:</p>
 <p><span class="math display">\[
-\log\left(\frac{p(y_i = 1 | \mathbf{x}_i)}{1-p(y_i = 1 | \mathbf{x}_i)}\right) = w_0 + w_1 \cdot x_{i1}
+\log\left(\frac{p(y_i = 1 \mid \mathbf{x}_i)}{1-p(y_i = 1 \mid \mathbf{x}_i)}\right) = w_0 + w_1 \cdot x_{i1}
 \]</span></p>
 <p>Wir haben oben bereits kurz den <strong>Threshold</strong> angesprochen. Hier wählen wir einen Threshold von 50% (= 0.5). Die Decision Boundary wird die Input-Varablenwerte darstellen, die genau zu einem Modelloutput von 50% führen.</p>
 <p>Wir können den Threshold-Wert in obige Gleichung einsetzen und kriegen folgendes:</p>
@@ -693,112 +732,275 @@ x_{i1} &amp;= \color{blue}{\frac{\log\left(\frac{p^*}{1-p^*}\right) - w_0}{w_1}}
 </section>
 <section id="naive-bayes" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="naive-bayes"><span class="header-section-number">3.2</span> Naive Bayes</h2>
-<p>Ein sehr einfaches, aber oft erstaunlich gut performendes Klassifikationsmodell ist <strong>Naive Bayes</strong>. Dieses Modell beruht auf dem <strong>Satz von Bayes</strong>, den Sie in Statistik 1 bereits kennen gelernt haben.</p>
-<p>Nachfolgend ein Ausschnitt aus den Folien von Prof.&nbsp;Dr.&nbsp;Tobias Schoch zum Satz von Bayes (falls Sie etwas repetieren möchten):</p>
+<p>Ein sehr einfaches, aber oft erstaunlich gut performendes Klassifikationsmodell ist <strong>Naive Bayes</strong>. Dieses Modell beruht auf dem <strong>Satz von Bayes</strong>, den Sie vielleicht bereits kennen.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Satz von Bayes
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Bla</p>
+</div>
+</div>
+</div>
 <section id="modellspezifikation-1" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="modellspezifikation-1"><span class="header-section-number">3.2.1</span> Modellspezifikation</h3>
-<p>Das Modell kann folgendermassen spezifiziert werden:</p>
+<p>Das Naive Bayes Modell kann folgendermassen spezifiziert werden:</p>
 <p><span class="math display">\[
-p(y_i = 1 | \mathbf{x}_i) = \frac{p(\mathbf{x}_i | y_i = 1) \cdot p(y_i = 1)}{p(\mathbf{x}_i)}
+p(y_i = 1 \mid \mathbf{x}_i) = \frac{p(\mathbf{x}_i \mid y_i = 1) \cdot p(y_i = 1)}{p(\mathbf{x}_i)}
 \]</span></p>
-<p>Es lohnt sich, hier kurz zu überlegen, was die Komponenten in dieser Modellspezifikation sind:</p>
+<p>Es lohnt sich, hier kurz zu überlegen, was die einzelnen Komponenten in dieser Modellspezifikation sind:</p>
 <ul>
-<li>Der linke Teil ist die Wahrscheinlichkeit, dass es sich bei der Email <span class="math inline">\(i\)</span> um Spam handelt, gegeben die Input-Werte. Es ist dieselbe Wahrscheinlichkeit, die wir auch bei der logistischen Regression zu modellieren versuchen. Man nennt diese Wahrscheinlichkeit in der Fachsprache <strong>Posterior</strong>.</li>
-<li>Der erste Teil rechts oben, <span class="math inline">\(p(\mathbf{x}_i | y_i = 1)\)</span>, ist die Wahrscheinlichkeit der konkreten Input-Werte der Email <span class="math inline">\(i\)</span>, gegeben es handelt sich um eine Spam-Email. Unsere Input-Werte sind ja im Spam Filter die wichtigsten Wörter gemäss dem Bag-of-Words Ansatz. D.h. wir rechnen hier die Wahrscheinlichkeit der beobachteten Wörter in einer Email, gegeben es ist eine Spam Email. Dieser Teil wird <strong>Likelihood</strong> genannt.</li>
-<li>Der zweite Teil rechts oben, <span class="math inline">\(p(y_i = 1)\)</span>, ist die a-priori Wahrscheinlichkeit einer Spam Email. Was ist die generelle Wahrscheinlichkeit, dass eine Email Spam ist. Diese Wahrscheinlichkeit wird in der Fachsprache <strong>Prior</strong> genannt.</li>
-<li>Der Nenner auf der rechten Seite ist die Wahrscheinlichkeit, dass wir für eine Email <span class="math inline">\(i\)</span> die konkreten Input-Werte beobachten, unabhängig davon ob es sich um Spam oder Ham handelt. Oft wird dieser Teil <strong>Evidence</strong> genannt. Mit dem <strong>Gesetz der totalen Wahrscheinlichkeit</strong> lässt sich die Evidence einfach rechnen:</li>
+<li>Der linke Teil ist die Wahrscheinlichkeit, dass wir für die <span class="math inline">\(i\)</span>-te Beobachtung die Kategorie 1 beobachten, gegeben die beobachteten Input-Variablenwerte. Im Prinzip ist es derselbe Term wie der linke Teil des logistischen Regressionsmodells. Im Kontext des Naive Bayes Modell wird dieser Term bzw. diese Wahrscheinlichkeit <strong>Posterior</strong> genannt.</li>
+<li>Der erste Teil rechts oben, also <span class="math inline">\(p(\mathbf{x}_i \mid y_i = 1)\)</span>, ist die Wahrscheinlichkeit der beobachteten Input-Werte der Beobachtung <span class="math inline">\(i\)</span>, gegeben sie gehört der Kategorie 1 an. Dieser Teil der Spezifikation wird <strong>Likelihood</strong> genannt.</li>
+<li>Der zweite Teil rechts oben, also <span class="math inline">\(p(y_i = 1)\)</span>, ist die <em>a-priori</em> Wahrscheinlichkeit, die Kategorie 1 zu beobachten. Diese Wahrscheinlichkeit wird in der Fachsprache <strong>Prior</strong> genannt.</li>
+<li>Der Nenner auf der rechten Seite ist die Wahrscheinlichkeit, die gegebenen Input-Variablenwerte zu beobachten, und zwar unabhängig davon ob die Beobachtung der Kategorie 1 oder 0 angehört. Oft wird dieser Teil <strong>Evidence</strong> oder <strong>Marginal Likelihood</strong> genannt. Mit dem <strong>Gesetz der totalen Wahrscheinlichkeit</strong> kann dieser Term berechnet werden:</li>
 </ul>
 <p><span class="math display">\[
-p(\mathbf{x}_i) = p(\mathbf{x}_i | y_i = 1) \cdot p(y_i = 1) + p(\mathbf{x}_i | y_i = 0) \cdot p(y_i = 0)
+p(\mathbf{x}_i) = p(\mathbf{x}_i \mid y_i = 1) \cdot p(y_i = 1) + p(\mathbf{x}_i \mid y_i = 0) \cdot p(y_i = 0)
 \]</span></p>
-<div style="background-color:#fef9e7; padding:10px">
-<p><strong>Wichtig</strong>: der zentrale Aspekt beim Naive Bayes Modell ist eine <strong>Unabhängigkeitsannahme</strong>. Warum brauchen wir eine Unabhängigkeitsannahme? Weil es äusserst schwierig ist, die Likelihood <span class="math inline">\(p(\mathbf{x}_i | y_i = 1)\)</span> aus Daten zu schätzen. Für eine kurze Email mit dem Text “Hallo, wie geht es dir?” müssten wir die <strong>gemeinsame Wahrscheinlichkeit</strong> (<em>Joint Probability</em>), dass genau diese 5 Worte gemeinsam in einer Spam Email vorkommen und alle anderen Wörter nicht, schätzen. Das ist enorm schwierig. Darum machen wir folgende Unabhängigkeitsannahme:</p>
+<p>Hier sehen wir mit Naive Bayes nun zum ersten Mal ein <strong>generatives</strong> Modell (<a href="01_intro.html#sec-taxonomie" class="quarto-xref">siehe Abschnitt&nbsp;<span>1.4.3</span></a>), denn wir schätzen im Zahler der Modellspezifikation nichts anderes als die gemeinsame Verteilung von <span class="math inline">\(\mathbf{x}_i\)</span> und <span class="math inline">\(y_i\)</span>:</p>
 <p><span class="math display">\[
-p(\mathbf{x}_i | y_i = 1) = p(x_{i1} | y_i = 1) \cdot p(x_{i2} | y_i = 1) \cdot \ldots \cdot p(x_{ip} | y_i = 1) \cdot
+p(\mathbf{x}_i \mid y_i) \cdot p(y_i) = p(\mathbf{x}_i,\, y_i)
 \]</span></p>
-<p>Anstatt die gemeinsame Wahrscheinlichkeit müssen wir hier nur die <strong>Randwahrscheinlichkeiten</strong> für jedes Wort schätzen und diese dann miteinander multiplizieren.</p>
-<p>Das ist eine ziemliche Vereinfachung, denn wir nehmen nun an, dass beispielsweise die Wahrscheinlichkeit des Worts “geht” (gegeben eine Spam Email) <strong>unabhängig</strong> von der Wahrscheinlichkeit des Worts “wie” (gegeben eine Spam Email) ist. Wenn Sie daran denken, wie oft in einem Text die Phrase “wie geht…” vorkommt, dann dürften die beiden Wahrscheinlichkeiten kaum unabhängig voneinander sein. Aber in der Praxis funktioniert diese Annahme trotzdem erstaunlich gut.</p>
-<p>Wenn wir an den <strong>Bias-Variance-Tradeoff</strong> denken, dann passiert mit dieser Unabhängigkeitsannahme folgendes: wir erhöhen den Bias des Modells willentlich, indem wir diese Unabhängigkeitsannahme machen. Gleichzeitig reduzieren wir jedoch die Varianz substantiell, da das Modell so viel einfacher wird. Oft ist die Reduktion der Varianz grösser als der Anstieg des Bias, weshalb dieses Modell in der Praxis oft gut funktioniert.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Warum dieses Modell naiv genannt wird?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Der zentrale Aspekt beim Naive Bayes Modell ist eine <strong>Unabhängigkeitsannahme</strong>. Warum brauchen wir eine Unabhängigkeitsannahme? Weil es äusserst schwierig ist, die Likelihood <span class="math inline">\(p(\mathbf{x}_i \mid y_i = 1)\)</span> aus Daten zu schätzen.</p>
+<p>Nehmen wir an, wir haben 10 Input-Variablen, die alle binär sind (0/1, also zwei mögliche Werte annehmen können). In diesem Fall müssten wir aus den Daten eine <strong>gemeinsame Wahrscheinlichkeit</strong> (engl. <em>Joint Probability</em>) mit <span class="math inline">\(2^{10}=1024\)</span> möglichen Kombinationen schätzen, und zwar für jede mögliche Kategorie der Output-Variable. Etwas allgemeiner würde gelten, dass wenn wir <span class="math inline">\(p\)</span> binäre Input-Variaben haben, die gemeinsame Wahrscheinlichkeit von <span class="math inline">\(2^p\)</span> möglichen Kombinationen von Input-Variablenwerte für jede der <span class="math inline">\(C\)</span> Kategorien (hier <span class="math inline">\(C=2\)</span>) aus Daten geschätzt werden müsste.</p>
+<p>In der Praxis ist das bereits ab einem kleinen <span class="math inline">\(p\)</span> unsinning: viele der möglichen Kombinationen würden im Trainingsdatensatz sehr selten oder gar nicht vorkommen, was eine robuste Schätzung dieser Wahrscheinlichkeiten verunmöglicht. Die so geschätzten Wahrscheinlichkeiten sind eine weitere Art wie sich <strong>Overfitting</strong> äussern kann.</p>
+<p>Um dieses Problem zu beheben, machen wir beim Naive Bayes Modell folgende Unabhängigkeitsannahme für die Likelihood:</p>
+<p><span class="math display">\[
+p(\mathbf{x}_i \mid y_i = 1) = p(x_{i1} \mid y_i = 1) \cdot p(x_{i2} \mid y_i = 1) \cdot \ldots \cdot p(x_{ip} \mid y_i = 1) \cdot
+\]</span></p>
+<p>Anstatt die gemeinsame Wahrscheinlichkeit müssen wir hier nur die <strong>Randwahrscheinlichkeiten</strong> für jede Input-Variable separat schätzen und diese dann miteinander multiplizieren. Wir befolgen hier die bekannte Regel aus der Wahrscheinlichkeitsrechnung, dass wenn zwei Ereignisse <span class="math inline">\(A\)</span> und <span class="math inline">\(B\)</span> unabhängig sind, die gemeinsame Wahrscheinlichkeit wie folgt berechenbar ist:</p>
+<p><span class="math display">\[
+P(A, B) = P(A) \cdot P(B)
+\]</span></p>
+<p>Diese Unabhängigkeitsannahme ist eine starke Vereinfachung der Realität. Wenn wir beispielsweise modellieren, ob jemand zahlungsunfähig wird (<span class="math inline">\(y_i=1\)</span>) oder nicht, dann besagt die Annahmen, dass das Einkommen (gegeben es kommt zu einer Zahlungsunfähigkeit) unabhängig ist vom Beschäftigungsgrad (gegeben es kommt zu einer Zahlungsunfähigkeit). Diese beiden Input-Variablen korrelieren in der Praxis jedoch sicherlich sehr stark und sind nicht unabhängig.</p>
+<p>Das erstaunliche ist jedoch, dass Naive Bayes trotz dieser Annahme in der Praxis oft gut funktioniert. Um zu verstehen, warum das so ist, hilft der <strong>Bias-Variance-Tradeoff</strong>. Die Unabhängigkeitsannahme verstärkt zwar den Bias des Modells. Gleichzeitig reduzieren wir aber die Varianz (Overfitting) substantiell, da das Modell so viel, viel einfacher wird. Oft überwiegt die Reduktion der Varianz den Anstieg im Bias-Term.</p>
+</div>
 </div>
 </section>
 <section id="modelltraining-1" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="modelltraining-1"><span class="header-section-number">3.2.2</span> Modelltraining</h3>
-<p>Aus obigen Ausführungen sehen wir, dass wir folgende Wahrscheinlichkeiten aus den Daten schätzen müssen:</p>
+<p>Aus dem vorherigen Abschnitt sehen wir, dass Modelltraining im Fall von Naive Bayes heisst, dass verschiedenen Wahrscheinlichkeiten aus den Trainingsdaten geschätzt werden müssen:</p>
 <ul>
-<li>Priors <span class="math inline">\(p(y_i = 1)\)</span> und <span class="math inline">\(p(y_i = 0)\)</span></li>
-<li>Für alle <strong>Spam</strong> Emails die Randwahrscheinlichkeiten <span class="math inline">\(p(x_{i1} | y_i = 1)\)</span>, <span class="math inline">\(p(x_{i2} | y_i = 1)\)</span>, etc.</li>
-<li>Für alle <strong>Ham</strong> Emails die Randwahrscheinlichkeiten <span class="math inline">\(p(x_{i1} | y_i = 0)\)</span>, <span class="math inline">\(p(x_{i2} | y_i = 0)\)</span>, etc.</li>
+<li>Die Priors <span class="math inline">\(p(y_i = 1)\)</span> und <span class="math inline">\(p(y_i = 0)\)</span></li>
+<li>Die Randwahrscheinlichkeiten <span class="math inline">\(p(x_{i1} \mid y_i = 1)\)</span>, <span class="math inline">\(p(x_{i2} \mid y_i = 1)\)</span>, etc. für alle Beobachtungen im Trainingsdatensatz, die der <strong>Kategorie 1</strong> angehören.</li>
+<li>Die Randwahrscheinlichkeiten <span class="math inline">\(p(x_{i1} \mid y_i = 0)\)</span>, <span class="math inline">\(p(x_{i2} \mid y_i = 0)\)</span>, etc. für alle Beobachtungen im Trainingsdatensatz, die der <strong>Kategorie 0</strong> angehören.</li>
 </ul>
-<p>Die Priors können ganz einfach als <strong>relative Häufigkeiten</strong> von Spam bzw. Ham Emails im Trainingsdatensatz geschätzt werden.</p>
-<p>Auch die Randwahrscheinlichkeiten lassen sich im Spam Filter Beispiel einfach schätzen. Für jedes Wort im Bag-of-Words (z.B. “price”) schätzen Sie die relative Häufigkeit in allen Spam Emails und in allen Ham Emails.</p>
-<p>Im Spam Filter Beispiel haben wir nur kategorische (qualitative) Input-Variablen, für die sich die Randwahrscheinlichkeiten als relative Häufigkeiten schätzen lassen. Es ist aber auch möglich, <strong>quantitative Input-Variablen</strong> zu haben, z.B. die Anzahl Worte in einer Email. In diesem Fall nehmen Sie alle Spam Emails und schätzen eine Normalverteilung für die Anzahl Worte in den Spam Emails. Mit der geschätzten Normalverteilung können Sie dann ebenfalls eine Randwahrscheinlichkeit (genauer gesagt einen Wert der Dichte) für eine bestimmte Anzahl Worte rechnen. Das Selbe tun Sie selbstverständlich auch mit den Ham Emails.</p>
+<p>Wir schauen uns das Modelltraining konkret für unser einfaches Klassifikationsproblem von oben mit folgender Ausgangslage an:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-nb-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Einfaches Klassifikationsbeispiel."></p>
+<figcaption>Abgebildet ist die Ausgangslage eines einfachen Klassifikationsproblems mit einer Input-Variable (eingezeichnet auf der x-Achse) und der Output-Variable (eingezeichnet auf der y-Achse). In der Folge zeigen wir hier die Anwendung eines Naive Bayes Modells für dieses Problem.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Wichtig</strong>: wir haben hier nur eine Input-Variable, weshalb die Unabhängigkeitsannahme des Naive Bayes Modells hier nicht ins Gewicht fallen wird.</p>
+<p>Die Priors können ganz einfach als <strong>relative Häufigkeiten</strong> basierend auf dem Trainingsdatensatz geschätzt werden. Für unser Beispiel kriegen wir folgende Priors:</p>
+<ul>
+<li><span class="math inline">\(p(y_i = 1) = \frac{3}{5} = 0.6\)</span></li>
+<li><span class="math inline">\(p(y_i = 0) = \frac{2}{5} = 0.4\)</span></li>
+</ul>
+<p>In unserem Fall haben wir eine <strong>quantitative Input-Variablen</strong>. Die Randwahrscheinlichkeiten werden für diesen Fall als Normalverteilungen, einmal für die Kategorie <span class="math inline">\(y_i=1\)</span> und einmal für die Kategorie <span class="math inline">\(y_i=0\)</span> geschätzt.</p>
+<ul>
+<li>Für <span class="math inline">\(y_i=0\)</span> ergibt sich die Schätzung von <span class="math inline">\(p(x_{i} \mid y_i = 0) = \mathcal{N}\left(\mu_0, \sigma_0^2\right)\)</span>, wobei
+<ul>
+<li><span class="math inline">\(\mu_0=\frac{1}{2}(-4.1 + 0.5) = -1.8\)</span><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li><span class="math inline">\(\sigma_0^2 = \frac{1}{2}\left((-4.1 - (-1.8))^2 + (0.5 - (-1.8))^2\right) = 5.29\)</span><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+</ul></li>
+<li>Für <span class="math inline">\(y_i=1\)</span> ergibt sich die Schätzung von <span class="math inline">\(p(x_{i} \mid y_i = 1) = \mathcal{N}\left(\mu_1, \sigma_1^2\right)\)</span>, wobei
+<ul>
+<li><span class="math inline">\(\mu_1=\frac{1}{3}(-0.1 + 1.4 + 4.4) = 1.9\)</span></li>
+<li><span class="math inline">\(\sigma_1^2 = \frac{1}{3}\left((-0.1 - 1.9)^2 + (1.4 - 1.9)^2 + (4.4 - 1.9)^2\right) = 3.5\)</span></li>
+</ul></li>
+</ul>
+<p>Die folgende Abbildung zeigt die beiden geschätzten Normalverteilungen, die für jeden möglichen Wert von <span class="math inline">\(x\)</span> einen Dichtewert zurückgeben.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-nb-dens-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Einfaches Klassifikationsbeispiel."></p>
+<figcaption>Geschätzte Dichtefunktionen (Normalverteilung) für die beiden Kategorien der Output-Variable.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Nun berechnen wir den Posterior <span class="math inline">\(p(y_i = 1 \mid x_i)\)</span> für den Wert <span class="math inline">\(x_i=2\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+p(y_i = 1 \mid x_i) &amp;= \frac{p(x_i \mid y_i = 1) \cdot p(y_i = 1)}{p(x_i)}\\
+&amp;= \frac{\mathcal{N}(x_i=2 \mid \mu_1, \sigma_1^2) \cdot p(y_i = 1)}{\mathcal{N}(x_i=2 \mid \mu_1, \sigma_1^2) \cdot p(y_i = 1) + \mathcal{N}(x_i=2 \mid \mu_0, \sigma_0^2) \cdot p(y_i = 0)}\\
+&amp;= \frac{0.213 \cdot 0.6}{0.213 \cdot 0.6 + 0.044 \cdot 0.4}\\
+&amp;= 0.88
+\end{align}\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/class-prob-nb-posterior-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Einfaches Klassifikationsbeispiel."></p>
+<figcaption>Posterior Wahrscheinlichkeiten unseres Modells für alle möglichen Werte von <span class="math inline">\(x\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="beispiel" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="beispiel"><span class="header-section-number">3.2.3</span> Beispiel</h3>
-<p>Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort “afford” bzw. “price” in einer Email vorkommen oder nicht.</p>
-<p>Berechnen wir als erstes die Priors.</p>
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "priors_mc", echo = FALSE} -->
-<!-- question("Der Trainingsdatensatz enthält insgesamt 4000 Emails. 1277 Emails sind Spam. Was sind die korrekten Priors?", -->
-<!--   answer("$p(y_i = 1) = 0.32$ und $p(y_i = 0) = 0.68$", correct = TRUE), -->
-<!--   answer("$p(y_i = 1) = 0.68$ und $p(y_i = 0) = 0.32$"), -->
-<!--   answer("$p(y_i = 1) = 0.5$ und $p(y_i = 0) = 0.5$"), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
+<section id="spam-filter" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="spam-filter"><span class="header-section-number">3.2.3</span> Spam Filter</h3>
+<p>Zum Schluss schauen wir uns hier (erstmal nur konzeptionell) die Anwendung des Naive Bayes Modell für einen <strong>Spam Filter</strong> an. Der Spam Filter soll eine gegebene Email möglichst korrekt in die Kategorien <strong>Spam</strong> (<span class="math inline">\(y_i=1\)</span>) oder <strong>Ham</strong> (<span class="math inline">\(y_i=0\)</span>) klassifizieren.</p>
+<p>Die Trainingsdaten bestehen in diesem Fall aus <span class="math inline">\(n\)</span> Emails. Eine Sammlung von Emails sind sogenannte <strong>unstrukturierte Daten</strong> und da muss man sich überlegen, wie man die Daten in eine strukturierte Form bringt. Oder in anderen Worten, wie kommt man von einer Email zu einem Input-Vektor <span class="math inline">\(\mathbf{x}_i\)</span>? Eine Möglichkeit ist der sogenannte <strong>Bag-of-Words</strong> Ansatz. Dabei geht man folgendermassen vor:</p>
+<ol type="1">
+<li>Man bestimmt die <strong>häufigsten Wörter</strong> im Trainingsdatensatz (d.h., in den Emails, die wir für das Training verwenden werden).</li>
+<li>Das erste Wort in diesem Set von häufig vorkommenden Wörtern wird durch die erste Input-Variable <span class="math inline">\(x_{i1}\)</span> repräsentiert, das zweite Wort durch die zweite Input-Variable <span class="math inline">\(x_{i2}\)</span>, usw. Für eine Beobachtung <span class="math inline">\(i\)</span> (bzw. die <span class="math inline">\(i\)</span>-te Email) ist die Input-Variable <span class="math inline">\(x_{i1}=1\)</span> falls das erste Wort in der Email vorkommt und sonst 0. Dasselbe gilt natürlich für alle anderen Input-Variablen. So kann eine Email in einen fixen Input-Vektor von Nullen und Einsen transformiert werden.</li>
+</ol>
+<p>Folgende Abbildung illustriert den Bag-of-Words Ansatz für ein ganz kleines Beispiel:</p>
+<div id="fig-bagofwords" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bagofwords-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/bagOfWords.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bagofwords-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;3.1: Bag-of-Words (Beispiel)
+</figcaption>
+</figure>
+</div>
+<p>Wir schauen uns nun die Modellberechnungen anhand eines einfachen Beispiels an. Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort “afford” bzw. “price” in einer Email vorkommen oder nicht.</p>
+<section id="frage-4" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-4">Frage</h4>
+<p>Berechnen wir als erstes die Priors. Der Trainingsdatensatz enthält insgesamt 4000 Emails. 1277 Emails sind Spam. Was sind die korrekten Priors?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(p(y_i = 1) = 0.32\)</span> und <span class="math inline">\(p(y_i = 0) = 0.68\)</span>.</p>
+</div>
+</div>
+</div>
 <p>Als nächstes rechnen wir die Randwahrscheinlichkeiten für die Spam Emails. In den 1277 Spam Emails enthalten 40 Emails das Wort “afford” und 223 Emails das Wort “price”.</p>
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "randSpam_mc", echo = FALSE} -->
-<!-- question("Was sind die korrekten Randwahrscheinlichkeiten für die Spam Emails?", -->
-<!--   answer("$p(afford_i = 1 | y_i = 1) = 0.03$ und $p(price_i = 1 | y_i = 1) = 0.17$", correct = TRUE), -->
-<!--   answer("$p(afford_i = 1 | y_i = 1) = 0.97$ und $p(price_i = 1 | y_i = 1) = 0.83$"), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
-<p>Wichtig: die Wahrscheinlichkeit, dass das Wort “afford” bzw. “price” <em>nicht</em> vorkommt in einer Spam Email haben wir so indirekt auch bereits berechnet:</p>
+</section>
+<section id="frage-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-5">Frage</h4>
+<p>Was sind die korrekten Randwahrscheinlichkeiten für die Spam Emails?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(p(afford_i = 1 \mid y_i = 1) = 0.03\)</span> und <span class="math inline">\(p(price_i = 1 \mid y_i = 1) = 0.17\)</span>.</p>
+</div>
+</div>
+</div>
+<p><strong>Wichtig</strong>: die Wahrscheinlichkeit, dass das Wort “afford” bzw. “price” <em>nicht</em> vorkommt in einer Spam Email haben wir so indirekt auch bereits berechnet:</p>
 <p><span class="math display">\[
-p(afford_i = 0 | y_i = 1) = 1 - p(afford_i = 1 | y_i = 1) = 1 - 0.03 = 0.97
-\]</span> <span class="math display">\[
-p(price_i = 0 | y_i = 1) = 1 - p(price_i = 1 | y_i = 1) = 1 - 0.17 = 0.83
+p(afford_i = 0 \mid y_i = 1) = 1 - p(afford_i = 1 \mid y_i = 1) = 1 - 0.03 = 0.97
+\]</span></p>
+<p><span class="math display">\[
+p(price_i = 0 \mid y_i = 1) = 1 - p(price_i = 1 \mid y_i = 1) = 1 - 0.17 = 0.83
 \]</span></p>
 <p>Als letztes rechnen wir nun noch die Randwahrscheinlichkeiten für die Ham Emails. In den 2723 Ham Emails enthalten 27 Emails das Wort “afford” und 134 Emails das Wort “price”.</p>
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "randHam_mc", echo = FALSE} -->
-<!-- question("Was sind die korrekten Randwahrscheinlichkeiten für die Ham Emails?", -->
-<!--   answer("$p(afford_i = 1 | y_i = 0) = 0.01$ und $p(price_i = 1 | y_i = 0) = 0.05$", correct = TRUE), -->
-<!--   answer("$p(afford_i = 1 | y_i = 0) = 0.99$ und $p(price_i = 1 | y_i = 0) = 0.95$"), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
+</section>
+<section id="frage-6" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-6">Frage</h4>
+<p>Was sind die korrekten Randwahrscheinlichkeiten für die Ham Emails?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(p(afford_i = 1 \mid y_i = 0) = 0.01\)</span> und <span class="math inline">\(p(price_i = 1 \mid y_i = 0) = 0.05\)</span>.</p>
+</div>
+</div>
+</div>
 <p>Auch hier können die Wahrscheinlichkeiten für das “Gegenereignis” einfach gerechnet werden:</p>
 <p><span class="math display">\[
-p(afford_i = 0 | y_i = 0) = 1 - p(afford_i = 1 | y_i = 0) = 1 - 0.01 = 0.99
-\]</span> <span class="math display">\[
-p(price_i = 0 | y_i = 0) = 1 - p(price_i = 1 | y_i = 0) = 1 - 0.05 = 0.95
+p(afford_i = 0 \mid y_i = 0) = 1 - p(afford_i = 1 \mid y_i = 0) = 1 - 0.01 = 0.99
+\]</span></p>
+<p><span class="math display">\[
+p(price_i = 0 \mid y_i = 0) = 1 - p(price_i = 1 \mid y_i = 0) = 1 - 0.05 = 0.95
 \]</span></p>
 <p>Nun wollen wir die Posterior Wahrscheinlichkeit berechnen, dass eine Email, welche sowohl das Wort “afford” als auch das Wort “price” enthält, eine Spam Email ist:</p>
 <p><span class="math display">\[
 \begin{split}
-p(y_i = 1 | afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 | y_i = 1) \cdot p(price_i = 1 | y_i = 1) \cdot p(y_i = 1)}{p(afford_i = 1, price_i = 1)}\\
+p(y_i = 1 \mid afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 \mid y_i = 1) \cdot p(price_i = 1 \mid y_i = 1) \cdot p(y_i = 1)}{p(afford_i = 1, price_i = 1)}\\
 &amp;= \frac{0.03 \cdot 0.17 \cdot 0.32}{0.03 \cdot 0.17 \cdot 0.32 + 0.01 \cdot 0.05 \cdot 0.68}\\
 &amp;= \frac{0.001632}{0.001632 + 0.00034}\\
 &amp;= 0.83
 \end{split}
 \]</span></p>
 <p>Wow, gegeben, dass die beiden Worte “afford” und “price” in einem Email vorkommen, sind wir also ziemlich sicher, dass es sich um eine Spam Email handelt.</p>
-<p><strong>Aufgabe</strong>: rechnen Sie die Wahrscheinlichkeit, dass es sich bei einer Email um Spam handelt, wenn nur das Wort “afford” vorkommt, nicht aber das Wort “price”. <em>Lösung</em>: 0.55</p>
+</section>
+<section id="frage-7" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-7">Frage</h4>
+<p>Rechnen Sie die Wahrscheinlichkeit, dass es sich bei einer Email um Spam handelt, wenn nur das Wort “afford” vorkommt, nicht aber das Wort “price”.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\begin{split}
+p(y_i = 1 \mid afford_i = 1, price_i = 0) &amp;= \frac{p(afford_i = 1 \mid y_i = 1) \cdot p(price_i = 0 \mid y_i = 1) \cdot p(y_i = 1)}{p(afford_i = 1, price_i = 0)}\\
+&amp;= \frac{0.03 \cdot 0.83 \cdot 0.32}{0.03 \cdot 0.83 \cdot 0.32 + 0.01 \cdot 0.95 \cdot 0.68}\\
+&amp;= \frac{0.007968}{0.007968 + 0.00646}\\
+&amp;= 0.55
+\end{split}
+\]</span></p>
+<p>Wir sind jetzt viel weniger sicher (55%), dass es sich um Spam handelt, da das Wort “price” nicht mehr in der Email vorkommt.</p>
+</div>
+</div>
+</div>
+<ul>
+<li>Man kann Input-Variablen mischen.</li>
+<li>Missing values</li>
+<li>Works for C &gt; 2</li>
+</ul>
+</section>
 </section>
 </section>
 <section id="k-nearest-neighbors" class="level2" data-number="3.3">
@@ -825,7 +1027,7 @@ p(y_i = 1 | afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 | y_i = 1) \c
 <li>Rotes Kreuz.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -834,7 +1036,7 @@ p(y_i = 1 | afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 | y_i = 1) \c
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Es hat drei rote Kreuze und zwei blaue Kreise in der Nachbarschaft. Die roten Kreuze sind darum in der Mehrheit, weshalb Antwort <strong>c</strong> korrekt ist.</p>
 </div>
@@ -846,7 +1048,7 @@ p(y_i = 1 | afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 | y_i = 1) \c
 <img src="images/knn.PNG" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-knn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
+Abbildung&nbsp;3.2: KNN Modell für binäres Klassifikationsproblem
 </figcaption>
 </figure>
 </div>
@@ -858,7 +1060,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 <li>10</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -867,7 +1069,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Die Nachbarschaft, dargestellt durch den Kreis, enthält 5 Beobachtungen. Deshalb ist Antwort <strong>a</strong> korrekt.</p>
 </div>
@@ -880,7 +1082,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 <li>5</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -889,7 +1091,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Der Durchschnitt über die 5 <span class="math inline">\(y_i\)</span>-Werte in der Nachbarschaft beträgt 4, weshalb Antwort <strong>a</strong> korrekt ist.</p>
 </div>
@@ -901,7 +1103,7 @@ Abbildung&nbsp;3.1: KNN Modell für binäres Klassifikationsproblem
 <img src="images/knnreg.PNG" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-knnreg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;3.2: KNN Modell für Regressionsproblem
+Abbildung&nbsp;3.3: KNN Modell für Regressionsproblem
 </figcaption>
 </figure>
 </div>
@@ -918,6 +1120,8 @@ Abbildung&nbsp;3.2: KNN Modell für Regressionsproblem
 <ol>
 <li id="fn1"><p>Manchmal wird die Kategorie 1 auch mit “Erfolg” und die Kategorie 0 mit Misserfolg betitelt. Diese Bezeichnungen sind jedoch etwas irreführend. Versucht man vorherzusagen, ob jemand eine Krankheit hat, dann ist “krank” meist die Kategorie 1. Dieses Ereignis kann kaum als “Erfolg” gewertet werden. Im Prinzip ist es Ihnen überlassen, wie Sie die beiden möglichen Kategorien mit 0/1 kodieren. Meist wird Kategorie 1 für das uns primär interessierende Ereignis gesetzt: z.B. Krankheit, Lehrabbruch, Kreditkartenbetrug.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Auch hier einmal mehr im ML eine irreführende Namensgebung: das logistische <em>Regressionsmodell</em> ist ein <em>Klassifikationsmodell</em>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Wir verwenden hier den bekannten Schätzer für den Parameter <span class="math inline">\(\mu\)</span> der Normalverteilung, nämlich <span class="math inline">\(\bar{x} = \frac{1}{n} \sum_i^n x_i\)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Wir verwenden hier den bekannten Schätzer für die Varianz <span class="math inline">\(\sigma^2\)</span> der Normalverteilung, nämlich <span class="math inline">\(\hat{\sigma}^2 = \frac{1}{n} \sum_i^n (x_i - \bar{x})^2\)</span>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

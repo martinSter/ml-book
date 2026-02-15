@@ -62,7 +62,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-60bb1717b56a62d0d19126c2c8ec626d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e83ed3172a0847c3b1a4e9a3dee0bd66.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -297,7 +297,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#input-daten" id="toc-input-daten" class="nav-link" data-scroll-target="#input-daten"><span class="header-section-number">1.4.1</span> Input-Daten</a></li>
   <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">1.4.2</span> Output</a></li>
-  <li><a href="#taxonomie-des-machine-learnings" id="toc-taxonomie-des-machine-learnings" class="nav-link" data-scroll-target="#taxonomie-des-machine-learnings"><span class="header-section-number">1.4.3</span> Taxonomie des Machine Learnings</a></li>
+  <li><a href="#sec-taxonomie" id="toc-sec-taxonomie" class="nav-link" data-scroll-target="#sec-taxonomie"><span class="header-section-number">1.4.3</span> Taxonomie des Machine Learnings</a></li>
   </ul></li>
   <li><a href="#regression-vs.-klassifikation" id="toc-regression-vs.-klassifikation" class="nav-link" data-scroll-target="#regression-vs.-klassifikation"><span class="header-section-number">1.5</span> Regression vs.&nbsp;Klassifikation</a></li>
   <li><a href="#parametrische-vs.-nicht-parametrische-modelle" id="toc-parametrische-vs.-nicht-parametrische-modelle" class="nav-link" data-scroll-target="#parametrische-vs.-nicht-parametrische-modelle"><span class="header-section-number">1.6</span> Parametrische vs.&nbsp;nicht-parametrische Modelle</a></li>
@@ -493,8 +493,8 @@ x_{n1} &amp; x_{n2} &amp; \cdots &amp; x_{np}\\
 <p>Die <span class="math inline">\(n\)</span> Beobachtungen, die für das Training eines Modells zur Verfügung stehen werden meist <strong>Trainingsdaten</strong> oder <strong>Trainingset</strong> genannt.</p>
 </section>
 </section>
-<section id="taxonomie-des-machine-learnings" class="level3" data-number="1.4.3">
-<h3 data-number="1.4.3" class="anchored" data-anchor-id="taxonomie-des-machine-learnings"><span class="header-section-number">1.4.3</span> Taxonomie des Machine Learnings</h3>
+<section id="sec-taxonomie" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="sec-taxonomie"><span class="header-section-number">1.4.3</span> Taxonomie des Machine Learnings</h3>
 <p>Beim <strong>Supervised Learning</strong> geht es um ML Probleme, in denen <strong>sowohl Input-Daten als auch ein Output</strong> vorhanden ist. Ziel beim Supervised Learning ist es, ein Modell zu trainieren, das basierend auf den Input-Daten möglichst gute Vorhersagen für den Output macht. Es geht also hier um Vorhersageprobleme. In einem gewissen Sinn ist der Output die überwachende Instanz (engl. <em>Supervisor</em>), welche den Lernprozess des Modells kontrolliert.</p>
 <p>Etwas formaler und mit einem probabilistischen Hut auf kann man Supervised Learning auch wie folgt beschreiben: wir nehmen an, dass die vorliegenden Daten <span class="math inline">\((\mathbf{X},\,\mathbf{y})\)</span> gezogen wurden aus einer wahren, aber unbekannten Verteilung, die wir als <span class="math inline">\(P(\mathbf{X},\,\mathbf{y})\)</span> beschreiben. Im Supervised Learning geht es nun darum diese gemeinsame Verteilung <span class="math inline">\(P(\mathbf{X},\,\mathbf{y})\)</span> mithilfe der vorliegenden Daten möglichst gut zu schätzen. Wählen wir ein Modell, das diese gemeinsame Wahrscheinlichkeit direkt modelliert, dann sprechen wir von einem <strong>generativen</strong> Modell. Oft versucht man sich jedoch das Leben einfacher zu machen, indem man <span class="math inline">\(P(\mathbf{y}\mid\mathbf{X})\)</span> modelliert. In diesem Fall spricht man von <strong>diskriminativen</strong> Modellen. Wir werden in späteren Kapiteln auf diese Unterscheidung zurückkommen. Wichtig: fast jedes Modell macht irgendwelche <strong>vereinfachenden Annahmen</strong>, um entweder ein generatives oder ein diskriminatives Modell zu rechnen.</p>
 <section id="frage-1" class="level4 unnumbered">
