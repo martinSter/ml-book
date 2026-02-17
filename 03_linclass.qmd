@@ -10,7 +10,7 @@ Wir werden uns in diesem Kapitel drei Modelle für das Klassifikationsproblem an
 * Naive Bayes (NB)
 * K-Nearest Neighbors (KNN)
 
-**Wichtig**: der Titel des Kapitels besagt, dass wir uns *lineare* Klassifikationsmodelle anschauen. Das stimmt nicht ganz, denn während das logistische Regressionsmodell und Naive Bayes lineare Modelle sind, ist KNN ein sehr flexibles, nicht-lineares Modell.
+**Wichtig**: der Titel des Kapitels besagt, dass wir uns *lineare* Klassifikationsmodelle anschauen. Das stimmt nicht ganz, denn während das logistische Regressionsmodell und (unter gewissen Bedingungen) Naive Bayes lineare Modelle sind, ist KNN ein sehr flexibles, nicht-lineares Modell.
 
 ## Logistische Regression
 
@@ -688,7 +688,7 @@ Wenn Sie sich also auf die Prüfung vorbereiten, dann sind Sie fast sicher (ca. 
 
 ### Modellspezifikation
 
-Das Naive Bayes Modell kann folgendermassen spezifiziert werden. Dabei wenden wir den Satz von Bayes an:
+Das Naive Bayes Modell kann folgendermassen spezifiziert werden. Dabei wenden wir den Satz von Bayes an ($y_i=1$ ist hier gewissermassen das Ereignis A, während die Beobachtung der Input-Variablen $\mathbf{x}_i$ das Ereignis B darstellt):
 
 $$
 p(y_i = 1 \mid \mathbf{x}_i) = \frac{p(\mathbf{x}_i \mid y_i = 1) \cdot p(y_i = 1)}{p(\mathbf{x}_i)}
@@ -705,7 +705,7 @@ $$
 p(\mathbf{x}_i) = p(\mathbf{x}_i \mid y_i = 1) \cdot p(y_i = 1) + p(\mathbf{x}_i \mid y_i = 0) \cdot p(y_i = 0)
 $$
 
-Mit dem Naive Bayes Modell sehen wir nun zum ersten Mal ein **generatives** Modell ([siehe Abschnitt @sec-taxonomie]), denn wir schätzen im Zahler der Modellspezifikation nichts anderes als die **gemeinsame Verteilung** von $\mathbf{x}_i$ und $y_i$:
+Mit dem Naive Bayes Modell sehen wir nun zum ersten Mal ein **generatives** Modell ([siehe Abschnitt @sec-taxonomie]), denn wir schätzen im **Zähler** der Modellspezifikation nichts anderes als die **gemeinsame Verteilung** von $\mathbf{x}_i$ und $y_i$:
 
 $$
 p(\mathbf{x}_i \mid y_i) \cdot p(y_i) = p(\mathbf{x}_i,\, y_i)
@@ -739,7 +739,7 @@ Das erstaunliche ist jedoch, dass Naive Bayes trotz dieser Annahme in der Praxis
 
 ### Modelltraining
 
-Aus dem vorherigen Abschnitt sehen wir, dass Modelltraining im Fall von Naive Bayes heisst, dass verschiedenen Wahrscheinlichkeiten aus den Trainingsdaten geschätzt werden müssen:
+Es wurde oben bereits angedeutet, dass Modelltraining im Fall von Naive Bayes heisst, dass verschiedene Wahrscheinlichkeiten aus den Trainingsdaten geschätzt werden müssen:
 
 * Die Priors $p(y_i = 1)$ und $p(y_i = 0)$
 * Die Randwahrscheinlichkeiten $p(x_{i1} \mid y_i = 1)$, $p(x_{i2} \mid y_i = 1)$, etc. für alle Beobachtungen im Trainingsdatensatz, die der **Kategorie 1** angehören.
@@ -781,17 +781,20 @@ points(x, y, pch = 16, cex = 2, col = cols)
 
 Die Priors können ganz einfach als **relative Häufigkeiten** basierend auf dem Trainingsdatensatz geschätzt werden. Für unser Beispiel kriegen wir folgende Priors:
 
-* $p(y_i = 1) = \frac{3}{5} = 0.6$
-* $p(y_i = 0) = \frac{2}{5} = 0.4$
+* $p(y_i = 1) = \frac{3}{5} = 0.6$ (die blauen Beobachtungen)
+* $p(y_i = 0) = \frac{2}{5} = 0.4$ (die roten Beobachtungen)
 
-In unserem Fall haben wir eine **quantitative Input-Variablen**. Die Randwahrscheinlichkeiten werden für diesen Fall als Normalverteilungen, einmal für die Kategorie $y_i=1$ und einmal für die Kategorie $y_i=0$ geschätzt.
+In unserem Fall haben wir eine **quantitative Input-Variable**. Die Randwahrscheinlichkeiten werden für diesen Fall als Normalverteilungen, einmal für die Kategorie $y_i=1$ und einmal für die Kategorie $y_i=0$ geschätzt.
 
-* Für $y_i=0$ ergibt sich die Schätzung von $p(x_{i} \mid y_i = 0) = \mathcal{N}\left(\mu_0, \sigma_0^2\right)$, wobei
-    * $\mu_0=\frac{1}{2}(-4.1 + 0.5) = -1.8$^[Wir verwenden hier den bekannten Schätzer für den Parameter $\mu$ der Normalverteilung, nämlich $\bar{x} = \frac{1}{n} \sum_i^n x_i$.]
-    * $\sigma_0^2 = \frac{1}{2}\left((-4.1 - (-1.8))^2 + (0.5 - (-1.8))^2\right) = 5.29$^[Wir verwenden hier den bekannten Schätzer für die Varianz $\sigma^2$ der Normalverteilung, nämlich $\hat{\sigma}^2 = \frac{1}{n} \sum_i^n (x_i - \bar{x})^2$.]
-* Für $y_i=1$ ergibt sich die Schätzung von $p(x_{i} \mid y_i = 1) = \mathcal{N}\left(\mu_1, \sigma_1^2\right)$, wobei
-    * $\mu_1=\frac{1}{3}(-0.1 + 1.4 + 4.4) = 1.9$
-    * $\sigma_1^2 = \frac{1}{3}\left((-0.1 - 1.9)^2 + (1.4 - 1.9)^2 + (4.4 - 1.9)^2\right) = 3.5$
+Für $y_i=0$ ergibt sich die Schätzung von $p(x_{i} \mid y_i = 0) = \mathcal{N}\left(\mu_0, \sigma_0^2\right)$, wobei
+
+* $\mu_0=\frac{1}{2}(-4.1 + 0.5) = -1.8$^[Wir verwenden hier den bekannten Schätzer für den Parameter $\mu$ der Normalverteilung, nämlich $\bar{x} = \frac{1}{n} \sum_i^n x_i$.]
+* $\sigma_0^2 = \frac{1}{2}\left((-4.1 - (-1.8))^2 + (0.5 - (-1.8))^2\right) = 5.29$^[Wir verwenden hier den bekannten Schätzer für die Varianz $\sigma^2$ der Normalverteilung, nämlich $\hat{\sigma}^2 = \frac{1}{n} \sum_i^n (x_i - \bar{x})^2$.]
+
+Für $y_i=1$ ergibt sich die Schätzung von $p(x_{i} \mid y_i = 1) = \mathcal{N}\left(\mu_1, \sigma_1^2\right)$, wobei
+
+* $\mu_1=\frac{1}{3}(-0.1 + 1.4 + 4.4) = 1.9$
+* $\sigma_1^2 = \frac{1}{3}\left((-0.1 - 1.9)^2 + (1.4 - 1.9)^2 + (4.4 - 1.9)^2\right) = 3.5$
 
 Die folgende Abbildung zeigt die Dichtefunktionen der beiden geschätzten Normalverteilungen, die für jeden möglichen Wert von $x$ einen Dichtewert zurückgeben.
 
@@ -840,7 +843,9 @@ lines(xx, d0, col = rgb(1, 0, 0, 0.6), lwd = 2)
 lines(xx, d1, col = rgb(0, 0, 1, 0.6), lwd = 2)
 ```
 
-Nun berechnen wir den Posterior $p(y_i = 1 \mid x_i)$ für den Wert $x_i=2$:
+### Vorhersagen
+
+Als Beispiel können wir nun den Posterior $p(y_i = 1 \mid x_i)$ für den Wert $x_i=2$ berechnen:
 
 \begin{align}
 p(y_i = 1 \mid x_i = 2) &= \frac{p(x_i = 2 \mid y_i = 1) \cdot p(y_i = 1)}{p(x_i = 2)}\\
@@ -877,7 +882,7 @@ axis(side = 2, at = seq(0, 1, 1), labels = seq(0, 1, 1), cex.axis = 1.5)
 # Lines through origin
 abline(h = 0, lty = 1, lwd = 1, col = "grey")
 abline(h = 1, lty = 1, lwd = 1, col = "grey")
-abline(v = 0, lty = 1, lwd = 1, col = "grey")
+# abline(v = 0, lty = 1, lwd = 1, col = "grey")
 # Add data points
 cols <- c(rgb(1, 0, 0, 0.4), rgb(1, 0, 0, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4), rgb(0, 0, 1, 0.4))
 points(x, y, pch = 16, cex = 2, col = cols)
@@ -892,13 +897,54 @@ n1 <- sum(y == 1); m1 <- mean(x1); s1 <- sqrt(((n1 - 1) / n1) * var(x1))
 post <- function(x, pr, mu, mu_alt, sd, sd_alt){dnorm(x, mu, sd) * pr / (dnorm(x, mu, sd) * pr + dnorm(x, mu_alt, sd_alt) * (1 - pr))}
 curve(post(x, pr = 0.4, mu = m0, mu_alt = m1, sd = s0, sd_alt = s1), from = -6, to = 6, add = TRUE, lwd = 2.5, col = rgb(1, 0, 0, 0.6))
 curve(post(x, pr = 0.6, mu = m1, mu_alt = m0, sd = s1, sd_alt = s0), from = -6, to = 6, add = TRUE, lwd = 2.5, col = rgb(0, 0, 1, 0.6))
+# Compute decision boundary by solving quadratic equation.
+a <- 1/(2*s0^2) - 1/(2*s1^2)
+b <- -(m0/s0^2) + m1/s1^2
+const <- m0^2 / (2*s0^2) - m1^2 / (2*s1^2) + log((0.6*s0) / (0.4*s1))
+db <- (-b + sqrt(b^2 - 4*a*const)) / (2*a)
+abline(v = db, lty = 1, lwd = 1, col = "grey")
+# Add colored polygons
+polygon(x = c(-6, db, db, -6), 
+        y = c(-1, -1, 2, 2), 
+        col = rgb(1, 0, 0, 0.1),
+        border = NA)
+polygon(x = c(db, 6, 6, db), 
+        y = c(-1, -1, 2, 2), 
+        col = rgb(0, 0, 1, 0.1),
+        border = NA)
 ```
 
-Der Ort, an dem sich die beiden Kurven kreuzen, stellt die Decision Boundary dar. Das macht auch irgendwie Sinn, denn es ist ja der Ort, an dem die Posterior Wahrscheinlichkeit der einen Kategorie plötzlich kleiner ist als diejenige der anderen Kategorie.
+Der Ort, an dem sich die beiden Kurven kreuzen, stellt die **Decision Boundary** dar. Das macht auch irgendwie Sinn, denn es ist ja der Ort, an dem die Posterior Wahrscheinlichkeit der einen Kategorie plötzlich kleiner ist als diejenige der anderen Kategorie. Hier ist das am Ort $x=-0.44$ (die Berechnung dieses Punkts ist etwas komplexer, weshalb wir sie hier nicht anschauen).
+
+Hier noch ein paar Abschlussbemerkungen:
+
+* Das Naive Bayes Modell funktioniert problemlos für $C>2$ Kategorien in der Outputkategorie. Wir berechnen die bedingten Randwahrscheinlichkeiten sowie den Prior einfach auch für die weiteren Kategorien und können so den entsprechend angepassten Posterior berechnen. Für gegebene Input-Variablenwerte $\mathbf{x}_i$ wird die Klasse mit der höchsten Posterior Wahrscheinlichkeit vorhergesagt.
+* Wir hatten in unserem kleinen Beispiel nur eine numerische Input-Variable. Ein Naive Bayes Modell kann gut mit **gemischten Input-Variablen** umgehen. Wir können also sowohl numerische als auch kategorische Input-Variablen im Modell drin haben. Die entsprechenden Randwahrscheinlichkeiten werden dabei einfach miteinander multipliziert.
+* Fehlt für eine Beobachtung der Wert einer Input-Variable, dann kann diese Input-Variable einfach ignoriert werden. Warum das so ist, kann in folgender (optionalen) Box nachvollzogen werden.
+
+::: {.callout-caution collapse="true"}
+## Fehlende Input-Werte in Naive Bayes (optional)
+
+Nehmen wir an, wir haben zwei Input-Variablen $x_{i1}$ und $x_{i2}$. Nun fehlt uns bei einer Beobachtung der Wert für die Variable $x_{i2}$.
+
+Wir können nun die Variable $x_{i2}$ aus der rechten Seite der Modellspezifikation **raus marginalisieren**. Das Prinzips des Marginalisierens haben Sie vermutlich bereits kennen gelernt. Es gilt folgende allgemeine Regel: $\sum_{A} P(A,B) = P(B)$. Diese Regel wenden wir nun hier an:
+
+\begin{align}
+{\color{Red}\sum_{x_{i2}}} \frac{p(x_{i1} \mid y_i = 1) \cdot p(x_{i2} \mid y_i = 1) \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot p(x_{i2} \mid y_i = 1) \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot p(x_{i2} \mid y_i = 0) \cdot p(y_i = 0)}\\
+
+= \frac{p(x_{i1} \mid y_i = 1) \cdot {\color{Red}\sum_{x_{i2}} p(x_{i2} \mid y_i = 1)} \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot {\color{Red}\sum_{x_{i2}} p(x_{i2} \mid y_i = 1)} \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot {\color{Red}\sum_{x_{i2}} p(x_{i2} \mid y_i = 0)} \cdot p(y_i = 0)}\\
+
+= \frac{p(x_{i1} \mid y_i = 1) \cdot {\color{Red} 1} \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot {\color{Red} 1} \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot {\color{Red} 1} \cdot p(y_i = 0)}\\
+
+= \frac{p(x_{i1} \mid y_i = 1) \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot p(y_i = 0)}\\
+\end{align}
+
+Diese Umformung oben ist nur dank der Unbhängigkeitsannahme möglich. Ausserdem verwenden wir die Tatsache, dass $\sum_{x_{i2}} p(x_{i2} \mid y_i = 1) = 1$, d.h. wenn wir die Randwahrscheinlichkeiten über alle möglichen Werte von $x_{i2}$ summieren, dann muss per Definition 1 resultieren.
+:::
 
 ### Spam Filter
 
-Zum Schluss schauen wir uns hier (erstmal nur konzeptionell) die Anwendung des Naive Bayes Modell für einen **Spam Filter** an. Der Spam Filter soll eine gegebene Email möglichst korrekt in die Kategorien **Spam** ($y_i=1$) oder **Ham** ($y_i=0$) klassifizieren.
+Zum Schluss schauen wir uns hier (erstmal nur konzeptionell) die Anwendung des Naive Bayes Modells für einen **Spam Filter** an. Der Spam Filter soll eine gegebene Email möglichst korrekt in die Kategorien **Spam** ($y_i=1$) oder **Ham** ($y_i=0$) klassifizieren.
 
 Die Trainingsdaten bestehen in diesem Fall aus $n$ Emails. Eine Sammlung von Emails sind sogenannte **unstrukturierte Daten** und da muss man sich überlegen, wie man die Daten in eine strukturierte Form bringt. Oder in anderen Worten, wie kommt man von einer Email zu einem Input-Vektor $\mathbf{x}_i$? Eine Möglichkeit ist der sogenannte **Bag-of-Words** Ansatz. Dabei geht man folgendermassen vor:
 
@@ -909,7 +955,7 @@ Folgende Abbildung illustriert den Bag-of-Words Ansatz für ein ganz kleines Bei
 
 ![Bag-of-Words (Beispiel)](images/bagOfWords.png){width=70% #fig-bagofwords}
 
-Wir schauen uns nun die Modellberechnungen anhand eines einfachen Beispiels an. Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort "afford" bzw. "price" in einer Email vorkommen oder nicht.
+Wir schauen uns nun die Modellberechnungen anhand eines Beispiels an. Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort "afford" bzw. "price" in einer Email vorkommen oder nicht.
 
 #### Frage {.unnumbered}
 
@@ -976,7 +1022,7 @@ p(y_i = 1 \mid afford_i = 1, price_i = 1) &= \frac{p(afford_i = 1 \mid y_i = 1) 
 \end{split}
 $$
 
-Wow, gegeben, dass die beiden Worte "afford" und "price" in einem Email vorkommen, sind wir also ziemlich sicher, dass es sich um eine Spam Email handelt.
+Wow, gegeben, dass die beiden Worte "afford" und "price" in einer Email vorkommen, sind wir also ziemlich sicher, dass es sich um eine Spam Email handelt.
 
 #### Frage {.unnumbered}
 
@@ -997,10 +1043,6 @@ $$
 Wir sind jetzt viel weniger sicher (55%), dass es sich um Spam handelt, da das Wort "price" nicht mehr in der Email vorkommt.
 :::
 
-* Man kann Input-Variablen mischen.
-* Missing values
-* Works for C > 2
-
 ## K-Nearest Neighbors
 
 <!-- Curse of Dimensionality -->
@@ -1009,7 +1051,9 @@ Wir sind jetzt viel weniger sicher (55%), dass es sich um Spam handelt, da das W
 
 <!-- Ch. 5 in Anil's Book -->
 
-**Nicht-parametrische Modelle** wiederum sind Modelle, welche nicht (oder zumindest nicht explizit) durch Parameter charakterisiert sind. Am besten schauen wir uns gleich ein einfaches nicht-parametrisches Modell an, nämlich das **K-Nearest-Neighbors** (KNN) Modell. Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer\*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram ($x_{i1}$) und ein Werbebudget für Tiktok ($x_{i2}$). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output $y_i$). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die $K$ nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den $K$ nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die $K$ **ähnlichsten** Beobachtungen und nutzen diese, um eine Vorhersage zu machen.
+Mit dem **K-Nearest-Neighbors** (KNN) Modell schauen wir uns nun noch ein **nicht-parametrisches Modell** an. Solche Modelle sind nicht (oder zumindest nicht explizit) durch Parameter charakterisiert.
+
+Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer\*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram ($x_{i1}$) und ein Werbebudget für Tiktok ($x_{i2}$). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output $y_i$). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die $K$ nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den $K$ nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die $K$ **ähnlichsten** Beobachtungen und nutzen diese, um eine Vorhersage zu machen.
 
 Selbstverständlich spielt der konkrete Wert von $K$ hier eine grosse Rolle - sollen wir nur $K=1$ Nachbarn berücksichtigen? Oder $K=10$ Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55 Datenpunkte, sondern auch die **Entscheidungsgrenze** (in schwarz). Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn Sie $K$ erhöhen oder reduzieren.
 
@@ -1039,7 +1083,7 @@ c. Rotes Kreuz.
 Es hat drei rote Kreuze und zwei blaue Kreise in der Nachbarschaft. Die roten Kreuze sind darum in der Mehrheit, weshalb Antwort **c** korrekt ist.
 :::
 
-![KNN Modell für binäres Klassifikationsproblem](images/knn.PNG){#fig-knn}
+![KNN Modell für binäres Klassifikationsproblem](images/knn.PNG){width=50% #fig-knn}
 
 Was ist der Wert für $K$ für das KNN Modell in der oben stehenden Abbildung?
 
@@ -1066,7 +1110,7 @@ c. 5
 Der Durchschnitt über die 5 $y_i$-Werte in der Nachbarschaft beträgt 4, weshalb Antwort **a** korrekt ist.
 :::
 
-![KNN Modell für Regressionsproblem](images/knnreg.PNG){#fig-knnreg}
+![KNN Modell für Regressionsproblem](images/knnreg.PNG){width=50% #fig-knnreg}
 
 ## Modelle in R {#sec-logregR}
 
