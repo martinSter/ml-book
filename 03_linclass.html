@@ -281,7 +281,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#modellspezifikation-1" id="toc-modellspezifikation-1" class="nav-link" data-scroll-target="#modellspezifikation-1"><span class="header-section-number">3.2.1</span> Modellspezifikation</a></li>
   <li><a href="#modelltraining-1" id="toc-modelltraining-1" class="nav-link" data-scroll-target="#modelltraining-1"><span class="header-section-number">3.2.2</span> Modelltraining</a></li>
-  <li><a href="#spam-filter" id="toc-spam-filter" class="nav-link" data-scroll-target="#spam-filter"><span class="header-section-number">3.2.3</span> Spam Filter</a></li>
+  <li><a href="#vorhersagen" id="toc-vorhersagen" class="nav-link" data-scroll-target="#vorhersagen"><span class="header-section-number">3.2.3</span> Vorhersagen</a></li>
+  <li><a href="#spam-filter" id="toc-spam-filter" class="nav-link" data-scroll-target="#spam-filter"><span class="header-section-number">3.2.4</span> Spam Filter</a></li>
   </ul></li>
   <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</a></li>
   <li><a href="#sec-logregR" id="toc-sec-logregR" class="nav-link" data-scroll-target="#sec-logregR"><span class="header-section-number">3.4</span> Modelle in R</a></li>
@@ -318,7 +319,7 @@ window.Quarto = {
 <li>Naive Bayes (NB)</li>
 <li>K-Nearest Neighbors (KNN)</li>
 </ul>
-<p><strong>Wichtig</strong>: der Titel des Kapitels besagt, dass wir uns <em>lineare</em> Klassifikationsmodelle anschauen. Das stimmt nicht ganz, denn während das logistische Regressionsmodell und Naive Bayes lineare Modelle sind, ist KNN ein sehr flexibles, nicht-lineares Modell.</p>
+<p><strong>Wichtig</strong>: der Titel des Kapitels besagt, dass wir uns <em>lineare</em> Klassifikationsmodelle anschauen. Das stimmt nicht ganz, denn während das logistische Regressionsmodell und (unter gewissen Bedingungen) Naive Bayes lineare Modelle sind, ist KNN ein sehr flexibles, nicht-lineares Modell.</p>
 <section id="logistische-regression" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="logistische-regression"><span class="header-section-number">3.1</span> Logistische Regression</h2>
 <p>Die logistische Regression ist das Gegenstück zur linearen Regression für das Klassifikationsproblem. Es ist ein einfaches Modell, das oft als guter Ausgangspunkt für jegliche Klassifikationsprobleme dient. Das heisst, es macht meist Sinn, als <strong>erstes Modell</strong> ein logistisches Regressionsmodell zu trainieren.</p>
@@ -793,7 +794,7 @@ P(A \mid B) &amp;= \frac{P(B \mid A) \cdot P(A)}{P(B)}\\
 </div>
 <section id="modellspezifikation-1" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="modellspezifikation-1"><span class="header-section-number">3.2.1</span> Modellspezifikation</h3>
-<p>Das Naive Bayes Modell kann folgendermassen spezifiziert werden. Dabei wenden wir den Satz von Bayes an:</p>
+<p>Das Naive Bayes Modell kann folgendermassen spezifiziert werden. Dabei wenden wir den Satz von Bayes an (<span class="math inline">\(y_i=1\)</span> ist hier gewissermassen das Ereignis A, während die Beobachtung der Input-Variablen <span class="math inline">\(\mathbf{x}_i\)</span> das Ereignis B darstellt):</p>
 <p><span class="math display">\[
 p(y_i = 1 \mid \mathbf{x}_i) = \frac{p(\mathbf{x}_i \mid y_i = 1) \cdot p(y_i = 1)}{p(\mathbf{x}_i)}
 \]</span></p>
@@ -807,7 +808,7 @@ p(y_i = 1 \mid \mathbf{x}_i) = \frac{p(\mathbf{x}_i \mid y_i = 1) \cdot p(y_i = 
 <p><span class="math display">\[
 p(\mathbf{x}_i) = p(\mathbf{x}_i \mid y_i = 1) \cdot p(y_i = 1) + p(\mathbf{x}_i \mid y_i = 0) \cdot p(y_i = 0)
 \]</span></p>
-<p>Mit dem Naive Bayes Modell sehen wir nun zum ersten Mal ein <strong>generatives</strong> Modell (<a href="01_intro.html#sec-taxonomie" class="quarto-xref">siehe Abschnitt&nbsp;<span>1.4.3</span></a>), denn wir schätzen im Zahler der Modellspezifikation nichts anderes als die <strong>gemeinsame Verteilung</strong> von <span class="math inline">\(\mathbf{x}_i\)</span> und <span class="math inline">\(y_i\)</span>:</p>
+<p>Mit dem Naive Bayes Modell sehen wir nun zum ersten Mal ein <strong>generatives</strong> Modell (<a href="01_intro.html#sec-taxonomie" class="quarto-xref">siehe Abschnitt&nbsp;<span>1.4.3</span></a>), denn wir schätzen im <strong>Zähler</strong> der Modellspezifikation nichts anderes als die <strong>gemeinsame Verteilung</strong> von <span class="math inline">\(\mathbf{x}_i\)</span> und <span class="math inline">\(y_i\)</span>:</p>
 <p><span class="math display">\[
 p(\mathbf{x}_i \mid y_i) \cdot p(y_i) = p(\mathbf{x}_i,\, y_i)
 \]</span></p>
@@ -839,7 +840,7 @@ P(A, B) = P(A) \cdot P(B)
 </section>
 <section id="modelltraining-1" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="modelltraining-1"><span class="header-section-number">3.2.2</span> Modelltraining</h3>
-<p>Aus dem vorherigen Abschnitt sehen wir, dass Modelltraining im Fall von Naive Bayes heisst, dass verschiedenen Wahrscheinlichkeiten aus den Trainingsdaten geschätzt werden müssen:</p>
+<p>Es wurde oben bereits angedeutet, dass Modelltraining im Fall von Naive Bayes heisst, dass verschiedene Wahrscheinlichkeiten aus den Trainingsdaten geschätzt werden müssen:</p>
 <ul>
 <li>Die Priors <span class="math inline">\(p(y_i = 1)\)</span> und <span class="math inline">\(p(y_i = 0)\)</span></li>
 <li>Die Randwahrscheinlichkeiten <span class="math inline">\(p(x_{i1} \mid y_i = 1)\)</span>, <span class="math inline">\(p(x_{i2} \mid y_i = 1)\)</span>, etc. für alle Beobachtungen im Trainingsdatensatz, die der <strong>Kategorie 1</strong> angehören.</li>
@@ -859,21 +860,19 @@ P(A, B) = P(A) \cdot P(B)
 <p><strong>Wichtig</strong>: wir haben hier nur eine Input-Variable, weshalb die Unabhängigkeitsannahme des Naive Bayes Modells hier nicht ins Gewicht fallen wird.</p>
 <p>Die Priors können ganz einfach als <strong>relative Häufigkeiten</strong> basierend auf dem Trainingsdatensatz geschätzt werden. Für unser Beispiel kriegen wir folgende Priors:</p>
 <ul>
-<li><span class="math inline">\(p(y_i = 1) = \frac{3}{5} = 0.6\)</span></li>
-<li><span class="math inline">\(p(y_i = 0) = \frac{2}{5} = 0.4\)</span></li>
+<li><span class="math inline">\(p(y_i = 1) = \frac{3}{5} = 0.6\)</span> (die blauen Beobachtungen)</li>
+<li><span class="math inline">\(p(y_i = 0) = \frac{2}{5} = 0.4\)</span> (die roten Beobachtungen)</li>
 </ul>
-<p>In unserem Fall haben wir eine <strong>quantitative Input-Variablen</strong>. Die Randwahrscheinlichkeiten werden für diesen Fall als Normalverteilungen, einmal für die Kategorie <span class="math inline">\(y_i=1\)</span> und einmal für die Kategorie <span class="math inline">\(y_i=0\)</span> geschätzt.</p>
-<ul>
-<li>Für <span class="math inline">\(y_i=0\)</span> ergibt sich die Schätzung von <span class="math inline">\(p(x_{i} \mid y_i = 0) = \mathcal{N}\left(\mu_0, \sigma_0^2\right)\)</span>, wobei
+<p>In unserem Fall haben wir eine <strong>quantitative Input-Variable</strong>. Die Randwahrscheinlichkeiten werden für diesen Fall als Normalverteilungen, einmal für die Kategorie <span class="math inline">\(y_i=1\)</span> und einmal für die Kategorie <span class="math inline">\(y_i=0\)</span> geschätzt.</p>
+<p>Für <span class="math inline">\(y_i=0\)</span> ergibt sich die Schätzung von <span class="math inline">\(p(x_{i} \mid y_i = 0) = \mathcal{N}\left(\mu_0, \sigma_0^2\right)\)</span>, wobei</p>
 <ul>
 <li><span class="math inline">\(\mu_0=\frac{1}{2}(-4.1 + 0.5) = -1.8\)</span><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></li>
 <li><span class="math inline">\(\sigma_0^2 = \frac{1}{2}\left((-4.1 - (-1.8))^2 + (0.5 - (-1.8))^2\right) = 5.29\)</span><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></li>
-</ul></li>
-<li>Für <span class="math inline">\(y_i=1\)</span> ergibt sich die Schätzung von <span class="math inline">\(p(x_{i} \mid y_i = 1) = \mathcal{N}\left(\mu_1, \sigma_1^2\right)\)</span>, wobei
+</ul>
+<p>Für <span class="math inline">\(y_i=1\)</span> ergibt sich die Schätzung von <span class="math inline">\(p(x_{i} \mid y_i = 1) = \mathcal{N}\left(\mu_1, \sigma_1^2\right)\)</span>, wobei</p>
 <ul>
 <li><span class="math inline">\(\mu_1=\frac{1}{3}(-0.1 + 1.4 + 4.4) = 1.9\)</span></li>
 <li><span class="math inline">\(\sigma_1^2 = \frac{1}{3}\left((-0.1 - 1.9)^2 + (1.4 - 1.9)^2 + (4.4 - 1.9)^2\right) = 3.5\)</span></li>
-</ul></li>
 </ul>
 <p>Die folgende Abbildung zeigt die Dichtefunktionen der beiden geschätzten Normalverteilungen, die für jeden möglichen Wert von <span class="math inline">\(x\)</span> einen Dichtewert zurückgeben.</p>
 <div class="cell" data-layout-align="center">
@@ -886,7 +885,10 @@ P(A, B) = P(A) \cdot P(B)
 </div>
 </div>
 </div>
-<p>Nun berechnen wir den Posterior <span class="math inline">\(p(y_i = 1 \mid x_i)\)</span> für den Wert <span class="math inline">\(x_i=2\)</span>:</p>
+</section>
+<section id="vorhersagen" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="vorhersagen"><span class="header-section-number">3.2.3</span> Vorhersagen</h3>
+<p>Als Beispiel können wir nun den Posterior <span class="math inline">\(p(y_i = 1 \mid x_i)\)</span> für den Wert <span class="math inline">\(x_i=2\)</span> berechnen:</p>
 <p><span class="math display">\[\begin{align}
 p(y_i = 1 \mid x_i = 2) &amp;= \frac{p(x_i = 2 \mid y_i = 1) \cdot p(y_i = 1)}{p(x_i = 2)}\\
 &amp;= \frac{\mathcal{N}(x_i=2 \mid \mu_1, \sigma_1^2) \cdot p(y_i = 1)}{\mathcal{N}(x_i=2 \mid \mu_1, \sigma_1^2) \cdot p(y_i = 1) + \mathcal{N}(x_i=2 \mid \mu_0, \sigma_0^2) \cdot p(y_i = 0)}\\
@@ -905,11 +907,44 @@ p(y_i = 1 \mid x_i = 2) &amp;= \frac{p(x_i = 2 \mid y_i = 1) \cdot p(y_i = 1)}{p
 </div>
 </div>
 </div>
-<p>Der Ort, an dem sich die beiden Kurven kreuzen, stellt die Decision Boundary dar. Das macht auch irgendwie Sinn, denn es ist ja der Ort, an dem die Posterior Wahrscheinlichkeit der einen Kategorie plötzlich kleiner ist als diejenige der anderen Kategorie.</p>
+<p>Der Ort, an dem sich die beiden Kurven kreuzen, stellt die <strong>Decision Boundary</strong> dar. Das macht auch irgendwie Sinn, denn es ist ja der Ort, an dem die Posterior Wahrscheinlichkeit der einen Kategorie plötzlich kleiner ist als diejenige der anderen Kategorie. Hier ist das am Ort <span class="math inline">\(x=-0.44\)</span> (die Berechnung dieses Punkts ist etwas komplexer, weshalb wir sie hier nicht anschauen).</p>
+<p>Hier noch ein paar Abschlussbemerkungen:</p>
+<ul>
+<li>Das Naive Bayes Modell funktioniert problemlos für <span class="math inline">\(C&gt;2\)</span> Kategorien in der Outputkategorie. Wir berechnen die bedingten Randwahrscheinlichkeiten sowie den Prior einfach auch für die weiteren Kategorien und können so den entsprechend angepassten Posterior berechnen. Für gegebene Input-Variablenwerte <span class="math inline">\(\mathbf{x}_i\)</span> wird die Klasse mit der höchsten Posterior Wahrscheinlichkeit vorhergesagt.</li>
+<li>Wir hatten in unserem kleinen Beispiel nur eine numerische Input-Variable. Ein Naive Bayes Modell kann gut mit <strong>gemischten Input-Variablen</strong> umgehen. Wir können also sowohl numerische als auch kategorische Input-Variablen im Modell drin haben. Die entsprechenden Randwahrscheinlichkeiten werden dabei einfach miteinander multipliziert.</li>
+<li>Fehlt für eine Beobachtung der Wert einer Input-Variable, dann kann diese Input-Variable einfach ignoriert werden. Warum das so ist, kann in folgender (optionalen) Box nachvollzogen werden.</li>
+</ul>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Fehlende Input-Werte in Naive Bayes (optional)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Nehmen wir an, wir haben zwei Input-Variablen <span class="math inline">\(x_{i1}\)</span> und <span class="math inline">\(x_{i2}\)</span>. Nun fehlt uns bei einer Beobachtung der Wert für die Variable <span class="math inline">\(x_{i2}\)</span>.</p>
+<p>Wir können nun die Variable <span class="math inline">\(x_{i2}\)</span> aus der rechten Seite der Modellspezifikation <strong>raus marginalisieren</strong>. Das Prinzips des Marginalisierens haben Sie vermutlich bereits kennen gelernt. Es gilt folgende allgemeine Regel: <span class="math inline">\(\sum_{A} P(A,B) = P(B)\)</span>. Diese Regel wenden wir nun hier an:</p>
+<p><span class="math display">\[\begin{align}
+{\color{Red}\sum_{x_{i2}}} \frac{p(x_{i1} \mid y_i = 1) \cdot p(x_{i2} \mid y_i = 1) \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot p(x_{i2} \mid y_i = 1) \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot p(x_{i2} \mid y_i = 0) \cdot p(y_i = 0)}\\
+
+= \frac{p(x_{i1} \mid y_i = 1) \cdot {\color{Red}\sum_{x_{i2}} p(x_{i2} \mid y_i = 1)} \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot {\color{Red}\sum_{x_{i2}} p(x_{i2} \mid y_i = 1)} \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot {\color{Red}\sum_{x_{i2}} p(x_{i2} \mid y_i = 0)} \cdot p(y_i = 0)}\\
+
+= \frac{p(x_{i1} \mid y_i = 1) \cdot {\color{Red} 1} \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot {\color{Red} 1} \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot {\color{Red} 1} \cdot p(y_i = 0)}\\
+
+= \frac{p(x_{i1} \mid y_i = 1) \cdot p(y_i = 1)}{p(x_{i1} \mid y_i = 1) \cdot p(y_i = 1) + p(x_{i1} \mid y_i = 0) \cdot p(y_i = 0)}\\
+\end{align}\]</span></p>
+<p>Diese Umformung oben ist nur dank der Unbhängigkeitsannahme möglich. Ausserdem verwenden wir die Tatsache, dass <span class="math inline">\(\sum_{x_{i2}} p(x_{i2} \mid y_i = 1) = 1\)</span>, d.h. wenn wir die Randwahrscheinlichkeiten über alle möglichen Werte von <span class="math inline">\(x_{i2}\)</span> summieren, dann muss per Definition 1 resultieren.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="spam-filter" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="spam-filter"><span class="header-section-number">3.2.3</span> Spam Filter</h3>
-<p>Zum Schluss schauen wir uns hier (erstmal nur konzeptionell) die Anwendung des Naive Bayes Modell für einen <strong>Spam Filter</strong> an. Der Spam Filter soll eine gegebene Email möglichst korrekt in die Kategorien <strong>Spam</strong> (<span class="math inline">\(y_i=1\)</span>) oder <strong>Ham</strong> (<span class="math inline">\(y_i=0\)</span>) klassifizieren.</p>
+<section id="spam-filter" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="spam-filter"><span class="header-section-number">3.2.4</span> Spam Filter</h3>
+<p>Zum Schluss schauen wir uns hier (erstmal nur konzeptionell) die Anwendung des Naive Bayes Modells für einen <strong>Spam Filter</strong> an. Der Spam Filter soll eine gegebene Email möglichst korrekt in die Kategorien <strong>Spam</strong> (<span class="math inline">\(y_i=1\)</span>) oder <strong>Ham</strong> (<span class="math inline">\(y_i=0\)</span>) klassifizieren.</p>
 <p>Die Trainingsdaten bestehen in diesem Fall aus <span class="math inline">\(n\)</span> Emails. Eine Sammlung von Emails sind sogenannte <strong>unstrukturierte Daten</strong> und da muss man sich überlegen, wie man die Daten in eine strukturierte Form bringt. Oder in anderen Worten, wie kommt man von einer Email zu einem Input-Vektor <span class="math inline">\(\mathbf{x}_i\)</span>? Eine Möglichkeit ist der sogenannte <strong>Bag-of-Words</strong> Ansatz. Dabei geht man folgendermassen vor:</p>
 <ol type="1">
 <li>Man bestimmt die <strong>häufigsten Wörter</strong> im Trainingsdatensatz (d.h., in den Emails, die wir für das Training verwenden werden).</li>
@@ -926,31 +961,10 @@ Abbildung&nbsp;3.1: Bag-of-Words (Beispiel)
 </figcaption>
 </figure>
 </div>
-<p>Wir schauen uns nun die Modellberechnungen anhand eines einfachen Beispiels an. Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort “afford” bzw. “price” in einer Email vorkommen oder nicht.</p>
+<p>Wir schauen uns nun die Modellberechnungen anhand eines Beispiels an. Der Einfachheit halber berechnen wir hier ein Spam Filter Beispiel mit nur zwei Input-Variablen. Die beiden Variablen beschreiben, ob das Wort “afford” bzw. “price” in einer Email vorkommen oder nicht.</p>
 <section id="frage-4" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="frage-4">Frage</h4>
 <p>Berechnen wir als erstes die Priors. Der Trainingsdatensatz enthält insgesamt 4000 Emails. 1277 Emails sind Spam. Was sind die korrekten Priors?</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tipp</span>Lösung
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><span class="math inline">\(p(y_i = 1) = 0.32\)</span> und <span class="math inline">\(p(y_i = 0) = 0.68\)</span>.</p>
-</div>
-</div>
-</div>
-<p>Als nächstes rechnen wir die Randwahrscheinlichkeiten für die Spam Emails. In den 1277 Spam Emails enthalten 40 Emails das Wort “afford” und 223 Emails das Wort “price”.</p>
-</section>
-<section id="frage-5" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="frage-5">Frage</h4>
-<p>Was sind die korrekten Randwahrscheinlichkeiten für die Spam Emails?</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -962,6 +976,27 @@ Abbildung&nbsp;3.1: Bag-of-Words (Beispiel)
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(p(y_i = 1) = 0.32\)</span> und <span class="math inline">\(p(y_i = 0) = 0.68\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Als nächstes rechnen wir die Randwahrscheinlichkeiten für die Spam Emails. In den 1277 Spam Emails enthalten 40 Emails das Wort “afford” und 223 Emails das Wort “price”.</p>
+</section>
+<section id="frage-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-5">Frage</h4>
+<p>Was sind die korrekten Randwahrscheinlichkeiten für die Spam Emails?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math inline">\(p(afford_i = 1 \mid y_i = 1) = 0.03\)</span> und <span class="math inline">\(p(price_i = 1 \mid y_i = 1) = 0.17\)</span>.</p>
 </div>
@@ -980,7 +1015,7 @@ p(price_i = 0 \mid y_i = 1) = 1 - p(price_i = 1 \mid y_i = 1) = 1 - 0.17 = 0.83
 <h4 class="unnumbered anchored" data-anchor-id="frage-6">Frage</h4>
 <p>Was sind die korrekten Randwahrscheinlichkeiten für die Ham Emails?</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -989,7 +1024,7 @@ p(price_i = 0 \mid y_i = 1) = 1 - p(price_i = 1 \mid y_i = 1) = 1 - 0.17 = 0.83
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math inline">\(p(afford_i = 1 \mid y_i = 0) = 0.01\)</span> und <span class="math inline">\(p(price_i = 1 \mid y_i = 0) = 0.05\)</span>.</p>
 </div>
@@ -1011,13 +1046,13 @@ p(y_i = 1 \mid afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 \mid y_i =
 &amp;= 0.83
 \end{split}
 \]</span></p>
-<p>Wow, gegeben, dass die beiden Worte “afford” und “price” in einem Email vorkommen, sind wir also ziemlich sicher, dass es sich um eine Spam Email handelt.</p>
+<p>Wow, gegeben, dass die beiden Worte “afford” und “price” in einer Email vorkommen, sind wir also ziemlich sicher, dass es sich um eine Spam Email handelt.</p>
 </section>
 <section id="frage-7" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="frage-7">Frage</h4>
 <p>Rechnen Sie die Wahrscheinlichkeit, dass es sich bei einer Email um Spam handelt, wenn nur das Wort “afford” vorkommt, nicht aber das Wort “price”.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1026,7 +1061,7 @@ p(y_i = 1 \mid afford_i = 1, price_i = 1) &amp;= \frac{p(afford_i = 1 \mid y_i =
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math display">\[
 \begin{split}
@@ -1040,11 +1075,6 @@ p(y_i = 1 \mid afford_i = 1, price_i = 0) &amp;= \frac{p(afford_i = 1 \mid y_i =
 </div>
 </div>
 </div>
-<ul>
-<li>Man kann Input-Variablen mischen.</li>
-<li>Missing values</li>
-<li>Works for C &gt; 2</li>
-</ul>
 </section>
 </section>
 </section>
@@ -1053,7 +1083,8 @@ p(y_i = 1 \mid afford_i = 1, price_i = 0) &amp;= \frac{p(afford_i = 1 \mid y_i =
 <!-- Curse of Dimensionality -->
 <!-- Optimal Bayes Classifier -->
 <!-- Ch. 5 in Anil's Book -->
-<p><strong>Nicht-parametrische Modelle</strong> wiederum sind Modelle, welche nicht (oder zumindest nicht explizit) durch Parameter charakterisiert sind. Am besten schauen wir uns gleich ein einfaches nicht-parametrisches Modell an, nämlich das <strong>K-Nearest-Neighbors</strong> (KNN) Modell. Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram (<span class="math inline">\(x_{i1}\)</span>) und ein Werbebudget für Tiktok (<span class="math inline">\(x_{i2}\)</span>). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output <span class="math inline">\(y_i\)</span>). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die <span class="math inline">\(K\)</span> nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den <span class="math inline">\(K\)</span> nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die <span class="math inline">\(K\)</span> <strong>ähnlichsten</strong> Beobachtungen und nutzen diese, um eine Vorhersage zu machen.</p>
+<p>Mit dem <strong>K-Nearest-Neighbors</strong> (KNN) Modell schauen wir uns nun noch ein <strong>nicht-parametrisches Modell</strong> an. Solche Modelle sind nicht (oder zumindest nicht explizit) durch Parameter charakterisiert.</p>
+<p>Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram (<span class="math inline">\(x_{i1}\)</span>) und ein Werbebudget für Tiktok (<span class="math inline">\(x_{i2}\)</span>). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output <span class="math inline">\(y_i\)</span>). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die <span class="math inline">\(K\)</span> nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den <span class="math inline">\(K\)</span> nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die <span class="math inline">\(K\)</span> <strong>ähnlichsten</strong> Beobachtungen und nutzen diese, um eine Vorhersage zu machen.</p>
 <p>Selbstverständlich spielt der konkrete Wert von <span class="math inline">\(K\)</span> hier eine grosse Rolle - sollen wir nur <span class="math inline">\(K=1\)</span> Nachbarn berücksichtigen? Oder <span class="math inline">\(K=10\)</span> Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55 Datenpunkte, sondern auch die <strong>Entscheidungsgrenze</strong> (in schwarz). Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn Sie <span class="math inline">\(K\)</span> erhöhen oder reduzieren.</p>
 <p>Ausserdem können Sie in der ersten Abbildung auch den schwarzen Punkt mit der Maus setzen, wodurch Ihnen die <span class="math inline">\(K\)</span> nächsten Punkte des schwarzen Punkts angezeigt werden.</p>
 <p>Die zweite Abbildung zeigt die Entscheidungsregionen mit unterschiedlicher Intensität je nachdem wie sicher sich das Modell ist. In einer Region, in der alle <span class="math inline">\(K\)</span> Nachbarn nicht-erfolgreiche Produkte sind, sind wir uns eher sicher bezüglich der Vorhersage als in einer Region, in der die Anteile zwischen erfolgreichen und nicht-erfolgreichen Produkten ausgeglichen sind.</p>
@@ -1072,7 +1103,7 @@ p(y_i = 1 \mid afford_i = 1, price_i = 0) &amp;= \frac{p(afford_i = 1 \mid y_i =
 <li>Rotes Kreuz.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1081,7 +1112,7 @@ p(y_i = 1 \mid afford_i = 1, price_i = 0) &amp;= \frac{p(afford_i = 1 \mid y_i =
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Es hat drei rote Kreuze und zwei blaue Kreise in der Nachbarschaft. Die roten Kreuze sind darum in der Mehrheit, weshalb Antwort <strong>c</strong> korrekt ist.</p>
 </div>
@@ -1090,7 +1121,7 @@ p(y_i = 1 \mid afford_i = 1, price_i = 0) &amp;= \frac{p(afford_i = 1 \mid y_i =
 <div id="fig-knn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-knn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/knn.PNG" class="img-fluid figure-img">
+<img src="images/knn.PNG" class="img-fluid figure-img" style="width:50.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-knn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Abbildung&nbsp;3.2: KNN Modell für binäres Klassifikationsproblem
@@ -1105,7 +1136,7 @@ Abbildung&nbsp;3.2: KNN Modell für binäres Klassifikationsproblem
 <li>10</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1114,7 +1145,7 @@ Abbildung&nbsp;3.2: KNN Modell für binäres Klassifikationsproblem
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Die Nachbarschaft, dargestellt durch den Kreis, enthält 5 Beobachtungen. Deshalb ist Antwort <strong>a</strong> korrekt.</p>
 </div>
@@ -1127,7 +1158,7 @@ Abbildung&nbsp;3.2: KNN Modell für binäres Klassifikationsproblem
 <li>5</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1136,7 +1167,7 @@ Abbildung&nbsp;3.2: KNN Modell für binäres Klassifikationsproblem
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Der Durchschnitt über die 5 <span class="math inline">\(y_i\)</span>-Werte in der Nachbarschaft beträgt 4, weshalb Antwort <strong>a</strong> korrekt ist.</p>
 </div>
@@ -1145,7 +1176,7 @@ Abbildung&nbsp;3.2: KNN Modell für binäres Klassifikationsproblem
 <div id="fig-knnreg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-knnreg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/knnreg.PNG" class="img-fluid figure-img">
+<img src="images/knnreg.PNG" class="img-fluid figure-img" style="width:50.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-knnreg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Abbildung&nbsp;3.3: KNN Modell für Regressionsproblem
