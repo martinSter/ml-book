@@ -268,25 +268,29 @@ Selbstverständlich könnten wir uns nun auch quadratische Funktionen oder Polyn
 
 ### Potenzen und Logarithmen
 
-Blabla...
+Coming soon...
 
 
 ## Integral- und Differentialrechnung
 
-Olteanu materials:
-Local vs. global minima
-From a maximization to a minimization problem
-Basic definition of derivative
-Differentiation rules
-local min., max. and saddle point
-Second derivative test
-Partial derivatives
-What is a gradient? What is Hessian? What is Jacobian?
-Chain rules
-Lagrange optimization
+Coming soon...
+
+<!-- Olteanu materials: -->
+<!-- Local vs. global minima -->
+<!-- From a maximization to a minimization problem -->
+<!-- Basic definition of derivative -->
+<!-- Differentiation rules -->
+<!-- local min., max. and saddle point -->
+<!-- Second derivative test -->
+<!-- Partial derivatives -->
+<!-- What is a gradient? What is Hessian? What is Jacobian? -->
+<!-- Chain rules -->
+<!-- Lagrange optimization -->
 
 
 ## Lineare Algebra
+
+Coming soon...
 
 <!-- used to describe linear systems -->
 <!-- show example of linear system -->
@@ -323,41 +327,41 @@ Lagrange optimization
 
 <!-- The problem of determining whether a square matrix has maximal rank is a cetral on in lin. alg. One can use the determinant of the matrix to find out. -->
 
-Olteanu materials:
-What is a scalar? What is a vector? What is a matrix?
-Vector norms
-Inner products
-Symmetric, diagonal, square and identity matrix
-Associative, commutative laws for matrices
-Matrix addition and multiplication
-Matrix inversion
-Eigenvectors and eigenvalues
-Quadratic form and positive (semi-) definiteness
-Differentiation rules for matrices
-
-
+<!-- Olteanu materials: -->
+<!-- What is a scalar? What is a vector? What is a matrix? -->
+<!-- Vector norms -->
+<!-- Inner products -->
+<!-- Symmetric, diagonal, square and identity matrix -->
+<!-- Associative, commutative laws for matrices -->
+<!-- Matrix addition and multiplication -->
+<!-- Matrix inversion -->
+<!-- Eigenvectors and eigenvalues -->
+<!-- Quadratic form and positive (semi-) definiteness -->
+<!-- Differentiation rules for matrices -->
 
 ## Wahrscheinlichkeitsrechnung
 
-Olteanu materials:
-Sample space and axioms of probability
-Conditional probability definition
-Discrete vs. continuous random variables
-Joint probability distributions
-Expectation and variance, covariance (always for discrete and continuous)
-Bernoulli, Binomial, Normal, Multivariate Normal, Laplace
+Coming soon...
 
-
+<!-- Olteanu materials: -->
+<!-- Sample space and axioms of probability -->
+<!-- Conditional probability definition -->
+<!-- Discrete vs. continuous random variables -->
+<!-- Joint probability distributions -->
+<!-- Expectation and variance, covariance (always for discrete and continuous) -->
+<!-- Bernoulli, Binomial, Normal, Multivariate Normal, Laplace -->
 
 ### Diskrete Zufallsvariablen
 
-Wir werden später sehen, dass im Machine Learning oftmals Dinge als **Zufallsvariablen** modelliert werden. Eine Zufallsvariable $X$ ist eine Variable, für die der konkrete Wert nicht von vornherein klar ist. Wir können mit $X$ zum Beispiel das Resultat eines Münzwurfs modellieren. Die zwei möglichen Resultate sind Kopf und Zahl. Vor dem Münzwurf ist nicht klar, ob Kopf oder Zahl erscheinen wird. Genau darum modellieren wir das Resultat des Münzwurfs als Zufallsvariable.
+Coming soon...
 
-Es gibt in diesem einfachen Beispiel nur zwei mögliche Resultate (Kopf und Zahl), d.h. die Anzahl möglicher Resultate ist endlich (= nicht unendlich). Darum handelt es sich in diesem Fall um eine **diskrete** Zufallsvariable.
+<!-- Wir werden später sehen, dass im Machine Learning oftmals Dinge als **Zufallsvariablen** modelliert werden. Eine Zufallsvariable $X$ ist eine Variable, für die der konkrete Wert nicht von vornherein klar ist. Wir können mit $X$ zum Beispiel das Resultat eines Münzwurfs modellieren. Die zwei möglichen Resultate sind Kopf und Zahl. Vor dem Münzwurf ist nicht klar, ob Kopf oder Zahl erscheinen wird. Genau darum modellieren wir das Resultat des Münzwurfs als Zufallsvariable. -->
+
+<!-- Es gibt in diesem einfachen Beispiel nur zwei mögliche Resultate (Kopf und Zahl), d.h. die Anzahl möglicher Resultate ist endlich (= nicht unendlich). Darum handelt es sich in diesem Fall um eine **diskrete** Zufallsvariable. -->
 
 
 
 
 ## Verteilungen
 
-
+Coming soon...
