@@ -36,7 +36,7 @@ Zusammenfassend lässt sich sagen, dass wir mit ML dem Computer die Möglichkeit
 
 1. Bevor wir ML verwenden können, um Muster in Daten zu lernen, müssen wir uns für ein konkretes Modell entscheiden. ML Modelle können unterschiedlich flexibel sein und es liegt im Ermessen von Ihnen, wie flexibel das Modell sein soll. Sie müssen bei der Wahl des Modells die Komplexität des Problems berücksichtigen. Grundsätzliche gilt bei der Wahl des Modells, dass flexiblere Modelle komplexere Sachverhalte abbilden können. Ein zu flexibles Modell kann aber schnell zu *Overfitting* führen, doch dazu später mehr. Dieser erste Schritt wird im Fachjargon typischerweise **Modellwahl** (engl. *Model Selection*) genannt.
 2. Sobald Sie das Modell ausgewählt haben, übergeben Sie dem Computer (etwas vereinfacht gesagt) das Modell, einen Datensatz sowie einen Lernalgorithmus. Nun hat der Computer alle Zutaten, um automatisch zu lernen. Doch was lernt er eigentlich? Der Computer lernt die Parameter Ihres gewählten Modells, so dass das Modell sich optimal an die Daten anpasst. Dieser Schritt wird im Fachjargon **Modelltraining** (engl. *Model Training* oder *Model Fitting*) genannt.
-3. Falls Sie mit dem erlernten Modell zufrieden sind, können Sie es nun entweder dazu verwenden Vorhersagen zu machen oder um Zusammenhänge in den Daten zu interpretieren und daraus wertvolle Einsichten gewinnen. Dieser Schritt wird im Fachjargon als **Modellinferenz** (engl. *Model Inference*) zusammengefasst. Typischerweise sind Sie in der Realität mit dem ersten erlernten Modell allerdings noch nicht zufrieden und gehen zurück zu Schritt 1 und wählen ein anderes Modell.
+3. Falls Sie mit dem erlernten Modell zufrieden sind, können Sie es nun entweder dazu verwenden Vorhersagen zu machen oder um Zusammenhänge in den Daten zu interpretieren und daraus wertvolle Einsichten zu gewinnen. Dieser Schritt wird im Fachjargon als **Modellinferenz** (engl. *Model Inference*) zusammengefasst. Typischerweise sind Sie in der Realität mit dem ersten erlernten Modell allerdings noch nicht zufrieden und gehen zurück zu Schritt 1 und wählen ein anderes Modell.
 
 Es handelt sich bei dieser Vorgehensweise um eine sehr allgemeine Beschreibung des ML Prozesses. Wie diese drei Schritte konkret funktionieren, werden Sie in den nachfolgenden Kapiteln dieses Buchs erfahren.
 
@@ -101,7 +101,7 @@ Diese Notation bedarf ein paar Erklärungen:
 
 * Den Index $i$ brauchen wir, um die verschiedenen Beobachtungen zu kennzeichnen. $i$ kann eine Ganzzahl zwischen $1$ und $n$ annehmen, wobei $n$ die Anzahl Beobachtungen im Datensatz bezeichnet. Wenn wir zum Beispiel etwas über die Input-Daten der dritten Beobachtung sagen wollen, dann können wir die Notation $\mathbf{x}_3$ verwenden.
 * Für jede Beobachtung $i$ haben wir insgesamt $p$ Variablen, welche die verschiedenen Attribute einer Beobachtung enthalten. $x_{i1}$ bezeichnet also die erste Variable der i-ten Beobachtung, $x_{i2}$ die zweite Variable der i-ten Beobachtung und $x_{ip}$ die p-te (letzte) Variable der i-ten Beobachtung.
-* Was Sie oben sehen, ist $\mathbf{x}_i$ aus mathematischer Sicht ein Spaltenvektor. Mit diesem Spaltenvektor können wir die Input-Daten einer Beobachtung *kompakt* darstellen können.
+* Wie Sie oben sehen, ist $\mathbf{x}_i$ aus mathematischer Sicht ein Spaltenvektor. Mit diesem Spaltenvektor können wir die Input-Daten einer Beobachtung *kompakt* darstellen können.
 
 $\mathbf{x}_i$ bezeichnet nur die beobachteten Input-Variablenwerte für die i-te Beobachtung. Wenn wir die beobachteten Input-Variablenwerte aller $n$ Beobachtungen kompakt darstellen möchten, dann können wir das mit einer Matrix tun. Dazu müssen wir die Input-Variablen für jede Beobachtung $i$ **zeilenweise** in einer Matrix anordnen:
 
@@ -295,7 +295,7 @@ Welche Länge hat unser Vektor $\mathbf{x}_i = \begin{pmatrix} -4.1 & 3.5 \end{p
 ## Lösung
 
 $$
-\| \mathbf{x}_i \| = \sqrt{{-4.1}^2 + {3.5}^2} = 5.39
+\| \mathbf{x}_i \| = \sqrt{{(-4.1)}^2 + {3.5}^2} = 5.39
 $$
 :::
 
@@ -306,7 +306,7 @@ Nun kommen wir bereits zu einem der aus meiner Sicht wichtigsten mathematischen 
 
 Das Skalarprodukt zwischen zwei Vektoren kann aus zwei Perspektiven betrachtet werden: einer geometrischen und einer algebraischen. Das Resultat ist aber in beiden Fällen dasselbe, nämlich ein **Skalar** (also irgendeine reelle Zahl).
 
-In der **geometrischen** Perspektive entspricht das Skalarprodukt zwischen zwei Vektoren $\mathbf{a}$ und $\mathbf{b}$ dem Produkt der Länge von $\mathbf{a}$ sowie der Länge der orthogonalen Projektion von $\mathbf{b}$ auf $\mathbf{a}$. Wir können das selbstverständlich als Formel aufschreiben. Weil wir das ganze aus einer geometrischen Perspektive betrachten, verwenden wir die geomtrische Schreibweise von Vektoren (mit Pfeilen oberhalb der Variablennamen):
+In der **geometrischen** Perspektive entspricht das Skalarprodukt zwischen zwei Vektoren $\mathbf{a}$ und $\mathbf{b}$ dem Produkt der Länge von $\mathbf{a}$ sowie der Länge der orthogonalen Projektion von $\mathbf{b}$ auf $\mathbf{a}$. Wir können das selbstverständlich als Formel aufschreiben. Weil wir das ganze aus einer geometrischen Perspektive betrachten, verwenden wir die geometrische Schreibweise von Vektoren (mit Pfeilen oberhalb der Variablennamen):
 
 $$
 \vec{a} \cdot \vec{b} = \| \vec{a} \| \; \| \vec{b} \| \cos(\varphi)
@@ -407,7 +407,7 @@ perceptron <- function(X, y, bias = TRUE, lr = 1, n_epochs = 1000) {
 
 Aus geometrischer Sicht kann man sich das Perceptron mit zwei Input-Variablen als Gerade im Koordinatensystem vorstellen, welche die Beobachtungen der einen Kategorie von den Beobachtungen der anderen Kategorie trennt.^[In höherdimensionalen Räumen sind es anstelle von Geraden sogenannte Hyperebenen.]
 
-Für jeden Datenpunkt, der genau auf dieser trennenden Geraden liegt, muss gelten, dass $\mathbf{w}'\,\mathbf{x}_i = 0$. Aus der Einführung zum Skalarprodukt wissen wir, dass wenn das Skalarprodukt 0 ist die Vektoren in einem rechten Winkel zueinander stehen, oder in anderen Worten, orthogonal sind.
+Für jeden Datenpunkt, der genau auf dieser trennenden Geraden liegt, muss gelten, dass $\mathbf{w}'\,\mathbf{x}_i = 0$. Aus der Einführung zum Skalarprodukt wissen wir, dass wenn das Skalarprodukt 0 ist die Vektoren in einem rechten Winkel zueinander stehen, oder in anderen Worten, **orthogonal** sind.
 
 Wir sehen in untenstehender Abbildung, dass dies tatsächlich so ist. Die Gerade (in Grün) trennt die 5 Datenpunkte perfekt auf in die zwei Kategorien (blaue Kreise und rote Dreiecke). Der Gewichtsvektor (definiert durch die Gewichte $w_1$ und $w_2$) steht in einem **rechten Winkel** zur Geraden. Der Gewichtsvektor charakterisiert also indirekt die Gerade (oder allgemeiner: die Hyperebene), weil diese Orthogonalität immer gegeben ist.
 
