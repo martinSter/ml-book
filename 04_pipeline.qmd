@@ -19,3 +19,19 @@ Einer der wichtigsten Schritte ist die saubere und gründliche **Evaluation** Ih
 Am Schluss geht es darum, dass Sie Ihr Wissen und Ihre Erkenntnisse an die relevanten Fachexpert\*innen weitergeben (**Wissenstransfer**) und Ihr finales Modell in einer produktiven Umgebung implementieren (oft **Deployment** genannt). Zum Beispiel können Sie Ihr Modell in einer mobilen App einbetten oder als REST API Service zur Verfügung stellen.
 
 Ein wichtiger Aspekt beim Klassifikationsproblem ist die Frage, wie man die Modell- bzw. Vorhersagegüte korrekt **evaluiert**. Als Beispiel verwenden wir die Klassifikation von Emails in Spam und nicht-Spam ("Ham"). Der Abschnitt **Spam Filter** enthält den R Code, welcher einen Spam Filter aufsetzt und fittet. Zum Schluss werden wir den Spam Filter **deployen**.
+
+
+<!-- Was muss hier noch kommen? -->
+
+<!-- - Preprocessing steps (vielleicht anhand des Spam Filters) -->
+<!-- - Multi-Class Problem -->
+<!-- - Imbalance -->
+<!-- - Hyperparameter Tuning -->
+<!-- - Was passiert mit anderem Threshold -->
+<!-- - Evaluation von Klassifikationsproblemen -->
+
+
+
+
+
+

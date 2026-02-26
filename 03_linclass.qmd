@@ -18,11 +18,11 @@ Die logistische Regression ist das Gegenstück zur linearen Regression für das 
 
 ### Output-Variable
 
-Die Output-Variable bzw. das Label im **binären** Klassifikationsproblem ist eine kategorische Variable mit zwei möglichen Kategorien (oder Klassen). Wie oben erwähnt nimmt die Output-Variable den Wert 1 an, also $y_i=1$, falls eine Beobachtung der Kategorie 1 angehört und sonst den Wert 0, $y_i=0$. Typischerweise geben wir den Wert 1 der Kategorie, die uns wirklich interessiert (z.B. Spam, Zahlungsunfähigkeit, Patient hat eine Krankheit).
+Die Output-Variable bzw. das Label im **binären** Klassifikationsproblem ist eine kategorische Variable mit zwei möglichen Kategorien (oder Klassen). Wie oben erwähnt nimmt die Output-Variable den Wert 1 an, also $y_i=1$, falls eine Beobachtung der Kategorie 1 angehört und sonst den Wert 0, also $y_i=0$. Typischerweise geben wir den Wert 1 der Kategorie, die uns wirklich interessiert (z.B. Spam, Zahlungsunfähigkeit, Patient hat eine Krankheit).
 
 In folgender Abbildung ist ein Klassifikationsproblem mit 5 Beobachtungen dargestellt. Die drei blauen Datenpunkte gehören der Kategorie 1 an, während die zwei roten Datenpunkte der Kategorie 0 angehören. Wir werden weiter unten auf dieses Problem zurückkommen.
 
-```{r class-prob, echo=FALSE, fig.show = 'hold', fig.cap='Abgebildet ist die Ausgangslage eines einfachen Klassifikationsproblems mit einer Input-Variable (eingezeichnet auf der x-Achse) und der Output-Variable (eingezeichnet auf der y-Achse). Je grösser der $x$-Wert einer Beobachtung, desto wahrscheinlicher ist es, dass die Beobachtung der Kategorie 1 angehört.', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='Einfaches Klassifikationsbeispiel.'}
+```{r class-prob, echo=FALSE, fig.show = 'hold', fig.cap='Abgebildet ist die Ausgangslage eines einfachen Klassifikationsproblems mit einer Input-Variable (eingezeichnet auf der x-Achse) und der Output-Variable (eingezeichnet auf der y-Achse). Man sieht aus der Abbildung direkt, dass je grösser der $x$-Wert einer Beobachtung, desto wahrscheinlicher ist es, dass die Beobachtung der Kategorie 1 angehört.', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='Einfaches Klassifikationsbeispiel.'}
 library(latex2exp)
 # Data points
 x <- c(-4.1, 0.5, -0.1, 1.4, 4.4)
@@ -88,7 +88,7 @@ Diese gewichtete Summe der Input-Variablenwerte wird auch bei der logistischen R
 $$
 p(y_i = 1 \mid \mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
 $$
-Warum nicht? Weil die gewichtete Summe je nach Input-Daten mal negativ sein kann oder auch grösser als 1. Gleichzeitig wissen wir aus der Wahrscheinlichkeitstheorie, dass eine Wahrscheinlichkeit immer zwischen 0 und 1 liegen muss. Folgende Abbildung zeigt, dass das lineare Regressionsmodell nur innerhalb der gestrichelten, vertikalen Linien eine Wahrscheinlichkeit zwischen 0 und 1 zurückgibt.
+Warum nicht? Weil die gewichtete Summe je nach Input-Daten mal negativ sein kann oder auch grösser als 1. Gleichzeitig wissen wir aus der Wahrscheinlichkeitstheorie, dass eine Wahrscheinlichkeit immer zwischen 0 und 1 liegen muss. Folgende Abbildung zeigt, dass das lineare Regressionsmodell nur innerhalb der gestrichelten, vertikalen Linien eine Wahrscheinlichkeit zwischen 0 und 1 zurück gibt.
 
 ```{r class-prob-lin-reg, echo=FALSE, fig.show = 'hold', fig.cap='Was passiert, wenn wir ein einfaches lineares Regressionsmodell schätzen für unser kleines Klassifikationsproblem.', out.width='60%', fig.asp=0.7, fig.align='center', fig.alt='Lin. Reg. für einfaches Klassifikationsbeispiel.'}
 library(latex2exp)
@@ -633,7 +633,7 @@ axis(side = 2, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
 x1 <- seq(0, 10, len = 300)
 x2 <- seq(0, 10, len = 300)
 grid <- expand.grid(X1 = x1, X2 = x2)
-z <- matrix(predict(lr_mod, grid, type = "response"), 300)
+z <- matrix(predict(lr_mod, grid, type = "response"), nrow = 300, byrow = TRUE)
 image(x2, x1, z,  col = c(rgb(1,0,0,.1), rgb(0,0,1,.1)), breaks = c(0, .5, 1), add = TRUE)
 contour(x2, x1, z, levels = .5, add = TRUE, drawlabels = FALSE, lwd = 2, col = "grey")
 points(df$X2, df$X1, pch = 16, cex = 2, col = cols)
@@ -1112,13 +1112,234 @@ Der Durchschnitt über die 5 $y_i$-Werte in der Nachbarschaft beträgt 4, weshal
 
 ![KNN Modell für Regressionsproblem](images/knnreg.PNG){width=50% #fig-knnreg}
 
-## Modelle in R {#sec-logregR}
+## Klassifikation in R {#sec-logregR}
 
-Coming soon
+Wir schauen uns ähnlich wie bei der Regression zuerst kurz an, wie man mit Base `R` ein logistisches Regressionsmodell berechnet. In einem zweiten Schritt schauen wir uns minimale Beispiele für die logistische Regression, Naive Bayes und das KNN Modell im `tidymodels` Framework an.
 
+### Base `R`
 
+In Base `R` lassen sich logistische Regressionsmodelle mit der `glm()` Funktion (`glm` steht für *generalized linear model*) rechnen.
 
+Wir wenden die Funktion hier für unser simples Beispiel von ganz oben mit $n=5$ Beobachtungen an:
 
+```{r}
+# Datenpunkte
+x <- c(-4.1, 0.5, -0.1, 1.4, 4.4)
+y <- c(0, 0, 1, 1, 1)
 
+# Dataframe
+df <- data.frame(x = x, y = y)
 
+# Modellrechnung
+mod <- glm(y ~ x, data = df, family = "binomial")
 
+# Modelloutput
+summary(mod)
+```
+
+Wir sehen im Output in der Spalte `Estimate` die trainierten Gewichte $w_0$ und $w_1$. Alles andere in diesem Output interessiert uns aus einer ML-Sicht eher weniger.
+
+Um Vorhersagen zu rechnen, können wir folgenden Code verwenden (hier für neue Input-Werte von 0.5 und 5.1). Mit `type = "response"` stellen wir sicher, dass das Modell vorhergesagte Wahrscheinlichkeiten zurück gibt.
+
+```{r}
+# Modellvorhersagen
+yp <- predict(mod, newdata = data.frame(x = c(0.5, 5.1)), type = "response")
+yp
+```
+
+### `tidymodels`
+
+Sobald wir **regularisierte** logistische Regressionsmodelle oder eben Naive Bayes oder KNN rechnen wollen, eignet sich der `tidymodels` [Framework](https://www.tidymodels.org/) besser als Base `R`.
+
+Für das logistische Modell verwenden wir als Engine wie bei der Regression das `glmnet` Package. Für Naive Bayes verwenden wir als Engines `naivebayes` und `discrim` und für KNN das `kknn` Package. All diese Packages müssen zusammen mit `tidymodels` erstmal geladen werden:
+
+```{r output=FALSE}
+library(tidymodels)
+library(naivebayes)
+library(discrim)
+library(glmnet)
+library(kknn)
+```
+
+Der folgende Code-Block generiert das Datenbeispiel von oben mit den zwei Input-Variablen (die Details sind hier nicht so wichtig):
+
+```{r}
+# Wir werden Daten aus einer multivariate Normalverteilung samplen,
+# wozu wir das MASS R-Package verwenden.
+library(MASS)
+
+# Seed für Reproduzierbarkeit
+set.seed(2)
+
+# Anzahl Beobachtungen
+n <- 50
+
+# Hier definieren wir die Kovarianzmatrizen der beiden multivariaten Normalvert.
+Sigma0 <- matrix(c(1, 0, 0, 1.5), nrow = 2, ncol = 2)
+Sigma1 <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)
+
+# Hier ziehen wir die Input-Variablenwerte für die Beob. der 
+# ersten und der zweiten Kategorie.
+class0 <- mvrnorm(n/2, mu = c(4, 4), Sigma0)
+class1 <- mvrnorm(n/2, mu = c(6, 6), Sigma1)
+
+# Wir kombinieren die Input-Variablenwerte der beiden Kategorien zu einem DF.
+df <- data.frame(rbind(class0, class1))
+
+# Wir fügen die Outputwerte hinzu.
+df$y <- c(rep(0, n/2), rep(1, n/2))
+
+# Schauen wir uns die ersten paar Zeilen an:
+head(df)
+```
+
+Bevor wir beginnen, schreiben wir nun kurz eine Funktion, die uns jeweils die Decision Boundary eines Modells visualisieren wird (auch hier sind die genauen Details im Code weniger wichtig):
+
+```{r}
+plot_db <- function(data, fit) {
+  # Grösse der Trainingsdaten
+  n <- nrow(data)
+  # Definiere die Farbe für die Datenpunkte.
+  cols <- c(rep(rgb(1, 0, 0, 0.4), n/2), rep(rgb(0, 0, 1, 0.4), n/2))
+  # Nun erstellen wir Sequenzen von möglichen X1 und X2 Werten.
+  x1 <- seq(0, 10, len = 300); x2 <- seq(0, 10, len = 300)
+  # Nun kombinieren wir alle möglichen X1 und X2 Werte (300 * 300 = 90'000)
+  grid <- expand.grid(X1 = x1, X2 = x2)
+  # z ist eine Matrix, die alle Vorhersagen für die Kombinationen im Grid enthält.
+  z <- matrix(predict(fit, grid, type = "prob")$.pred_1, nrow = 300, byrow = TRUE)
+  # Plot Parameter
+  par(mar = c(4, 5, 0.5, 0.5), oma = c(0.5, 0.5, 0.5, 0.5), pty = "s")
+  # Leerer Plot
+  plot(1, 1,
+     axes = F, ylim = c(0, 10), xlim = c(0, 10),
+     xlab = "X2", ylab = "X1",
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+  # Box um den Plot und Achsen
+  box(lwd = 1)
+  axis(side = 1, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+  axis(side = 2, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+  # Schattierte Flächen (basierend auf Matrix z)
+  image(x2, x1, z,  col = c(rgb(1,0,0,.1), rgb(0,0,1,.1)), breaks = c(0, .5, 1), add = TRUE)
+  # Decision Boundary (basierend auf Matrix z)
+  contour(x2, x1, z, levels = .5, add = TRUE, drawlabels = FALSE, lwd = 2, col = "grey")
+  # Datenpunkte hinzufügen
+  points(data$X2, data$X1, pch = 16, cex = 2, col = cols)
+}
+```
+
+#### Logistische Regression
+
+Das regularisierte logistische Regressionsmodell funktioniert sehr ähnlich wie im Regressionsfall. Bei der Modellspezifikation verwenden wir jedoch `logistic_reg()` anstelle von `linear_reg()`.
+
+```{r}
+# Modellspezifikation für lineares Modell mit Regularisierung
+lr_mod <- 
+  logistic_reg(penalty = 0.005, mixture = 1) |> 
+  set_engine("glmnet")
+```
+
+Nun fitten wir das Modell mit `fit()`. Für das `formula` Objekt gibt es folgende Besonderheiten:
+
+* Die Zielvariable ist im Klassifikationsfall kategorischer Natur, weshalb `tidymodels` hier einen Faktor erwartet.
+* Wir experimentieren hier etwas weiter mit polynomischen Input-Variablen und nehmen neben $x_{i1}$ und $x_{i2}$ auch $x_{i1}^2, x_{i2}^2$ und $x_{i1} \cdot x_{i2}$ als zusätzliche Input-Variablen ins Modell. Damit wir nicht Overfitting betreiben, ist Regularisierung hier besonders wichtig. Wir können die zusätzlichen Input-Variablen mit der Helper-Funktion `I()` einfügen.
+
+```{r}
+# Modelltraining
+lr_fit <-
+  lr_mod |>
+  fit(formula = factor(y) ~ X1 + X2 + I(X1^2) + I(X2^2) + I(X1 * X2), data = df)
+```
+
+Schauen wir uns das trainierte Modell am besten kurz an:
+
+```{r}
+# Trainierte Parameter des Modells
+tidy(lr_fit) %>%
+  print(n = 6)
+```
+
+Um zu sehen, welcher Decision Boundary dieses Modell entspricht, können wir sie visualisieren.
+
+```{r out.width='60%', fig.asp=1, fig.align='center'}
+# Decision Boundary visualisieren
+plot_db(df, lr_fit)
+```
+
+Wir haben das Modell hier mit $\lambda=0.005$ regularisiert. Sie können gerne lokal weiter experimentieren und andere Werte für den Regularisierungsparameter ausprobieren. Wir werden später sehen, dass wir den optimalen Wert für $\lambda$ (bzw. `penalty`) **tunen** können.
+
+#### Naive Bayes
+
+Das Naive Bayes Modell wird mit `naive_Bayes()` spezifiziert. Wir setzen das Argument `Laplace = 1.0`, doch was macht dieses Argument genau? Wir haben gesehen, dass wir für Naive Bayes viele Randwahrscheinlichkeiten aus den Daten schätzen müssen. Doch was passiert, wenn z.B. keine einzige Spam Email das Wort "write" enthält? In dem Fall ist die Wahrscheinlichkeit $p(write_i \mid y_i=1) = 0$. Wenn jetzt also eine neue Spam Email, welche das Wort "write" enthält, in Ihr Postfach reinkommt, dann wird der Spam Filter eine Spam Wahrscheinlichkeit von 0 berechnen. Mit `Laplace = 1.0` beheben wir dieses Problem, indem wir bei der Schätzung der Randwahrscheinlichkeiten überall eine 1 addieren, so dass jedes Wort im schlimmsten Fall eine minimale Wahrscheinlichkeit aufweist, in einer Email (Spam oder Ham) vorzukommen.
+
+Mit `usekernel = FALSE` stellen wir sicher, dass wie oben Normalverteilungen geschätzt werden.
+
+```{r}
+# Modellspezifikation
+nb_mod <- 
+  naive_Bayes(Laplace = 1.0) %>% 
+  set_engine("naivebayes", usekernel = FALSE)
+```
+
+Der Fit des Modells ist wie oben bei der logistischen Regression (wir verzichten hier jedoch auf die zusätzlichen Input-Variablen).
+
+```{r}
+# Model Fitting Naive Bayes
+nb_fit <- 
+  nb_mod %>% 
+  fit(formula = factor(y) ~ X1 + X2, data = df)
+
+# Ausgabe des Modells
+nb_fit
+```
+
+Wir sehen im obigen Output sowohl die Priors (beide Kategorien kommen genau gleich häufig vor) als auch die geschätzten Parameter der Normalverteilungen (gegeben die Kategorien in $y$) für die beiden Input-Variablen.
+
+Für einen neuen Datenpunkt (4, 6) würden wir eher die Kategorie 0 vorhersagen, da sie eine klar höhere Wahrscheinlichkeit (0.621) hat als die Kategorie 1 (0.379).
+
+```{r}
+# Vorhersage für einen neuen Datenpunkt
+predict(nb_fit, new_data = data.frame(X1 = 4, X2 = 6), type = "prob")
+```
+
+Und schliesslich können wir auch hier die Decision Boundary visualisieren und sehen, dass wir hier kein lineares Modell mehr vorfinden!
+
+```{r out.width='60%', fig.asp=1, fig.align='center'}
+# Decision Boundary visualisieren
+plot_db(df, nb_fit)
+```
+
+#### K-Nearest Neighbors
+
+Zum Abschluss fitten wir noch ein KNN Modell mit $K=5$ Nachbarn. Da dieses Modell wie erwähnt auf den Regressions- und den Klassifikationsfall anwendbar ist, setzen wir mit `set_mode()` den gewünschten Fall.
+
+```{r}
+# Modellspezifikation
+knn_mod <- 
+  nearest_neighbor(neighbors = 5) |> 
+  set_mode("classification") |> 
+  set_engine("kknn")
+```
+
+Nun kann das Modell trainiert werden: 
+
+```{r}
+# Model Fitting KNN
+knn_fit <- 
+  knn_mod %>% 
+  fit(formula = factor(y) ~ X1 + X2, data = df)
+```
+
+Auch hier machen wir eine Vorhersage für den Datenpunkt (4, 6) und auch KNN kommt zum Schluss, dass die Kategorie 0 wahrscheinlicher ist.
+
+```{r}
+# Vorhersage für einen neuen Datenpunkt
+predict(knn_fit, new_data = data.frame(X1 = 4, X2 = 6), type = "prob")
+```
+
+Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von **Overfitting**. Man müsste den Hyperparameter $K$ etwas erhöhen! Auch hier gilt: der optimale Wert für $K$ kann mittels eines Hyperparamter Tunings gefunden werden (mehr dazu in @sec-pipeline).
+
+```{r out.width='60%', fig.asp=1, fig.align='center'}
+# Decision Boundary visualisieren
+plot_db(df, knn_fit)
+```
