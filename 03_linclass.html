@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -285,7 +320,11 @@ window.Quarto = {
   <li><a href="#spam-filter" id="toc-spam-filter" class="nav-link" data-scroll-target="#spam-filter"><span class="header-section-number">3.2.4</span> Spam Filter</a></li>
   </ul></li>
   <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</a></li>
-  <li><a href="#sec-logregR" id="toc-sec-logregR" class="nav-link" data-scroll-target="#sec-logregR"><span class="header-section-number">3.4</span> Modelle in R</a></li>
+  <li><a href="#sec-logregR" id="toc-sec-logregR" class="nav-link" data-scroll-target="#sec-logregR"><span class="header-section-number">3.4</span> Klassifikation in R</a>
+  <ul class="collapse">
+  <li><a href="#base-r" id="toc-base-r" class="nav-link" data-scroll-target="#base-r"><span class="header-section-number">3.4.1</span> Base <code>R</code></a></li>
+  <li><a href="#tidymodels" id="toc-tidymodels" class="nav-link" data-scroll-target="#tidymodels"><span class="header-section-number">3.4.2</span> <code>tidymodels</code></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -325,14 +364,14 @@ window.Quarto = {
 <p>Die logistische Regression ist das Gegenstück zur linearen Regression für das Klassifikationsproblem. Es ist ein einfaches Modell, das oft als guter Ausgangspunkt für jegliche Klassifikationsprobleme dient. Das heisst, es macht meist Sinn, als <strong>erstes Modell</strong> ein logistisches Regressionsmodell zu trainieren.</p>
 <section id="output-variable" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="output-variable"><span class="header-section-number">3.1.1</span> Output-Variable</h3>
-<p>Die Output-Variable bzw. das Label im <strong>binären</strong> Klassifikationsproblem ist eine kategorische Variable mit zwei möglichen Kategorien (oder Klassen). Wie oben erwähnt nimmt die Output-Variable den Wert 1 an, also <span class="math inline">\(y_i=1\)</span>, falls eine Beobachtung der Kategorie 1 angehört und sonst den Wert 0, <span class="math inline">\(y_i=0\)</span>. Typischerweise geben wir den Wert 1 der Kategorie, die uns wirklich interessiert (z.B. Spam, Zahlungsunfähigkeit, Patient hat eine Krankheit).</p>
+<p>Die Output-Variable bzw. das Label im <strong>binären</strong> Klassifikationsproblem ist eine kategorische Variable mit zwei möglichen Kategorien (oder Klassen). Wie oben erwähnt nimmt die Output-Variable den Wert 1 an, also <span class="math inline">\(y_i=1\)</span>, falls eine Beobachtung der Kategorie 1 angehört und sonst den Wert 0, also <span class="math inline">\(y_i=0\)</span>. Typischerweise geben wir den Wert 1 der Kategorie, die uns wirklich interessiert (z.B. Spam, Zahlungsunfähigkeit, Patient hat eine Krankheit).</p>
 <p>In folgender Abbildung ist ein Klassifikationsproblem mit 5 Beobachtungen dargestellt. Die drei blauen Datenpunkte gehören der Kategorie 1 an, während die zwei roten Datenpunkte der Kategorie 0 angehören. Wir werden weiter unten auf dieses Problem zurückkommen.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="03_linclass_files/figure-html/class-prob-1.png" class="img-fluid figure-img" style="width:60.0%" alt="Einfaches Klassifikationsbeispiel."></p>
-<figcaption>Abgebildet ist die Ausgangslage eines einfachen Klassifikationsproblems mit einer Input-Variable (eingezeichnet auf der x-Achse) und der Output-Variable (eingezeichnet auf der y-Achse). Je grösser der <span class="math inline">\(x\)</span>-Wert einer Beobachtung, desto wahrscheinlicher ist es, dass die Beobachtung der Kategorie 1 angehört.</figcaption>
+<figcaption>Abgebildet ist die Ausgangslage eines einfachen Klassifikationsproblems mit einer Input-Variable (eingezeichnet auf der x-Achse) und der Output-Variable (eingezeichnet auf der y-Achse). Man sieht aus der Abbildung direkt, dass je grösser der <span class="math inline">\(x\)</span>-Wert einer Beobachtung, desto wahrscheinlicher ist es, dass die Beobachtung der Kategorie 1 angehört.</figcaption>
 </figure>
 </div>
 </div>
@@ -376,7 +415,7 @@ f(\mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot
 \]</span> Diese gewichtete Summe der Input-Variablenwerte wird auch bei der logistischen Regression eine wichtige Rolle spielen. Wir haben in der ersten Frage zu diesem Kapitel bereits gesehen, dass folgende Modellgleichung leider nicht eine gute Idee ist:</p>
 <p><span class="math display">\[
 p(y_i = 1 \mid \mathbf{x}_i) = w_0 + w_1 \cdot x_{i1} + w_2 \cdot x_{i2} + \ldots + w_p \cdot x_{ip}
-\]</span> Warum nicht? Weil die gewichtete Summe je nach Input-Daten mal negativ sein kann oder auch grösser als 1. Gleichzeitig wissen wir aus der Wahrscheinlichkeitstheorie, dass eine Wahrscheinlichkeit immer zwischen 0 und 1 liegen muss. Folgende Abbildung zeigt, dass das lineare Regressionsmodell nur innerhalb der gestrichelten, vertikalen Linien eine Wahrscheinlichkeit zwischen 0 und 1 zurückgibt.</p>
+\]</span> Warum nicht? Weil die gewichtete Summe je nach Input-Daten mal negativ sein kann oder auch grösser als 1. Gleichzeitig wissen wir aus der Wahrscheinlichkeitstheorie, dass eine Wahrscheinlichkeit immer zwischen 0 und 1 liegen muss. Folgende Abbildung zeigt, dass das lineare Regressionsmodell nur innerhalb der gestrichelten, vertikalen Linien eine Wahrscheinlichkeit zwischen 0 und 1 zurück gibt.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1186,10 +1225,322 @@ Abbildung&nbsp;3.3: KNN Modell für Regressionsproblem
 </section>
 </section>
 <section id="sec-logregR" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="sec-logregR"><span class="header-section-number">3.4</span> Modelle in R</h2>
-<p>Coming soon</p>
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-logregR"><span class="header-section-number">3.4</span> Klassifikation in R</h2>
+<p>Wir schauen uns ähnlich wie bei der Regression zuerst kurz an, wie man mit Base <code>R</code> ein logistisches Regressionsmodell berechnet. In einem zweiten Schritt schauen wir uns minimale Beispiele für die logistische Regression, Naive Bayes und das KNN Modell im <code>tidymodels</code> Framework an.</p>
+<section id="base-r" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="base-r"><span class="header-section-number">3.4.1</span> Base <code>R</code></h3>
+<p>In Base <code>R</code> lassen sich logistische Regressionsmodelle mit der <code>glm()</code> Funktion (<code>glm</code> steht für <em>generalized linear model</em>) rechnen.</p>
+<p>Wir wenden die Funktion hier für unser simples Beispiel von ganz oben mit <span class="math inline">\(n=5\)</span> Beobachtungen an:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datenpunkte</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">4.1</span>, <span class="fl">0.5</span>, <span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">1.4</span>, <span class="fl">4.4</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataframe</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Modellrechnung</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> df, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelloutput</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = "binomial", data = df)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)   0.1496     1.3198   0.113    0.910
+x             0.9901     1.1371   0.871    0.384
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 6.7301  on 4  degrees of freedom
+Residual deviance: 3.9211  on 3  degrees of freedom
+AIC: 7.9211
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
+<p>Wir sehen im Output in der Spalte <code>Estimate</code> die trainierten Gewichte <span class="math inline">\(w_0\)</span> und <span class="math inline">\(w_1\)</span>. Alles andere in diesem Output interessiert uns aus einer ML-Sicht eher weniger.</p>
+<p>Um Vorhersagen zu rechnen, können wir folgenden Code verwenden (hier für neue Input-Werte von 0.5 und 5.1). Mit <code>type = "response"</code> stellen wir sicher, dass das Modell vorhergesagte Wahrscheinlichkeiten zurück gibt.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modellvorhersagen</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>yp <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">5.1</span>)), <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>yp</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        1         2 
+0.6557965 0.9945090 </code></pre>
+</div>
+</div>
+</section>
+<section id="tidymodels" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="tidymodels"><span class="header-section-number">3.4.2</span> <code>tidymodels</code></h3>
+<p>Sobald wir <strong>regularisierte</strong> logistische Regressionsmodelle oder eben Naive Bayes oder KNN rechnen wollen, eignet sich der <code>tidymodels</code> <a href="https://www.tidymodels.org/">Framework</a> besser als Base <code>R</code>.</p>
+<p>Für das logistische Modell verwenden wir als Engine wie bei der Regression das <code>glmnet</code> Package. Für Naive Bayes verwenden wir als Engines <code>naivebayes</code> und <code>discrim</code> und für KNN das <code>kknn</code> Package. All diese Packages müssen zusammen mit <code>tidymodels</code> erstmal geladen werden:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naivebayes)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(discrim)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kknn)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Der folgende Code-Block generiert das Datenbeispiel von oben mit den zwei Input-Variablen (die Details sind hier nicht so wichtig):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir werden Daten aus einer multivariate Normalverteilung samplen,</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># wozu wir das MASS R-Package verwenden.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Anzahl Beobachtungen</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier definieren wir die Kovarianzmatrizen der beiden multivariaten Normalvert.</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>Sigma0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">1.5</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>Sigma1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier ziehen wir die Input-Variablenwerte für die Beob. der </span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># ersten und der zweiten Kategorie.</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>class0 <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(n<span class="sc">/</span><span class="dv">2</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), Sigma0)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>class1 <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(n<span class="sc">/</span><span class="dv">2</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">6</span>), Sigma1)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir kombinieren die Input-Variablenwerte der beiden Kategorien zu einem DF.</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rbind</span>(class0, class1))</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir fügen die Outputwerte hinzu.</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Schauen wir uns die ersten paar Zeilen an:</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        X1       X2 y
+1 6.451706 2.901509 0
+2 3.522763 4.226393 0
+3 4.596558 5.944705 0
+4 3.207797 2.615578 0
+5 3.710363 3.901712 0
+6 3.261061 4.162181 0</code></pre>
+</div>
+</div>
+<p>Bevor wir beginnen, schreiben wir nun kurz eine Funktion, die uns jeweils die Decision Boundary eines Modells visualisieren wird (auch hier sind die genauen Details im Code weniger wichtig):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plot_db <span class="ot">&lt;-</span> <span class="cf">function</span>(data, fit) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grösse der Trainingsdaten</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Definiere die Farbe für die Datenpunkte.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fu">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.4</span>), n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.4</span>), n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nun erstellen wir Sequenzen von möglichen X1 und X2 Werten.</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  x1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">len =</span> <span class="dv">300</span>); x2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">len =</span> <span class="dv">300</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nun kombinieren wir alle möglichen X1 und X2 Werte (300 * 300 = 90'000)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">X1 =</span> x1, <span class="at">X2 =</span> x2)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># z ist eine Matrix, die alle Vorhersagen für die Kombinationen im Grid enthält.</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">predict</span>(fit, grid, <span class="at">type =</span> <span class="st">"prob"</span>)<span class="sc">$</span>.pred_1, <span class="at">nrow =</span> <span class="dv">300</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot Parameter</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">oma =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">pty =</span> <span class="st">"s"</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Leerer Plot</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span>, <span class="dv">1</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">axes =</span> F, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"X2"</span>, <span class="at">ylab =</span> <span class="st">"X1"</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xaxs =</span> <span class="st">"i"</span>, <span class="at">yaxs =</span> <span class="st">"i"</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex =</span> <span class="dv">2</span>, <span class="at">cex.lab =</span> <span class="fl">1.5</span>, <span class="at">cex.axis =</span> <span class="fl">1.5</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Box um den Plot und Achsen</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">box</span>(<span class="at">lwd =</span> <span class="dv">1</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">2</span>), <span class="at">labels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">2</span>), <span class="at">cex.axis =</span> <span class="fl">1.5</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">2</span>), <span class="at">labels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">2</span>), <span class="at">cex.axis =</span> <span class="fl">1.5</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Schattierte Flächen (basierend auf Matrix z)</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">image</span>(x2, x1, z,  <span class="at">col =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,.<span class="dv">1</span>), <span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,.<span class="dv">1</span>)), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">5</span>, <span class="dv">1</span>), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Decision Boundary (basierend auf Matrix z)</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">contour</span>(x2, x1, z, <span class="at">levels =</span> .<span class="dv">5</span>, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">drawlabels =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"grey"</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Datenpunkte hinzufügen</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(data<span class="sc">$</span>X2, data<span class="sc">$</span>X1, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">cex =</span> <span class="dv">2</span>, <span class="at">col =</span> cols)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="logistische-regression-1" class="level4">
+<h4 class="anchored" data-anchor-id="logistische-regression-1">Logistische Regression</h4>
+<p>Das regularisierte logistische Regressionsmodell funktioniert sehr ähnlich wie im Regressionsfall. Bei der Modellspezifikation verwenden wir jedoch <code>logistic_reg()</code> anstelle von <code>linear_reg()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modellspezifikation für lineares Modell mit Regularisierung</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lr_mod <span class="ot">&lt;-</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistic_reg</span>(<span class="at">penalty =</span> <span class="fl">0.005</span>, <span class="at">mixture =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun fitten wir das Modell mit <code>fit()</code>. Für das <code>formula</code> Objekt gibt es folgende Besonderheiten:</p>
+<ul>
+<li>Die Zielvariable ist im Klassifikationsfall kategorischer Natur, weshalb <code>tidymodels</code> hier einen Faktor erwartet.</li>
+<li>Wir experimentieren hier etwas weiter mit polynomischen Input-Variablen und nehmen neben <span class="math inline">\(x_{i1}\)</span> und <span class="math inline">\(x_{i2}\)</span> auch <span class="math inline">\(x_{i1}^2, x_{i2}^2\)</span> und <span class="math inline">\(x_{i1} \cdot x_{i2}\)</span> als zusätzliche Input-Variablen ins Modell. Damit wir nicht Overfitting betreiben, ist Regularisierung hier besonders wichtig. Wir können die zusätzlichen Input-Variablen mit der Helper-Funktion <code>I()</code> einfügen.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelltraining</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lr_fit <span class="ot">&lt;-</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  lr_mod <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">formula =</span> <span class="fu">factor</span>(y) <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> <span class="fu">I</span>(X1<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(X2<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(X1 <span class="sc">*</span> X2), <span class="at">data =</span> df)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Schauen wir uns das trainierte Modell am besten kurz an:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Trainierte Parameter des Modells</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lr_fit) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="dv">6</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  term        estimate penalty
+  &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)  -5.50     0.005
+2 X1            0        0.005
+3 X2            0        0.005
+4 I(X1^2)       0.0291   0.005
+5 I(X2^2)       0        0.005
+6 I(X1 * X2)    0.185    0.005</code></pre>
+</div>
+</div>
+<p>Um zu sehen, welcher Decision Boundary dieses Modell entspricht, können wir sie visualisieren.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision Boundary visualisieren</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_db</span>(df, lr_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Wir haben das Modell hier mit <span class="math inline">\(\lambda=0.005\)</span> regularisiert. Sie können gerne lokal weiter experimentieren und andere Werte für den Regularisierungsparameter ausprobieren. Wir werden später sehen, dass wir den optimalen Wert für <span class="math inline">\(\lambda\)</span> (bzw. <code>penalty</code>) <strong>tunen</strong> können.</p>
+</section>
+<section id="naive-bayes-1" class="level4">
+<h4 class="anchored" data-anchor-id="naive-bayes-1">Naive Bayes</h4>
+<p>Das Naive Bayes Modell wird mit <code>naive_Bayes()</code> spezifiziert. Wir setzen das Argument <code>Laplace = 1.0</code>, doch was macht dieses Argument genau? Wir haben gesehen, dass wir für Naive Bayes viele Randwahrscheinlichkeiten aus den Daten schätzen müssen. Doch was passiert, wenn z.B. keine einzige Spam Email das Wort “write” enthält? In dem Fall ist die Wahrscheinlichkeit <span class="math inline">\(p(write_i \mid y_i=1) = 0\)</span>. Wenn jetzt also eine neue Spam Email, welche das Wort “write” enthält, in Ihr Postfach reinkommt, dann wird der Spam Filter eine Spam Wahrscheinlichkeit von 0 berechnen. Mit <code>Laplace = 1.0</code> beheben wir dieses Problem, indem wir bei der Schätzung der Randwahrscheinlichkeiten überall eine 1 addieren, so dass jedes Wort im schlimmsten Fall eine minimale Wahrscheinlichkeit aufweist, in einer Email (Spam oder Ham) vorzukommen.</p>
+<p>Mit <code>usekernel = FALSE</code> stellen wir sicher, dass wie oben Normalverteilungen geschätzt werden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modellspezifikation</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>nb_mod <span class="ot">&lt;-</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">naive_Bayes</span>(<span class="at">Laplace =</span> <span class="fl">1.0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"naivebayes"</span>, <span class="at">usekernel =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Der Fit des Modells ist wie oben bei der logistischen Regression (wir verzichten hier jedoch auf die zusätzlichen Input-Variablen).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model Fitting Naive Bayes</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>nb_fit <span class="ot">&lt;-</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  nb_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">formula =</span> <span class="fu">factor</span>(y) <span class="sc">~</span> X1 <span class="sc">+</span> X2, <span class="at">data =</span> df)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ausgabe des Modells</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>nb_fit</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>parsnip model object
 
 
+================================= Naive Bayes ==================================
+
+Call:
+naive_bayes.default(x = maybe_data_frame(x), y = y, laplace = ~1, 
+    usekernel = ~FALSE)
+
+-------------------------------------------------------------------------------- 
+ 
+Laplace smoothing: 1
+
+-------------------------------------------------------------------------------- 
+ 
+A priori probabilities: 
+
+  0   1 
+0.5 0.5 
+
+-------------------------------------------------------------------------------- 
+ 
+Tables: 
+
+-------------------------------------------------------------------------------- 
+:: X1 (Gaussian) 
+-------------------------------------------------------------------------------- 
+      
+X1            0        1
+  mean 4.195698 6.026455
+  sd   1.072403 1.285003
+
+-------------------------------------------------------------------------------- 
+:: X2 (Gaussian) 
+-------------------------------------------------------------------------------- 
+      
+X2            0        1
+  mean 4.409033 5.841578
+  sd   1.401447 1.059517
+
+--------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Wir sehen im obigen Output sowohl die Priors (beide Kategorien kommen genau gleich häufig vor) als auch die geschätzten Parameter der Normalverteilungen (gegeben die Kategorien in <span class="math inline">\(y\)</span>) für die beiden Input-Variablen.</p>
+<p>Für einen neuen Datenpunkt (4, 6) würden wir eher die Kategorie 0 vorhersagen, da sie eine klar höhere Wahrscheinlichkeit (0.621) hat als die Kategorie 1 (0.379).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage für einen neuen Datenpunkt</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(nb_fit, <span class="at">new_data =</span> <span class="fu">data.frame</span>(<span class="at">X1 =</span> <span class="dv">4</span>, <span class="at">X2 =</span> <span class="dv">6</span>), <span class="at">type =</span> <span class="st">"prob"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  .pred_0 .pred_1
+    &lt;dbl&gt;   &lt;dbl&gt;
+1   0.621   0.379</code></pre>
+</div>
+</div>
+<p>Und schliesslich können wir auch hier die Decision Boundary visualisieren und sehen, dass wir hier kein lineares Modell mehr vorfinden!</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision Boundary visualisieren</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_db</span>(df, nb_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="k-nearest-neighbors-1" class="level4">
+<h4 class="anchored" data-anchor-id="k-nearest-neighbors-1">K-Nearest Neighbors</h4>
+<p>Zum Abschluss fitten wir noch ein KNN Modell mit <span class="math inline">\(K=5\)</span> Nachbarn. Da dieses Modell wie erwähnt auf den Regressions- und den Klassifikationsfall anwendbar ist, setzen wir mit <code>set_mode()</code> den gewünschten Fall.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modellspezifikation</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>knn_mod <span class="ot">&lt;-</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nearest_neighbor</span>(<span class="at">neighbors =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"kknn"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun kann das Modell trainiert werden:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model Fitting KNN</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>knn_fit <span class="ot">&lt;-</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  knn_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">formula =</span> <span class="fu">factor</span>(y) <span class="sc">~</span> X1 <span class="sc">+</span> X2, <span class="at">data =</span> df)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Auch hier machen wir eine Vorhersage für den Datenpunkt (4, 6) und auch KNN kommt zum Schluss, dass die Kategorie 0 wahrscheinlicher ist.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage für einen neuen Datenpunkt</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(knn_fit, <span class="at">new_data =</span> <span class="fu">data.frame</span>(<span class="at">X1 =</span> <span class="dv">4</span>, <span class="at">X2 =</span> <span class="dv">6</span>), <span class="at">type =</span> <span class="st">"prob"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  .pred_0 .pred_1
+    &lt;dbl&gt;   &lt;dbl&gt;
+1    0.88    0.12</code></pre>
+</div>
+</div>
+<p>Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von <strong>Overfitting</strong>. Man müsste den Hyperparameter <span class="math inline">\(K\)</span> etwas erhöhen! Auch hier gilt: der optimale Wert für <span class="math inline">\(K\)</span> kann mittels eines Hyperparamter Tunings gefunden werden (mehr dazu in <a href="04_pipeline.html" class="quarto-xref"><span>Kapitel 4</span></a>).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision Boundary visualisieren</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_db</span>(df, knn_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03_linclass_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
