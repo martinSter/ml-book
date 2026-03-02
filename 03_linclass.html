@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -319,7 +339,12 @@ window.Quarto = {
   <li><a href="#vorhersagen" id="toc-vorhersagen" class="nav-link" data-scroll-target="#vorhersagen"><span class="header-section-number">3.2.3</span> Vorhersagen</a></li>
   <li><a href="#spam-filter" id="toc-spam-filter" class="nav-link" data-scroll-target="#spam-filter"><span class="header-section-number">3.2.4</span> Spam Filter</a></li>
   </ul></li>
-  <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</a></li>
+  <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</a>
+  <ul class="collapse">
+  <li><a href="#hyperparameter-k" id="toc-hyperparameter-k" class="nav-link" data-scroll-target="#hyperparameter-k"><span class="header-section-number">3.3.1</span> Hyperparameter <span class="math inline">\(K\)</span></a></li>
+  <li><a href="#distanzen-messen" id="toc-distanzen-messen" class="nav-link" data-scroll-target="#distanzen-messen"><span class="header-section-number">3.3.2</span> Distanzen messen</a></li>
+  <li><a href="#fluch-der-dimensionalität" id="toc-fluch-der-dimensionalität" class="nav-link" data-scroll-target="#fluch-der-dimensionalität"><span class="header-section-number">3.3.3</span> Fluch der Dimensionalität</a></li>
+  </ul></li>
   <li><a href="#sec-logregR" id="toc-sec-logregR" class="nav-link" data-scroll-target="#sec-logregR"><span class="header-section-number">3.4</span> Klassifikation in R</a>
   <ul class="collapse">
   <li><a href="#base-r" id="toc-base-r" class="nav-link" data-scroll-target="#base-r"><span class="header-section-number">3.4.1</span> Base <code>R</code></a></li>
@@ -1119,20 +1144,14 @@ p(y_i = 1 \mid afford_i = 1, price_i = 0) &amp;= \frac{p(afford_i = 1 \mid y_i =
 </section>
 <section id="k-nearest-neighbors" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="k-nearest-neighbors"><span class="header-section-number">3.3</span> K-Nearest Neighbors</h2>
-<!-- Curse of Dimensionality -->
-<!-- Optimal Bayes Classifier -->
-<!-- Ch. 5 in Anil's Book -->
-<p>Mit dem <strong>K-Nearest-Neighbors</strong> (KNN) Modell schauen wir uns nun noch ein <strong>nicht-parametrisches Modell</strong> an. Solche Modelle sind nicht (oder zumindest nicht explizit) durch Parameter charakterisiert.</p>
-<p>Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram (<span class="math inline">\(x_{i1}\)</span>) und ein Werbebudget für Tiktok (<span class="math inline">\(x_{i2}\)</span>). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output <span class="math inline">\(y_i\)</span>). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die <span class="math inline">\(K\)</span> nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den <span class="math inline">\(K\)</span> nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die <span class="math inline">\(K\)</span> <strong>ähnlichsten</strong> Beobachtungen und nutzen diese, um eine Vorhersage zu machen.</p>
-<p>Selbstverständlich spielt der konkrete Wert von <span class="math inline">\(K\)</span> hier eine grosse Rolle - sollen wir nur <span class="math inline">\(K=1\)</span> Nachbarn berücksichtigen? Oder <span class="math inline">\(K=10\)</span> Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55 Datenpunkte, sondern auch die <strong>Entscheidungsgrenze</strong> (in schwarz). Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn Sie <span class="math inline">\(K\)</span> erhöhen oder reduzieren.</p>
-<p>Ausserdem können Sie in der ersten Abbildung auch den schwarzen Punkt mit der Maus setzen, wodurch Ihnen die <span class="math inline">\(K\)</span> nächsten Punkte des schwarzen Punkts angezeigt werden.</p>
-<p>Die zweite Abbildung zeigt die Entscheidungsregionen mit unterschiedlicher Intensität je nachdem wie sicher sich das Modell ist. In einer Region, in der alle <span class="math inline">\(K\)</span> Nachbarn nicht-erfolgreiche Produkte sind, sind wir uns eher sicher bezüglich der Vorhersage als in einer Region, in der die Anteile zwischen erfolgreichen und nicht-erfolgreichen Produkten ausgeglichen sind.</p>
+<p>Mit dem <strong>K-Nearest-Neighbors</strong> (KNN) Modell schauen wir uns nun noch ein <strong>nicht-parametrisches Modell</strong> an. Solche Modelle sind nicht (oder zumindest nicht explizit) durch Parameter charakterisiert. Wir schauen uns zuerst ein einfaches Beispiel an.</p>
+<p>Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram (<span class="math inline">\(x_{i1}\)</span>) und ein Werbebudget für Tiktok (<span class="math inline">\(x_{i2}\)</span>). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output <span class="math inline">\(y_i\)</span>). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die <span class="math inline">\(K\)</span> nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den <span class="math inline">\(K\)</span> nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die <span class="math inline">\(K\)</span> <strong>ähnlichsten</strong> Beobachtungen und nutzen diese, um eine Vorhersage zu machen. Die Grundidee ist also, dass ähnliche Beobachtungen (in Bezug auf die Input-Variablen) uns etwas über den Output einer neuen Beobachtung sagen.</p>
 <div class="cell">
 <iframe src="https://martin-sterchi.shinyapps.io/appKNN/?showcase=0" width="672" height="600px" data-external="1">
 </iframe>
 </div>
-<p>Um die <span class="math inline">\(K\)</span> nächsten Nachbarn zu finden, müssen wir die Distanzen zwischen Punkten rechnen können. Dazu verwenden wir die Euklidische Distanz, welche wir in Kapitel @ref(basics) kennen lernen werden.</p>
-<p>Das KNN Modell ist ein sehr einfaches ML Modell, welches in der Praxis allerdings nicht allzu häufig angewendet wird. Warum nicht? Weil es am sogenannten <strong>Fluch der Dimensionalität</strong> (engl. Curse of Dimensionality) leidet. Doch was bedeutet das? Je mehr Input-Variablen wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee, dass wir <span class="math inline">\(K\)</span> nahe, ähnliche Beobachtungen für die Vorhersage verwenden. Wenn diese <span class="math inline">\(K\)</span> nahen Beobachtungen im hochdimensionalen Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert auch das Modell nicht mehr gut.</p>
+<p>Ausserdem können Sie in der ersten Abbildung auch den schwarzen Punkt mit der Maus setzen, wodurch Ihnen die <span class="math inline">\(K\)</span> nächsten Punkte des schwarzen Punkts angezeigt werden.</p>
+<p>Die zweite Abbildung zeigt die Entscheidungsregionen mit unterschiedlicher Intensität je nachdem wie sicher sich das Modell ist. In einer Region, in der alle <span class="math inline">\(K\)</span> Nachbarn nicht-erfolgreiche Produkte sind, sind wir uns eher sicher bezüglich der Vorhersage als in einer Region, in der die Anteile zwischen erfolgreichen und nicht-erfolgreichen Produkten ausgeglichen sind.</p>
 <section id="fragen-1" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="fragen-1">Fragen</h4>
 <p>Stellen Sie sich vor, Sie haben folgendes Klassifikationsproblem, das Sie mit KNN lösen wollen. Welche Kategorie prognostiziert ein KNN Modell für den Punkt <span class="math inline">\(x\)</span> in der unten stehenden Abbildung?</p>
@@ -1222,6 +1241,57 @@ Abbildung&nbsp;3.3: KNN Modell für Regressionsproblem
 </figcaption>
 </figure>
 </div>
+</section>
+<section id="hyperparameter-k" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="hyperparameter-k"><span class="header-section-number">3.3.1</span> Hyperparameter <span class="math inline">\(K\)</span></h3>
+<p>Selbstverständlich spielt der konkrete Wert von <span class="math inline">\(K\)</span> hier eine grosse Rolle - sollen wir nur <span class="math inline">\(K=1\)</span> Nachbarn berücksichtigen? Oder <span class="math inline">\(K=10\)</span> Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55 Datenpunkte, sondern auch die <strong>Decision Boundary</strong> (in schwarz). Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn Sie <span class="math inline">\(K\)</span> erhöhen oder reduzieren.</p>
+<p>Die Decision Boundary variert stark jenachdem welchen Wert Sie für <span class="math inline">\(K\)</span> wählen. Je grösser <span class="math inline">\(K\)</span>, desto glätter wird die Decision Boundary.</p>
+<p>Sie haben zudem sicherlich bemerkt, dass die Decision Boundary klar <strong>nicht-linear</strong> ist. Das Modell gilt darum auch als hoch-flexibles Modell.</p>
+<section id="frage-8" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-8">Frage</h4>
+<p>Was passiert, wenn Sie <span class="math inline">\(K=n\)</span> setzen (<span class="math inline">\(n\)</span> ist die Grösse des Trainingsdatensatzes)?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wenn <span class="math inline">\(K=n\)</span>, dann wird für jede neue Beobachtung der ganze Trainingsdatensatz als nächste Nachbarn verwendet. Im Klassifikationsfall führt das dazu, dass für jede neue Beobachtung immer die Kategorie in <span class="math inline">\(y\)</span>, die am häufigsten vorkommt, vorhergesagt wird.</p>
+<p>Im Regressionsfall würde für jede neue Beobachtung immer der Durchschnitt der Outputwerte im Trainingsdatensatz, also <span class="math inline">\(\bar{y}\)</span>, vorhergesagt werden.</p>
+</div>
+</div>
+</div>
+<p>Doch wie wählen wir einen guten Wert für den <strong>Hyperparameter</strong> <span class="math inline">\(K\)</span>? Genau gleich wie für <span class="math inline">\(\lambda\)</span> bei der regularisierten (logistischen) Regression wählen wir <span class="math inline">\(K\)</span> mittels Resampling (mehr dazu in <a href="04_pipeline.html" class="quarto-xref"><span>Kapitel 4</span></a>).</p>
+</section>
+</section>
+<section id="distanzen-messen" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="distanzen-messen"><span class="header-section-number">3.3.2</span> Distanzen messen</h3>
+<p>Um die <span class="math inline">\(K\)</span> nächsten Nachbarn zu finden, müssen wir die Distanzen zwischen Punkten rechnen können. Dazu verwenden wir (im einfachsten Fall, wenn alle Input-Variablen numerischer Natur sind) die <strong>Euklidische Distanz</strong>.</p>
+<p>Die Euklidische Distanz zwischen zwei Vektoren <span class="math inline">\(\mathbf{x}_i = \begin{pmatrix} x_{i1} &amp; x_{i2} \end{pmatrix}'\)</span> und <span class="math inline">\(\mathbf{z}_i = \begin{pmatrix} z_{i1} &amp; z_{i2} \end{pmatrix}'\)</span> lässt sich wie folgt berechnen:</p>
+<p><span class="math display">\[
+d(\mathbf{x}_i, \mathbf{z}_i) = \sqrt{(x_{i1} - z_{i1})^2 + (x_{i2} - z_{i2})^2}
+\]</span></p>
+<p>Haben Ihre Vektoren mehr als zwei Dimensionen, dann kommen einfach weitere quadrierte Terme dazu, z.B. <span class="math inline">\((x_{i3} - z_{i3})^2\)</span>. Im zweidimensionalen Raum kann die Berechnung der Euklidischen Distanz direkt mit dem Satz von Pythagoras nachvollzogen werden.</p>
+</section>
+<section id="fluch-der-dimensionalität" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="fluch-der-dimensionalität"><span class="header-section-number">3.3.3</span> Fluch der Dimensionalität</h3>
+<p>Sie konnten sich vielleicht in der Zwischenzeit sehr begeistern für das KNN Modell, weil es einerseits so einfach ist und andererseits trotzdem sehr komplexe, nicht-lineare Regressions- oder Klassifikationsprobleme lösen kann.</p>
+<p>Was etwas weniger offensichtlich ist: das Modell macht <strong>keine Annahmen</strong> über die Form oder Verteilung der Trainingsdaten. Wir machen beispielsweise nicht wie oben bei Naive Bayes, dass eine numerische Input-Variable normalverteilt ist. Ausserdem: wenn Sie über sehr, sehr viele Trainingsdaten verfügen, dann gibt es gewisse mathematische Garantien, dass KNN sehr nahe an das bestmögliche Modell herankommt, d.h. dass unser <span class="math inline">\(\hat{f}(\mathbf{x}_i)\)</span> sehr nahe beim unbekannten <span class="math inline">\(f(\mathbf{x}_i)\)</span> liegt.</p>
+<p>Warum wird KNN in der Praxis trotzdem nicht allzu häufig verwendet? Weil es stark am sogenannten <strong>Fluch der Dimensionalität</strong> (engl. <em>Curse of Dimensionality</em>) leidet.</p>
+<p>Doch was bedeutet das? Je mehr Input-Variablen wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee, dass wir <span class="math inline">\(K\)</span> nahe, ähnliche Beobachtungen für die Vorhersage verwenden. Wenn diese <span class="math inline">\(K\)</span> nahen Beobachtungen im hochdimensionalen Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert auch das Modell nicht mehr gut.</p>
+<p>Wir machen hier ein einfaches Beispiel, das Ihnen dabei helfen soll, den Fluch der Dimensionalität intuitiv besser zu verstehen. Das Beispiel ist inspiriert durch <span class="citation" data-cites="Ananthaswamy">(<a href="references.html#ref-Ananthaswamy" role="doc-biblioref">Ananthaswamy 2024, Kap. 5</a>)</span>. Stellen Sie sich vor, wir haben nur <strong>binäre Input-Variablen</strong>, die entweder den Wert 0 oder 1 haben können. Ausserdem haben wir einen Trainingsdatensatz von <span class="math inline">\(n=50\)</span> Beobachtungen.</p>
+<ul>
+<li>Im ersten Fall haben wir nur <strong>eine binäre Input-Variable</strong> <span class="math inline">\(x_{i1}\)</span>. Wir nehmen nun an, dass die Werte dieser Variable zufällig entweder 0 oder 1 sind, also je eine 50% Wahrscheinlichkeit haben 0 oder 1 zu sein. Wir erwarten darum, dass wir im Schnitt <span class="math inline">\(n \cdot p = 50 \cdot 0.5 = 25\)</span><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Beobachtungen mit dem Wert 0 und 25 Beobachtungen mit dem Wert 1 haben.</li>
+<li>Im zweiten Fall haben wir <strong>zwei binäre Input-Variablen</strong> <span class="math inline">\(x_{i1}\)</span> und <span class="math inline">\(x_{i2}\)</span>. Auch hier nehmen die Variablen die Werte 0 und 1 rein zufällig an. Nun haben wir aber vier mögliche Kombinationen von Input-Variablenwerten. Jede der Kombinationen hat eine Wahrscheinlichkeit von 0.25. Wir erwarten darum für jede mögliche Kombination <span class="math inline">\(n \cdot p = 50 \cdot 0.25 = 12.5\)</span> Beobachtungen.</li>
+<li>Im Fall von <strong>drei binären Input-Variablen</strong> haben wir acht mögliche Kombinationen von <span class="math inline">\(x_{i1}\)</span>, <span class="math inline">\(x_{i2}\)</span> und <span class="math inline">\(x_{i3}\)</span>. Dadurch erwarten für jede mögliche Kombination nur noch <span class="math inline">\(n \cdot p = 50 \cdot 0.125 = 6.25\)</span> Beobachtungen.</li>
+</ul>
+<p>Allgemein gilt: im Fall von <span class="math inline">\(p\)</span> binären Input-Variablen, gibt es <span class="math inline">\(2^p\)</span> mögliche Kombinationen der Input-Variablenwerte und dementsprechend erwarten wir für jede Kombination <span class="math inline">\(n \cdot (1/2^p)\)</span> Beobachtungen. Für <span class="math inline">\(p=10\)</span> können wir beispielsweise für jede mögliche Kombination nur noch 0.05 Beobachtungen erwarten. Sie sehen vielleicht schon das Problem. Mit einer gegebenen Anzahl Trainingsbeobachtungen <span class="math inline">\(n\)</span> reduziert sich die Anzahl Beobachtungen, die “nahe” beieinander liegen immer mehr, je grösser die Anzahl Input-Variablen <span class="math inline">\(p\)</span>.</p>
 </section>
 </section>
 <section id="sec-logregR" class="level2" data-number="3.4">
@@ -1407,7 +1477,7 @@ Number of Fisher Scoring iterations: 6</code></pre>
 </div>
 </div>
 </div>
-<p>Wir haben das Modell hier mit <span class="math inline">\(\lambda=0.005\)</span> regularisiert. Sie können gerne lokal weiter experimentieren und andere Werte für den Regularisierungsparameter ausprobieren. Wir werden später sehen, dass wir den optimalen Wert für <span class="math inline">\(\lambda\)</span> (bzw. <code>penalty</code>) <strong>tunen</strong> können.</p>
+<p>Wir haben das Modell hier mit <span class="math inline">\(\lambda=0.005\)</span> regularisiert. Sie können gerne lokal weiter experimentieren und andere Werte für den Regularisierungsparameter ausprobieren. Wir werden später sehen, dass wir den optimalen Wert für <span class="math inline">\(\lambda\)</span> (bzw. <code>penalty</code>) via Resampling (Cross-Validation) <strong>tunen</strong> können.</p>
 </section>
 <section id="naive-bayes-1" class="level4">
 <h4 class="anchored" data-anchor-id="naive-bayes-1">Naive Bayes</h4>
@@ -1525,7 +1595,7 @@ X2            0        1
 1    0.88    0.12</code></pre>
 </div>
 </div>
-<p>Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von <strong>Overfitting</strong>. Man müsste den Hyperparameter <span class="math inline">\(K\)</span> etwas erhöhen! Auch hier gilt: der optimale Wert für <span class="math inline">\(K\)</span> kann mittels eines Hyperparamter Tunings gefunden werden (mehr dazu in <a href="04_pipeline.html" class="quarto-xref"><span>Kapitel 4</span></a>).</p>
+<p>Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von <strong>Overfitting</strong>. Man müsste den Hyperparameter <span class="math inline">\(K\)</span> etwas erhöhen! Auch hier gilt: der optimale Wert für <span class="math inline">\(K\)</span> kann mittels eines Hyperparamter Tunings (Resampling) gefunden werden (mehr dazu in <a href="04_pipeline.html" class="quarto-xref"><span>Kapitel 4</span></a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision Boundary visualisieren</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_db</span>(df, knn_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1539,6 +1609,11 @@ X2            0        1
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-Ananthaswamy" class="csl-entry" role="listitem">
+Ananthaswamy, Anil. 2024. <em>Why Machines Learn: The Elegant Math Behind Modern AI</em>. Dutton.
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -1551,6 +1626,7 @@ X2            0        1
 <li id="fn4"><p>Wir haben bei der Sigmoid Funktion gesehen, dass sie immer beim Wert <span class="math inline">\(z=0\)</span> den Wert 0.5 annimmt. Es ist hier wichtig zu sehen, dass wir auf der x-Achse die Input-Variable <span class="math inline">\(x\)</span> darstellen und nicht <span class="math inline">\(z\)</span>. Hier, im Fall der logistischen Regression, gilt <span class="math inline">\(z=w_0 + w_1 \cdot x\)</span>. Indem wir <span class="math inline">\(z\)</span> gleich 0 setzen und nach <span class="math inline">\(x\)</span> auflösen, finden wir, dass <span class="math inline">\(x=-w_0/w_1\)</span> oder in unserem konkreten Beispiel <span class="math inline">\(x = -(0.15/0.99) \approx -0.15\)</span>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Wir verwenden hier den bekannten Schätzer für den Parameter <span class="math inline">\(\mu\)</span> der Normalverteilung, nämlich <span class="math inline">\(\bar{x} = \frac{1}{n} \sum_i^n x_i\)</span>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Wir verwenden hier den bekannten Schätzer für die Varianz <span class="math inline">\(\sigma^2\)</span> der Normalverteilung, nämlich <span class="math inline">\(\hat{\sigma}^2 = \frac{1}{n} \sum_i^n (x_i - \bar{x})^2\)</span>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Diese Berechnung ist nichts anderes als der Erwartungswert einer Binomialverteilung.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
