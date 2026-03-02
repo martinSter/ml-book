@@ -700,7 +700,7 @@ $$
 J(\mathbf{w}) = \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \right)^2 + \lambda \cdot \sum_{j=1}^p |w_j|
 $$
 
-Die Optimierung der LASSO Kostenfunktion hat allerdings einen gewichtigen **Vorteil** gegenüber Ridge, der nicht so offensichtlich ist: unwichtige Parameter werden bei LASSO auf 0 gesetzt, während Ridge die Parameter einfach kleiner macht, sie aber nie auf genau 0 setzt (ausser wenn $\lambda \to \infty$). Das Modell nimmt also selbständig eine **Selektion der wichtigen Variablen** vor. Diese Eigenschaft macht das Modell auch gut interpretierbar, weil bei korrekter Anwendung von LASSE nur die relevanten Input-Variablen im Modell verbleiben.
+Die Optimierung der LASSO Kostenfunktion hat allerdings einen gewichtigen **Vorteil** gegenüber Ridge, der nicht so offensichtlich ist: unwichtige Parameter werden bei LASSO auf 0 gesetzt, während Ridge die Parameter einfach kleiner macht, sie aber nie auf genau 0 setzt (ausser wenn $\lambda \to \infty$). Das Modell nimmt also selbständig eine **Selektion der wichtigen Variablen** vor. Diese Eigenschaft macht das Modell auch gut interpretierbar, weil bei korrekter Anwendung von LASSO nur die relevanten Input-Variablen im Modell verbleiben.
 
 ::: {.callout-caution collapse="true"}
 ## Wie funktioniert diese Variablenselektion bei LASSO? (optional)

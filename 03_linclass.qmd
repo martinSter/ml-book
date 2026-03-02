@@ -1045,29 +1045,17 @@ Wir sind jetzt viel weniger sicher (55%), dass es sich um Spam handelt, da das W
 
 ## K-Nearest Neighbors
 
-<!-- Curse of Dimensionality -->
+Mit dem **K-Nearest-Neighbors** (KNN) Modell schauen wir uns nun noch ein **nicht-parametrisches Modell** an. Solche Modelle sind nicht (oder zumindest nicht explizit) durch Parameter charakterisiert. Wir schauen uns zuerst ein einfaches Beispiel an.
 
-<!-- Optimal Bayes Classifier -->
-
-<!-- Ch. 5 in Anil's Book -->
-
-Mit dem **K-Nearest-Neighbors** (KNN) Modell schauen wir uns nun noch ein **nicht-parametrisches Modell** an. Solche Modelle sind nicht (oder zumindest nicht explizit) durch Parameter charakterisiert.
-
-Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer\*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram ($x_{i1}$) und ein Werbebudget für Tiktok ($x_{i2}$). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output $y_i$). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die $K$ nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den $K$ nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die $K$ **ähnlichsten** Beobachtungen und nutzen diese, um eine Vorhersage zu machen.
-
-Selbstverständlich spielt der konkrete Wert von $K$ hier eine grosse Rolle - sollen wir nur $K=1$ Nachbarn berücksichtigen? Oder $K=10$ Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55 Datenpunkte, sondern auch die **Entscheidungsgrenze** (in schwarz). Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn Sie $K$ erhöhen oder reduzieren.
-
-Ausserdem können Sie in der ersten Abbildung auch den schwarzen Punkt mit der Maus setzen, wodurch Ihnen die $K$ nächsten Punkte des schwarzen Punkts angezeigt werden.
-
-Die zweite Abbildung zeigt die Entscheidungsregionen mit unterschiedlicher Intensität je nachdem wie sicher sich das Modell ist. In einer Region, in der alle $K$ Nachbarn nicht-erfolgreiche Produkte sind, sind wir uns eher sicher bezüglich der Vorhersage als in einer Region, in der die Anteile zwischen erfolgreichen und nicht-erfolgreichen Produkten ausgeglichen sind.
+Stellen Sie sich vor, Sie haben einen Datensatz mit 55 Produkten aus Ihrem Sortiment. Sie haben jedes dieser 55 Produkte auf Instagram und auf Tiktok durch Influencer\*innen bewerben lassen. Für jedes der 55 Produkte hatten Sie ein Werbebudget für Instagram ($x_{i1}$) und ein Werbebudget für Tiktok ($x_{i2}$). Am Ende des Geschäftsjahrs haben Sie für jedes der 55 Produkte bestimmt, ob die Absatzziele erreicht wurden oder nicht (Output $y_i$). Die erfolgreichen Produkte (= Absatzziel erreicht) sind in untenstehender App als blaue Punkte eingezeichnet. Die roten Dreiecke repräsentieren die nicht-erfolgreichen Produkte. Sie sehen, dass erfolgreiche Produkte tendenziell höhere Instagram und Tiktok Werbebudgets aufwiesen als nicht-erfolgreiche Produkte. Sie möchten nun ein Modell schätzen, dass die Produkte automatisch klassifizieren kann. Dazu verwenden Sie das KNN Modell, das die $K$ nächsten Nachbarn unter den 55 gegebenen Produkten sucht und dann die häufigste Beobachtung unter den $K$ nächsten Nachbarn vorhersagt. In anderen Worten: wir suchen die $K$ **ähnlichsten** Beobachtungen und nutzen diese, um eine Vorhersage zu machen. Die Grundidee ist also, dass ähnliche Beobachtungen (in Bezug auf die Input-Variablen) uns etwas über den Output einer neuen Beobachtung sagen.
 
 ```{r, echo=FALSE}
 knitr::include_app("https://martin-sterchi.shinyapps.io/appKNN/", height = "600px")
 ```
 
-Um die $K$ nächsten Nachbarn zu finden, müssen wir die Distanzen zwischen Punkten rechnen können. Dazu verwenden wir die Euklidische Distanz, welche wir in Kapitel \@ref(basics) kennen lernen werden.
+Ausserdem können Sie in der ersten Abbildung auch den schwarzen Punkt mit der Maus setzen, wodurch Ihnen die $K$ nächsten Punkte des schwarzen Punkts angezeigt werden.
 
-Das KNN Modell ist ein sehr einfaches ML Modell, welches in der Praxis allerdings nicht allzu häufig angewendet wird. Warum nicht? Weil es am sogenannten **Fluch der Dimensionalität** (engl. Curse of Dimensionality) leidet. Doch was bedeutet das? Je mehr Input-Variablen wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee, dass wir $K$ nahe, ähnliche Beobachtungen für die Vorhersage verwenden. Wenn diese $K$ nahen Beobachtungen im hochdimensionalen Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert auch das Modell nicht mehr gut.
+Die zweite Abbildung zeigt die Entscheidungsregionen mit unterschiedlicher Intensität je nachdem wie sicher sich das Modell ist. In einer Region, in der alle $K$ Nachbarn nicht-erfolgreiche Produkte sind, sind wir uns eher sicher bezüglich der Vorhersage als in einer Region, in der die Anteile zwischen erfolgreichen und nicht-erfolgreichen Produkten ausgeglichen sind.
 
 #### Fragen {.unnumbered}
 
@@ -1111,6 +1099,59 @@ Der Durchschnitt über die 5 $y_i$-Werte in der Nachbarschaft beträgt 4, weshal
 :::
 
 ![KNN Modell für Regressionsproblem](images/knnreg.PNG){width=50% #fig-knnreg}
+
+### Hyperparameter $K$
+
+Selbstverständlich spielt der konkrete Wert von $K$ hier eine grosse Rolle - sollen wir nur $K=1$ Nachbarn berücksichtigen? Oder $K=10$ Nachbarn? Die erste Abbildung in der App zeigt nicht nur die 55 Datenpunkte, sondern auch die **Decision Boundary** (in schwarz). Untersuchen Sie kurz, wie sich diese Entscheidungsgrenze verändert, wenn Sie $K$ erhöhen oder reduzieren. 
+
+Die Decision Boundary variert stark jenachdem welchen Wert Sie für $K$ wählen. Je grösser $K$, desto glätter wird die Decision Boundary.
+
+Sie haben zudem sicherlich bemerkt, dass die Decision Boundary klar **nicht-linear** ist. Das Modell gilt darum auch als hoch-flexibles Modell.
+
+#### Frage {.unnumbered}
+
+Was passiert, wenn Sie $K=n$ setzen ($n$ ist die Grösse des Trainingsdatensatzes)?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Wenn $K=n$, dann wird für jede neue Beobachtung der ganze Trainingsdatensatz als nächste Nachbarn verwendet. 
+Im Klassifikationsfall führt das dazu, dass für jede neue Beobachtung immer die Kategorie in $y$, die am häufigsten vorkommt, vorhergesagt wird.
+
+Im Regressionsfall würde für jede neue Beobachtung immer der Durchschnitt der Outputwerte im Trainingsdatensatz, also $\bar{y}$, vorhergesagt werden.
+:::
+
+Doch wie wählen wir einen guten Wert für den **Hyperparameter** $K$? Genau gleich wie für $\lambda$ bei der regularisierten (logistischen) Regression wählen wir $K$ mittels Resampling (mehr dazu in @sec-pipeline).
+
+### Distanzen messen
+
+Um die $K$ nächsten Nachbarn zu finden, müssen wir die Distanzen zwischen Punkten rechnen können. Dazu verwenden wir (im einfachsten Fall, wenn alle Input-Variablen numerischer Natur sind) die **Euklidische Distanz**.
+
+Die Euklidische Distanz zwischen zwei Vektoren $\mathbf{x}_i = \begin{pmatrix} x_{i1} & x_{i2} \end{pmatrix}'$ und $\mathbf{z}_i = \begin{pmatrix} z_{i1} & z_{i2} \end{pmatrix}'$ lässt sich wie folgt berechnen:
+
+$$
+d(\mathbf{x}_i, \mathbf{z}_i) = \sqrt{(x_{i1} - z_{i1})^2 + (x_{i2} - z_{i2})^2}
+$$
+
+Haben Ihre Vektoren mehr als zwei Dimensionen, dann kommen einfach weitere quadrierte Terme dazu, z.B. $(x_{i3} - z_{i3})^2$. Im zweidimensionalen Raum kann die Berechnung der Euklidischen Distanz direkt mit dem Satz von Pythagoras nachvollzogen werden.
+
+### Fluch der Dimensionalität
+
+Sie konnten sich vielleicht in der Zwischenzeit sehr begeistern für das KNN Modell, weil es einerseits so einfach ist und andererseits trotzdem sehr komplexe, nicht-lineare Regressions- oder Klassifikationsprobleme lösen kann.
+
+Was etwas weniger offensichtlich ist: das Modell macht **keine Annahmen** über die Form oder Verteilung der Trainingsdaten. Wir machen beispielsweise nicht wie oben bei Naive Bayes, dass eine numerische Input-Variable normalverteilt ist. Ausserdem: wenn Sie über sehr, sehr viele Trainingsdaten verfügen, dann gibt es gewisse mathematische Garantien, dass KNN sehr nahe an das bestmögliche Modell herankommt, d.h. dass unser $\hat{f}(\mathbf{x}_i)$ sehr nahe beim unbekannten $f(\mathbf{x}_i)$ liegt.
+
+Warum wird KNN in der Praxis trotzdem nicht allzu häufig verwendet? Weil es stark am sogenannten **Fluch der Dimensionalität** (engl. *Curse of Dimensionality*) leidet.
+
+Doch was bedeutet das? Je mehr Input-Variablen wir haben, desto weiter entfernt sind Datenpunkte voneinander (das ist etwas, das man sich nur schwer vorstellen kann, aber Sie können es mir für den Moment einfach mal glauben). Das KNN beruht auf der Grundidee, dass wir $K$ nahe, ähnliche Beobachtungen für die Vorhersage verwenden. Wenn diese $K$ nahen Beobachtungen im hochdimensionalen Raum (= viele Input-Variablen) nicht mehr nahe sind, dann funktioniert auch das Modell nicht mehr gut.
+
+Wir machen hier ein einfaches Beispiel, das Ihnen dabei helfen soll, den Fluch der Dimensionalität intuitiv besser zu verstehen. Das Beispiel ist inspiriert durch [@Ananthaswamy, Kapitel 5]. Stellen Sie sich vor, wir haben nur **binäre Input-Variablen**, die entweder den Wert 0 oder 1 haben können. Ausserdem haben wir einen Trainingsdatensatz von $n=50$ Beobachtungen.
+
+* Im ersten Fall haben wir nur **eine binäre Input-Variable** $x_{i1}$. Wir nehmen nun an, dass die Werte dieser Variable zufällig entweder 0 oder 1 sind, also je eine 50% Wahrscheinlichkeit haben 0 oder 1 zu sein. Wir erwarten darum, dass wir im Schnitt $n \cdot p = 50 \cdot 0.5 = 25$^[Diese Berechnung ist nichts anderes als der Erwartungswert einer Binomialverteilung.] Beobachtungen mit dem Wert 0 und 25 Beobachtungen mit dem Wert 1 haben.
+* Im zweiten Fall haben wir **zwei binäre Input-Variablen** $x_{i1}$ und $x_{i2}$. Auch hier nehmen die Variablen die Werte 0 und 1 rein zufällig an. Nun haben wir aber vier mögliche Kombinationen von Input-Variablenwerten. Jede der Kombinationen hat eine Wahrscheinlichkeit von 0.25. Wir erwarten darum für jede mögliche Kombination $n \cdot p = 50 \cdot 0.25 = 12.5$ Beobachtungen.
+* Im Fall von **drei binären Input-Variablen** haben wir acht mögliche Kombinationen von $x_{i1}$, $x_{i2}$ und $x_{i3}$. Dadurch erwarten für jede mögliche Kombination nur noch $n \cdot p = 50 \cdot 0.125 = 6.25$ Beobachtungen.
+
+Allgemein gilt: im Fall von $p$ binären Input-Variablen, gibt es $2^p$ mögliche Kombinationen der Input-Variablenwerte und dementsprechend erwarten wir für jede Kombination $n \cdot (1/2^p)$ Beobachtungen. Für $p=10$ können wir beispielsweise für jede mögliche Kombination nur noch 0.05 Beobachtungen erwarten. Sie sehen vielleicht schon das Problem. Mit einer gegebenen Anzahl Trainingsbeobachtungen $n$ reduziert sich die Anzahl Beobachtungen, die "nahe" beieinander liegen immer mehr, je grösser die Anzahl Input-Variablen $p$.
 
 ## Klassifikation in R {#sec-logregR}
 
@@ -1266,7 +1307,7 @@ Um zu sehen, welcher Decision Boundary dieses Modell entspricht, können wir sie
 plot_db(df, lr_fit)
 ```
 
-Wir haben das Modell hier mit $\lambda=0.005$ regularisiert. Sie können gerne lokal weiter experimentieren und andere Werte für den Regularisierungsparameter ausprobieren. Wir werden später sehen, dass wir den optimalen Wert für $\lambda$ (bzw. `penalty`) **tunen** können.
+Wir haben das Modell hier mit $\lambda=0.005$ regularisiert. Sie können gerne lokal weiter experimentieren und andere Werte für den Regularisierungsparameter ausprobieren. Wir werden später sehen, dass wir den optimalen Wert für $\lambda$ (bzw. `penalty`) via Resampling (Cross-Validation) **tunen** können.
 
 #### Naive Bayes
 
@@ -1337,7 +1378,7 @@ Auch hier machen wir eine Vorhersage für den Datenpunkt (4, 6) und auch KNN kom
 predict(knn_fit, new_data = data.frame(X1 = 4, X2 = 6), type = "prob")
 ```
 
-Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von **Overfitting**. Man müsste den Hyperparameter $K$ etwas erhöhen! Auch hier gilt: der optimale Wert für $K$ kann mittels eines Hyperparamter Tunings gefunden werden (mehr dazu in @sec-pipeline).
+Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von **Overfitting**. Man müsste den Hyperparameter $K$ etwas erhöhen! Auch hier gilt: der optimale Wert für $K$ kann mittels eines Hyperparamter Tunings (Resampling) gefunden werden (mehr dazu in @sec-pipeline).
 
 ```{r out.width='60%', fig.asp=1, fig.align='center'}
 # Decision Boundary visualisieren
