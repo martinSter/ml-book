@@ -74,7 +74,7 @@ Antwort c. stimmt nicht, weil das lineare Regressionsmodell technisch problemlos
 
 Nun wundern Sie sich vielleicht: wenn uns unser Modell eine Schätzung für $p(y_i = 1 \mid \mathbf{x}_i)$ zurück gibt, wie mache ich damit eine Vorhersage?
 
-Im einfachsten Fall ist unsere Vorhersage $\hat{y}_i=1$ (also Kategorie 1), falls die geschätzte Wahrscheinlichkeit $p(y_i = 1 \mid \mathbf{x}_i) > 50\%$, und sonst $\hat{y}_i=0$. Hier haben wir einen **Threshold** von 50% gewählt, aber grundsätzlich können wir auch andere Thresholds wählen (z.B. 20% oder 85%), um von den geschätzten Wahrscheinlichkeiten eine Vorhersage abzuleiten. Wir werden uns in @sec-pipeline genauer mit dem optimalen Threshold befassen.
+Im einfachsten Fall ist unsere Vorhersage $\hat{y}_i=1$ (also Kategorie 1), falls die geschätzte Wahrscheinlichkeit $p(y_i = 1 \mid \mathbf{x}_i) > 50\%$, und sonst $\hat{y}_i=0$. Hier haben wir einen **Threshold** von 50% gewählt, aber grundsätzlich können wir auch andere Thresholds wählen (z.B. 20% oder 85%), um von den geschätzten Wahrscheinlichkeiten eine Vorhersage abzuleiten. Wir werden uns in @sec-eval genauer mit dem optimalen Threshold befassen.
 
 ### Modellspezifikation
 
@@ -1121,7 +1121,7 @@ Im Klassifikationsfall führt das dazu, dass für jede neue Beobachtung immer di
 Im Regressionsfall würde für jede neue Beobachtung immer der Durchschnitt der Outputwerte im Trainingsdatensatz, also $\bar{y}$, vorhergesagt werden.
 :::
 
-Doch wie wählen wir einen guten Wert für den **Hyperparameter** $K$? Genau gleich wie für $\lambda$ bei der regularisierten (logistischen) Regression wählen wir $K$ mittels Resampling (mehr dazu in @sec-pipeline).
+Doch wie wählen wir einen guten Wert für den **Hyperparameter** $K$? Genau gleich wie für $\lambda$ bei der regularisierten (logistischen) Regression wählen wir $K$ mittels Resampling (mehr dazu in @sec-eval).
 
 ### Distanzen messen
 
@@ -1380,7 +1380,7 @@ Auch hier machen wir eine Vorhersage für den Datenpunkt (4, 6) und auch KNN kom
 predict(knn_fit, new_data = data.frame(X1 = 4, X2 = 6), type = "prob")
 ```
 
-Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von **Overfitting**. Man müsste den Hyperparameter $K$ etwas erhöhen! Auch hier gilt: der optimale Wert für $K$ kann mittels eines Hyperparamter Tunings (Resampling) gefunden werden (mehr dazu in @sec-pipeline).
+Die Decision Boundary ist hier schon erheblich komplexer und zeigt klare Anzeichen von **Overfitting**. Man müsste den Hyperparameter $K$ etwas erhöhen! Auch hier gilt: der optimale Wert für $K$ kann mittels eines Hyperparamter Tunings (Resampling) gefunden werden (mehr dazu in @sec-eval).
 
 ```{r out.width='60%', fig.asp=1, fig.align='center'}
 # Decision Boundary visualisieren
