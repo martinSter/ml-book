@@ -228,7 +228,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ML Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hyperparameter Tuning und Evaluation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -338,12 +338,12 @@ window.Quarto = {
   <li><a href="#ridge-regressionsmodell" id="toc-ridge-regressionsmodell" class="nav-link" data-scroll-target="#ridge-regressionsmodell"><span class="header-section-number">2.5.1</span> Ridge Regressionsmodell</a></li>
   <li><a href="#lasso-regressionsmodell" id="toc-lasso-regressionsmodell" class="nav-link" data-scroll-target="#lasso-regressionsmodell"><span class="header-section-number">2.5.2</span> LASSO Regressionsmodell</a></li>
   </ul></li>
-  <li><a href="#bias-variance-tradeoff" id="toc-bias-variance-tradeoff" class="nav-link" data-scroll-target="#bias-variance-tradeoff"><span class="header-section-number">2.6</span> Bias-Variance Tradeoff</a></li>
+  <li><a href="#sec-bias-var" id="toc-sec-bias-var" class="nav-link" data-scroll-target="#sec-bias-var"><span class="header-section-number">2.6</span> Bias-Variance Tradeoff</a></li>
   <li><a href="#sec-linregpoly" id="toc-sec-linregpoly" class="nav-link" data-scroll-target="#sec-linregpoly"><span class="header-section-number">2.7</span> Polynomische Regression</a></li>
   <li><a href="#lineare-regression-in-r" id="toc-lineare-regression-in-r" class="nav-link" data-scroll-target="#lineare-regression-in-r"><span class="header-section-number">2.8</span> Lineare Regression in R</a>
   <ul class="collapse">
   <li><a href="#base-r" id="toc-base-r" class="nav-link" data-scroll-target="#base-r"><span class="header-section-number">2.8.1</span> Base <code>R</code></a></li>
-  <li><a href="#tidymodels-glmnet" id="toc-tidymodels-glmnet" class="nav-link" data-scroll-target="#tidymodels-glmnet"><span class="header-section-number">2.8.2</span> <code>tidymodels</code> + <code>glmnet</code></a></li>
+  <li><a href="#sec-reg-examp" id="toc-sec-reg-examp" class="nav-link" data-scroll-target="#sec-reg-examp"><span class="header-section-number">2.8.2</span> <code>tidymodels</code> + <code>glmnet</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -999,8 +999,8 @@ J(\mathbf{w}) = \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \hat{f}(\mathbf{x}_i) \r
 <p><strong>Wichtig</strong>: wie bei Ridge müssen auch hier alle numerischen Input-Variablen zwingend standardisiert sein.</p>
 </section>
 </section>
-<section id="bias-variance-tradeoff" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="bias-variance-tradeoff"><span class="header-section-number">2.6</span> Bias-Variance Tradeoff</h2>
+<section id="sec-bias-var" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="sec-bias-var"><span class="header-section-number">2.6</span> Bias-Variance Tradeoff</h2>
 <p>Wir haben oben bereits gesehen, dass der Hyperparameter <span class="math inline">\(\lambda\)</span> bestimmt, wie stark die Komplexität des Regressionsmodells eingeschränkt wird (oder in anderen Worten, die Parameter richtung Null geschrumpft werden).</p>
 <p>Um noch besser zu verstehen, warum es so wichtig ist, die Komplexität eines Modells korrekt einzustellen, wollen wir uns nun mit einem ganz wichtigen Konzept im Machine Learning beschäftigen, nämlich dem <strong>Bias-Variance Tradeoff</strong>. Dieses Konzept kann <em>intuitiv</em> für alle Bereiche des Supervised Learnings angewendet werden. Für das Regressionsproblem können wir diesen Tradeoff jedoch auch <em>mathematisch</em> herleiten <span class="citation" data-cites="islr">(siehe auch <a href="references.html#ref-islr" role="doc-biblioref">James u.&nbsp;a. 2021</a>)</span> und genau das tun wir jetzt hier.</p>
 <p>Stellen Sie sich vor, dass wir eine grosse Anzahl Trainingsdatensätze zur Verfügung haben und mit jedem dieser Datensätze versuchen wir den wahren funktionalen Zusammenhang <span class="math inline">\(f(\mathbf{x}_i)\)</span> möglichst gut mit <span class="math inline">\(\hat{f}(\mathbf{x}_i)\)</span> zu schätzen. Für jeden Datensatz sieht das geschätzte Modell <span class="math inline">\(\hat{f}(\mathbf{x}_i)\)</span> etwas anders aus (da es auf einem unterschiedlichen Datensatz trainiert wurde). Das geschätzte Modell, kurz <span class="math inline">\(\hat{f}\)</span>, variiert also je nach Datensatz und ist dementsprechend eine <strong>Zufallsvariable</strong>.</p>
@@ -1210,8 +1210,8 @@ F-statistic: 7.544 on 1 and 2 DF,  p-value: 0.1109</code></pre>
 </div>
 </div>
 </section>
-<section id="tidymodels-glmnet" class="level3" data-number="2.8.2">
-<h3 data-number="2.8.2" class="anchored" data-anchor-id="tidymodels-glmnet"><span class="header-section-number">2.8.2</span> <code>tidymodels</code> + <code>glmnet</code></h3>
+<section id="sec-reg-examp" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="sec-reg-examp"><span class="header-section-number">2.8.2</span> <code>tidymodels</code> + <code>glmnet</code></h3>
 <p>Für regularisierte Regressionsmodelle eignet sich der <code>tidymodels</code> <a href="https://www.tidymodels.org/">Framework</a> in Kombination mit <code>glmnet</code> (letzteres ist die Engine für regularisierte Modelle aller Art). Wir laden als erstes die beiden Packages. Beim ersten Mal müssen diese Packages mit <code>install.packages(c("tidymodels", "glmnet"))</code> installiert werden.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; ML Pipeline – Machine Learning verstehen statt nur anwenden</title>
+<title>4&nbsp; Hyperparameter Tuning und Evaluation – Machine Learning verstehen statt nur anwenden</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -71,6 +106,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -83,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./classical.html">Klassisches Machine Learning</a></li><li class="breadcrumb-item"><a href="./04_pipeline.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ML Pipeline</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./classical.html">Klassisches Machine Learning</a></li><li class="breadcrumb-item"><a href="./04_pipeline.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hyperparameter Tuning und Evaluation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Suchen" onclick="window.quartoOpenSearch();">
@@ -144,7 +208,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_pipeline.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ML Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hyperparameter Tuning und Evaluation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -236,15 +300,32 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Inhaltsverzeichnis</h2>
+   
+  <ul>
+  <li><a href="#hyperparameter-tuning" id="toc-hyperparameter-tuning" class="nav-link active" data-scroll-target="#hyperparameter-tuning"><span class="header-section-number">4.1</span> Hyperparameter Tuning</a>
+  <ul class="collapse">
+  <li><a href="#train-test-split" id="toc-train-test-split" class="nav-link" data-scroll-target="#train-test-split"><span class="header-section-number">4.1.1</span> Train-Test Split</a></li>
+  <li><a href="#resampling" id="toc-resampling" class="nav-link" data-scroll-target="#resampling"><span class="header-section-number">4.1.2</span> Resampling</a></li>
+  <li><a href="#tuning" id="toc-tuning" class="nav-link" data-scroll-target="#tuning"><span class="header-section-number">4.1.3</span> Tuning</a></li>
+  <li><a href="#finaler-fit" id="toc-finaler-fit" class="nav-link" data-scroll-target="#finaler-fit"><span class="header-section-number">4.1.4</span> Finaler Fit</a></li>
+  </ul></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation"><span class="header-section-number">4.2</span> Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#regressionsproblem" id="toc-regressionsproblem" class="nav-link" data-scroll-target="#regressionsproblem"><span class="header-section-number">4.2.1</span> Regressionsproblem</a></li>
+  <li><a href="#klassifikationsproblem" id="toc-klassifikationsproblem" class="nav-link" data-scroll-target="#klassifikationsproblem"><span class="header-section-number">4.2.2</span> Klassifikationsproblem</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./classical.html">Klassisches Machine Learning</a></li><li class="breadcrumb-item"><a href="./04_pipeline.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ML Pipeline</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./classical.html">Klassisches Machine Learning</a></li><li class="breadcrumb-item"><a href="./04_pipeline.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hyperparameter Tuning und Evaluation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-pipeline" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">ML Pipeline</span></span></h1>
+<h1 class="title"><span id="sec-eval" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hyperparameter Tuning und Evaluation</span></span></h1>
 </div>
 
 
@@ -261,39 +342,831 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="#fig-pipeline" class="quarto-xref">Abbildung&nbsp;<span>4.1</span></a> zeigt, wie eine typische ML-Pipeline aussieht.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div id="fig-pipeline" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/Pipeline.png" class="img-fluid figure-img">
+<p>In diesem Kapitel lernen wir zwei aus praktischer Sicht relevante Themen kennen. Wir beginnen damit, uns zu überlegen, wie wir die Hyperparameter eines Modells optimieren können. Dieser Prozess hat im ML einen spezifischen Namen, nämlich <strong>Hyperparameter Tuning</strong>. In diesem Zusammenhang werden wir auch kurz auf den Train-Test Split und Resampling Methoden eingehen. In einem zweiten Teil überlegen wir uns, wie die <strong>Vorhersagegüte</strong> von Modellen <strong>evaluiert</strong> wird. Dabei gehen wir kurz nochmal auf das Regressionsproblem ein und befassen uns dann detaillierter mit dem Klassifikationsproblem.</p>
+<section id="hyperparameter-tuning" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="hyperparameter-tuning"><span class="header-section-number">4.1</span> Hyperparameter Tuning</h2>
+<p>Um den Hyperparameter Tuning Prozess zu illustrieren, verwende ich wiederum das konstruierte Regressionsbeispiel, das ich bereits im <a href="02_linreg.html#sec-bias-var" class="quarto-xref">Abschnitt&nbsp;<span>2.6</span></a> und im <a href="02_linreg.html#sec-reg-examp" class="quarto-xref">Abschnitt&nbsp;<span>2.8.2</span></a> verwendet habe.</p>
+<p>Wir generieren hier aber nicht nur 50 Beobachtungen, sondern <span class="math inline">\(n = 200\)</span> und simulieren danach eine Situation, in der zuerst ein <strong>Train-Test Split</strong> gemacht werden muss.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laden der R-Packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir definieren die Anzahl Beobachtungen, die Anzahl Input-Var.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># und die Standardabweichung des Fehlerterms.</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun simulieren wir die Input-Variablenwerte aus einer Normalverteilung.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), <span class="at">nrow =</span> n)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Generierung der y-Werte mit normalverteiltem Noise.</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> X[, <span class="dv">1</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, sd)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir fassen die Input-Variablen und den Output zu einem Dataframe zusammen.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(X)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>y <span class="ot">&lt;-</span> y</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;4.1: Eine typische ML-Pipeline.
+<p>Die Problemstellung sieht nun wie folgt aus: wir haben einen Datensatz mit <span class="math inline">\(n = 200\)</span> Beobachtungen und sollen damit ein lineares Regressionsmodell schätzen. Weil wir viele Input-Variablen (<span class="math inline">\(p=50\)</span>) haben, macht es Sinn, hier Regularisierung zu verwenden. Dabei müssen wir uns (<strong>i</strong>) für die Art von Regularisierung (Ridge oder LASSO) und (<strong>ii</strong>) für den optimalen Hyperparameter <span class="math inline">\(\lambda\)</span> entscheiden. Wir haben also zwei Hyperparameter, die es zu optimieren gilt.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Was sind Hyperparameter?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ein Hyperparameter ist kein eigentlicher Modellparameter, denn er wird nicht während des Modelltrainings (Fitting) gelernt, sondern muss vor der Trainingsphase gesetzt werden. Mit Resampling-Methoden (siehe weiter unten) versuchen wir, einen möglichst optimalen Wert für den Hyperparameter zu finden.</p>
+<p>Beispiel: Bei der regularisierten Regression (Ridge und LASSO) haben wir die Modellparameter <span class="math inline">\(w_0, w_1, \dots, w_p\)</span>. Zusätzlich haben wir einen Hyperparameter <span class="math inline">\(\lambda\)</span>, der bestimmt, wie stark regularisiert wird. Während <span class="math inline">\(\lambda\)</span> <strong>vor dem Training</strong> des Modells gesetzt werden muss, werden die Modellparameter <strong>während des Trainings</strong> gelernt bzw. optimiert.</p>
+</div>
+</div>
+<section id="train-test-split" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="train-test-split"><span class="header-section-number">4.1.1</span> Train-Test Split</h3>
+<p>In einem typischen ML-Problem legen wir uns in der Anfangsphase des Projekts einen Teil der Daten zur Seite (<strong>Testdaten</strong>). Wir werden die beiseite gelegten Daten ganz am Schluss verwenden, um die Performance unseres finalen Modells zu messen. Es ist ganz wichtig, dass wir diese Daten vor der finalen Performance-Messung nicht “anfassen”, auch nicht für explorative Analysen. Warum nicht? Die Performance auf den Testdaten soll uns als “unvoreingenommene” Schätzung des Fehlers dienen, der unser Modell in einem produktiven System machen wird. Wenn wir Einsichten aus dem Testdatensatz in unser Modell einfliessen lassen (sogenanntes <strong>Data Snooping</strong>), dann wird der Fehler auf dem Testset den tatsächlichen Fehler unterschätzen.</p>
+<p>Die restlichen Daten (<strong>Trainingsdaten</strong>) verwenden wir, um die Daten explorativ zu erforschen, um bessere Features zu entwickeln und um verschiedene Modelle darauf zu trainieren.</p>
+<p>Wir führen nun also einen <strong>zufälligen</strong> Train-Test Split durch. Wichtig ist, dass wir vorher einen Seed setzen, so dass wir denselben zufälligen Split immer wieder reproduzieren können. Für den Split verwenden wir die Funktion <code>initial_split()</code> aus <code>tidymodels</code>. Mit dem Argument <code>prop = 3/4</code> bestimmen wir, dass der Trainingsdatensatz 75% der Daten enthalten soll, während die restlichen 25% der Daten in den Testdatensatz fliessen. Der effektive Split wird dann mit den Funktionen <code>training()</code> und <code>testing()</code> vollzogen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed, um den Train-Test Split reproduzierbar zu machen</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split (75% Training, 25% Test)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>train_test_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(train_test_split)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(train_test_split)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Kurzer Test (Resultate sollte 0.75 sein)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(train) <span class="sc">/</span> <span class="fu">nrow</span>(data)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.75</code></pre>
+</div>
+</div>
+<p>Für den Fall eines Klassifikationsproblems enthält die Funktion <code>initial_split()</code> ein weiteres Argument <code>strata</code>, das uns erlaubt einen <strong>stratifizierten Split</strong> zu machen. Wenn wir beispielsweise betrügerische Kreditkartentransaktionen vorhersagen wollen und unsere Daten nur 10% betrügerische Transaktionen enthalten, dann wollen wir mit einem stratifizierten Split sicherstellen, dass sowohl der Trainings- als auch der Testdatensatz nach dem Split ein Verhältnis von 90% zu 10% aufweist. Ist <span class="math inline">\(y\)</span> ein (R-)Faktor, dann wird dies durch <code>strata = y</code> sichergestellt.</p>
+</section>
+<section id="resampling" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="resampling"><span class="header-section-number">4.1.2</span> Resampling</h3>
+<p>Das Thema <strong>Resampling</strong> ist enorm wichtig im Machine Learning. Wir verwenden Resampling Methoden für zwei Aspekte während der Modellierung:</p>
+<ul>
+<li>Resampling hilft uns, das Hyperparameter Tuning durchzuführen. Wir werden im Rest dieses Unterkapitels sehen, wie das genau funktioniert.</li>
+<li>Mithilfe des Resamplings können wir uns aber auch <strong>zwischen verschiedenen Modellen entscheiden</strong>. Wenn wir zum Beispiel ein logistisches Regressionsmodell und ein Naive Bayes Modell trainiert haben, dann können wir schauen, welches der beiden Modelle die bessere (Resampling-)Performance aufweist, ohne dass wir bereits auf das Testset zurückgreifen müssen.</li>
+</ul>
+<p>Die bekannteste Resampling-Methode ist <strong>K-Fold Cross-Validation</strong>. Die Funktionsweise dieser Methode ist in folgenden Schritten beschrieben:</p>
+<ol type="1">
+<li>Als erstes teilen wir den Trainingsdatensatz in <span class="math inline">\(K\)</span> (z.B. <span class="math inline">\(K=5\)</span>) gleich grosse Teile (Folds) auf.</li>
+<li>Dann legen wir den ersten Fold zur Seite und trainieren das Modell auf den restlichen 4 Folds.</li>
+<li>Danach verwenden wir das in Schritt 2 trainierte Modell, um Vorhersagen für die Beobachtungen im ersten (Test-)Fold zu rechnen, der ja nicht für das Training verwendet wurde. Wir vergleichen die Vorhersagen mit den wahren Werten mithilfe eines Modellgütemasses (z.B. RMSE) und speichern den entsprechenden RMSE Wert.</li>
+<li>Wir wiederholen die Schritte 2. und 3. und legen jeweils einen anderen Fold zur Seite für die Evaluation des Modells.</li>
+<li>Wir haben am Schluss <span class="math inline">\(K\)</span> RMSE-Werte. Diese <span class="math inline">\(K\)</span> Werte können wir mitteln, um die Vorhersagegüte eines Modells zu schätzen. Mit den <span class="math inline">\(K\)</span> RMSE-Werten können wir auch eine Varianz schätzen, um die Unsicherheit unserer Schätzung zu beziffern.</li>
+</ol>
+<p>Folgende Abbildung stellt 5-Fold Cross-Validation grafisch dar:</p>
+<div id="fig-crossval" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crossval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/CV_predictions.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crossval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;4.1: 5-Fold Cross-Validation. Die RMSE-Werte für die 5 Test-Folds rechts können gemittelt werden. Der resultierende mittlere RMSE-Wert ist eine Schätzung für die Modellgüte des Modells.
 </figcaption>
 </figure>
 </div>
-<p>Sie starten typischerweise mit einem <strong>Problem</strong> oder einer Herausforderung. Ihr ganzes Projekt sollte darauf ausgelegt sein, dieses Problem zu lösen. Es ist grundsätzlich nicht ratsam, auf Biegen und Brechen eine ML Lösung zu implementieren, wenn kein klar definiertes Problem vorliegt. Nehmen Sie sich also zu Beginn eines Projekts Zeit, das Problem grundlegend zu definieren. Sprechen Sie auch mit den entsprechenden Fachexpert*innen im Unternehmen, um genau zu verstehen, was verbessert oder effizienter gemacht werden soll und was die technischen oder ökonomischen Einschränkungen sind.</p>
-<p>Sobald das Problemverständnis vorhanden ist, beginnen Sie, sich mit den <strong>verfügbaren Daten</strong> zu befassen. Auch hier müssen Sie sich wahrscheinlich mit den entsprechenden Expert*innen im Unternehmen (z.B. Datenbankadministrator*innen) austauschen. Es geht hier unter anderem darum abzuklären, welche Daten verfügbar sind, in welchem Format die Daten vorhanden sind wie die Datenqualität ist.</p>
-<p>Danach beginnen Sie mit den Datenarbeiten. Häufig wird dieser Schritt <strong>Preprocessing</strong> oder <strong>Data Cleaning</strong> genannt. Oft verschlingt dieser Arbeitsschritt sehr viel Zeit und es ist nicht unüblich, dass 80% der Projektzeit hier aufgewendet werden. Es ist auch völlig normal, wenn Sie von diesem Schritt zurück zur Problemdefinition gehen und sie verfeinern oder anpassen müssen oder zum Beispiel nochmals Fragen mit den Datenbankexpert*innen klären müssen, weil Ihr Datenverständnis noch nicht vollständig ist.</p>
-<p>Nachdem die Daten vorbereitet wurden, gehen Sie typischerweise zu einer <strong>explorativen Analyse</strong> der Daten über. Das heisst, Sie visualisieren die vorhandenen Variablen univariat (d.h. jede Variable einzeln) oder multivariat (d.h. zwei oder mehr Variablen zusammen). Ein Beispiel einer univariaten Visualisierung ist ein Histogramm einer quantitativen Variable (z.B. Quartalsumsätze). Ein Beispiel einer multivariaten Visualisierung ist ein Streudiagramm zweier quantitativer Variablen (z.B. Quartalsumsätze und Wechselkurse). Auch hier ist es üblich, dass Sie einen Schritt zurück gehen und weitere Datenbereinigungen vornehmen müssen.</p>
-<p>Nach der explorativen Analyse der Daten sollten Sie eine erste Idee von den wichtigsten Zusammenhängen in den Daten haben. Basierend darauf können Sie Ihr erstes Modell wählen und trainieren und mit der eigentlichen <strong>Analyse</strong> bzw. der Lösung des Problems beginnen.</p>
-<p>Einer der wichtigsten Schritte ist die saubere und gründliche <strong>Evaluation</strong> Ihrer Modelle. Dieser Schritt dient einerseits dazu das beste Modell auszuwählen und andererseits dazu die Qualität Ihrer Lösung bzw. Ihres Modells abzuschätzen. Mit diesem zweiten Schritt wollen Sie nämlich bereits während der Projektphase einschätzen können, wie gut Ihr Modell das gegebene Problem löst oder einen bestehenden Betriebsprozess verbessert oder effizienter macht. Die beiden Schritte Analyse und Evaluation werden typischerweise ein paar Mal iteriert, bis Sie das beste Modell gefunden haben.</p>
-<p>Am Schluss geht es darum, dass Sie Ihr Wissen und Ihre Erkenntnisse an die relevanten Fachexpert*innen weitergeben (<strong>Wissenstransfer</strong>) und Ihr finales Modell in einer produktiven Umgebung implementieren (oft <strong>Deployment</strong> genannt). Zum Beispiel können Sie Ihr Modell in einer mobilen App einbetten oder als REST API Service zur Verfügung stellen.</p>
-<p>Ein wichtiger Aspekt beim Klassifikationsproblem ist die Frage, wie man die Modell- bzw. Vorhersagegüte korrekt <strong>evaluiert</strong>. Als Beispiel verwenden wir die Klassifikation von Emails in Spam und nicht-Spam (“Ham”). Der Abschnitt <strong>Spam Filter</strong> enthält den R Code, welcher einen Spam Filter aufsetzt und fittet. Zum Schluss werden wir den Spam Filter <strong>deployen</strong>.</p>
-<!-- Was muss hier noch kommen? -->
-<!-- - Preprocessing steps (vielleicht anhand des Spam Filters) -->
+<p>Sie sehen vielleicht jetzt auch, warum wir von <em>Resampling</em> sprechen. Wir samplen nämlich mehrere kleine Validierungsdatensätze (Folds) aus dem Trainingsdatensatz, um eine Schätzung für die Modellgüte zu erhalten.</p>
+<p>Doch wie können wir nun damit den optimalen Hyperparameter (z.B. <span class="math inline">\(\lambda\)</span>) finden? Wir führen <strong>für jeden möglichen Wert</strong>, den der Hyperparameter annehmen kann, die K-Fold Cross-Validation durch und kriegen dementsprechend für jeden möglichen Hyperparameterwert eine <strong>Schätzung der Modellgüte</strong>. Am Schluss wählen wir ganz einfach den Hyperparameterwert, der zur besten (geschätzten) Modellgüte führt! Wenn wir den optimalen Hyperparameterwert gefunden haben, dann trainieren wir das Modell ein letztes Mal auf dem ganzen Trainingsdatensatz, d.h. ohne Cross-Validation (mit dem optimalen Hyperparameterwert).</p>
+<p>Mit <code>tidymodels</code> können wir die Folds für 5-Fold Cross-Validation wie folgt vorbereiten. Mit dem Argument <code>repeats</code> könnten wir das Verfahren mehrmals wiederholen, um genauere Schätzungen zu erhalten. Das Objekt <code>folds</code> wird weiter unten dem Trainingsprozess übergeben werden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">15</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 5-Fold CV</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train, <span class="at">v =</span> <span class="dv">5</span>, <span class="at">repeats =</span> <span class="dv">1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="validation-set" class="level4">
+<h4 class="anchored" data-anchor-id="validation-set">Validation Set</h4>
+<p>Wenn wir einen besonders grossen Datensatz haben, dann können wir auch einfach ein <strong>Validation Set</strong> bilden anstatt K-Fold Cross-Validation durchzuführen. D.h. wir splitten den ursprünglichen Datensatz in einen Trainings-, Validierungs- und einen Testdatensatz. Mit <code>tidymodels</code> würden wir das wie folgt machen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed, um den Train-Validation-Test Split reproduzierbar zu machen</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split (60% Training, 20% Validierung, 20% Test)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data_split <span class="ot">&lt;-</span> <span class="fu">initial_validation_split</span>(data, <span class="at">prop =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.2</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(data_split)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>valid <span class="ot">&lt;-</span> <span class="fu">validation</span>(data_split)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(data_split)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Der Vorteil von einem Validation Set im Vergleich zu K-Fold Cross-Validation ist, dass es weniger rechenintensiv ist. Warum? Wenn wir 5 mögliche Hyperparameterwerte haben, dann müssen wir im Falle eines Validation Sets nur 5 Mal ein Modell rechnen und evaluieren.</p>
+</section>
+<section id="frage" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
+<p>Wie viele Modelle müssen gerechnet und evaluiert werden im Fall von 5-Fold Cross-Validation mit 5 möglichen Hyperparameterwerten?</p>
+<ol type="a">
+<li>10 Modelle</li>
+<li>25 Modelle</li>
+<li>1 Modell</li>
+<li>5 Modelle</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die korrekte Antwort ist <strong>b</strong>. Für jeden der 5 möglichen Hyperparameterwerte wird 5-Fold Cross-Validation durchgeführt. Daraus ergibt sich, dass insgesamt <span class="math inline">\(5\cdot 5=25\)</span> Modelle gerechnet werden.</p>
+</div>
+</div>
+</div>
+<p><strong>Wichtiges Takeaway</strong>: wir evaluieren ein Modell nie einfach nur auf dem Trainingsdatensatz. Wir wenden immer eine Form von Resampling an, um die Modellgüte zu schätzen und/oder um die Hyperparameter zu optimieren. Die Vorhersagegüte auf dem Trainingsdatensatz ist oft ein zu optimistisches Resultat und sollte nie als Entscheidungsgrundlage verwendet werden.</p>
+</section>
+</section>
+<section id="tuning" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="tuning"><span class="header-section-number">4.1.3</span> Tuning</h3>
+<p>Nun schauen wir uns an, wie das Hyperparameter Tuning für unser Beispiel funktioniert. In einem ersten Schritt spezifizieren wir hier nun das Modell, das wir rechnen wollen, nämlich das regularisierte lineare Regressionsmodell.</p>
+<p>Wichtig sind im folgenden Code Block die Argumente <code>penalty = tune()</code> und <code>mixture = tune()</code>. Diese legen fest, dass wir die beiden Hyperparameter <code>penalty</code> (entspricht <span class="math inline">\(\lambda\)</span>) und <code>mixture</code> (bestimmt, ob wir ein Ridge oder LASSO Modell wählen) tunen wollen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modellspezifikation für lineares Modell mit Regularisierung</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lm_mod <span class="ot">&lt;-</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="fu">tune</span>(), <span class="at">mixture =</span> <span class="fu">tune</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun setzen wir einen <code>tidymodels</code>-Worklow auf und fügen das oben spezifizierte Modell mit <code>add_model(lm_mod)</code> dem Workflow hinzu. Ausserdem spezifizieren wir das Modell in <code>add_formula()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Workflow aufsetzen</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lm_wflow <span class="ot">&lt;-</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_mod) <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(<span class="at">formula =</span> y <span class="sc">~</span> .)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun wird es spannend: wir tunen unsere zwei Hyperparameter. Mit <code>expand.grid()</code> erstellen wir einen Grid von möglichen Werten für <code>penalty</code> und <code>mixture</code>:</p>
+<ul>
+<li>Für <code>penalty</code> testen wir die Werte <span class="math inline">\({0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000}\)</span></li>
+<li>Für <code>mixture</code> testen wir die Werte 0 (entspricht Ridge) und 1 (entspricht LASSO).</li>
+</ul>
+<section id="frage-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-1">Frage</h4>
+<p>Wie viele Hyperparameter-Kombinationen testen wir hier?</p>
+<ol type="a">
+<li>9</li>
+<li>2</li>
+<li>18</li>
+<li>90</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die korrekte Antwort ist <strong>c</strong>. Für jeden der 9 möglichen Werte für <span class="math inline">\(\lambda\)</span> testen wir, ob Ridge oder LASSO besser ist. Wir haben also insgesamt <span class="math inline">\(9\cdot 2=18\)</span> Kombinationen.</p>
+</div>
+</div>
+</div>
+<p>Die Funktion <code>tune_grid()</code> führt das Tuning durch. Wir übergeben der Funktion das Objekt <code>folds</code> von oben sowie den Grid mit möglichen Hyperparameterwerten.</p>
+<p>Mit <code>control = control_grid(save_pred = TRUE, save_workflow = TRUE)</code> sagen wir der Funktion, dass alle Resampling-Resultate (d.h. die Vorhersagen auf den Folds) sowie auch die Workflows gespeichert werden sollen.</p>
+<p>Schliesslich definieren wir die zu verwendenden Modellgütemasse, nämlich den RMSE und den MAE (siehe <a href="02_linreg.html" class="quarto-xref">Kapitel&nbsp;<span>2</span></a>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grid mit möglichen Hyperparameter Werten</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lm_reg_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">penalty =</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">3</span>, <span class="at">by =</span> <span class="dv">1</span>), <span class="at">mixture =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuning / Fitting</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>lm_res <span class="ot">&lt;-</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  lm_wflow <span class="sc">|&gt;</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(<span class="at">resamples =</span> folds,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">grid =</span> lm_reg_grid,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>, <span class="at">save_workflow =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">metrics =</span> <span class="fu">metric_set</span>(rmse, mae))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Folgender Code erlaubt uns, die Resultate des Tunings (hier nur die RMSE-Werte) anzuschauen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultate des Tunings</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lm_res <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mean)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 18 × 8
+      penalty mixture .metric .estimator  mean     n std_err .config         
+        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
+ 1    0.01          1 rmse    standard   0.208     5 0.00753 pre0_mod08_post0
+ 2    0.1           1 rmse    standard   0.215     5 0.0161  pre0_mod10_post0
+ 3    0.001         1 rmse    standard   0.249     5 0.0106  pre0_mod06_post0
+ 4    0.00001       1 rmse    standard   0.253     5 0.0109  pre0_mod02_post0
+ 5    0.0001        1 rmse    standard   0.253     5 0.0109  pre0_mod04_post0
+ 6    0.00001       0 rmse    standard   0.296     5 0.0148  pre0_mod01_post0
+ 7    0.0001        0 rmse    standard   0.296     5 0.0148  pre0_mod03_post0
+ 8    0.001         0 rmse    standard   0.296     5 0.0148  pre0_mod05_post0
+ 9    0.01          0 rmse    standard   0.296     5 0.0148  pre0_mod07_post0
+10    0.1           0 rmse    standard   0.300     5 0.0155  pre0_mod09_post0
+11    1             0 rmse    standard   0.602     5 0.0317  pre0_mod11_post0
+12   10             0 rmse    standard   0.891     5 0.0431  pre0_mod13_post0
+13  100             0 rmse    standard   0.958     5 0.0455  pre0_mod15_post0
+14    1             1 rmse    standard   0.966     5 0.0458  pre0_mod12_post0
+15   10             1 rmse    standard   0.966     5 0.0458  pre0_mod14_post0
+16  100             1 rmse    standard   0.966     5 0.0458  pre0_mod16_post0
+17 1000             0 rmse    standard   0.966     5 0.0458  pre0_mod17_post0
+18 1000             1 rmse    standard   0.966     5 0.0458  pre0_mod18_post0</code></pre>
+</div>
+</div>
+<p>Wir sehe aus obigem Output, dass <span class="math inline">\(\lambda = 0.01\)</span> und <code>mixture = 1</code> (also LASSO) den kleinsten durchschnittlichen RMSE-Wert erzielen (0.208). Es handelt sich hierbei um einen über die 5 (Test-)Folds gemittelten RMSE-Wert von Modellen mit dieser optimalen Hyperparameterkombination.</p>
+<p>Am besten plotten wir die Resultate doch auch gleich:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot der Resultate</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>lm_res <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_metrics</span>()  <span class="sc">|&gt;</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> penalty, <span class="at">y =</span> mean, <span class="at">color =</span> .metric, <span class="at">linetype =</span> <span class="fu">factor</span>(mixture))) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Penalty"</span>, <span class="at">y =</span> <span class="st">"Modellgüte"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_pipeline_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Wir sehen anhand der Kurven, dass alle Modelle bis zu einem Wert von <span class="math inline">\(\lambda = 0.1\)</span> ähnlich gut sind. Grössere Werte des Regularisierungsparameters führen dann aber sofort zu einer schlechteren Performance.</p>
+<p>Mit der Funktion <code>select_best()</code> können wir nun automatisch das beste Modell aus den Tuning Resultaten auswählen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir wählen das beste Modell</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>lm_best <span class="ot">&lt;-</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  lm_res <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_best</span>(<span class="at">metric =</span> <span class="st">"rmse"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>lm_best</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  penalty mixture .config         
+    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;           
+1    0.01       1 pre0_mod08_post0</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="finaler-fit" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="finaler-fit"><span class="header-section-number">4.1.4</span> Finaler Fit</h3>
+<p>Bis hierhin haben wir die Modelle immer nur auf 4 von 5 Folds gerechnet. Nun wollen wir ein finales Modell mit den optimalen Werten für die Hyperparameter auf dem ganzen Trainingsdatensatz rechnen. <code>tidymodels</code> macht diesen Schritt sehr einfach:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finales Modell fitten</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>last_lm_fit <span class="ot">&lt;-</span> <span class="fu">fit_best</span>(lm_res)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Schauen wir uns doch noch kurz die trainierten Parameter an:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameter Finaler Fit</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>last_lm_fit <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_parsnip</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 51 × 3
+  term        estimate penalty
+  &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)  1.99       0.01
+2 V1           1.00       0.01
+3 V2           0.00491    0.01
+4 V3          -0.00578    0.01
+5 V4           0          0.01
+# ℹ 46 more rows</code></pre>
+</div>
+</div>
+<p>Wie erwartet sind die Parameterwerte abgesehen von <span class="math inline">\(w_0\)</span> und <span class="math inline">\(w_1\)</span> sehr klein oder sogar genau 0.</p>
+</section>
+</section>
+<section id="evaluation" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="evaluation"><span class="header-section-number">4.2</span> Evaluation</h2>
+<p>Im <strong>Regressionsfall</strong> haben wir bereits gesehen, dass die Modellgüte meist mithilfe des RMSE oder des MAE evaluiert wird. Darum gehen wir im ersten Abschnitt nur noch kurz darauf ein, wie nun mit dem obigen finalen Modell die Testset-Performance gerechnet werden kann.</p>
+<p>Im <strong>Klassifikationsfall</strong> ist die Evaluation der Modellgüte etwas komplexer, weshalb wir uns im zweiten Abschnitt ausführlich damit befassen.</p>
+<section id="regressionsproblem" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="regressionsproblem"><span class="header-section-number">4.2.1</span> Regressionsproblem</h3>
+<p>Um unser Regressionsbeispiel von oben abzuschliessen, rechnen wir nun hier noch die Vorhersagegüte für die Beobachtungen im Testset aus. Mit <code>augment()</code> wenden wir in einem ersten Schritt das finale Modell auf die Testdaten an. Danach verwenden wir die Funktion <code>rmse()</code> und <code>mae()</code>, um die beiden bekannten Gütemasse für Regressionsprobleme zu rechnen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersagen auf Testset rechnen</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>test_lm <span class="ot">&lt;-</span> <span class="fu">augment</span>(last_lm_fit, test)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># RMSE auf Testset</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>test_lm <span class="sc">|&gt;</span> <span class="fu">rmse</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> .pred)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard       0.203</code></pre>
+</div>
+</div>
+<p>Und hier noch der MAE:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MAE auf Testset</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>test_lm <span class="sc">|&gt;</span> <span class="fu">mae</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> .pred)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 mae     standard       0.165</code></pre>
+</div>
+</div>
+<p>Diese beiden Werte (berechnet auf dem Testset) sind für uns nun also ein Indikator dafür, welchen Fehler wir von diesem Modell in einem produktiven System erwarten würden.</p>
+</section>
+<section id="klassifikationsproblem" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="klassifikationsproblem"><span class="header-section-number">4.2.2</span> Klassifikationsproblem</h3>
 <!-- - Multi-Class Problem -->
 <!-- - Imbalance -->
-<!-- - Hyperparameter Tuning -->
 <!-- - Was passiert mit anderem Threshold -->
-<!-- - Evaluation von Klassifikationsproblemen -->
-
-
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>Icons stammen von https://thenounproject.com/.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<p>Dieser gesamte Abschnitt bezieht sich auf das <strong>binäre</strong> Klassifikationsproblem Wir werden uns die Evaluation für den Fall von mehrklassigen Klassifikationsproblemen zu einem späteren Zeitpunkt anschauen.</p>
+<p>Die allermeisten Klassifikationsmodelle geben uns für eine Beobachtung der Input-Variablen <span class="math inline">\(\mathbf{x}_i\)</span> die Wahrscheinlichkeit, dass <span class="math inline">\(y_i = 1\)</span>, also <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span> zurück. Doch wie kommen wir eigentlich von diesen Wahrscheinlichkeiten zu einer richtigen Vorhersage? Wir müssen zuerst einen <strong>Threshold</strong> wählen. Im einfachsten Fall ist der Threshold <strong>0.5</strong> (also 50%) und wir erstellen die Vorhersagen wie folgt:</p>
+<ul>
+<li>Wenn <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i) \geq 0.5\)</span>, dann ist unsere Vorhersage <span class="math inline">\(\hat{y}_i = 1\)</span>.</li>
+<li>Wenn <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i) &lt; 0.5\)</span>, dann ist unsere Vorhersage <span class="math inline">\(\hat{y}_i = 0\)</span>.</li>
+</ul>
+<p>Oft werden die Vorhersagen <span class="math inline">\(\hat{y}_i\)</span> <em>hard predictions</em> genannt, während die vorhergesagten Wahrscheinlichkeiten <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span> als <em>soft predictions</em> bezeichnet werden. Die Modellgütemasse, die wir hier kennen lernen werden, basieren entweder auf den <em>hard</em> oder den <em>soft predictions</em>.</p>
+<p>Im folgenden Datensatz, genannt <code>df</code>, haben wir 40 Beobachtungen. Für jede Beobachtung verfügen wir über den wahren Wert der Zielvariable (<code>y</code>) sowie die vorhergesagte Wahrscheinlichkeit eines Klassifikationsmodells (<code>prob</code>):</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   y       prob
+1  1 0.95721924
+2  1 0.95721924
+3  1 0.95721924
+4  1 0.90284298
+5  1 0.90284298
+6  1 0.90284298
+7  1 0.90284298
+8  1 0.88629832
+9  1 0.88629832
+10 1 0.88629832
+11 1 0.84579393
+12 1 0.84579393
+13 0 0.84579393
+14 1 0.79421077
+15 1 0.79421077
+16 0 0.79421077
+17 1 0.61580323
+18 1 0.61580323
+19 0 0.61580323
+20 0 0.61580323
+21 1 0.57895423
+22 1 0.39964340
+23 0 0.39964340
+24 0 0.39964340
+25 1 0.21658577
+26 0 0.21658577
+27 0 0.21658577
+28 0 0.21658577
+29 0 0.21658577
+30 1 0.10299336
+31 0 0.10299336
+32 0 0.10299336
+33 0 0.10299336
+34 0 0.10299336
+35 0 0.10299336
+36 0 0.04551533
+37 0 0.04551533
+38 0 0.04551533
+39 0 0.01941990
+40 0 0.01941990</code></pre>
+</div>
+</div>
+<p>Wir werden diesen Dataframe nachfolgend zur Illustration der verschiedenen Modellgütemasse verwenden.</p>
+<section id="accuracy" class="level4">
+<h4 class="anchored" data-anchor-id="accuracy">Accuracy</h4>
+<p>Das einfachste Modellgütemass für das Klassifikationsproblem ist die <strong>Accuracy</strong>. Bei der Accuracy zählen wir die Anzahl korrekt gemachter Vorhersagen und dividieren durch die Anzahl Beobachtungen. Wir verwenden hier also die <em>hard predictions</em>, weshalb diese in einem ersten Schritt mithilfe eines Threshold-Werts (hier 0.5) festgelegt werden müssen (Variable <code>pred</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage basierend auf Threshold</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>eval <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">factor</span>(y), <span class="at">pred =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> thres, <span class="dv">1</span>, <span class="dv">0</span>)))</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy mit Base R</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(eval<span class="sc">$</span>y <span class="sc">==</span> eval<span class="sc">$</span>pred) <span class="sc">/</span> <span class="fu">nrow</span>(eval)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.825</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy via tidymodels</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(eval, <span class="at">truth =</span> y, <span class="at">estimate =</span> pred)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.825</code></pre>
+</div>
+</div>
+<p>Wir sehen, dass die Accuracy hier 0.825 (oder 82.5%) beträgt. Wichtig ist, dass Sie bei Verwendung der Funktion <code>accuracy()</code> aus <code>tidymodels</code> sowohl die Zielvariable als auch die Vorhersagen vorher in einen Faktor transformieren.</p>
+</section>
+<section id="konfusionsmatrix" class="level4">
+<h4 class="anchored" data-anchor-id="konfusionsmatrix">Konfusionsmatrix</h4>
+<p>Sobald wir mithilfe eines Thresholds <em>hard predictions</em> berechnet haben, können wir die Klassifikationsresultate mit einer <strong>Konfusionsmatrix</strong> darstellen. Die generelle Form der Konfusionsmatrix sieht wie folgt aus:</p>
+<div id="fig-confusionmat" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confusionmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Konfusionsmatrix.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusionmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;4.2: Konfusionsmatrix
+</figcaption>
+</figure>
+</div>
+<p>Die vier Zellen der Matrix repräsentieren die vier möglichen Outcomes:</p>
+<ul>
+<li><strong>True Negative (TN)</strong>: korrekte Vorhersage einer Beobachtung mit <span class="math inline">\(y_i = 0\)</span>. Beispiel: Spam Filter klassifiziert eine Ham Email <em>korrekt</em> als Ham (nicht-Spam).</li>
+<li><strong>True Positive (TP)</strong>: korrekte Vorhersage einer Beobachtung mit <span class="math inline">\(y_i = 1\)</span>. Beispiel: Spam Filter klassifiziert Spam Email <em>korrekt</em> als Spam.</li>
+<li><strong>False Negative (FN)</strong>: inkorrekte Vorhersage einer Beobachtung mit <span class="math inline">\(y_i = 1\)</span>. Beispiel: Spam Filter klassifiziert eine Spam Email <em>inkorrekt</em> als Ham (nicht-Spam).</li>
+<li><strong>False Positive (FP)</strong>: inkorrekte Vorhersage einer Beobachtung mit <span class="math inline">\(y_i = 0\)</span>. Beispiel: Spam Filter klassifiziert eine Ham Email <em>inkorrekt</em> als Spam.</li>
+</ul>
+</section>
+<section id="frage-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-2">Frage</h4>
+<p>Überlegen Sie sich kurz, welcher Fehler im Beispiel des Spam Filters schlimmer ist:</p>
+<ul>
+<li>False Negative: der Filter klassifiziert eine Spam Email als Ham.</li>
+<li>False Positive: der Filter klassifiziert eine Ham Email als Spam.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Es gibt hier keine allgemein gültige Lösung, denn es ist auch etwas Ansichtssache, welcher Fehler schlimmer ist. Persönlich wäre mir in diesem Fall die Vermeidung von False Positives (FP) wichtiger, denn ich möchte verhindern, dass Ham Emails im Spamordner “verschwinden” und ich so unter Umständen eine wichtige Email verpasse.</p>
+</div>
+</div>
+</div>
+<p>Mit der Funktion <code>table()</code> aus Base <code>R</code> können wir uns die Konfusionsmatrix in <code>R</code> ausgeben lassen. Damit wir genau die Anordnung wie in obiger Abbildung kriegen, übergeben wir der Funktion zuerst die Vorhersagen <code>eval$pred</code> und erst dann die wahren Werte der Zielvariable <code>eval$y</code>. Mit <code>dnn = c("pred", "true")</code> beschriften wir die Dimensionen der Tabelle.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage basierend auf Threshold</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>eval <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> thres, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Konfusionsmatrix (Base R)</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(eval<span class="sc">$</span>pred, eval<span class="sc">$</span>y, <span class="at">dnn =</span> <span class="fu">c</span>(<span class="st">"pred"</span>, <span class="st">"true"</span>))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    true
+pred  0  1
+   0 16  3
+   1  4 17</code></pre>
+</div>
+</div>
+<p>Wir sehen, dass unser Modell (mit einem Threshold von 0.5) <strong>4 False Positive</strong> und <strong>3 False Negative</strong> Fehler macht.</p>
+</section>
+<section id="sensitivity-und-specificity" class="level4">
+<h4 class="anchored" data-anchor-id="sensitivity-und-specificity">Sensitivity und Specificity</h4>
+<p>Wie oben gesehen kriegen wir mit der Accuracy den Anteil korrekter Vorhersagen. Oft möchte man die Klassifikationsresultate etwas genauer aufsplitten. Dazu werden die Gütemasse <strong>Sensitivity</strong> und <strong>Specificity</strong> verwendet:</p>
+<ul>
+<li><p>Die <strong>Sensitivity</strong> ist der Anteil korrekter Vorhersagen unter allen <em>positiven</em> Beobachtungen. Beispiel: was ist der Anteil korrekt als Spam klassifizierter Emails gemessen an allen Spam Emails? Die Formel ist wie folgt:</p>
+<p><span class="math display">\[
+\text{Sensitivity} = \frac{TP}{(TP + FN)}
+\]</span> Dieses Mass fokussiert also auf die rechte Spalte der Konfusionsmatrix. Die Sensitivity wird manchmal auch <em>True Positive Rate</em> oder <em>Recall</em> genannt.</p></li>
+<li><p>Die <strong>Specificity</strong> ist der Anteil korrekter Vorhersagen unter allen <em>negativen</em> Beobachtungen. Beispiel: was ist der Anteil korrekt als Ham klassifizierter Emails gemessen an allen Ham Emails? Die Formel ist wie folgt:</p>
+<p><span class="math display">\[
+\text{Specificity} = \frac{TN}{(TN + FP)}
+\]</span> Dieses Mass fokussiert dementsprechend auf die linke Spalte der Konfusionsmatrix. Die Specificity wird manchmal auch <em>True Negative Rate</em> genannt.</p></li>
+</ul>
+<p>Im folgenden Code Block rechnen wir die Sensitivity und Specificity mit <code>R</code>. Wichtig: das Argument <code>event_level = "second"</code> in den Funktionen <code>sens()</code> und <code>spec()</code> definiert, dass das zweite Faktorlevel die Kategorie ist, die uns hauptsächlich interessiert (also <span class="math inline">\(y_i=1\)</span>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage basierend auf Threshold</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>eval <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">factor</span>(y), <span class="at">pred =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> thres, <span class="dv">1</span>, <span class="dv">0</span>)))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity (tidymodels)</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>eval <span class="sc">|&gt;</span> </span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">sens</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> pred, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 sens    binary          0.85</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specificity (tidymodels)</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>eval <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">spec</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> pred, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 spec    binary           0.8</code></pre>
+</div>
+</div>
+</section>
+<section id="frage-3" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-3">Frage</h4>
+<p>Verwenden Sie folgenden Code, um die hier verwendeten Daten bei Ihnen lokal zu replizieren.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wahre Outputwerte</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>       <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhergesagte Wahrscheinlichkeiten</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.95721924</span>, <span class="fl">0.95721924</span>, <span class="fl">0.95721924</span>, <span class="fl">0.90284298</span>, <span class="fl">0.90284298</span>, </span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.90284298</span>, <span class="fl">0.90284298</span>, <span class="fl">0.88629832</span>, <span class="fl">0.88629832</span>, <span class="fl">0.88629832</span>, </span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.84579393</span>, <span class="fl">0.84579393</span>, <span class="fl">0.84579393</span>, <span class="fl">0.79421077</span>, <span class="fl">0.79421077</span>, </span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.79421077</span>, <span class="fl">0.61580323</span>, <span class="fl">0.61580323</span>, <span class="fl">0.61580323</span>, <span class="fl">0.61580323</span>, </span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.57895423</span>, <span class="fl">0.39964340</span>, <span class="fl">0.39964340</span>, <span class="fl">0.39964340</span>, <span class="fl">0.21658577</span>, </span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.21658577</span>, <span class="fl">0.21658577</span>, <span class="fl">0.21658577</span>, <span class="fl">0.21658577</span>, <span class="fl">0.10299336</span>, </span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.10299336</span>, <span class="fl">0.10299336</span>, <span class="fl">0.10299336</span>, <span class="fl">0.10299336</span>, <span class="fl">0.10299336</span>, </span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.04551533</span>, <span class="fl">0.04551533</span>, <span class="fl">0.04551533</span>, <span class="fl">0.01941990</span>, <span class="fl">0.01941990</span>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Zu einem Dataframe zusammenfassen</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">prob =</span> prob)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Kopieren Sie danach die obigen Code Blocks zu Accuracy, Konfusionsmatrix, Sensitivity und Specificity in ein lokals Skript und wählen Sie unterschiedliche Werte für den Threshold (z.B. 0.3 und 0.8). Was passiert mit der Accuracy, der Sensitivity und der Specificity?</p>
+<p>Sie haben vielleicht anhand der obigen Aufgabe feststellen können, dass sich die Modellgütemasse verändern, wenn wir den Threshold verändern. Grundsätzlich gilt folgendes:</p>
+<ul>
+<li>Die Accuracy ist <strong>maximal</strong> für einen Threshold von <strong>0.5</strong>.</li>
+<li>Wenn wir den <strong>Threshold senken</strong>, dann <strong>erhöht</strong> sich die <strong>Sensitivity</strong> (allerdings auf Kosten der Specificity). Warum? Die Senkung des Thresholds führt einerseits zu mehr True Positives, aber auch zu mehr falschen Vorhersagen von <span class="math inline">\(\hat{y}_i=1\)</span>, also mehr False Positives.</li>
+<li>Wenn wir den <strong>Threshold erhöhen</strong>, dann <strong>erhöht</strong> sich die <strong>Specificity</strong> (allerdings auf Kosten der Sensitivity). Warum? Die Erhöhung des Thresholds führt einerseits zu mehr True Negatives, aber auch zu mehr False Negatives. “You can’t have it both ways!”</li>
+</ul>
+<p>Folgende Abbildung zeigt die Accuracy, die Sensitivity und die Specificity für viele verschiedene Thresholds zwischen 0 und 1 (für unser Beispiel). Für reale Datenbeispiele sind die Kurven typischerweise glätter (engl. <em>smoother</em>).</p>
+<div id="fig-eval-meas" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eval-meas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/eval_measures.png" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eval-meas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;4.3: Wie verändern sich Accuracy, Sensitivity und Specificity, wenn sich der Threshold verändert.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Doch wie machen wir nun da eine gute Entscheidung bezüglich des Thresholds?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In praktisch jedem Praxisproblem ist entweder die Sensitivity oder die Specificity wichtiger. Um zu entscheiden, was wichtiger ist, braucht es manchmal etwas Domain Knowledge. Wir wählen den Threshold dann so, dass wir mit dem <strong>Tradeoff</strong> zwischen Sensitivity und Specificity leben können.</p>
+</div>
+</div>
+<p>Hier ein paar Beispiele:</p>
+<ul>
+<li>Wir haben oben bereits gesehen, dass es (zumindest mir) beim Spam Filter wichtiger ist, dass ich möglichst <strong>keinen False Positive Fehler</strong> mache (d.h. Ham verschwindet im Spamordner). Hier ist mir also die <strong>Specificity</strong> wichtiger. Darum wähle ich tendenziell einen Threshold grösser als 0.5.</li>
+<li>Bei der Vorhersage einer Krankheit (<span class="math inline">\(y_i = 1\)</span>) ist der <strong>False Negative Fehler</strong> wesentlich schlimmer (kranke Person wird als gesund klassifiziert). Hier ist mir also die <strong>Sensitivity</strong> wichtiger. Darum wähle ich tendenziell einen Threshold kleiner als 0.5 und “gehe auf Nummer sicher”.</li>
+</ul>
+</section>
+<section id="frage-4" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-4">Frage</h4>
+<p>Überlegt euch kurz anhand folgender Beispiele, welcher Fehler schlimmer ist und wie ihr euch dementsprechend bezüglich Threshold entscheiden würdet.</p>
+<ul>
+<li>Eine Bank möchte mit einem Modell die Zahlungsfähigkeit von Kundinnen und Kunden vorhersagen.</li>
+<li>Die Polizei möchte mit einem Modell vorhersagen, ob eine Person in den nächsten 6 Monaten eine kriminelle Tat begeht.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Auch hier sind meine Antworten subjektiv gefärbt:</p>
+<ul>
+<li>Aus Sicht der Bank gilt es zu verhindern, dass jemand der effektiv zahlungsunfähig wird (<span class="math inline">\(y_i = 1\)</span>) als nicht zahlungsunfähig vorhergesagt wird (<span class="math inline">\(\hat{y}_i = 0\)</span>). Es gilt also False Negative Fehler zu verhindern. Dementsprechend würde ich einen Threshold &lt; 0.5 wählen, um eine möglichst hohe Sensitivity zu erreichen. Diese Strategie hat aber einen Nachteil: die vielen False Positives, die so entstehen, müssen eventuell von Mitarbeitenden manuell überprüft werden, was zu viel Aufwand führen kann.</li>
+<li>Grundsätzlich möchte die Polizei hier ebenfalls False Negatives verhindern, so dass möglichst niemand, der straffällig wird (<span class="math inline">\(y_i=1\)</span>) von unserem Modell mit <span class="math inline">\(\hat{y}_i=0\)</span> vorhergesagt wird. Aus gesellschaftlicher Sicht sind jedoch auch False Positives unerwünscht, denn das heisst, dass Unschuldige als straffällig vorhergesagt werden.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="roc-kurve" class="level4">
+<h4 class="anchored" data-anchor-id="roc-kurve">ROC Kurve</h4>
+<p>Die <strong>ROC Kurve</strong>, das bekannteste Konzept zur Messung der Klassifikationsgüte, wurde entwickelt, weil es unbefriedigend ist, dass die Klassifikationsgüte (z.B. Accuracy, Sensitivity oder Specificity) vom gewählten Threshold abhängt. Die ROC Kurve wurde ursprünglich in der Kommunikationstheorie entwickelt und ROC steht für <em>receiver operating characteristic</em>.</p>
+<p>Jeder Punkt auf der ROC Kurve zeigt den Wert der Sensitivity und der Specificity für einen bestimmten Threshold, wobei der <strong>Threshold nicht explizit in der Grafik dargestellt</strong> wird. Ihr könnt es euch folgendermassen vorstellen:</p>
+<ol type="1">
+<li>Für jeden möglichen Threshold, z.B. <span class="math inline">\(\{0, 0.01, 0.02, 0.03, \ldots, 0.98, 0.99, 1.0\}\)</span>, wird sowohl die Sensitivity als auch die Specificity berechnet.</li>
+<li>Dann sortieren wir die Sensitivity-Specificity Paare nach aufsteigender Sensitivity.</li>
+<li>Zum Schluss plotten wir die sortierten Punkte als Kurve. Damit der Plot besser interpretierbar ist, plotten wir auf der x-Achse <span class="math inline">\(1 - \text{Specificity}\)</span>, was nichts anderes als die False Positive Rate ist.</li>
 </ol>
+<p>Hier der <code>tidymodels</code> Code dazu:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># y in einen Faktor umwandeln</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>eval <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">factor</span>(y))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Werte für die ROC Kurve</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_curve</span>(eval, <span class="at">truth =</span> y, prob, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 3
+   .threshold specificity sensitivity
+        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+ 1  -Inf             0           1   
+ 2     0.0194        0           1   
+ 3     0.0455        0.1         1   
+ 4     0.103         0.25        1   
+ 5     0.217         0.5         0.95
+ 6     0.400         0.7         0.9 
+ 7     0.579         0.8         0.85
+ 8     0.616         0.8         0.8 
+ 9     0.794         0.9         0.7 
+10     0.846         0.95        0.6 
+11     0.886         1           0.5 
+12     0.903         1           0.35
+13     0.957         1           0.15
+14   Inf             1           0   </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Kurve</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">roc_curve</span>(eval, <span class="at">truth =</span> y, prob, <span class="at">event_level =</span> <span class="st">"second"</span>))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_pipeline_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Zentrale Punkte</strong> für die Interpretation von ROC Kurven:</p>
+<ul>
+<li>Hat ein Modell eine ROC Kurve, die durch den Punkt ganz links oben geht, dann haben wir ein perfektes Modell gefunden. Warum? Für dieses Modell gibt es einen Threshold, mit dem sowohl die Sensitivity als auch die Specificity 1 sind (Achtung: wenn die Specificity 1 ist, dann ist <span class="math inline">\(1 - \text{Specificity} = 0\)</span>). Das Modell macht also keine Vorhersagefehler!</li>
+<li>Die gestrichelte Diagonale entspricht einem Modell, dessen Vorhersagen nicht besser als ein Münzwurf sind. Unser Modell sollte sich also immer klar von der Diagonalen abheben, nur dann hat es wirklich einen Nutzen.</li>
+<li>Wir können die ROC Kurve auch mit einer einzigen Zahl zusammenfassen, nämlich der Fläche unter der ROC Kurve. Man nennt dieses Mass <strong>ROC AUC</strong> (<strong>A</strong>rea <strong>U</strong>nder <strong>C</strong>urve). Wenn die ROC Kurve durch den Punkt links oben geht, dann ist ROC AUC 1.0 (perfektes Modell). Wenn unser Modell aber nicht besser als ein Münzwurf performt, dann ist ROC AUC ungefähr 0.5 (Modell ab in den Kübel).</li>
+<li>Die ROC Kurve eignet sich gut, um Modelle zu vergleichen. Warum? Verschiedene Modelle haben unterschiedliche Thresholds mit denen sie am besten performen. Die ROC Kurven bzw. ROC AUC erlauben einen direkten Vergleich von Modellen, da der Effekt des Thresholds nicht mehr reinspielt, weil alle möglichen Thresholds berücksichtigt werden.</li>
+</ul>
+</section>
+<section id="imbalance" class="level4">
+<h4 class="anchored" data-anchor-id="imbalance">Imbalance</h4>
+<p>Es gibt beim Klassifikationsproblem eine grosse Herausforderung, welche in der Praxis oft auftritt. Nämlich das Problem einer <strong>Imbalance</strong> (Unausgewogenheit) in der Zielvariable <span class="math inline">\(y_i\)</span>. Es kommt sehr häufig vor, dass die “positive” Klasse (<span class="math inline">\(y_i=1\)</span>), also die Klasse, an der wir wirklich interessiert sind, substanziell weniger häufig vorkommt als die “negative” Klasse (<span class="math inline">\(y_i=0\)</span>). Beispiel: Zahlungsunfähigkeit, Krankheit, gewaltsames Video auf YouTube, etc. In diesem Fall ist die Accuracy ein ganz schlechtes Gütemass. Warum seht ihr in folgender Aufgabe.</p>
+</section>
+<section id="frage-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-5">Frage</h4>
+<p>Stellen Sie sich vor, dass wir einen Datensatz mit Angaben zu 1000 Patientinnen und Patienten haben. 33 dieser 1000 Patientinnen und Patienten haben eine seltene Krankheit, die wir mit einem Modell vorhersagen möchten.</p>
+<ol type="1">
+<li>Stellen Sie die Konfusionsmatrix auf für ein simples Modell, das immer <span class="math inline">\(\hat{y}_i=0\)</span> (also keine Krankheit) vorhersagt.</li>
+<li>Rechnen Sie die Accuracy basierend auf den Zahlen in der Konfusionsmatrix. Was fällt Ihnen auf?</li>
+<li>Rechnen Sie nun die Sensitivity und Specificity basierend auf den Zahlen in der Konfusionsmatrix.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die Konfusionsmatrix für dieses simple Modell sieht wie folgt aus:</p>
+<div id="fig-confusionmat" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confusionmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Konfusionsmatrix_Imbalance.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusionmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;4.4: Konfusionsmatrix für unser Beispiel.
+</figcaption>
+</figure>
+</div>
+<p>Die Accurcy lässt sich dann einfach rechnen als:</p>
+<p><span class="math display">\[
+\text{Accuracy} = \frac{967 + 0}{1000} = 0.967
+\]</span> Sie sehen also, dass dieses naive Modell eine hervorragende Accuracy erreicht. Das ist jedoch nur möglich wegen der krassen Imbalance in diesem Beispiel.</p>
+<p>Rechnen wir nun die Sensitivity:</p>
+<p><span class="math display">\[
+\text{Sensitivity} = \frac{TP}{(TP + FN)} = \frac{0}{0 + 33} = 0
+\]</span> Und die Specificity:</p>
+<p><span class="math display">\[
+\text{Specificity} = \frac{TN}{(TN + FP)} = \frac{967}{967 + 0} = 1
+\]</span></p>
+<p>Zusammen geben uns Sensitivity und Specificity nun ein genaueres Bild ab. Dieses naive Modell hat zwar eine perfekte Specificity, aber gleichzeitig eine Sensitivity von 0%.</p>
+</div>
+</div>
+</div>
+<p>Wir sehen also, dass es im Falle einer Imbalance <em>nie</em> eine gute Idee ist, die Accuracy als Gütemass zu verwenden.</p>
+<p>Doch wir haben ein grundsätzlicheres Problem: unser ML-Modell kann unter Umständen zu wenig gut von den “positiven” (raren) Trainingsbeobachtungen lernen, da es einfach nicht eine genügend grosse Anzahl davon gibt. Das Modell fokussiert in diesem Fall zu stark auf die häufige Kategorie und vernachlässigt die rare Kategorie.</p>
+<p>Um dieses Problem zu lösen gibt es zwei Arten von Lösungen:</p>
+<ol type="1">
+<li><strong>Sampling Techniken</strong>: wir können einerseits ein <strong>Undersampling</strong> für die häufige Kategorie oder ein <strong>Oversampling</strong> für die rare Kategorie machen. Ganz einfach gesagt, entfernen wir beim Undersampling zufällig Beobachtungen, welche der häufigen Kategorie angehören bis die Imbalance weniger stark ist. Beim Oversampling generieren wir (zufällig) neue Beobachtungen für die rare Kategorie bis die Imbalance weniger stark ist.</li>
+<li><strong>Gewichtung in Kostenfunktion</strong>: Wir können Trainingsbeobachtungen, welche der raren Kategorie angehören, in der Berechnung der Kostenfunktion stärker gewichten.</li>
+</ol>
+<p>Persönlich bevorzuge ich die zweite Variante, weil sie aus meiner Sicht eleganter ist. In praktischen Problemen lohnt es sich jedoch immer etwas auszuprobieren, was am besten funktioniert. <code>tidymodels</code> bietet für beide Strategien Implementationen.</p>
+</section>
+<section id="precision-recall-kurve" class="level4">
+<h4 class="anchored" data-anchor-id="precision-recall-kurve">Precision-Recall Kurve</h4>
+<p>Die ROC Kurve (und ROC AUC) sind die am häufigsten verwendeten Techniken, um Klassifikationsmodelle zu evaluieren. Wenn aber die “positive” Kategorie sehr selten vorkommt (also eine Imbalance vorherrscht) und/oder der False Positive Fehler für das vorliegende Problem wichtiger ist, dann gibt es eine Alternative zur ROC Kurve, nämlich die <strong>Precision-Recall Kurve</strong>.</p>
+<p>Das Mass <strong>Recall</strong> haben wir bereits kennen gelernt, denn es ist nichts anderes als die <strong>Sensitivity</strong>. Zur Repetition:</p>
+<p><span class="math display">\[
+\text{Recall} = \frac{TP}{(TP + FN)}
+\]</span> Dieses Mass bezieht sich nur auf die zweite <em>Spalte</em> der Konfusionsmatrix, berücksichtigt also nur die Beobachtungen, die tatsächlich der Kategorie 1 angehören (<span class="math inline">\(y_i=1\)</span>).</p>
+<p>Das Mass <strong>Precision</strong> bezieht sich auf die zweite <em>Zeile</em> der Konfusionsmatrix, berücksichtigt also nur die Beobachtungen, für die unser Modell 1 vorhersagt (<span class="math inline">\(\hat{y}_i=1\)</span>). Die Formel ist wie folgt:</p>
+<p><span class="math display">\[
+\text{Precision} = \frac{TP}{(TP + FP)}
+\]</span> Auf den Spam Filter angewendet beantwortet die Precision die Frage “Wie viele unserer Spam Vorhersagen sind korrekt?”.</p>
+<p>Sie sehen, dass die beiden Masse, Precision und Recall, sich hauptsächlich mit der positiven Kategorie befassen. Die True Negatives (TN) kommen in den beiden Formeln gar nicht vor.</p>
+<p>Wie bei der ROC Kurve bzw. Sensitivity und Specificity gibt es einen <strong>Tradeoff</strong> zwischen Precision und Recall. Eine höhere Precision führt in der Regel zu einem tieferen Recall. Das sieht man auch gut anhand folgender Abbildung, die Precision und Recall für verschiedene Thresholds zeigt:</p>
+<div id="fig-prec-rec" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-prec-rec-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/prec-rec.png" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-prec-rec-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;4.5: Precision und Recall für viele verschiedene Thresholds.
+</figcaption>
+</figure>
+</div>
+<p>Manchmal will man die Precision und Recall Werte zu einem <strong>Score</strong> verbinden. Dazu kann man den <strong>harmonischen Mittelwert</strong> rechnen, den man im ML <strong>F1 Score</strong> nennt:</p>
+<p><span class="math display">\[
+\text{F1} = \frac{2}{\frac{1}{\text{Precision}} + \frac{1}{\text{Recall}}}
+\]</span> Warum ein harmonischer Mittelwert? Weil dieser einen tiefen Wert für Precision oder Recall stärker “bestraft” als der arithmetische Mittelwert. Das führt dazu, dass das F1 Score in der Tendenz nur dann hoch ist, wenn sowohl Precision als auch Recall hoch sind.</p>
+<p>Hier nun der <code>R</code>-Code, um Precision und Recall zu rechnen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage basierend auf Threshold</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>eval <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">factor</span>(y), <span class="at">pred =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> thres, <span class="dv">1</span>, <span class="dv">0</span>)))</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Precision (tidymodels)</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>eval <span class="sc">|&gt;</span> </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">precision</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> pred, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric   .estimator .estimate
+  &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+1 precision binary         0.810</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recall (= Sensitivity) (tidymodels)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>eval <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">recall</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> pred, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 recall  binary          0.85</code></pre>
+</div>
+</div>
+<p>Ähnlich wie bei der ROC Kurve, kann ma Precision gegen Recall für verschiedene Thresholds plotten, ohne die Thresholds direkt in der Grafik zu zeigen. So können wie bei der ROC Kurve verschiedene Modelle einfach anhand der resultierenden Kurven verglichen werden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Werte für die Precision-Recall Kurve</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pr_curve</span>(eval, <span class="at">truth =</span> y, prob, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 3
+   .threshold recall precision
+        &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+ 1   Inf        0        1    
+ 2     0.957    0.15     1    
+ 3     0.903    0.35     1    
+ 4     0.886    0.5      1    
+ 5     0.846    0.6      0.923
+ 6     0.794    0.7      0.875
+ 7     0.616    0.8      0.8  
+ 8     0.579    0.85     0.810
+ 9     0.400    0.9      0.75 
+10     0.217    0.95     0.655
+11     0.103    1        0.571
+12     0.0455   1        0.526
+13     0.0194   1        0.5  </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Precision-Recall Kurve</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">pr_curve</span>(eval, <span class="at">truth =</span> y, prob, <span class="at">event_level =</span> <span class="st">"second"</span>))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_pipeline_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
