@@ -740,7 +740,7 @@ Der **Nachteil** von LASSO im Vergleich zu Ridge ist, dass es keine analytische 
 
 **Wichtig**: wie bei Ridge müssen auch hier alle numerischen Input-Variablen zwingend standardisiert sein.
 
-## Bias-Variance Tradeoff
+## Bias-Variance Tradeoff {#sec-bias-var}
 
 Wir haben oben bereits gesehen, dass der Hyperparameter $\lambda$ bestimmt, wie stark die Komplexität des Regressionsmodells eingeschränkt wird (oder in anderen Worten, die Parameter richtung Null geschrumpft werden).
 
@@ -1123,7 +1123,7 @@ yp <- predict(mod, newdata = data.frame(x = c(2.5, 5.1)))
 yp
 ```
 
-### `tidymodels` + `glmnet`
+### `tidymodels` + `glmnet` {#sec-reg-examp}
 
 Für regularisierte Regressionsmodelle eignet sich der `tidymodels` [Framework](https://www.tidymodels.org/) in Kombination mit `glmnet` (letzteres ist die Engine für regularisierte Modelle aller Art). Wir laden als erstes die beiden Packages. Beim ersten Mal müssen diese Packages mit `install.packages(c("tidymodels", "glmnet"))` installiert werden.
 
