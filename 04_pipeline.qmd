@@ -290,7 +290,7 @@ Diese beiden Werte (berechnet auf dem Testset) sind für uns nun also ein Indika
 <!-- - Imbalance -->
 <!-- - Was passiert mit anderem Threshold -->
 
-Dieser gesamte Abschnitt bezieht sich auf das **binäre** Klassifikationsproblem Wir werden uns die Evaluation für den Fall von mehrklassigen Klassifikationsproblemen zu einem späteren Zeitpunkt anschauen.
+Dieser gesamte Abschnitt bezieht sich auf das **binäre** Klassifikationsproblem. Wir werden uns die Evaluation für den Fall von mehrklassigen Klassifikationsproblemen zu einem späteren Zeitpunkt anschauen.
 
 Die allermeisten Klassifikationsmodelle geben uns für eine Beobachtung der Input-Variablen $\mathbf{x}_i$ die Wahrscheinlichkeit, dass $y_i = 1$, also $p(y_i = 1 \mid \mathbf{x}_i)$ zurück. Doch wie kommen wir eigentlich von diesen Wahrscheinlichkeiten zu einer richtigen Vorhersage? Wir müssen zuerst einen **Threshold** wählen. Im einfachsten Fall ist der Threshold **0.5** (also 50%) und wir erstellen die Vorhersagen wie folgt:
 
@@ -364,13 +364,6 @@ Es gibt hier keine allgemein gültige Lösung, denn es ist auch etwas Ansichtssa
 Mit der Funktion `table()` aus Base `R` können wir uns die Konfusionsmatrix in `R` ausgeben lassen. Damit wir genau die Anordnung wie in obiger Abbildung kriegen, übergeben wir der Funktion zuerst die Vorhersagen `eval$pred` und erst dann die wahren Werte der Zielvariable `eval$y`. Mit `dnn = c("pred", "true")` beschriften wir die Dimensionen der Tabelle.
 
 ```{r}
-# Threshold
-thres <- 0.5
-
-# Vorhersage basierend auf Threshold
-eval <- df |> 
-  mutate(pred = ifelse(prob >= thres, 1, 0))
-
 # Konfusionsmatrix (Base R)
 table(eval$pred, eval$y, dnn = c("pred", "true"))
 ```
@@ -397,13 +390,6 @@ Dieses Mass fokussiert dementsprechend auf die linke Spalte der Konfusionsmatrix
 Im folgenden Code Block rechnen wir die Sensitivity und Specificity mit `R`. Wichtig: das Argument `event_level = "second"` in den Funktionen `sens()` und `spec()` definiert, dass das zweite Faktorlevel die Kategorie ist, die uns hauptsächlich interessiert (also $y_i=1$).
 
 ```{r}
-# Threshold
-thres <- 0.5
-
-# Vorhersage basierend auf Threshold
-eval <- df |> 
-  mutate(y = factor(y), pred = factor(ifelse(prob >= thres, 1, 0)))
-
 # Sensitivity (tidymodels)
 eval |> 
   yardstick::sens(truth = y, estimate = pred, event_level = "second")
@@ -485,7 +471,7 @@ Jeder Punkt auf der ROC Kurve zeigt den Wert der Sensitivity und der Specificity
 
 1. Für jeden möglichen Threshold, z.B. $\{0, 0.01, 0.02, 0.03, \ldots, 0.98, 0.99, 1.0\}$, wird sowohl die Sensitivity als auch die Specificity berechnet.
 2. Dann sortieren wir die Sensitivity-Specificity Paare nach aufsteigender Sensitivity.
-3. Zum Schluss plotten wir die sortierten Punkte als Kurve. Damit der Plot besser interpretierbar ist, plotten wir auf der x-Achse $1 - \text{Specificity}$, was nichts anderes als die False Positive Rate ist.
+3. Zum Schluss plotten wir die sortierten Punkte als Kurve. Damit der Plot besser interpretierbar ist, plotten wir auf der x-Achse $1 - \text{Specificity}$, was nichts anderes als die *False Positive Rate* ist.
 
 Hier der `tidymodels` Code dazu:
 
@@ -525,7 +511,7 @@ Stellen Sie sich vor, dass wir einen Datensatz mit Angaben zu 1000 Patientinnen 
 
 Die Konfusionsmatrix für dieses simple Modell sieht wie folgt aus:
 
-![Konfusionsmatrix für unser Beispiel.](images/Konfusionsmatrix_Imbalance.png){width=50% #fig-confusionmat}
+![Konfusionsmatrix für unser Beispiel.](images/Konfusionsmatrix_Imbalance.png){width=70% #fig-confusionmat}
 
 Die Accurcy lässt sich dann einfach rechnen als:
 
