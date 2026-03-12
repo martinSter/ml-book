@@ -688,7 +688,7 @@ Abbildung&nbsp;4.1: 5-Fold Cross-Validation. Die RMSE-Werte für die 5 Test-Fold
 <!-- - Multi-Class Problem -->
 <!-- - Imbalance -->
 <!-- - Was passiert mit anderem Threshold -->
-<p>Dieser gesamte Abschnitt bezieht sich auf das <strong>binäre</strong> Klassifikationsproblem Wir werden uns die Evaluation für den Fall von mehrklassigen Klassifikationsproblemen zu einem späteren Zeitpunkt anschauen.</p>
+<p>Dieser gesamte Abschnitt bezieht sich auf das <strong>binäre</strong> Klassifikationsproblem. Wir werden uns die Evaluation für den Fall von mehrklassigen Klassifikationsproblemen zu einem späteren Zeitpunkt anschauen.</p>
 <p>Die allermeisten Klassifikationsmodelle geben uns für eine Beobachtung der Input-Variablen <span class="math inline">\(\mathbf{x}_i\)</span> die Wahrscheinlichkeit, dass <span class="math inline">\(y_i = 1\)</span>, also <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i)\)</span> zurück. Doch wie kommen wir eigentlich von diesen Wahrscheinlichkeiten zu einer richtigen Vorhersage? Wir müssen zuerst einen <strong>Threshold</strong> wählen. Im einfachsten Fall ist der Threshold <strong>0.5</strong> (also 50%) und wir erstellen die Vorhersagen wie folgt:</p>
 <ul>
 <li>Wenn <span class="math inline">\(p(y_i = 1 \mid \mathbf{x}_i) \geq 0.5\)</span>, dann ist unsere Vorhersage <span class="math inline">\(\hat{y}_i = 1\)</span>.</li>
@@ -815,15 +815,8 @@ Abbildung&nbsp;4.2: Konfusionsmatrix
 </div>
 <p>Mit der Funktion <code>table()</code> aus Base <code>R</code> können wir uns die Konfusionsmatrix in <code>R</code> ausgeben lassen. Damit wir genau die Anordnung wie in obiger Abbildung kriegen, übergeben wir der Funktion zuerst die Vorhersagen <code>eval$pred</code> und erst dann die wahren Werte der Zielvariable <code>eval$y</code>. Mit <code>dnn = c("pred", "true")</code> beschriften wir die Dimensionen der Tabelle.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage basierend auf Threshold</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>eval <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> thres, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Konfusionsmatrix (Base R)</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(eval<span class="sc">$</span>pred, eval<span class="sc">$</span>y, <span class="at">dnn =</span> <span class="fu">c</span>(<span class="st">"pred"</span>, <span class="st">"true"</span>))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Konfusionsmatrix (Base R)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(eval<span class="sc">$</span>pred, eval<span class="sc">$</span>y, <span class="at">dnn =</span> <span class="fu">c</span>(<span class="st">"pred"</span>, <span class="st">"true"</span>))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    true
 pred  0  1
@@ -848,16 +841,9 @@ pred  0  1
 </ul>
 <p>Im folgenden Code Block rechnen wir die Sensitivity und Specificity mit <code>R</code>. Wichtig: das Argument <code>event_level = "second"</code> in den Funktionen <code>sens()</code> und <code>spec()</code> definiert, dass das zweite Faktorlevel die Kategorie ist, die uns hauptsächlich interessiert (also <span class="math inline">\(y_i=1\)</span>).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersage basierend auf Threshold</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>eval <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">factor</span>(y), <span class="at">pred =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&gt;=</span> thres, <span class="dv">1</span>, <span class="dv">0</span>)))</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity (tidymodels)</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>eval <span class="sc">|&gt;</span> </span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">sens</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> pred, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity (tidymodels)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>eval <span class="sc">|&gt;</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">sens</span>(<span class="at">truth =</span> y, <span class="at">estimate =</span> pred, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
@@ -970,7 +956,7 @@ Abbildung&nbsp;4.3: Wie verändern sich Accuracy, Sensitivity und Specificity, w
 <ol type="1">
 <li>Für jeden möglichen Threshold, z.B. <span class="math inline">\(\{0, 0.01, 0.02, 0.03, \ldots, 0.98, 0.99, 1.0\}\)</span>, wird sowohl die Sensitivity als auch die Specificity berechnet.</li>
 <li>Dann sortieren wir die Sensitivity-Specificity Paare nach aufsteigender Sensitivity.</li>
-<li>Zum Schluss plotten wir die sortierten Punkte als Kurve. Damit der Plot besser interpretierbar ist, plotten wir auf der x-Achse <span class="math inline">\(1 - \text{Specificity}\)</span>, was nichts anderes als die False Positive Rate ist.</li>
+<li>Zum Schluss plotten wir die sortierten Punkte als Kurve. Damit der Plot besser interpretierbar ist, plotten wir auf der x-Achse <span class="math inline">\(1 - \text{Specificity}\)</span>, was nichts anderes als die <em>False Positive Rate</em> ist.</li>
 </ol>
 <p>Hier der <code>tidymodels</code> Code dazu:</p>
 <div class="cell">
@@ -1045,7 +1031,7 @@ Abbildung&nbsp;4.3: Wie verändern sich Accuracy, Sensitivity und Specificity, w
 <div id="fig-confusionmat" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-confusionmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/Konfusionsmatrix_Imbalance.png" class="img-fluid figure-img" style="width:50.0%">
+<img src="images/Konfusionsmatrix_Imbalance.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusionmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Abbildung&nbsp;4.4: Konfusionsmatrix für unser Beispiel.
