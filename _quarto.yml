@@ -6,7 +6,7 @@ book:
   author: "Martin Sterchi"
   date: "02.02.2026"
   search: true
-  cover-image: cover.png
+  cover-image: images/cover.jpg
   page-footer: 
     left: "Copyright 2026, Martin Sterchi"
     right:
