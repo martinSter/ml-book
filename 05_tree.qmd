@@ -2,9 +2,9 @@
 
 Wir lernen hier nun sogenannte Entscheidungsbäume (engl. *Decision Trees*) kennen. Entscheidungsbäume gehören zur Klasse der *nicht-parametrischen* Machine Learning Modelle (wie KNN), da die Anzahl Parameter des Modells nicht von vornherein klar ist und erst nach dem Modelltraining feststeht.
 
-Entscheidungsbäume können sowohl für Regressions- als auch für Klassifikationsprobleme angewendet werden. Dementsprechend werden die spezifischen Modelle **Regression Tree** bzw. **Classification Tree** genannt. Wir werden uns hier ausführlich mit Regressionsbäumen beschäftigen und dann sehen, dass Klassifikationsbäume lediglich eine andere Kostenfunktion optimieren, aber sonst genau gleich funktionieren.
+Entscheidungsbäume können sowohl für Regressions- als auch für Klassifikationsprobleme angewendet werden. Dementsprechend werden die spezifischen Modelle Regressionsbaum bzw. Klassifikationsbaum genannt. Wir werden uns hier ausführlich mit Regressionsbäumen beschäftigen und dann sehen, dass Klassifikationsbäume lediglich eine andere Kostenfunktion optimieren, aber sonst genau gleich funktionieren.
 
-Entscheidungsbäume sind in der Praxis sehr beliebt, vorausgesetzt es geht ausschliesslich um die **Interpretierbarkeit**: wir werden sehen, dass Entscheidungsbäume sehr einfach und ansprechend visualisiert werden können. Wenn es allerdings darum geht, möglichst gute Vorhersagen zu machen, dann werden in der Praxis kaum Entscheidungsbäume angewendet, weil sie selten zu den am besten performenden Modellen gehören. Wir werden aber später im Modul sehen, dass in der Praxis gut performende Modelle (sogenannte *Ensemble* Methoden, siehe [Kapitel @sec-ensemble]) oft auf individuellen Entscheidungsbäumen aufbauen.
+Entscheidungsbäume sind in der Praxis sehr beliebt, vorausgesetzt es geht ausschliesslich um die **Interpretierbarkeit**: wir werden sehen, dass Entscheidungsbäume sehr einfach und ansprechend visualisiert werden können. Wenn es allerdings darum geht, möglichst gute Vorhersagen zu machen, dann werden in der Praxis kaum Entscheidungsbäume angewendet, weil sie selten zu den am besten performenden Modellen gehören. Entscheidungsbäume gelten als **instabile Modelle**, d.h., sie ändern sich teilweise stark, wenn sich die Trainingsdaten verändern. Bäume haben also in der Regel hohe Varianz und wenig Bias (Bias-Variance Tradeoff). Wir werden aber in @sec-ensemble sehen, dass in der Praxis gut performende Modelle (sogenannte *Ensemble* Methoden) auf individuellen Entscheidungsbäumen aufbauen.
 
 Um eine erste Intuition aufzubauen, schauen wir uns in folgender Abbildung den visuellen Unterschied zwischen dem Linearen Regressionsmodell (@sec-linreg) und einem Entscheidungsbaum für das **Regressionsproblem** mit einer Input-Variable $x_i$ an:
 
@@ -29,18 +29,18 @@ pred_lin <- predict(model_lin, new)
 # 2 plots side by side with smaller margins
 par(mfrow = c(1,2), mar = c(3,3,2,1), mgp = c(2,0.7,0), pty = "s", cex = 1.4, cex.lab = 1.2, cex.axis = 1.2, cex.main = 1.3)
 # Regression tree plot
-plot(x, y, col = rgb(0, 0, 1, 0.4), pch = 16, xlab = "x", ylab = "y", main = "Regression Tree")
+plot(x, y, col = "steelblue", pch = 16, xlab = "x", ylab = "y", main = "Regression Tree")
 lines(new$x, pred_tree, col = "rosybrown3", lwd = 3)
 # Linear regression plot
 plot(x, y, col = rgb(0, 0, 1, 0.4), pch = 16, xlab = "x", ylab = "y", main = "Linear Regression")
 lines(new$x, pred_lin, col = "rosybrown3", lwd = 3)
 ```
 
-Wie den Streudiagrammen entnommen werden kann, ist der wahre Zusammenhang zwischen dem Input $x_i$ und der Zielvariable $y_i$  hier stark nicht-linear. Der Fit des linearen Regressionsmodells (rechter Plot) ist sehr schlecht, während ein Regressionsbaum zu einem relativ guten Fit führt (linker Plot). Wir können davon bereits ableiten, dass Entscheidungsbäume *flexibler* sind als das lineare Regressionsmodell. Dementsprechend wird die Gefahr des **Overfittings** bei Entscheidungsbäumen auch grösser sein als beim linearen Regressionsmodell.
+Wie den Streudiagrammen entnommen werden kann, ist der wahre Zusammenhang zwischen dem Input $x_i$ und der Outputvariable $y_i$  hier stark nicht-linear. Der Fit des linearen Regressionsmodells (rechter Plot) ist sehr schlecht, während ein Regressionsbaum zu einem relativ guten Fit führt (linker Plot). Wir können davon bereits ableiten, dass Entscheidungsbäume *flexibler* sind als das lineare Regressionsmodell. Dementsprechend wird die Gefahr des **Overfittings** bei Entscheidungsbäumen auch grösser sein als beim linearen Regressionsmodell.
 
 Dieses Kapitel ist teilweise inspiriert durch [@islr, Kapitel 8] und [@Geron, Kapitel 6].
 
-## Regressionsbaum
+## Regressionsbäume
 
 Wir widmen uns in einem ersten Schritt kurz der "Anatomie" von Entscheidungsbäumen. Danach überlegen wir uns, wie ein trainierter Entscheidungsbaum gelesen werden muss, so dass wir verstehen, wie das Modell Vorhersagen macht. In einem dritten Abschnitt befassen wir uns mit dem Modelltraining. Zu guter Letzt schauen wir uns noch kurz die mathematische Modellspezifikation an.
 
@@ -50,7 +50,7 @@ Warum spricht man bei diesem Modell überhaupt von Bäumen? Weil die Visualisier
 
 Wir haben einen obersten Knoten, der **Root Node** genannt wird. Die inneren Knoten, nach denen weitere Splits folgen, werden **Internal Nodes** genannt. Die untersten Knoten, nach denen keine weiteren Splits folgen, werden **Leaf Nodes** genannt. Die Nodes sind durch sogenannte **Branches** verknüpft. Die **Tiefe** eines Baums entspricht der Anzahl von Ebenen, auf denen Splits durchgeführt werden.
 
-![Anatomie eines Entscheidungsbaums. Das Modell hier versucht die Mieten von Schweizer Wohnungen anhand des ökonomischen Alters einer Wohnung (`econage`) und der Fläche (`area`) vorherzusagen.](images/AnatomieTree.png){width=90% #fig-treeanatomy}
+![Anatomie eines Entscheidungsbaums. Das Modell hier versucht die Mieten von Schweizer Wohnungen anhand des ökonomischen Alters einer Wohnung (`econage`) und der Fläche (`area`) vorherzusagen.](images/AnatomieTree.png){width=100% #fig-treeanatomy}
 
 Doch was repräsentiert dieser Baum eigentlich? Der Baum repräsentiert eine Sequenz von **Splitting-Regeln** basierend auf den Input-Variablen. Wir können eine gegebene Beobachtung $\mathbf{x}_i$ vom Root Node aus durch den Baum "schicken". Bei jedem Node im Baum wird die Beobachtung basierend auf dem konkreten Input-Variablenwert entweder links oder rechts runtergeschickt. So endet die Beobachtung irgendwann in einem Leaf Node.
 
@@ -58,7 +58,7 @@ Etwas mathematischer ausgedrückt: der Baum repräsentiert eine **Segmentierung*
 
 ### Wie liest man einen Baum?
 
-Wir verwenden hier in der Folge den `housingrents` Datensatz, der $n = 152$ Beobachtungen zu Schweizer Wohnungen enthält. Die Zielvariable ist die Miete (`rent`). Die zwei wichtigsten Input-Variablen sind die Fläche einer Wohnung (`area`) sowie das ökonomische Alter einer Wohnung (`econage`). Eine weitere Input-Variable ist `nre`, dabei handelt es sich um eine binäre kategorische Variable, die den Wert 1 annimmt, falls eine Wohnung der Immobilienfirme NRE gehört und sonst 0. Der Datensatz ist im Dataframe `df`. Hier sind die ersten 6 Zeilen im Datensatz:
+Wir verwenden hier in der Folge den `housingrents` Datensatz, der $n = 152$ Beobachtungen zu Schweizer Wohnungen enthält. Die Outputvariable ist die Miete (`rent`). Die zwei wichtigsten Input-Variablen sind die Fläche einer Wohnung (`area`) sowie das ökonomische Alter einer Wohnung (`econage`). Eine weitere Input-Variable ist `nre`, dabei handelt es sich um eine binäre kategorische Variable, die den Wert 1 annimmt, falls eine Wohnung der Immobilienfirme NRE gehört und sonst 0. Der Datensatz ist im Dataframe `df`. Hier sind die ersten 6 Zeilen im Datensatz:
 
 ```{r, echo=FALSE}
 df <- read.csv("data/housingrents.csv", sep = ";")
@@ -68,27 +68,27 @@ df <- read.csv("data/housingrents.csv", sep = ";")
 head(df)
 ```
 
-@fig-firstsplit (links) zeigt den Root Node sowie den ersten Split des Baums, der resultiert, wenn ein Regressionsbaum auf den `housingrents` Daten angewendet wird. Der Root Node enthält zwei Zahlen, einerseits die mittlere Miete über den ganzen Trainingsdatensatz (CHF 1240) und andererseits den Anteil von Trainingsbeobachtungen im Root Node. Dieser Anteil ist vor dem ersten Split noch 100%.
+Die @fig-firstsplit (links) zeigt den Root Node sowie den ersten Split des Baums, der resultiert, wenn ein Regressionsbaum auf den `housingrents` Daten angewendet wird. Der Root Node enthält zwei Zahlen, einerseits die mittlere Miete über den ganzen Trainingsdatensatz (CHF 1240) und andererseits den Anteil von Trainingsbeobachtungen im Root Node. Dieser Anteil ist vor dem ersten Split noch 100%.
 
 Der **erste Split** verwendet die Variable `econage` und den Splitpunkt 25. Alle Wohnungen, die min. 25 Jahre alt sind, gehen dem linken Branch entlang in den linken internen Node. Insgesamt landen so 64% der Trainingsbeobachtungen in diesem linken internen Node. Die durchschnittliche Miete für diese Beobachtungen beträgt CHF 974. Alle Wohnungen, die jünger als 25 Jahre alt sind, gehen dem rechten Branch entlang in den rechten internen Node. Das sind dementsprechend die restlichen 36% der Beobachtungen und deren mittlere Miete beträgt CHF 1724.
 
 **Wichtig**: dieser erste Split **segmentiert** den Input Space nun in **zwei Regionen** (Rechtecke), wie im rechten Teil der Abbildung dargestellt. Das wichtigste Take-Away hier ist, dass ein Split im Baum einer Segmentierung des Input Spaces entspricht! Weil wir hier nur die Variablen `econage` und `area` betrachten, können wir diesen Input Space ohne Probleme in 2D visualisieren.
 
-![Der Baum nach dem ersten Split mit dazugehörender Segmentierung des Input Spaces (rechts).](images/FirstSplit.PNG){width=90% #fig-firstsplit}
+![Der Baum nach dem ersten Split mit dazugehörender Segmentierung des Input Spaces (rechts).](images/FirstSplit.PNG){width=100% #fig-firstsplit}
 
 Der **zweite Split** geschieht beim linken internen Node (@fig-secondsplit). Dort splitten wir die 64% der Beobachtungen basierend auf der Input-Variable `area` in zwei Untergruppen. Der Splitpunkt liegt bei 63 Quadratmeter. Der linke Leaf Node enthält nun nur noch 25% der Beobachtungen und deren mittlere Miete beträgt CHF 690. Das macht Sinn, denn es handelt sich dabei um alte (25 Jahre oder älter) und kleine Wohnungen (kleiner als 63 Quadratmeter). Der rechte Leaf Node enthält 39% aller Beobachtungen und deren Mittelwert beträgt CHF 1154. Es handelt sich dabei um alte, aber relativ grosse Wohnungen.
 
 Im rechten Teil der Abbildung sehen wir, dass dieser zweite Split den oberen Teil des Input Spaces weiter segmentiert in zwei Subregionen.
 
-![Der Baum nach dem zweiten Split mit dazugehörender Segmentierung des Input Spaces (rechts).](images/SecondSplit.PNG){width=90% #fig-secondsplit}
+![Der Baum nach dem zweiten Split mit dazugehörender Segmentierung des Input Spaces (rechts).](images/SecondSplit.PNG){width=100% #fig-secondsplit}
 
 Der **dritte Split** geschieht im rechten internen Node und basiert ebenfalls auf der Input-Variable `area` (@fig-thirdsplit). Der Splitpunkt liegt bei 139 Quadratmeter. Dieser Split teilt also die eher neuen Wohnungen (erster Split) weiter auf in sehr grosse (grösser als 139 Quadratmeter) und weniger grosse (kleiner als 139 Quadratmeter) Wohnungen. Die mittlere Miete für die 31% der Beobachtungen im linken Leaf Node beträgt CHF 1599, während die mittlere Miete für die 5% der Beobachtungen im rechten Leaf Node CHF 2561 beträgt. Der dritte Split segmentiert das untere Reckteck im Input Space weiter.
 
-![Der Baum nach dem dritten Split mit dazugehörender Segmentierung des Input Spaces (rechts).](images/ThirdSplit.PNG){width=90% #fig-thirdsplit}
+![Der Baum nach dem dritten Split mit dazugehörender Segmentierung des Input Spaces (rechts).](images/ThirdSplit.PNG){width=100% #fig-thirdsplit}
 
 Der finale Baum sowie die finale Segmentierung des Input Spaces sehen wie folgt aus:
 
-![Der fertig trainierte Baum mit dazugehörender Segmentierung des Input Spaces (rechts).](images/FinalTree.PNG){width=90% #fig-finaltree}
+![Der fertig trainierte Baum mit dazugehörender Segmentierung des Input Spaces (rechts).](images/FinalTree.PNG){width=100% #fig-finaltree}
 
 Wir sehen, dass die drei Splits zu vier Leaf Nodes führen. 
 
@@ -128,7 +128,7 @@ $$
 J = \frac{1}{n} \sum_{k=1}^K \sum_{i \in R_k} \left(y_i - \hat{y}_{R_k}\right)^2
 $$
 
-Die äussere Summe summiert über die Regionen $R_1, R_2, \dots, R_K$ und die innere Summe summiert *für jede Region* über die quadrierten Distanzen zwischen beobachteten und vorhergesagten Werten der Zielvariable. Ich hoffe, Sie sehen, dass es sich wirlich nur um den MSE handelt, einfach etwas speziell geschrieben wegen den Entscheidungsregionen des Baums.
+Die äussere Summe summiert über die Regionen $R_1, R_2, \dots, R_K$ und die innere Summe summiert *für jede Region* über die quadrierten Distanzen zwischen beobachteten und vorhergesagten Werten der Outputvariable. Ich hoffe, Sie sehen, dass es sich wirlich nur um den MSE handelt, einfach etwas speziell geschrieben wegen den Entscheidungsregionen des Baums.
 
 Leider ist es hier nicht möglich dieses Minimierungsproblem genau (also analytisch) zu lösen, denn es gibt zu viele verschiedene (genauer gesagt: unendlich viele) Möglichkeiten, wie die Recktecke im Input Space angeordnet und kombiniert werden können.
 
@@ -276,7 +276,7 @@ $$
 f(\mathbf{x}_i) = \sum_{k=1}^K \hat{y}_{R_k} \cdot \mathbb{1}_{\{\mathbf{x}_i \in R_k\}}
 $$
 
-Wir summieren also über die Entscheidungsregionen $R_k$. $\hat{y}_{R_k}$ ist der Durchschnitt über die Werte der Zielvariable der Trainingsbeobachtungen in Region $k$. Die Funktion $\mathbb{1}_{\{\mathbf{x}_i \in R_k\}}$ ist die sogenannte **Indikatorfunktion**, die nur genau dann den Wert 1 annimmt, wenn die Beobachtung $\mathbf{x}_i$ in Region $R_k$ liegt.
+Wir summieren also über die Entscheidungsregionen $R_k$. $\hat{y}_{R_k}$ ist der Durchschnitt über die Werte der Outputvariable der Trainingsbeobachtungen in Region $k$. Die Funktion $\mathbb{1}_{\{\mathbf{x}_i \in R_k\}}$ ist die sogenannte **Indikatorfunktion**, die nur genau dann den Wert 1 annimmt, wenn die Beobachtung $\mathbf{x}_i$ in Region $R_k$ liegt.
 
 Beispiel: wir haben drei Regionen $R_1, R_2, R_3$ mit entsprechenden Mittelwerten $\hat{y}_{R_1}=500$, $\hat{y}_{R_2}=750$ und $\hat{y}_{R_3}=1000$. Nun haben wir eine neue Beobachtung $\mathbf{x}_i$, die gemäss unserem Baum der Region 2 angehört. Der Funktionswert ist dementsprechend:
 
@@ -284,253 +284,220 @@ $$
 \hat{f}(\mathbf{x}_i) = 500 \cdot 0 + 750 \cdot 1 + 1000 \cdot 0 = 750
 $$
 
-## Classification Trees
+## Klassifikationsbäume
 
-Classification Trees funktionieren vom Prinzip her fast gleich wie die Regression Trees. Auch hier versuchen wir den Input Space so zu segmentieren, dass die resultierenden Regionen die kategorische Zielvariable möglichst gut klassifizieren. Es gibt jedoch **zwei zentrale Unterschiede** zum Regressionsproblem:
+Klassifikationsbäume funktionieren vom Prinzip her fast gleich wie Regressionsbäume. Auch hier versuchen wir den Input Space (mit rechteckigen Formen) so zu segmentieren, dass die resultierenden Regionen die kategorische Outputvariable möglichst gut klassifizieren. Es gibt jedoch **zwei zentrale Unterschiede** im Vergleich zum Regressionsproblem:
 
-* Die **Vorhersage** in einer Region $R_j$ entspricht nicht wie beim Regression Tree dem Mittelwert über die Zielvariable, sondern der **am häufigsten vorkommenden Kategorie** in Region $R_j$.
-* Der Trainingsalgorithmus minimiert nicht wie beim Regression Tree die Summe der quadrierten Residuen (SQR), sondern den **Gini Index**. Der Gini Index ist ein Mass für die "Reinheit" in einem Node. Warum ist das ein gutes Gütekriterium? Ein perfekter Baum hat in jedem Leaf Node nur noch Beobachtungen einer Kategorie. In dem Fall ist die "Reinheit" maximal.
+* Die **Vorhersage** in einer Region $R_k$ entspricht nicht wie beim Regressionsbaum dem Mittelwert über die Outputvariable, sondern der **am häufigsten vorkommenden Output-Kategorie** in der Entscheidungsregion $R_k$.
+* Der Trainingsalgorithmus minimiert nicht den MAE, sondern den **Gini Index**. Der Gini Index ist ein Mass für die "Reinheit" in einem Leaf Node. Warum ist das ein gutes Gütekriterium? Ein perfekter Baum hat in jedem Leaf Node nur noch Beobachtungen einer Kategorie. In dem Fall ist die "Reinheit" maximal. Schauen wir uns doch kurz die Formel für die Berechnung des Gini Indexes (für die $k$-te Entscheidungsregion $R_k$) an:
+  
+  $$
+  G_k = \sum_{l=1}^L \hat{p}_{kl} \cdot (1-\hat{p}_{kl})
+  $$
+  $\hat{p}_{kl}$ beschreibt hier den Anteil der $l$-ten Output-Kategorie in der $k$-ten Entscheidungsregion $R_k$. Die Gesamtkostenfunktion ist dann einfach die Summe über die Gini Indizes in den verschiedenen Regionen, also $\sum_k G_k$.
 
-Schauen wir uns doch kurz die Formel für die Berechnung des Gini Index (für die $j$-te Region $R_j$) an:
+#### Fragen {.unnumbered}
+
+* Wir haben ein binäres Klassifikationsproblem und wollen vorhersagen, ob jemand zahlungsunfähig wird oder nicht. In einer Entscheidungsregion des Baums haben wir 20 Beobachtungen, davon 15, die nicht zahlungsunfähig werden. Was ist der Wert des Gini Indexes in dieser Region?
+* Welchen Wert hat der Gini Index, wenn eine Entscheidungsregion nur noch Beobachtungen einer Kategorie enthält?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Die Lösung für die erste Frage rechnet sich wie folgt:
+
+\begin{align}
+G_k &= \sum_{l=1}^L \hat{p}_{kl} \cdot (1-\hat{p}_{kl})\\ 
+&= \frac{5}{20} \cdot \left(1-\frac{5}{20}\right) + \frac{15}{20} \cdot \left(1-\frac{15}{20}\right)\\
+&= 2 \cdot \frac{5}{20} \cdot \frac{15}{20}\\ 
+&= \frac{150}{400} = 0.375
+\end{align}
+
+Wenn eine Entscheidungsregion nur noch Beobachtungen einer Kategorie enthält, dann ist deren Anteil $\hat{p}=1$. Daraus ergibt sich folgende Gini Index Berechnung: $1 \cdot (1 - 1) + 0 \cdot (1 - 0) = 0$. Das ist auch gut so, denn wir wollen den Gini Index als eine Kostenfunktion interpretieren. Wir haben nur dann Kosten von 0, wenn eine Entscheidungsregion nur noch Beobachtungen einer Output-Kategorie enthält.
+:::
+
+::: {.callout-caution collapse="true"}
+## Entropie (optional)
+
+Eine Alternative zum Gini Index als Kostenfunktion ist die **Entropie**. Für die $k$-te Entscheidungsregion $R_k$ rechnet sie sich wie folgt:
 
 $$
-G_j = \sum_{k=1}^K \hat{p}_{jk} \cdot (1-\hat{p}_{jk})
+H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 $$
+Die Unterschiede zwischen dem Gini Index und Entropie als Kostenfunktion sind in der Praxis meist nicht von grosser Relevanz, aber es kann sich trotzdem lohnen, beide auszuprobieren und mittels Cross-Validation zu überprüfen, welche davon besser funktioniert.
+:::
 
-$\hat{p}_{jk}$ beschreibt hier den Anteil der $k$-ten Kategorie in der $j$-ten Region $R_j$. Die Gesamtkostenfunktion ist dann einfach die Summe über die Gini Indizes in den verschiedenen Regionen, also $\sum_j G_j$.
+Drei wichtige (letzte) Punkte gilt es noch zu erwähnen:
 
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "gini1_mc", echo = FALSE} -->
-<!-- question("Wir haben ein binäres Klassifikationsproblem und wollen vorhersagen, ob jemand zahlungsunfähig wird oder nicht. In einer Region des Baums haben wir 20 Beobachtungen, davon 15, die nicht zahlungsunfähig werden. Was ist der Wert des Gini Index in dieser Region?", -->
-<!--   answer("0.375", correct = TRUE), -->
-<!--   answer("1.0", correct = FALSE), -->
-<!--   answer("0.0", correct = FALSE), -->
-<!--   answer("0.625", correct = FALSE), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-
-<!-- ```{r, "gini2_mc", echo = FALSE} -->
-<!-- question("Welchen Wert hat der Gini Index, wenn eine Region nur noch Beobachtungen einer Kategorie enthält?", -->
-<!--   answer("0.0", correct = TRUE), -->
-<!--   answer("1.0", correct = FALSE), -->
-<!--   answer("0.5", correct = FALSE), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
-
-Drei wichtige (letzte) Punkte gibt es noch zu erwähnen:
-
-* Wie bei der logistischen Regression gesehen, geben uns die meisten Klassifkationsmodelle eine **Wahrscheinlichkeit** zurück, dass die Zielvariable $y_i$ der ersten Kategorie angehört ($y_i=1$). Das ist auch für Classification Trees möglich. Anstelle der am häufigsten vorkommenden Kategorie können wir uns vom Baum auch die **relativen Anteile** der Kategorien in einer Region (bzw. einem Leaf Node) ausgeben lassen. Diese Anteil können als Wahrscheinlichkeiten für die verschiedenen Kategorien interpretiert werden.
-* Ein Classification Tree ist nicht auf eine binäre Zielvariable limitiert und kann problemlos auf **mehrkategoriale Zielvariablen** angewendet werden.
-* **Kategoriale Input-Variablen** sind übrigens auch problemlos in Bäumen verwendbar. Beispiel: wir haben eine Input-Variable *Augenfarbe* mit drei möglichen Kategorien "blau", "grün" und "braun". Der Trainingsalgorithmus testet in diesem Fall alle möglichen Splits:
-    * "blau" vs. "grün"/"braun"
-    * "grün" vs. "blau"/"braun"
-    * "braun" vs. "blau"/"grün".
-
-
-
-
-
-## Vor- und Nachteile
-
-<!-- Entscheidungsbäume haben viele Vorteile, aber leider auch einige gewichtige Nachteile, weshalb sie in der Praxis nicht so häufig angewendet werden. -->
-
-<!-- **Vorteile**: -->
-
-<!-- * Entscheidungsbäume sind intuitiv einfach verständlich und gelten darum nicht als Black-Box Modelle. -->
-<!-- * Sie sind sehr gut visualisierbar. Auch Leute ohne Background in ML können einen Entscheidungsbaum mit den Splitting-Regeln intuitiv verstehen. -->
-<!-- * Für kategorische Input-Variablen ist kein One-Hot Encoding notwendig. In R kann man die entsprechenden Variablen als `Factors` dem Modell übergeben. -->
-<!-- * Im Buch ISLR (p. 339) wird zudem erwähnt, dass ein Decision Tree, der sequenziell **Entweder-Oder Entscheidungen** macht, unter Umständen menschliches Entscheidungsverhalten besser widerspiegelt als andere ML-Modelle. -->
-
-<!-- **Nachteile**: -->
-
-<!-- * Entscheidungsbäume gelten als instabile Modelle, d.h., wenn nur eine Trainingsbeobachtung entfernt wird, dann resultiert unter Umständen ein anderer Baum. Bäume haben also in der Regel hohe Varianz und wenig Bias (Bias-Variance Tradeoff) und sind darum in der Praxis meist nicht die besten Modelle. -->
-<!-- * Ein Decision Tree kann insbesondere auch bei Rotationen des Trainingsdatensatzes instabil sein. Folgende Abbildung (Quelle: HOML, p. 206) illustriert dieses Problem. Links ist die bestmögliche Decision Boundary in einem rechten Winkel zur x-Achse. In diesem Fall funktioniert der Decision Tree gut. Rechts ist der selbe Datensatz rotiert, so dass der Decision Tree ein unnötig komplexes Modell schätzen muss, denn die Splits müssen immer **parallel zu einer der Achsen** im Input Space verlaufen. Ein logistisches Modell würde hier die Daten perfekt mit einer Geraden trennen. -->
+* Wie bei der logistischen Regression gesehen (@sec-linclass), geben uns die meisten Klassifkationsmodelle eine **Wahrscheinlichkeit** zurück, dass die Outputvariable $y_i$ der ersten Kategorie angehört ($y_i=1$). Das ist auch für Klassifikationsbäume möglich. Anstelle der am häufigsten vorkommenden Kategorie (*hard prediction*) können wir uns vom Baum auch die **relativen Anteile** der Kategorien in einer Entscheidungsregion (bzw. einem Leaf Node) ausgeben lassen (*soft predictions*). Diese Anteil können als Wahrscheinlichkeiten für die verschiedenen Kategorien interpretiert werden.
+* Ein Klassifikationsbaum ist nicht auf eine binäre Outputvariablen limitiert und kann problemlos auf **mehrklassige Outputvariablen** angewendet werden.
+* **Kategoriale Input-Variablen** sind übrigens auch problemlos in Bäumen verwendbar. Beispiel: wir haben eine Input-Variable *Augenfarbe* mit drei möglichen Kategorien "blau", "grün" und "braun". Der Trainingsalgorithmus testet in diesem Fall alle möglichen Splits, hier sind es folgende drei:
+    * "blau" vs. "grün" oder "braun"
+    * "grün" vs. "blau" oder "braun"
+    * "braun" vs. "blau" oder "grün".
 
 
 ## Entscheidungsbäume in R
 
-<!-- Wir illustrieren die Anwendung von Entscheidungsbäume anhand des **Heart** Datensatzes, der auch im Buch ISLR (p. 336 - 338) verwendet wird. Der Datensatz enthält diverse Angaben zu 303 Patientinnen und Patienten, die mit Herzproblemen in ein Spital eingeliefert wurden. Unser Ziel ist es, aufgrund von verschiedenen Attributen vorherzusagen, ob eine Patientin oder ein Patient eine Herzerkrankung hat. Der Datensatz kann vom [UC Irvine ML Repository](https://archive.ics.uci.edu/ml/datasets/heart+disease) heruntergeladen werden. -->
+Wir illustrieren die Anwendung von Entscheidungsbäumen anhand des **Heart** Datensatzes, der auch in [@islr, Kapitel 8] verwendet wird und sich sehr gut eignet. Der ursprüngliche Datensatz kann vom [UC Irvine ML Repository](https://archive.ics.uci.edu/ml/datasets/heart+disease) heruntergeladen werden. Eine vorverarbeitete Version des Datensatzes, die wir unten verwenden, kann [hier](data/heart.rds) heruntergeladen werden.
 
-<!-- Der Datensatz umfasst folgende Variablen: -->
+Der Datensatz enthält diverse Angaben zu 303 Patientinnen und Patienten, die mit Herzproblemen in ein Spital eingeliefert wurden. Unser Ziel ist es, aufgrund von verschiedenen Attributen vorherzusagen, ob eine Patientin oder ein Patient eine Herzerkrankung hat.
 
-<!-- * `age`: Alter -->
-<!-- * `sex`: Geschlecht -->
-<!-- * `cp`: Art der Brustkorbschmerzen, 4 Kategorien -->
-<!-- * `trestbps`: systolischer Blutdruck -->
-<!-- * `chol`: Cholesterin-Wert im Blut -->
-<!-- * `fbs`: Blutzuckerwert (gemessen am Morgen auf nüchternen Magen) grösser als 120 mg/dl? (yes / no) -->
-<!-- * `restecg`: EKG Resultate, 3 Kategorien -->
-<!-- * `thalach`: Maximale erreichte Herzfrequenz -->
-<!-- * `exang`: Durch Sport ausgelöstes Angina (reduzierte Blutzufuhr zum Herz)? (yes / no) -->
-<!-- * `oldpeak`: Parameter der EKG Messung -->
-<!-- * `slope`: Parameter der EKG Messung, 3 Kategorien -->
-<!-- * `ca`: Anzahl Hauptarterien -->
-<!-- * `thal`: Thallium Stress Test Resultate (wie gut fliesst Blut zum Herz?), 3 Kategorien -->
-<!-- * `hd`: Herzerkrankung? (yes / no) - Zielvariable -->
+```{r, echo=FALSE}
+heart <- readRDS("data/heart.rds")
+```
 
-<!-- Der Datensatz ist bereits auf RAPP geladen und kann unter `heart` aufgerufen werden. Schauen wir uns als erstes mal die ersten paar Zeilen des Dataframes an: -->
+Der Datensatz umfasst folgende Variablen:
 
-<!-- ```{r block1, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Erste 10 Wörter in vocab -->
-<!-- head(heart) -->
-<!-- ``` -->
+* `age`: Alter
+* `sex`: Geschlecht
+* `cp`: Art der Brustkorbschmerzen, 4 Kategorien
+* `trestbps`: systolischer Blutdruck
+* `chol`: Cholesterin-Wert im Blut
+* `fbs`: Blutzuckerwert (gemessen am Morgen auf nüchternen Magen) grösser als 120 mg/dl? (yes / no)
+* `restecg`: EKG Resultate, 3 Kategorien
+* `thalach`: Maximale erreichte Herzfrequenz
+* `exang`: Durch Sport ausgelöstes Angina (reduzierte Blutzufuhr zum Herz)? (yes / no)
+* `oldpeak`: Parameter der EKG Messung
+* `slope`: Parameter der EKG Messung, 3 Kategorien
+* `ca`: Anzahl Hauptarterien
+* `thal`: Thallium Stress Test Resultate (wie gut fliesst Blut zum Herz?), 3 Kategorien
+* `hd`: Herzerkrankung? (yes / no) - Outputvariable
 
-<!-- Als nächstes überprüfen wir kurz, ob der Dataframe fehlende Werte enthält: -->
+Laden wir als erstes die nötigen R-Packages.
 
-<!-- ```{r block1_mv, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Fehlende Werte -->
-<!-- sapply(heart, function(x) sum(is.na(x))) -->
-<!-- ``` -->
+```{r, output=FALSE}
+library(rpart.plot)
+library(tidyverse)
+library(tidymodels)
+```
 
-<!-- Wir sehen, dass die Variable `ca` 4 fehlende Werte und die Variable `thal` zwei fehlende Werte enthält. Ein weiterer Vorteil von Entscheidungsbäume ist, dass diese Methode gut mit fehlenden Werten umgehen kann. Was effektiv passiert, ist folgendes: wenn in einem Split eine Variable verwendet wird, welche fehlende Werte enthält, dann wird für die Beobachtungen mit fehlenden Werten eine andere Variable (sogenanntes **Surrogat**) für den Split verwendet, welche möglichst ähnliche Entscheidungen trifft wie die Splitvariable. -->
+Als nächstes überprüfen wir kurz, ob der Dataframe fehlende Werte enthält:
 
-<!-- Als nächstes stellen wir sicher, dass wir keine starke Imbalance in der Zielvariable haben: -->
+```{r}
+# Fehlende Werte?
+sapply(heart, function(x) sum(is.na(x)))
+```
 
-<!-- ```{r block2, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Ist der Datensatz balanced? -->
-<!-- heart %>%  -->
-<!--   count(hd) %>%  -->
-<!--   mutate(prop = n / sum(n)) -->
-<!-- ``` -->
+Wir sehen, dass die Variable `ca` 4 fehlende Werte und die Variable `thal` zwei fehlende Werte enthält. Ein weiterer Vorteil von Entscheidungsbäumen ist, dass sie gut mit fehlenden Werten umgehen können. Was effektiv passiert, ist folgendes: wenn in einem Split eine Variable verwendet wird, welche fehlende Werte enthält, dann wird für die Beobachtungen mit fehlenden Werten eine andere Variable (sogenanntes **Surrogat**) für den Split verwendet, welche möglichst ähnliche Entscheidungen trifft wie die eigentliche Splitvariable.
 
-<!-- Das sieht gut aus. Ein Verhältnis von 54% Nein (keine Herzerkrankungen) zu 46% Ja (Herzerkrankungen) in der Zielvariable ist akzeptabel. -->
+Als nächstes stellen wir sicher, dass wir keine starke **Imbalance** in der Outputvariable haben:
 
-<!-- Wir machen hier ausnahmsweise **keinen Train-Test Split**, da es hier lediglich darum geht, die Anwendung von Entscheidungsbäume zu demonstrieren. In einem richtigen ML-Projekt würden wir allerdings spätestens hier einen Train-Test Split vollziehen. -->
+```{r}
+# Ist der Datensatz balanced?
+heart |>
+  count(hd) |>
+  mutate(prop = n / sum(n))
+```
 
-<!-- Stattdessen erstellen wir 5 Folds, um die optimalen Hyperparameter mit 5-Fold Cross-Validation zu finden. -->
+Das sieht gut aus. Ein Verhältnis von 54% Nein (keine Herzerkrankungen) zu 46% Ja (Herzerkrankungen) in der Outputvariable ist akzeptabel.
 
-<!-- ```{r block3, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Seed für Reproduzierbarkeit -->
-<!-- set.seed(123) -->
+Wir machen hier ausnahmsweise **keinen Train-Test Split**, da es hier lediglich darum geht, die Anwendung von Entscheidungsbäumen zu demonstrieren. In einem richtigen ML-Projekt würden wir allerdings spätestens hier einen Train-Test Split vollziehen.
 
-<!-- # 5-Fold CV -->
-<!-- folds <- vfold_cv(heart, v = 5, repeats = 1, strata = hd) -->
-<!-- ``` -->
+Stattdessen erstellen wir 5 Folds, um die optimalen Hyperparameter mit 5-Fold Cross-Validation zu finden.
 
-<!-- Nun spezifizieren wir das Modell mit der Funktion `decision_tree()` aus `tidymodels`. Wir werden hier die Hyperparameter `tree_depth` (Tiefe des Baums) und `min_n` (minimale Anzahl Beobachtungen in einem Node) tunen. Den Hyperparameter `cost_complexity` setzen wir auf 0 (diesen würden wir für das Pruning eines Baums verwenden, das wir uns jedoch im Theorieteil nicht angeschaut haben). Wir spezifizieren ausserdem, dass es sich um ein Klassifikationsproblem handelt und dass wir das R-Package `rpart` für das Fitting verwenden wollen. -->
+```{r}
+# Seed für Reproduzierbarkeit
+set.seed(123)
 
-<!-- ```{r block4, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Spezifikation des Classification Trees -->
-<!-- dt_mod <-  -->
-<!--   decision_tree(tree_depth = tune(), min_n = tune(), cost_complexity = 0) %>% -->
-<!--   set_mode("classification") %>%  -->
-<!--   set_engine("rpart") -->
-<!-- ``` -->
+# 5-Fold CV
+folds <- vfold_cv(heart, v = 5, repeats = 1, strata = hd)
+```
 
-<!-- Im Workflow definieren wir unter anderem die Modellgleichung `hd ~ .`, d.h. die Variable `hd` ist die Zielvariable und alle anderen werden als Input-Variablen verwendet. -->
+Nun spezifizieren wir das Modell mit der Funktion `decision_tree()` aus `tidymodels`. Wir werden hier die Hyperparameter `tree_depth` (Tiefe des Baums) und `min_n` (minimale Anzahl Beobachtungen in einem Node) tunen. Den Hyperparameter `cost_complexity` setzen wir auf 0 (diesen würden wir für das Pruning eines Baums verwenden). Wir spezifizieren ausserdem, dass es sich um ein Klassifikationsproblem handelt und dass wir das R-Package `rpart` für das Fitting verwenden wollen.
 
-<!-- ```{r block5, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Workflow -->
-<!-- dt_workflow <-  -->
-<!--   workflow() %>%  -->
-<!--   add_model(dt_mod) %>%  -->
-<!--   add_formula(hd ~ .) -->
-<!-- ``` -->
+```{r}
+# Spezifikation des Classification Trees
+dt_mod <-
+  decision_tree(tree_depth = tune(), min_n = tune(), cost_complexity = 0) |>
+  set_mode("classification") |>
+  set_engine("rpart")
+```
 
-<!-- Wir erstellen einen Tuning Grid für die beiden Hyperparameter, die wir tunen wollen: -->
+Im Workflow definieren wir unter anderem die Modellgleichung `hd ~ .`, d.h. die Variable `hd` ist die Outputvariable und alle anderen werden als Input-Variablen verwendet.
 
-<!-- ```{r block6, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Tuning Grid -->
-<!-- dt_grid <- expand.grid(tree_depth = seq(1, 20, by = 2), min_n = seq(10, 30, 5)) -->
+```{r}
+# Workflow
+dt_workflow <-
+  workflow() |>
+  add_model(dt_mod) |>
+  add_formula(hd ~ .)
+```
 
-<!-- # Wie sieht Grid aus? -->
-<!-- print(dt_grid) -->
-<!-- ``` -->
+Wir erstellen einen Tuning Grid für die beiden Hyperparameter, die wir tunen wollen:
 
-<!-- Nun sind wir bereit, das Modell zu fitten und das Hyperparameter Tuning durchzuführen. Da der nächste Schritt etwas länger dauert, ist der folgende Code Block nicht interaktiv. Im Hintergrund ist des Resultat des Tunings allerdings bereits als `dt_res` geladen. -->
+```{r}
+# Tuning Grid
+dt_grid <- expand.grid(tree_depth = seq(1, 10, by = 2), min_n = seq(10, 30, 5))
 
-<!-- ```{r block7, eval = FALSE} -->
-<!-- # Tuning / Model Fitting -->
-<!-- dt_res <-  -->
-<!--   dt_workflow %>%  -->
-<!--   tune_grid( -->
-<!--     resamples = folds, -->
-<!--     grid = dt_grid, -->
-<!--     control = control_grid(save_pred = TRUE), -->
-<!--     metrics = metric_set(roc_auc, accuracy)) -->
-<!-- ``` -->
+# Wie sieht Grid aus?
+print(dt_grid)
+```
 
-<!-- Schauen wir uns doch die besten 10 Hyperparameter Werte gemäss ROC AUC Kriterium an: -->
+Nun sind wir bereit, das Modell zu fitten und das Hyperparameter Tuning durchzuführen. Wir verwenden sowohl die Fläche unter der ROC-Kurve als auch die Accuracy, um die Modellgüte zu messen:
 
-<!-- ```{r block8, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Wir sortieren die Hyperparameter Spezifikationen nach ROC AUC -->
-<!-- dt_res %>%  -->
-<!--   show_best(metric = "roc_auc", n = 10) %>%  -->
-<!--   arrange(desc(mean)) -->
-<!-- ``` -->
+```{r}
+# Tuning / Model Fitting
+dt_res <-
+  dt_workflow |>
+  tune_grid(
+    resamples = folds,
+    grid = dt_grid,
+    control = control_grid(save_pred = TRUE, save_workflow = TRUE),
+    metrics = metric_set(roc_auc, accuracy))
+```
 
-<!-- Wir speichern das optimale Modell unter `dt_best`: -->
+Schauen wir uns doch die besten 10 Hyperparameter Werte gemäss ROC AUC Kriterium an:
 
-<!-- ```{r block9, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Wir wählen das beste Modell -->
-<!-- dt_best <-  -->
-<!--   dt_res %>%  -->
-<!--   select_best(metric = "roc_auc") -->
-<!-- ``` -->
+```{r}
+# Wir sortieren die Hyperparameter Spezifikationen nach ROC AUC
+dt_res |>
+  show_best(metric = "roc_auc", n = 10) |>
+  arrange(desc(mean))
+```
 
-<!-- Nun fitten wir den optimalen Decision Tree (`tree_depth = 5` und `min_n = 20`) auf dem ganzen Datensatz, so dass wir den letzten optimalen Fit kriegen: -->
+Nun fitten wir den optimalen Decision Tree (`tree_depth = 5` und `min_n = 20`) auf dem ganzen Datensatz, so dass wir den letzten optimalen Fit kriegen:
 
-<!-- ```{r block10, exercise = TRUE, exercise.lines = 20} -->
-<!-- # Last Fit Spezifikation (optimale Hyperparameter Werte) -->
-<!-- last_dt_mod <- -->
-<!--   decision_tree(tree_depth = 5, min_n = 20, cost_complexity = 0) %>%  -->
-<!--   set_mode("classification") %>%  -->
-<!--   set_engine("rpart") -->
+```{r}
+# Last Fit (auf ganzem Trainingsdatensatz)
+last_dt_fit <- fit_best(dt_res)
+```
 
-<!-- # Workflow anpassen (optimales Modell) -->
-<!-- last_dt_workflow <-  -->
-<!--   dt_workflow %>%  -->
-<!--   update_model(last_dt_mod) -->
+Wir können uns den Last Fit mal ausgeben lassen:
 
-<!-- # Last Fit (auf ganzem Trainingsdatensatz) -->
-<!-- last_dt_fit <- -->
-<!--   last_dt_workflow %>%  -->
-<!--   fit(data = heart) -->
-<!-- ``` -->
+```{r}
+# Last Fit
+last_dt_fit
+```
 
-<!-- Wir können uns den Last Fit mal in die Konsole ausgeben lassen: -->
+Hmm, etwas schwierig da den Überblick zu behalten. Mithilfe des R-Packages `rpart.plot` können wir den finalen Baum plotten, so dass er einfacher lesbar wird:
 
-<!-- ```{r block10_out, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Last Fit -->
-<!-- last_dt_fit -->
-<!-- ``` -->
+```{r, warning=FALSE}
+# Plot des finalen Baums
+last_dt_fit |>
+  extract_fit_engine() |>
+  rpart.plot()
+```
 
-<!-- Mithilfe des R-Packages `rpart.plot` können wir den finalen Baum plotten: -->
+Jeder Knoten im Baum enthält drei Informationen: erstens die Vorhersage, die der Baum in diesem Knoten machen würde, zweitens den relativen Anteil an Beobachtungen mit Herzerkrankung und drittens den gesamten relativen Anteil von Beobachtungen, welche in diesem Knoten landen. Anhand der Anzahl Leaf Nodes sehen wir, dass dieser Baum den Input Space in **13 Entscheidungsregionen** aufteilt.
 
-<!-- ```{r block11, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Plot des finalen Baums -->
-<!-- last_dt_fit %>% -->
-<!--   extract_fit_engine() %>% -->
-<!--   rpart.plot() -->
-<!-- ``` -->
+Nun plotten wir noch die ROC-Kurve für das finale Modell:
 
-<!-- Jeder Knoten im Baum enthält drei Informationen: erstens die Vorhersage, die der Baum in diesem Knoten machen würde; zweitens den relativen Anteil an Beobachtungen mit Herzerkrankung; und drittens den gesamten relativen Anteil von Beobachtungen, welche in diesem Knoten landen. Anhand der Anzahl Leaf Nodes sehen wir, dass dieser Baum den Input Space in **13 Regionen** aufteilt. -->
+```{r}
+# ROC Kurve für finalen Baum
+dt_auc <-augment(last_dt_fit, new_data = heart) |>
+  roc_curve(hd, .pred_yes, event_level = "second")
 
-<!-- Nun plotten wir noch die ROC-Kurve für das finale Modell: -->
+# ROC Kurve
+autoplot(dt_auc)
+```
 
-<!-- ```{r block12, exercise = TRUE, exercise.lines = 10} -->
-<!-- # ROC Kurve für finalen Baum -->
-<!-- dt_auc <-augment(last_dt_fit, new_data = heart) %>% -->
-<!--   roc_curve(hd, .pred_yes, event_level = "second") -->
+Mithilfe der Funktion `predict()` können wir basierend auf dem finalen Baum Vorhersagen für neue Beobachtungen machen. Hier tun wir das der Einfachheit halber für die fünfte Beobachtung im Datensatz `heart`. **Wichtig**: mit `type = "class"` kriegen wir eine *hard prediction* für die Beobachtung, während wir mit `type = "prob"` die *soft prediction* kriegen, also die Anteile von "yes" und "no" im Leaf Node (bzw. der Entscheidungsregion), in dem die fünfte Beobachtung landet.
 
-<!-- # ROC Kurve -->
-<!-- autoplot(dt_auc) -->
-<!-- ``` -->
+```{r}
+# Vorhersagen
+predict(last_dt_fit, new_data = heart[5, ], type = "class")
+predict(last_dt_fit, new_data = heart[5, ], type = "prob")
+```
 
-<!-- Mithilfe der Funktion `predict()` können wir basierend auf dem finalen Baum Vorhersagen für neue Beobachtungen machen. Hier tun wir das der Einfachheit halber für die fünfte Beobachtung im Datensatz `heart`. **Wichtig**: mit `type = "class"` kriegen wir die *harte* Vorhersage ("hard prediction") für die Beobachtung, während wir mit `type = "prob"` die *weiche* Vorhersage ("soft prediction") kriegen, also die Anteile von "yes" und "no" im Leaf Node (bzw. Region), in dem die fünfte Beobachtung landet. -->
-
-<!-- ```{r block13, exercise = TRUE, exercise.lines = 10} -->
-<!-- # Vorhersagen -->
-<!-- predict(last_dt_fit, new_data = heart[5, ], type = "class") -->
-<!-- predict(last_dt_fit, new_data = heart[5, ], type = "prob") -->
-<!-- ``` -->
-
+Wir sind uns bei dieser Person ziemlich sicher, dass **keine Herzerkrankung** vorliegt.
