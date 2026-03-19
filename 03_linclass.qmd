@@ -1139,7 +1139,7 @@ Haben Ihre Vektoren mehr als zwei Dimensionen, dann kommen einfach weitere quadr
 
 Sie konnten sich vielleicht in der Zwischenzeit sehr begeistern für das KNN Modell, weil es einerseits so einfach ist und andererseits trotzdem sehr komplexe, nicht-lineare Regressions- oder Klassifikationsprobleme lösen kann.
 
-Was etwas weniger offensichtlich ist: das Modell macht **keine Annahmen** über die Form oder Verteilung der Trainingsdaten. Wir machen beispielsweise nicht wie oben bei Naive Bayes, dass eine numerische Input-Variable normalverteilt ist. Ausserdem: wenn Sie über sehr, sehr viele Trainingsdaten verfügen, dann gibt es gewisse mathematische Garantien, dass KNN sehr nahe an das bestmögliche Modell herankommt, d.h. dass unser $\hat{f}(\mathbf{x}_i)$ sehr nahe beim unbekannten $f(\mathbf{x}_i)$ liegt.
+Was etwas weniger offensichtlich ist: das Modell macht **keine Annahmen** über die Form oder Verteilung der Trainingsdaten. Wir machen beispielsweise nicht wie oben bei Naive Bayes die Annahme, dass eine numerische Input-Variable normalverteilt ist. Ausserdem: wenn Sie über sehr, sehr viele Trainingsdaten verfügen, dann gibt es gewisse mathematische Garantien, dass KNN sehr nahe an das bestmögliche Modell herankommt, d.h., dass unser $\hat{f}(\mathbf{x}_i)$ sehr nahe beim unbekannten $f(\mathbf{x}_i)$ liegt.
 
 Warum wird KNN in der Praxis trotzdem nicht allzu häufig verwendet? Weil es stark am sogenannten **Fluch der Dimensionalität** (engl. *Curse of Dimensionality*) leidet.
 

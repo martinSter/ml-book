@@ -32,7 +32,7 @@ par(mfrow = c(1,2), mar = c(3,3,2,1), mgp = c(2,0.7,0), pty = "s", cex = 1.4, ce
 plot(x, y, col = "steelblue", pch = 16, xlab = "x", ylab = "y", main = "Regression Tree")
 lines(new$x, pred_tree, col = "rosybrown3", lwd = 3)
 # Linear regression plot
-plot(x, y, col = rgb(0, 0, 1, 0.4), pch = 16, xlab = "x", ylab = "y", main = "Linear Regression")
+plot(x, y, col = "steelblue", pch = 16, xlab = "x", ylab = "y", main = "Linear Regression")
 lines(new$x, pred_lin, col = "rosybrown3", lwd = 3)
 ```
 
