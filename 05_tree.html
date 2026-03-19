@@ -678,7 +678,7 @@ H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 </div>
 </div>
 </div>
-<p>Drei wichtige (letzte) Punkte gilt es noch zu erwähnen:</p>
+<p>Drei wichtige Punkte gilt es noch zu erwähnen:</p>
 <ul>
 <li>Wie bei der logistischen Regression gesehen (<a href="03_linclass.html" class="quarto-xref"><span>Kapitel 3</span></a>), geben uns die meisten Klassifkationsmodelle eine <strong>Wahrscheinlichkeit</strong> zurück, dass die Outputvariable <span class="math inline">\(y_i\)</span> der ersten Kategorie angehört (<span class="math inline">\(y_i=1\)</span>). Das ist auch für Klassifikationsbäume möglich. Anstelle der am häufigsten vorkommenden Kategorie (<em>hard prediction</em>) können wir uns vom Baum auch die <strong>relativen Anteile</strong> der Kategorien in einer Entscheidungsregion (bzw. einem Leaf Node) ausgeben lassen (<em>soft predictions</em>). Diese Anteil können als Wahrscheinlichkeiten für die verschiedenen Kategorien interpretiert werden.</li>
 <li>Ein Klassifikationsbaum ist nicht auf eine binäre Outputvariablen limitiert und kann problemlos auf <strong>mehrklassige Outputvariablen</strong> angewendet werden.</li>
@@ -689,6 +689,63 @@ H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 <li>“braun” vs.&nbsp;“blau” oder “grün”.</li>
 </ul></li>
 </ul>
+<p>Schauen wir uns zum Schluss dieses Abschnitts an, wie ein Klassifikationsbaum unser Beispiel mit zwei Input-Variablen aus <a href="03_linclass.html" class="quarto-xref"><span>Kapitel 3</span></a> segmentiert. Ich habe hier das R-Package <code>tree</code> verwendet und das Argument <code>minsize</code> auf 10 gesetzt (d.h., ein interner Knoten darf nicht weniger als 10 Beobachtungen enthalten):</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="05_tree_files/figure-html/tree-2D-1.png" class="img-fluid figure-img" style="width:60.0%" alt="DB für zwei Input-Variablen (Klassifikationsbaum)."></p>
+<figcaption>Decision Boundary für einen Threshold von 50% (bzw. 0.5) für einen Klassifikationsbaum mit <code>minsize = 10</code>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Wir sehen hier auch gleich zwei Probleme von Bäumen:</p>
+<ul>
+<li>Die resultierende Decision Boundary ist viel zu kompliziert für dieses Beispiel (<strong>Overfitting</strong>).</li>
+<li>Die Decision Boundary ist begrenzt auf lineare Segmente, die in einem <strong>rechten Winkel zu den Achsen</strong> verlaufen. Das ist eine starke Limitierung dieses Modells.</li>
+</ul>
+<p>Nachfolgend der gefittete Baum:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>node), split, n, deviance, yval
+      * denotes terminal node
+
+ 1) root 50 12.5000 0.5000  
+   2) X1 &lt; 5.25263 27  4.0740 0.1852  
+     4) X2 &lt; 4.66245 14  0.0000 0.0000 *
+     5) X2 &gt; 4.66245 13  3.0770 0.3846  
+      10) X2 &lt; 5.92184 6  1.3330 0.6667 *
+      11) X2 &gt; 5.92184 7  0.8571 0.1429 *
+   3) X1 &gt; 5.25263 23  2.6090 0.8696  
+     6) X2 &lt; 5.22556 9  2.0000 0.6667 *
+     7) X2 &gt; 5.22556 14  0.0000 1.0000 *</code></pre>
+</div>
+</div>
+</section>
+<section id="frage" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
+<p>Versuchen Sie den obigen R-Output gut zu verstehen. Sehen Sie die Splits im Input Space oben repräsentiert. Warum fehlt der Split repräsentiert durch <code>6)</code> und <code>7)</code>?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Der <strong>erste Split</strong> des Baums ist im R-Output durch <code>2)</code> und <code>3)</code> repräsentiert und bezieht sich auf die erste Input-Variable. Im Input Space entspricht der Split dem horizontalen Segment auf der Höhe 5.25.</p>
+<p>Der <strong>zweite und dritte Split</strong> des Baums ist im R-Output durch <code>4)</code> und <code>5)</code> respektive <code>6)</code> und <code>7)</code> repräsentiert. Beide beziehen sich auf die zweite Input-Variable.</p>
+<p>Der zweite Split ist im Input Space repräsentiert durch das vertikale Segment auf der Höhe 4.66 (im unteren, roten Teil des Input Space).</p>
+<p>Der dritte Split ist im Input Space <strong>nicht</strong> repräsentiert. Warum nicht? Wenn Sie den Split in <code>6)</code> und <code>7)</code> genau anschauen, dann sehen Sie, dass in beiden Regionen der Anteil der blauen Beobachtungen über 0.5 liegt (0.67 und 1.0). Das bedeutet, dass dieser Split mit einem Threshold von 0.5 keinen Einfluss auf die Decision Boundary hat.</p>
+<p>Der <strong>vierte Split</strong> des Baums ist im R-Output durch <code>10)</code> und <code>11)</code> repräsentiert und bezieht sich auf die zweite Input-Variable. Im Input Space entspricht der Split dem vertikalen Segment auf der Höhe 5.92.</p>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="entscheidungsbäume-in-r" class="level2" data-number="5.3">
@@ -714,14 +771,14 @@ H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 </ul>
 <p>Laden wir als erstes die nötigen R-Packages.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Als nächstes überprüfen wir kurz, ob der Dataframe fehlende Werte enthält:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fehlende Werte?</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(heart, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fehlende Werte?</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(heart, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     age      sex       cp trestbps     chol      fbs  restecg  thalach 
        0        0        0        0        0        0        0        0 
@@ -732,10 +789,10 @@ H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 <p>Wir sehen, dass die Variable <code>ca</code> 4 fehlende Werte und die Variable <code>thal</code> zwei fehlende Werte enthält. Ein weiterer Vorteil von Entscheidungsbäumen ist, dass sie gut mit fehlenden Werten umgehen können. Was effektiv passiert, ist folgendes: wenn in einem Split eine Variable verwendet wird, welche fehlende Werte enthält, dann wird für die Beobachtungen mit fehlenden Werten eine andere Variable (sogenanntes <strong>Surrogat</strong>) für den Split verwendet, welche möglichst ähnliche Entscheidungen trifft wie die eigentliche Splitvariable.</p>
 <p>Als nächstes stellen wir sicher, dass wir keine starke <strong>Imbalance</strong> in der Outputvariable haben:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ist der Datensatz balanced?</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>heart <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hd) <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ist der Datensatz balanced?</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>heart <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hd) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   hd   n      prop
 1  no 164 0.5412541
@@ -746,35 +803,35 @@ H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 <p>Wir machen hier ausnahmsweise <strong>keinen Train-Test Split</strong>, da es hier lediglich darum geht, die Anwendung von Entscheidungsbäumen zu demonstrieren. In einem richtigen ML-Projekt würden wir allerdings spätestens hier einen Train-Test Split vollziehen.</p>
 <p>Stattdessen erstellen wir 5 Folds, um die optimalen Hyperparameter mit 5-Fold Cross-Validation zu finden.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 5-Fold CV</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(heart, <span class="at">v =</span> <span class="dv">5</span>, <span class="at">repeats =</span> <span class="dv">1</span>, <span class="at">strata =</span> hd)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 5-Fold CV</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(heart, <span class="at">v =</span> <span class="dv">5</span>, <span class="at">repeats =</span> <span class="dv">1</span>, <span class="at">strata =</span> hd)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nun spezifizieren wir das Modell mit der Funktion <code>decision_tree()</code> aus <code>tidymodels</code>. Wir werden hier die Hyperparameter <code>tree_depth</code> (Tiefe des Baums) und <code>min_n</code> (minimale Anzahl Beobachtungen in einem Node) tunen. Den Hyperparameter <code>cost_complexity</code> setzen wir auf 0 (diesen würden wir für das Pruning eines Baums verwenden). Wir spezifizieren ausserdem, dass es sich um ein Klassifikationsproblem handelt und dass wir das R-Package <code>rpart</code> für das Fitting verwenden wollen.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spezifikation des Classification Trees</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dt_mod <span class="ot">&lt;-</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">decision_tree</span>(<span class="at">tree_depth =</span> <span class="fu">tune</span>(), <span class="at">min_n =</span> <span class="fu">tune</span>(), <span class="at">cost_complexity =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"rpart"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spezifikation des Classification Trees</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dt_mod <span class="ot">&lt;-</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">decision_tree</span>(<span class="at">tree_depth =</span> <span class="fu">tune</span>(), <span class="at">min_n =</span> <span class="fu">tune</span>(), <span class="at">cost_complexity =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"rpart"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Im Workflow definieren wir unter anderem die Modellgleichung <code>hd ~ .</code>, d.h. die Variable <code>hd</code> ist die Outputvariable und alle anderen werden als Input-Variablen verwendet.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Workflow</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dt_workflow <span class="ot">&lt;-</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(dt_mod) <span class="sc">|&gt;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(hd <span class="sc">~</span> .)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Workflow</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dt_workflow <span class="ot">&lt;-</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(dt_mod) <span class="sc">|&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(hd <span class="sc">~</span> .)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Wir erstellen einen Tuning Grid für die beiden Hyperparameter, die wir tunen wollen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuning Grid</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dt_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">tree_depth =</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>), <span class="at">min_n =</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">5</span>))</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wie sieht Grid aus?</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(dt_grid)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuning Grid</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dt_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">tree_depth =</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>), <span class="at">min_n =</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">5</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wie sieht Grid aus?</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(dt_grid)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   tree_depth min_n
 1           1    10
@@ -806,21 +863,21 @@ H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 </div>
 <p>Nun sind wir bereit, das Modell zu fitten und das Hyperparameter Tuning durchzuführen. Wir verwenden sowohl die Fläche unter der ROC-Kurve als auch die Accuracy, um die Modellgüte zu messen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuning / Model Fitting</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dt_res <span class="ot">&lt;-</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dt_workflow <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> folds,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> dt_grid,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>, <span class="at">save_workflow =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc, accuracy))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuning / Model Fitting</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dt_res <span class="ot">&lt;-</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  dt_workflow <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> folds,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> dt_grid,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>, <span class="at">save_workflow =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc, accuracy))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Schauen wir uns doch die besten 10 Hyperparameter Werte gemäss ROC AUC Kriterium an:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir sortieren die Hyperparameter Spezifikationen nach ROC AUC</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dt_res <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>(<span class="at">metric =</span> <span class="st">"roc_auc"</span>, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir sortieren die Hyperparameter Spezifikationen nach ROC AUC</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dt_res <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>(<span class="at">metric =</span> <span class="st">"roc_auc"</span>, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 8
    tree_depth min_n .metric .estimator  mean     n std_err .config         
@@ -839,13 +896,13 @@ H_k = - \sum_{l=1}^L \hat{p}_{kl} \cdot \log_2\,\left(\hat{p}_{kl}\right)
 </div>
 <p>Nun fitten wir den optimalen Decision Tree (<code>tree_depth = 5</code> und <code>min_n = 20</code>) auf dem ganzen Datensatz, so dass wir den letzten optimalen Fit kriegen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit (auf ganzem Trainingsdatensatz)</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>last_dt_fit <span class="ot">&lt;-</span> <span class="fu">fit_best</span>(dt_res)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit (auf ganzem Trainingsdatensatz)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>last_dt_fit <span class="ot">&lt;-</span> <span class="fu">fit_best</span>(dt_res)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Wir können uns den Last Fit mal ausgeben lassen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>last_dt_fit</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>last_dt_fit</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Formula
@@ -889,10 +946,10 @@ node), split, n, loss, yval, (yprob)
 </div>
 <p>Hmm, etwas schwierig da den Überblick zu behalten. Mithilfe des R-Packages <code>rpart.plot</code> können wir den finalen Baum plotten, so dass er einfacher lesbar wird:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot des finalen Baums</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>last_dt_fit <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot des finalen Baums</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>last_dt_fit <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -904,12 +961,12 @@ node), split, n, loss, yval, (yprob)
 <p>Jeder Knoten im Baum enthält drei Informationen: erstens die Vorhersage, die der Baum in diesem Knoten machen würde, zweitens den relativen Anteil an Beobachtungen mit Herzerkrankung und drittens den gesamten relativen Anteil von Beobachtungen, welche in diesem Knoten landen. Anhand der Anzahl Leaf Nodes sehen wir, dass dieser Baum den Input Space in <strong>13 Entscheidungsregionen</strong> aufteilt.</p>
 <p>Nun plotten wir noch die ROC-Kurve für das finale Modell:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Kurve für finalen Baum</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dt_auc <span class="ot">&lt;-</span><span class="fu">augment</span>(last_dt_fit, <span class="at">new_data =</span> heart) <span class="sc">|&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Kurve</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(dt_auc)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Kurve für finalen Baum</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dt_auc <span class="ot">&lt;-</span><span class="fu">augment</span>(last_dt_fit, <span class="at">new_data =</span> heart) <span class="sc">|&gt;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Kurve</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(dt_auc)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -920,15 +977,15 @@ node), split, n, loss, yval, (yprob)
 </div>
 <p>Mithilfe der Funktion <code>predict()</code> können wir basierend auf dem finalen Baum Vorhersagen für neue Beobachtungen machen. Hier tun wir das der Einfachheit halber für die fünfte Beobachtung im Datensatz <code>heart</code>. <strong>Wichtig</strong>: mit <code>type = "class"</code> kriegen wir eine <em>hard prediction</em> für die Beobachtung, während wir mit <code>type = "prob"</code> die <em>soft prediction</em> kriegen, also die Anteile von “yes” und “no” im Leaf Node (bzw. der Entscheidungsregion), in dem die fünfte Beobachtung landet.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersagen</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(last_dt_fit, <span class="at">new_data =</span> heart[<span class="dv">5</span>, ], <span class="at">type =</span> <span class="st">"class"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersagen</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(last_dt_fit, <span class="at">new_data =</span> heart[<span class="dv">5</span>, ], <span class="at">type =</span> <span class="st">"class"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
   .pred_class
   &lt;fct&gt;      
 1 no         </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(last_dt_fit, <span class="at">new_data =</span> heart[<span class="dv">5</span>, ], <span class="at">type =</span> <span class="st">"prob"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(last_dt_fit, <span class="at">new_data =</span> heart[<span class="dv">5</span>, ], <span class="at">type =</span> <span class="st">"prob"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   .pred_no .pred_yes

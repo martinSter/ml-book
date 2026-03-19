@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -71,6 +106,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -236,8 +300,33 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Inhaltsverzeichnis</h2>
+   
+  <ul>
+  <li><a href="#warum-ensembles" id="toc-warum-ensembles" class="nav-link active" data-scroll-target="#warum-ensembles"><span class="header-section-number">6.0.1</span> Warum Ensembles?</a></li>
+  <li><a href="#voting-models" id="toc-voting-models" class="nav-link" data-scroll-target="#voting-models"><span class="header-section-number">6.0.2</span> Voting Models</a></li>
+  <li><a href="#bagging" id="toc-bagging" class="nav-link" data-scroll-target="#bagging"><span class="header-section-number">6.1</span> Bagging</a>
+  <ul class="collapse">
+  <li><a href="#bootstrap" id="toc-bootstrap" class="nav-link" data-scroll-target="#bootstrap"><span class="header-section-number">6.1.1</span> Bootstrap</a></li>
+  <li><a href="#wie-funktioniert-bagging" id="toc-wie-funktioniert-bagging" class="nav-link" data-scroll-target="#wie-funktioniert-bagging"><span class="header-section-number">6.1.2</span> Wie funktioniert Bagging?</a></li>
+  <li><a href="#out-of-bag" id="toc-out-of-bag" class="nav-link" data-scroll-target="#out-of-bag"><span class="header-section-number">6.1.3</span> Out-of-Bag</a></li>
+  <li><a href="#variable-importance" id="toc-variable-importance" class="nav-link" data-scroll-target="#variable-importance"><span class="header-section-number">6.1.4</span> Variable Importance</a></li>
+  <li><a href="#bagging-auf-dem-heart-datensatz" id="toc-bagging-auf-dem-heart-datensatz" class="nav-link" data-scroll-target="#bagging-auf-dem-heart-datensatz"><span class="header-section-number">6.1.5</span> Bagging auf dem Heart Datensatz</a></li>
+  </ul></li>
+  <li><a href="#random-forests" id="toc-random-forests" class="nav-link" data-scroll-target="#random-forests"><span class="header-section-number">6.2</span> Random Forests</a>
+  <ul class="collapse">
+  <li><a href="#wie-funktionieren-random-forests" id="toc-wie-funktionieren-random-forests" class="nav-link" data-scroll-target="#wie-funktionieren-random-forests"><span class="header-section-number">6.2.1</span> Wie funktionieren Random Forests?</a></li>
+  <li><a href="#random-forests-auf-dem-heart-datensatz" id="toc-random-forests-auf-dem-heart-datensatz" class="nav-link" data-scroll-target="#random-forests-auf-dem-heart-datensatz"><span class="header-section-number">6.2.2</span> Random Forests auf dem Heart Datensatz</a></li>
+  </ul></li>
+  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">6.3</span> Boosting</a>
+  <ul class="collapse">
+  <li><a href="#wie-funktioniert-gradient-boosting" id="toc-wie-funktioniert-gradient-boosting" class="nav-link" data-scroll-target="#wie-funktioniert-gradient-boosting"><span class="header-section-number">6.3.1</span> Wie funktioniert Gradient Boosting?</a></li>
+  <li><a href="#gradient-boosting-auf-dem-heart-datensatz" id="toc-gradient-boosting-auf-dem-heart-datensatz" class="nav-link" data-scroll-target="#gradient-boosting-auf-dem-heart-datensatz"><span class="header-section-number">6.3.2</span> Gradient Boosting auf dem Heart Datensatz</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -261,9 +350,932 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Coming soon.</p>
+<p><strong>Dieses Kapitel ist Work-in-Progress.</strong></p>
+<p>Ihr habt euch vielleicht bereits gewundert, was gemeint ist mit <strong>Ensembles</strong>. Ein Ensemble Modell ist ein Modell, das auf vielen verschiedenen <strong>individuellen Regressions- oder Klassifikationsmodellen</strong> aufbaut, also ein Ensemble von individuellen Modellen.</p>
+<p>Ein grosser Teil der Ensemble Methoden, die wir uns hier anschauen werden, kombinieren viele verschiedene <strong>Decision Tree</strong> Modelle zu einem Ensemble Modell. Konkret heisst das, dass die Vorhersagen der individuellen Decision Trees gemittelt werden.</p>
+<p>Der Vorteil von diesem Vorgehen ist, dass Ensemble Modelle oft eine (viel) bessere Vorhersagegüte haben als die individuellen Decision Trees allein hätten. Tatsächlich ist es so, dass Ensemble Modelle sogar dann gut funktionieren, wenn die individuellen Modelle des Ensembles nur leicht bessere Vorhersagen als der Zufall machen. Man spricht darum manchmal von Ensembles von <strong>Weak Lerners</strong>.</p>
+<p>Ensemble Methoden sind die in der Praxis oft am besten performenden Modelle (neben Deep Learning Modellen). Der Nachteil ist, dass wir mit Ensemble Methoden stärker in den Bereich von <strong>Black-Box</strong> Modellen vorrücken. Das heisst, es wird nun schwieriger, die Einflüsse der Input-Variablen auf unsere Zielvariable zu verstehen.</p>
+<p>Eine schöne Analogie für Ensemble Methoden ist das Konzept <strong>Wisdom of the Crowd</strong>: wir kombinieren das “Wissen” von vielen verschiedenen Modellen zu einem starken Ensemble.</p>
+<section id="warum-ensembles" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="warum-ensembles"><span class="header-section-number">6.0.1</span> Warum Ensembles?</h3>
+<p>Doch warum funktionieren Ensembles so gut? Hier hilft eine Analogie zur klassischen Statistik (ISLR, p.&nbsp;340). Wir nehmen an, wir haben eine Stichprobe von <span class="math inline">\(n\)</span> Beobachtungen (z.B. Hauspreise).</p>
+<ul>
+<li>Die Standardabweichung <span class="math inline">\(\sigma\)</span> besagt, wie stark eine einzelne Beobachtung im Schnitt vom Stichprobenmittelwert abweicht.</li>
+<li>Der Standardfehler des Mittelwerts <span class="math inline">\(\frac{\sigma}{\sqrt{n}}\)</span> besagt, wie stark der Stichprobenmittelwert im Schnitt vom wahren (unbekannten) Populationsmittelwert abweicht.</li>
+</ul>
+<p>Wir sehen, dass sich die Varianz durch das <strong>Mitteln</strong> um den Faktor <span class="math inline">\(1/\sqrt{n}\)</span> reduziert.</p>
+<p>Bei Ensemble Methoden passiert etwas ähnliches: indem wir die Vorhersagen von vielen individuellen Modellen <strong>mitteln</strong>, reduziert sich die <strong>Varianz</strong>. Basierend auf dem Bias-Variance Tradeoff können wir ableiten, dass ein Ensemble Modell mit geringerer Varianz auch zu besseren Vorhersagen führen sollte.</p>
+<p><strong>Wichtig</strong>: die Formel für den Standardfehler des Mittelwerts in der klassischen Statistik gilt nur, wenn die <span class="math inline">\(n\)</span> Beobachtungen unabhängig sind. Auch dieses Resultat lässt sich auf Ensemble Methoden übertragen: <strong>je unabhängiger</strong> die individuellen Modelle voneinander sind, <strong>desto besser</strong> funktioniert ein Ensemble.</p>
+</section>
+<section id="voting-models" class="level3" data-number="6.0.2">
+<h3 data-number="6.0.2" class="anchored" data-anchor-id="voting-models"><span class="header-section-number">6.0.2</span> Voting Models</h3>
+<p>In vielen Projekten trainieren wir mehrere Modelle und entscheiden uns dann für das beste Modell. Doch warum nicht alle trainierten Modelle verwenden? Genau das ist die Idee von sogenannten <strong>Voting Models</strong>. Die Idee könnte simpler nicht sein: wir lassen jedes unserer Modelle eine Vorhersage machen (harte Vorhersage oder Wahrscheinlichkeit) und kombinieren alle individuellen Vorhersagen zu einer aggregierten Vorhersage. Das Prinzip des Voting Models ist in folgender Abbildung anhand des Spam Filters illstriert:</p>
+<div id="fig-votingclassifier" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-votingclassifier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/VotingClassifier.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-votingclassifier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.1: Bla.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="bagging" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="bagging"><span class="header-section-number">6.1</span> Bagging</h2>
+<p>Wir haben in der Einführung bereits gelernt, dass ein Ensemble vor allem dann gut funktioniert, wenn die individuellen Modelle, über die gemittelt wird, möglichst unabhängig sind. Es gibt zwei Wege, wie wir versuchen, möglichst viel Unabhängigkeit zwischen den individuellen Modellen herzustellen:</p>
+<ol type="1">
+<li>Wir rechnen effektiv unterschiedliche Modelle wie beim <strong>Voting Classifier</strong> gesehen.</li>
+<li>Wir rechnen jedes mal das selbe Modell, aber stets auf einem anderen Subset des Trainingsdatensatzes.</li>
+</ol>
+<p>Ein Ansatz nach zweitem Muster ist das sogenannte <strong>Bootstrap Aggregating</strong> (Bagging). Beim Bagging generieren wir eine grosse Anzahl <span class="math inline">\(B\)</span> <strong>verschiedener Subsets</strong> aus dem Trainingsdatensatz und lernen für jedes Subset einen Decision Tree. Jeder Decision Tree wird viel Varianz haben (d.h. wird sehr instabil sein), aber indem wir die Resultate aller Decision Trees mitteln, wird die Varianz des Ensembles substanziell kleiner sein. Im Idealfall resultieren so massiv bessere Vorhersagen des Ensembles.</p>
+<section id="bootstrap" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="bootstrap"><span class="header-section-number">6.1.1</span> Bootstrap</h3>
+<p>Die erste wichtige Frage ist, wie wir aus dem Trainingsdatensatz verschiedene Subsets generieren. Dazu wird beim Bagging eine altbekannte Technik aus der Statistik angewendet, nämlich der <strong>Bootstrap</strong>. Die beiden folgenden Abbildungen zeigen, wie der Bootstrap in der klassischen Statistik angewendet werden.</p>
+<div id="fig-boot1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-boot1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Bootstrap1.PNG" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-boot1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.2: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Der zentrale Punkt, den es hier zu verstehen gilt, ist wie das Boostrap Sampling funktioniert. Wir ziehen <span class="math inline">\(n\)</span> Beobachtungen aus einer Stichprobe der Grösse <span class="math inline">\(n\)</span>. Damit jedes Subset (d.h. jedes Bootstrap Sample) unterschiedlich ist, müssen wir ziehen <strong>mit Zurücklegen</strong>. Dadurch werden gewisse Beobachtungen mehr als einmal in unserem Bootstrap Sample landen und gewisse Beobachtungen gar nicht. Nur so kriegen wir unterschiedliche Bootstrap Samples.</p>
+<p>In obigem Beispiel können wir den Standardfehler des Mittelwerts <span class="math inline">\(s_{\bar{x}}\)</span> selbstverständlich analytisch berechnen, nämlich mithilfe der Formel <span class="math inline">\(s_{\bar{x}}=\frac{\hat{\sigma}}{\sqrt{n}}=\frac{316.47}{\sqrt{10}}\approx 100\)</span>. Manchmal gibt es aber keine analytische Formel und dann ist die Boostrap Technik enorm hilfreich. Die nächste Abbildung zeigt, wie wir den Standardfehler des Mittelwerts mithilfe des Boostraps rechnen könnten:</p>
+<div id="fig-boot2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-boot2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Bootstrap2.PNG" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-boot2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.3: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Die <em>Standardabweichung</em> über die 1000 Mittelwerte, die wir basierend auf den Bootstrap Samples rechnen, gibt uns eine Schätzung für den <em>Standardfehler des Mittelwerts</em>. Unsere Bootstrap Schätzung (95) ist nicht weit entfernt von der analytischen Lösung (100)!</p>
+</section>
+<section id="wie-funktioniert-bagging" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="wie-funktioniert-bagging"><span class="header-section-number">6.1.2</span> Wie funktioniert Bagging?</h3>
+<p>Wir generieren also mit der Bootstrap Technik eine grosse Anzahl <span class="math inline">\(B\)</span> Subsets aus dem Trainingsdatensatz und rechnen für jedes Subset einen Decision Tree. Beim Bagging beschränken wir die Bäume <em>nicht</em> (keine max. Tiefe oder ähnliches). Jeder einzelne Baum wird darum viel Varianz, aber relativ wenig Bias haben.</p>
+<p>Die Idee des Ensembles ist nun, dass wir die <span class="math inline">\(B\)</span> Vorhersagen, die wir von all den individuellen Decision Trees kriegen, mitteln. Im Fall des Regressionsproblems rechnen wir ganz einfach den <strong>Durchschnitt über die <span class="math inline">\(B\)</span> Vorhersagen</strong>,</p>
+<p><span class="math display">\[
+\hat{f}(\mathbf{x}_i) = \frac{1}{B} \sum_{b=1}^B \hat{f}^b(\mathbf{x}_i)
+\]</span> wobei <span class="math inline">\(\hat{f}^b(\mathbf{x}_i)\)</span> die Vorhersage des Baums im <span class="math inline">\(b\)</span>-ten Subset bezeichnet.</p>
+<p>Im Fall des Klassifikationsproblems können wir zwischen einem <strong>Soft Vote</strong> oder einem <strong>Hard Vote</strong> wählen:</p>
+<ul>
+<li>Beim Soft Vote rechnen wir den <strong>Durchschnitt über die vorhergesagten Wahrscheinlichkeiten</strong> der <span class="math inline">\(B\)</span> Bäume.</li>
+<li>Beim Hard Vote entscheiden wir uns für die “harte” Vorhersage, die unter den <span class="math inline">\(B\)</span> Bäumen <strong>am häufigsten</strong> vorkommt.</li>
+</ul>
+<p>Folgende Abbildung zeigt das Vorgehen schematisch anhand des <code>housingrents</code> Datensatzes, den Sie im Decision Tree Tutorial bereits kennen gelernt haben. Es handelt sich hierbei um ein Regressionsproblem:</p>
+<div id="fig-bagging" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bagging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Bagging.PNG" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bagging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.4: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Wir aggregieren hier <span class="math inline">\(B=3\)</span> Bäume zu einem Bagging Ensemble.</p>
+</section>
+<section id="out-of-bag" class="level3" data-number="6.1.3">
+<h3 data-number="6.1.3" class="anchored" data-anchor-id="out-of-bag"><span class="header-section-number">6.1.3</span> Out-of-Bag</h3>
+<p>Das Bootstrap Sampling führt dazu, dass in jedem Subset im Schnitt nur rund 2/3 der Beobachtungen im Trainingsdatensatz sind, d.h. mindestens einmal gezogen werden. Die nicht gezogenen Beobachtungen nennen wir die <strong>Out-of-Bag</strong> (OOB) Beobachtungen.</p>
+<div style="background-color:#fef9e7; padding:10px">
+<p><strong>Optional</strong>: Warum enthält ein Bootstrap Datensatz nur rund 2/3 der Datenpunkte?</p>
+<p>Unser Trainingsdatensatz enthält <span class="math inline">\(n\)</span> Beobachtungen. Beim Bootstrap ziehen wir genau <span class="math inline">\(n\)</span> Beobachtungen <strong>mit Zurücklegen</strong> (wenn wir ohne Zurücklegen samplen würden, dann würde jedes Mal der ganze Trainingsdatensatz resultieren).</p>
+<p>Bei jeder Ziehung hat jede Beobachtung im Trainingsdatensatz die Wahrscheinlichkeit <span class="math inline">\(1/n\)</span> gezogen zu werden. Dementsprechend ist die Wahrscheinlichkeit, dass eine Beobachtung während des Bootstrap nicht gezogen wird <span class="math inline">\((1 - \frac{1}{n})^n\)</span>.</p>
+<p>Aus dem folgt, dass die Wahrscheinlichkeit einer Beobachtung mindestens einmal gezogen zu werden <span class="math inline">\(1 - (1 - \frac{1}{n})^n\)</span> ist.</p>
+<p>Beispiel: für einen Trainingsdatensatz der Grösse <span class="math inline">\(n=100\)</span>, ergibt sich eine Wahrscheinlichkeit einer Beobachtung mindestens einmal gezogen zu werden von <span class="math inline">\(1 - (1 - \frac{1}{100})^{100}=0.63\approx 2/3\)</span>.</p>
+</div>
+<p><br></p>
+<p>Warum ist OOB wichtig? Weil jede Beobachtung im Trainingsdatensatz in rund 1/3 aller Subsets OOB sein wird. Das können wir für eine Art Cross-Validation nutzen. Wir schauen für jede Beobachtung, in welchen Subsets sie OOB war. Dann verwenden wir die Bäume aller dieser Subsets, um für die OOB-Beobachtung Vorhersagen zu rechnen. Die Vorhersagen werden gemittelt. Wenn wir dies für jede Beobachtung im Trainingsdatensatz machen, dann kriegen wir für jede Beobachtung eine Vorhersage von Modellen, für welche diese Beobachtung nicht im Training verwendet wurde.</p>
+<p>Für grosse Trainingsdatensätze kann das ein sehr wertvolles Vorgehen sein, weil K-Fold Cross-Validation in diesen Fällen sehr “teuer” ist (R läuft sehr lange!).</p>
+</section>
+<section id="variable-importance" class="level3" data-number="6.1.4">
+<h3 data-number="6.1.4" class="anchored" data-anchor-id="variable-importance"><span class="header-section-number">6.1.4</span> Variable Importance</h3>
+<p>Wir bewegen uns nun immer stärker in Richtung Black-Box Modelle. Darum wird das Thema <strong>Variable Importance</strong> (VIP) nun wichtiger. Das heisst, wir müssen uns nun verstärkt überlegen, wie wir aus dem Modell lernen können, welche Input-Variablen für die Vorhersagen wichtig sind.</p>
+<p>Beim linearen und logistischen Regressionsmodell war das relativ einfach, da man die Wichtigkeit einer Input-Variable sehr gut anhand des geschätzten Koeffizienten für die Variable abschätzen kann. Auch bei Decision Trees ist es simpel: Variablen, welche in Splits weiter oben im Baum verwendet werden, sind tendenziell wichtiger als Variablen, die in Splits weiter unten vorkommen und garantiert wichtiger als Variablen, die im Baum <em>nicht</em> verwendet werden.</p>
+<p>Die gute Nachricht ist, dass es auch für Ensembles gute und konzeptionell einfache Methoden gibt. Bagging ist ja bekanntlich ein Modell, das über eine grosse Anzahl <span class="math inline">\(B\)</span> Decision Trees aggregiert. Wenn wir beispielsweise die Wichtigkeit für die Input-Variable <span class="math inline">\(x_{i1}\)</span> messen wollen, dann schauen wir in jedem der <span class="math inline">\(B\)</span> Bäume, wie gross die Reduktion in SQR (Regression) bzw. Gini Index (Klassifikation) ist durch einen Split, in dem die Variable <span class="math inline">\(x_{i1}\)</span> verwendet wurde. Die VIP der Variable <span class="math inline">\(x_{i1}\)</span> ist dann einfach der Durchschnitt über die <span class="math inline">\(B\)</span> Reduktionen (wenn die Variable <span class="math inline">\(x_{i1}\)</span> in einem der Bäume nicht verwendet wird, dann beträgt die Reduktion für diesen Baum 0).</p>
+<p>Häufig rechnet man VIP gleich für alle Input-Variablen und <strong>normalisiert</strong> sie, so dass VIP ein Maximum von 1 annehmen kann. Das erreichen wir, indem wir alle (unnormalisierten) VIP Werte durch den maximalen VIP Wert teilen.</p>
+<!-- Weighted average? (see HOML, p.200) -->
+</section>
+<section id="bagging-auf-dem-heart-datensatz" class="level3" data-number="6.1.5">
+<h3 data-number="6.1.5" class="anchored" data-anchor-id="bagging-auf-dem-heart-datensatz"><span class="header-section-number">6.1.5</span> Bagging auf dem Heart Datensatz</h3>
+<p>Wie oben schon etwas angetönt, ist es beim Bagging nicht zwingend nötig irgendwelche Hyperparameter zu tunen. Die Anzahl Bäume <span class="math inline">\(B\)</span> sollte einfach hoch genug gewählt werden und die individuellen Bäume müssen nicht beschränkt werden. Aus diesem Grund werden wir hier nicht <code>tidymodels</code> verwenden (wir sparen uns hier den ganzen Overhead von <code>tidymodels</code>). Stattdessen verwenden wir das R Package <code>randomForest</code>. Sie werden später sehen, dass wir dasselbe Package auch für die Random Forest Methode verwenden werden (wie es der Name natürlich bereits verrät).</p>
+<p>Wir übergeben der <code>randomForest()</code> Funktion als erstes die Modellformel <code>hd ~ .</code> und den Trainingsdatensatz. Das Argument <code>mtry</code> wird vor allem bei den Random Forest Modellen wichtig sein. Es gibt der Funktion vor, wie viele der Input-Variablen an jedem Split eines individuellen Baums als mögliche Splitvariablen zur Verfügung stehen. Hier, beim Bagging, sollen bei jedem Split <strong>alle Input-Variablen</strong> zur Verfügung stehen. Darum setzen wir das Argument auf <code>ncol(train) - 1</code> (13), die Anzahl Input-Variablen. Das Argument <code>ntree = 10000</code> gibt der Funktion vor, dass wir <span class="math inline">\(B=10'000\)</span> Bäume schätzen wollen. Zum Schluss sagen wir noch, dass wir die Variable Importance messen wollen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Bagging</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit (Bagging basiert stark auf SAMPLING)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">44</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting eines Bagging Modells</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>bag_fit <span class="ot">&lt;-</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">randomForest</span>(hd <span class="sc">~</span> ., </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> train, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">mtry =</span> <span class="fu">ncol</span>(train) <span class="sc">-</span> <span class="dv">1</span>, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">ntree =</span> <span class="dv">10000</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Output des Modells</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>bag_fit</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>Call:
+ randomForest(formula = hd ~ ., data = train, mtry = ncol(train) - 1, ntree = 10000, importance = TRUE) 
+               Type of random forest: classification
+                     Number of trees: 10000
+No. of variables tried at each split: 13
+
+        OOB estimate of  error rate: 22.97%
+Confusion matrix:
+    no yes class.error
+no  97  23   0.1916667
+yes 28  74   0.2745098</code></pre>
+<p>Sie sehen oben eine Zusammenfassung des Fit Objekts. Insbesondere interessant ist die <strong>Out-of-Bag (OOB) Error Rate</strong>, die hier 22.97% beträgt und damit leicht höher ist als die CV Error Rate unseres Classification Trees (20.7%).</p>
+<p>Selbstverständlich könnten wir das gefittete Modell nun bereits verwenden, um harte oder weiche Vorhersagen zu machen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersagen machen</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(bag_fit, <span class="at">newdata =</span> train[<span class="dv">1</span>, ], <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(bag_fit, <span class="at">newdata =</span> train[<span class="dv">1</span>, ], <span class="at">type =</span> <span class="st">"class"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>## Soft (type = "prob")
+      no    yes
+1 0.9845 0.0155
+attr(,"class")
+[1] "matrix" "array"  "votes" 
+
+## Hard (type = "class")
+ 1 
+no 
+Levels: no yes</code></pre>
+<p><strong>Wichtig:</strong> die <code>predict()</code> Funktion in obigem Code Block ist aus Base R. Bei der <code>predict()</code> Funktion aus <code>tidymodels</code> würde das Argument <code>newdata</code> anders heissen, nämlich <code>new_data</code>.</p>
+<p>Zum Schluss können wir uns noch die Variable Importance anschauen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>randomForest<span class="sc">::</span><span class="fu">importance</span>(bag_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>                no        yes MeanDecreaseAccuracy MeanDecreaseGini
+age      17.100347   3.715216            16.177084        7.8986270
+sex      31.081711   6.019096            29.483147        1.5685783
+cp       40.770308  48.529442            61.272832       13.5563437
+trestbps 14.167571   3.402533            13.105737        8.6907289
+chol      4.071502 -15.546766            -6.707937        7.6470803
+fbs      -2.062854  -6.660895            -5.817300        0.3817802
+restecg  -5.875380  15.080576             7.003098        1.7126149
+thalach  38.111493  19.476168            42.650182       12.2312568
+exang    17.678602  10.001055            20.078778        1.8729007
+oldpeak  82.348719  73.489513           107.656615       15.3368627
+slope    13.423276  24.646575            27.516395        3.0001435
+ca       94.181277  43.425076            95.753121       12.4442411
+thal     83.619876  73.070677           102.413468       23.4377673</code></pre>
+<p>Wir sehen, dass die Variable <code>thal</code> klar zur stärksten durchschnittlichen Reduktion im Gini Index führt! Wir können diese Werte natürlich auch grafisch darstellen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Automatischer Plot Variable Importance</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(bag_fit, <span class="at">main =</span> <span class="st">"Variable Importance Heart"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-varimp-heart-bag" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-varimp-heart-bag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/BAG_VarImp_Heart.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-varimp-heart-bag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.5: Bla.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="random-forests" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="random-forests"><span class="header-section-number">6.2</span> Random Forests</h2>
+<p>Wir haben in der Einführung gesehen, dass Ensemble Methoden vor allem dann gut funktionieren, wenn die individuellen Bäume möglichst wenig (am liebsten gar nicht) korreliert sind.</p>
+<p>Beim Bagging sind die Bäume aber oft sehr stark korreliert. Wenn wir z.B. einen Datensatz mit einer wichtigen Input-Variable haben (z.B. <code>econage</code> im <code>housingrents</code> Datensatz), dann wird beinahe jeder Baum im Bagging im ersten Split <code>econage</code> verwenden und dementsprechend werden alle Bäume ähnlich sein.</p>
+<section id="wie-funktionieren-random-forests" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="wie-funktionieren-random-forests"><span class="header-section-number">6.2.1</span> Wie funktionieren Random Forests?</h3>
+<p>Um mehr Diversität (i.e., weniger Korrelation) unter den Bäumen herzustellen, macht die <strong>Random Forest</strong> Methode einen kleinen, aber cleveren Trick: für jeden individuellen Baum und jeden Split stehen nur <span class="math inline">\(m\)</span> <strong>zufällig</strong> ausgewählte Input-Variablen zur Verfügung (wobei <span class="math inline">\(m\)</span> kleiner ist als die Anzahl Input-Variablen <span class="math inline">\(p\)</span>). So ergeben sich vielfältigere Bäume und die Reduktion der Varianz ist grösser. Etwas konkreter: die dominante Variable <code>econage</code> steht so nicht für jeden ersten Split zur Verfügung und so zwingen wir die Bäume zu mehr Diversität.</p>
+<p>Typischerweise tunen wir <span class="math inline">\(m\)</span> via Cross-Validation. In der Praxis hat sich <span class="math inline">\(m=\sqrt{p}\)</span> als guter Wert herausgestellt. Wenn wir also kein Hyperparameter-Tuning machen wollen, dann kann <span class="math inline">\(m\)</span> manuell auf <span class="math inline">\(\sqrt{p}\)</span> gesetzt werden. Die Anzahl Bäume <span class="math inline">\(B\)</span> kann problemlos auf einen grossen Wert gesetzt werden (z.B. <span class="math inline">\(B=10'000\)</span>). Hierbei besteht keine Gefahr für Overfitting. Die Tatsache, dass ein Random Forest in vielen Fällen auch ohne Hyperparameter Tuning gute Resultate liefert, ist einer der Hauptgründe, warum dieses Modell in der Praxis so beliebt ist.</p>
+<p>Ein Nachteil von Random Forests ist, dass die Trainingsphase länger dauern kann, insbesondere wenn wir uns entscheiden, gewisse Hyperparameter doch zu tunen. Wenn wir z.B. <span class="math inline">\(B=1000\)</span> setzen, dann heisst das, dass wir für jeden Hyperparameter Wert 1000 Decision Trees schätzen müssen. Doch auch hier gibt es eine Lösung, denn die einzelnen Bäume werden unabhängig voneinander trainiert und darum ist es sehr einfach den Rechenprozess zu <strong>parallelisieren</strong> (auf mehrere Cores Ihres Computers).</p>
+</section>
+<section id="random-forests-auf-dem-heart-datensatz" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="random-forests-auf-dem-heart-datensatz"><span class="header-section-number">6.2.2</span> Random Forests auf dem Heart Datensatz</h3>
+<p>Wir schauen uns hier zuerst an, wie man Random Forests ohne <code>tidymodels</code> rechnen kann. Dazu verwenden wir wie bereits beim Bagging die <code>randomForest()</code> Funktion. Der einzige Unterschied im Vergleich zum Bagging ist, dass wir nun für das Argument <code>mtry</code> einen Wert kleiner als die Anzahl Input-Variablen setzten. Wie oben erwähnt gilt die Faustregel, dass <span class="math inline">\(m=\sqrt{p}=\sqrt{13}=3.61\)</span>. Darum setzten wir <code>mtry = 4</code>. Nun stehen bei jedem Split in jedem individuellen Baum nur <strong>vier zufällig ausgewählte Input-Variablen</strong> zur Verfügung. Wie gesagt: ein kleiner, aber feiner Trick!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 4.1 Random Forests (klassisch)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">22</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting eines Random Forest Modells</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>rf_fit <span class="ot">&lt;-</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">randomForest</span>(hd <span class="sc">~</span> ., </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> train, </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">mtry =</span> <span class="dv">4</span>, </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">ntree =</span> <span class="dv">10000</span>, </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Output des Modells</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>rf_fit</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>Call:
+ randomForest(formula = hd ~ ., data = train, mtry = 4, ntree = 10000, importance = TRUE) 
+               Type of random forest: classification
+                     Number of trees: 10000
+No. of variables tried at each split: 4
+
+        OOB estimate of  error rate: 19.37%
+Confusion matrix:
+     no yes class.error
+no  103  17   0.1416667
+yes  26  76   0.2549020</code></pre>
+<p>Wir sehen, dass die OOB Error Rate nun nur 19.37% beträgt. Wir dürfen also erwarten, dass der Random Forest bessere Vorhersagen machen wird als Bagging und der Classification Tree.</p>
+<p>Nun fitten wir den Random Forest mit <code>tidymodels</code> und der <code>ranger</code> Engine. Schauen Sie sich folgenden Code genau an. Viele Elemente kennen Sie bereits. Was ist neu? Wir verwenden das R-Package <code>doParallel</code>, um das Tuning zu parallelisieren. Das heisst, jede Hyperparameter Kombination wird auf einem anderen Core Ihres Computers gerechnet. So verläuft der Trainingsprozess relativ schnell! Mit <code>grid = 30</code> lassen wir einfach 30 Hyperparamter Kombinationen testen; wir geben sie nicht explizit vor.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 4.2 Random Forests (tidymodels + ranger)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Spezifikation des RFs</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>rf_mod <span class="ot">&lt;-</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rand_forest</span>(<span class="at">mtry =</span> <span class="fu">tune</span>(), <span class="at">min_n =</span> <span class="fu">tune</span>(), <span class="at">trees =</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Workflow</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>rf_workflow <span class="ot">&lt;-</span> </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(rf_mod) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(hd <span class="sc">~</span> .)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Parallel Processing</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>doParallel<span class="sc">::</span><span class="fu">registerDoParallel</span>()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">22</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Model Fitting / Tuning</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>rf_res <span class="ot">&lt;-</span> </span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  rf_workflow <span class="sc">%&gt;%</span> </span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(folds,</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">grid =</span> <span class="dv">30</span>,</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc))</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir sortieren die Hyperparameter Spezifikationen nach ROC AUC</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>rf_res <span class="sc">%&gt;%</span> </span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>(<span class="at">metric =</span> <span class="st">"roc_auc"</span>, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code># A tibble: 10 × 8
+    mtry min_n .metric .estimator  mean     n std_err .config              
+   &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
+ 1     1     7 roc_auc binary     0.909     5  0.0274 Preprocessor1_Model22
+ 2     2     4 roc_auc binary     0.903     5  0.0278 Preprocessor1_Model25
+ 3     2    31 roc_auc binary     0.898     5  0.0302 Preprocessor1_Model02
+ 4     4    10 roc_auc binary     0.895     5  0.0264 Preprocessor1_Model16
+ 5     3    34 roc_auc binary     0.894     5  0.0296 Preprocessor1_Model09
+ 6     3    25 roc_auc binary     0.894     5  0.0301 Preprocessor1_Model23
+ 7     3    37 roc_auc binary     0.893     5  0.0293 Preprocessor1_Model24
+ 8     4    24 roc_auc binary     0.893     5  0.0280 Preprocessor1_Model27
+ 9     7    13 roc_auc binary     0.891     5  0.0245 Preprocessor1_Model04
+10     5    18 roc_auc binary     0.889     5  0.0288 Preprocessor1_Model01</code></pre>
+<p>Interessanterweise ist für <code>mtry</code> der Wert 1 optimal. Das heisst für jeden Split steht nur eine zufällig ausgewählte Input-Variable zur Verfügung. Wir können die Tuning Resultate auch grafisch darstellen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Tuning Resultate</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rf_res)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-rftuning" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rftuning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/rf_tuning.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rftuning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.6: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Nun speichern wir das beste Modell ab und vergleichen die ROC Kurven des Classification Trees und des Random Forests:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bestes Modell</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>rf_best <span class="ot">&lt;-</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  rf_res <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_best</span>(<span class="at">metric =</span> <span class="st">"roc_auc"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultate vorbereiten für ROC Kurve</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>rf_auc <span class="ot">&lt;-</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  rf_res <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> rf_best) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"Random Forest"</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Kurven vergleichen</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(rf_auc, dt_auc) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> specificity, <span class="at">y =</span> sensitivity, <span class="at">col =</span> model)) <span class="sc">+</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="at">linewidth =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">lty =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">"plasma"</span>, <span class="at">end =</span> .<span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-rocrfct" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rocrfct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/roc_rf_ct.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rocrfct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.7: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Der Random Forest ist doch einigermassen klar besser. Cool! Nun erstellen wir wie gewohnt den Last Fit auf dem ganzen Trainingsdatensatz und mit optimalen Hyperparameterwerten. Mit <code>importance = "impurity"</code> sagen wir der Funktion, dass wir die Variable Importance Werte auch gleich mitrechnen wollen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit Spezifikation (optimale Hyperparameter Werte)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>last_rf_mod <span class="ot">&lt;-</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rand_forest</span>(<span class="at">mtry =</span> <span class="dv">1</span>, <span class="at">min_n =</span> <span class="dv">7</span>, <span class="at">trees =</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>, <span class="at">importance =</span> <span class="st">"impurity"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Workflow anpassen (optimales Modell)</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>last_rf_workflow <span class="ot">&lt;-</span> </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  rf_workflow <span class="sc">%&gt;%</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_model</span>(last_rf_mod)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit (auf ganzem Trainingsdatensatz)</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>last_rf_fit <span class="ot">&lt;-</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  last_rf_workflow <span class="sc">%&gt;%</span> </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Schauen wir uns kurz das gefittete Objekt an:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell Output</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>last_rf_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_parsnip</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>parsnip model object
+
+Ranger result
+
+Call:
+ ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~1, x), 
+ num.trees = ~1000, min.node.size = min_rows(~7, x), importance = ~"impurity", 
+ num.threads = 1, verbose = FALSE, seed = sample.int(10^5, 1), probability = TRUE) 
+
+Type:                             Probability estimation 
+Number of trees:                  1000 
+Sample size:                      222 
+Number of independent variables:  13 
+Mtry:                             1 
+Target node size:                 7 
+Variable importance mode:         impurity 
+Splitrule:                        gini 
+OOB prediction error (Brier s.):  0.1393055</code></pre>
+<p>Auch hier sehen wir den OOB Fehler. Er liegt bei knapp 14%. Hier handelt es sich jedoch um das sogenannte Brier Score, weshalb dieser Wert nicht direkt mit den vorherigen OOB Werten verglichen werden kann. Last but not least, können wir die Variable Importance Werte für die Top-20 Input-Variablen plotten mit der Funktion <code>vip()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance Plot</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>last_rf_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vip</span>(<span class="at">num_features =</span> <span class="dv">20</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-varimprf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-varimprf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/var_imp_rf.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-varimprf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.8: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Die Variable <code>thal</code> ist in allen Modellen die klar wichtigste Variable.</p>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "ensemblePerformance", echo = FALSE} -->
+<!-- question("Sie haben einen Datensatz und trainieren 3 Modelle: einen einfachen Decision Tree, ein Bagging Modell sowie einen Random Forest. Was erwarten Sie a-priori bezüglich der Performance dieser drei Modelle? ('>' bedeutet 'besser als')", -->
+<!--   answer("Decision Tree > Bagging > Random Forest", correct = FALSE), -->
+<!--   answer("Random Forest > Bagging > Decision Tree", correct = TRUE), -->
+<!--   answer("Bagging > Random Forest > Decision Tree", correct = FALSE), -->
+<!--   answer("Random Forest > Decision Tree > Bagging", correct = FALSE), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+</section>
+</section>
+<section id="boosting" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="boosting"><span class="header-section-number">6.3</span> Boosting</h2>
+<p>Wir haben gesehen, dass beim Bagging und bei Random Forests eine grosse Anzahl Decision Trees gefittet werden, die dann zusammen das Ensemble ergeben. Dabei wurden die Bäume <strong>unabhängig</strong> voneinander gefittet, wodurch das Modell-Training gut parallelisiert werden konnte.</p>
+<p>Auch beim Boosting geht es darum, die Vorhersagen von vielen verschiedenen (kleinen) Decision Trees zu kombinieren. Jedoch findet beim Boosting das Modell-Fitting bzw. das Training des Modells <strong>sequenziell</strong> statt. Der erste Baum wird auf dem vollen Trainingsdatensatz gefittet. Der zweite Baum versucht dann die Fehler des ersten Baums auszumerzen. Der dritte Baum versucht dann die Fehler des ersten und zweiten Baums auszumerzen, usw. So entsteht ein <strong>iterativer</strong> Trainingsprozess, in dem sich der <span class="math inline">\(m\)</span>-te Baum darauf fokussiert die Fehler der <span class="math inline">\(m-1\)</span> vorherigen Bäume zu korrigieren.</p>
+<p>Weil beim Boosting die Bäume sequenziell gefittet werden, ist das Training nicht mehr so einfach parallelisierbar. Deshalb ist dieser Algorithmus im Training tendenziell etwas langsamer als beispielsweise Random Forests. Oft führen Boosting Modelle aber zu den besten Vorhersagen in Praxisprojekten!</p>
+<p>Es gibt viele verschiedene Boosting Algorithmen und Modelle. Wir werden uns hier auf den <strong>Gradient Boosting</strong> Algorithmus konzentrieren, da dieser Algorithmus in der Praxis am häufigsten verwendet wird. Ein weiterer bekannter Boosting Algorithmus ist <strong>AdaBoost</strong>, bei dem falsch klassifizierte Beobachtungen im Fitting des nächsten Baums ein höheres Gewicht im Training erhalten.</p>
+<section id="wie-funktioniert-gradient-boosting" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="wie-funktioniert-gradient-boosting"><span class="header-section-number">6.3.1</span> Wie funktioniert Gradient Boosting?</h3>
+<p>Wir schauen uns hier der Einfachheit halber an, wie der Gradient Boosting Algorithmus für das <strong>Regressionsproblem</strong> funktioniert. Der Algorithmus für das Klassifikationsproblem ist ähnlich, aber technisch etwas komplexer.</p>
+<div style="background-color:#fef9e7; padding:10px">
+<p>Der <strong>Algorithmus</strong> funktioniert wie folgt (ISLR, p.&nbsp;347):</p>
+<ol type="1">
+<li>Wir initialisieren das Boosting Modell mit <span class="math inline">\(\hat{f}(\mathbf{x}_i) = 0\)</span> und wir initialisieren die <strong>Residuen</strong> <span class="math inline">\(r_i\)</span> mit den Werten der Zielvariable, also <span class="math inline">\(r_i=y_i\)</span> für alle Trainingsbeobachtungen.</li>
+<li>Danach iterieren wir über <span class="math inline">\(B\)</span> Bäume, also über <span class="math inline">\(b=1,2,\dots,B\)</span>:
+<ul>
+<li>Wir fitten den <span class="math inline">\(b\)</span>-ten Baum <span class="math inline">\(\hat{f}^b\)</span> mit insgesamt <span class="math inline">\(d\)</span> Splits so gut wie möglich auf die aktuellen Residuen <span class="math inline">\(r_i\)</span>.</li>
+<li>Wir updaten das Boosting Modell mit dem im vorherigen Schritt gefitteten Baum, indem wir den neuen Baum wie folgt hinzufügen: <span class="math inline">\(\hat{f}(\mathbf{x}_i) := \hat{f}(\mathbf{x}_i) + \lambda \hat{f}^b(\mathbf{x}_i)\)</span>. Wir fügen also die Vorhersage des neuen Baums zum Modell hinzu, multiplizieren die neuen Vorhersagen aber mit dem <strong>Shrinkage</strong> Faktor <span class="math inline">\(\lambda\)</span>.</li>
+<li>Nun berechnen wir die neuen Residuen zwischen den Werten der Zielvariable und den aktuellen Vorhersagen des Boosting Modells für alle Trainingsbeobachtungen: <span class="math inline">\(r_i := y_i - \hat{f}(\mathbf{x}_i)\)</span>.</li>
+</ul></li>
+<li>Nachdem wir über alle <span class="math inline">\(B\)</span> Bäume iteriert haben, kriegen wir unser finales Boosting Modell, nämlich <span class="math inline">\(\hat{f}(\mathbf{x}_i) = \sum_{b=1}^B \lambda \hat{f}^b(\mathbf{x}_i)\)</span>.</li>
+</ol>
+</div>
+<p><br></p>
+<p>Aus obigem Algorithmus ist ersichtlich, dass Gradient Boosting drei wichtige <strong>Hyperparameter</strong> hat:</p>
+<ul>
+<li>Die Anzahl Bäume <span class="math inline">\(B\)</span>, die in das Ensemble einfliessen. Im Gegensatz zu Bagging und Random Forest kann es beim Boosting zu Overfitting kommen, wenn wir eine zu grosse Anzahl Bäume <span class="math inline">\(B\)</span> wählen, denn jeder Baum versucht ja die Fehler aller vorangehenden Bäume zu verbesseren oder korrigieren. Irgendwann kommen wir so in den Bereich, wo der Algorithmus nur noch den unsystematischen Teil der Information (<strong>Noise</strong>) zu fitten versucht.</li>
+<li>Der Hyperparameter <span class="math inline">\(d\)</span> bezeichnet die Anzahl Splits, die wir in den einzelnen Bäumen zulassen. Erstaunlich oft funktionieren Bäume mit einem Split, also <span class="math inline">\(d=1\)</span>, gut in der Praxis. In diesem Fall handelt es sich um sogenannte <strong>Decision Stumps</strong> (dt. Entscheidungsstümmel). In diesem Fall fitten wir effektiv ein <em>additives Modell</em> (warum?).</li>
+<li>Der dritte wichtige Hyperparameter ist der Shrinkage Hyperparameter <span class="math inline">\(\lambda \leq 1\)</span>. Wir wollen damit sicherstellen, dass das Boosting Ensemble nicht zu schnell lernt. Es hat sich in der Praxis herausgestellt, dass langsam lernende Boosting Ensembles zu einem besseren Modell führen. Der Shrinkage Hyperparameter kann auch als eine Form von <strong>Regularisierung</strong> interpretiert werden.</li>
+</ul>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, echo=FALSE} -->
+<!-- fluidPage( -->
+<!--   fluidRow( -->
+<!--     withMathJax(), -->
+<!--     p("In dieser Demo verwenden wir die Gradient Boosting Methode auf einem simplen  -->
+<!--       Datensatz mit einer Input-Variable. Wir schauen uns an, wie sich die  -->
+<!--       Hyperparameter dieser Methode (B, Shrinkage, Anzahl Splits) auf den Fit an -->
+<!--       die Trainingsdaten sowie die Fehler auf Training- und Testdatensatz auswirken.  -->
+<!--       Abgebildet ist immer nur der Trainingsdatensatz. Der Testdatensatz hat immer die -->
+<!--       selbe Grösse wie der Trainingsdatensatz.") -->
+<!--   ), -->
+<!--   fluidRow( -->
+<!--     column(width = 4, numericInput("n_boosting", "Anzahl Beobachtungen", 50, 1, 200, 10)) -->
+<!--   ), -->
+<!--   fluidRow( -->
+<!--     column(width = 4, numericInput("B", "Anzahl Bäume B", 1, 1, 500, 10)), -->
+<!--     column(width = 4, numericInput("shrinkage", "Shrinkage", 1, 0.01, 1, 0.01)), -->
+<!--     column(width = 4, numericInput("splits", "Anzahl Splits", 1, 1, 5, 1)), -->
+<!--   ), -->
+<!--   fluidRow( -->
+<!--     column(width = 12, plotOutput("boosting")) -->
+<!--   ) -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<!-- ```{r, context = "server"} -->
+<!-- output$boosting <- renderPlot({ -->
+<!--   library(gbm) -->
+<!--   # Setze den Seed für Reprodzierbarkeit -->
+<!--   set.seed(123) -->
+<!--   # Generiere Daten -->
+<!--   xtrain <- runif(input$n_boosting, 0, 1) -->
+<!--   ytrain <- 4 * (xtrain-0.5)^2 + rnorm(input$n_boosting, 0, 0.1) -->
+<!--   xtest <- runif(input$n_boosting, 0, 1) -->
+<!--   ytest <- 4 * (xtest-0.5)^2 + rnorm(input$n_boosting, 0, 0.1) -->
+<!--   # Kreiere Data Frames -->
+<!--   train <- data.frame(y = ytrain, x = xtrain) -->
+<!--   test <- data.frame(y = ytest, x = xtest) -->
+<!--   # Rechne Regressionsbaum -->
+<!--   model <- reg_boost <- gbm(y ~ x, data = train, distribution = "gaussian",  -->
+<!--                             n.trees = input$B, interaction.depth = input$splits,  -->
+<!--                             shrinkage = input$shrinkage, n.minobsinnode = 1, bag.fraction = 1) -->
+<!--   # Data Frame für Zeichnen der Kurven -->
+<!--   new <- data.frame(x = seq(0, 1, 0.001)) -->
+<!--   # Vorhersagen -->
+<!--   pred_curves <- predict(model, new, n.trees = input$B) -->
+<!--   pred_train <- predict(model, train, n.trees = input$B) -->
+<!--   pred_test <- predict(model, test, n.trees = input$B) -->
+<!--   # 2 Plots nebeneinander -->
+<!--   par(mfrow = c(1,2)) -->
+<!--   par(bg = "#fef9e7") -->
+<!--   # Streuudiagramm -->
+<!--   plot(xtrain, ytrain, col = "blue", pch = 16) -->
+<!--   # Kurve Modell -->
+<!--   lines(seq(0, 1, 0.001), pred_curves, type = "l", col = "red", lwd = 2) -->
+<!--   # RMSE Train/Test -->
+<!--   rmse_train <- sqrt(mean((ytrain - pred_train)^2)) -->
+<!--   rmse_test <- sqrt(mean((ytest - pred_test)^2)) -->
+<!--   # Barplot RMSE -->
+<!--   barplot(c(rmse_train, rmse_test), main = "Root Mean Squared Error (RMSE)",  -->
+<!--           ylim = c(0, 1), names.arg = c("Train", "Test")) -->
+<!--   # RMSE als Text -->
+<!--   text(c(0.7,1.9), y=0.5, labels = c(round(rmse_train, 2), round(rmse_test, 2))) -->
+<!-- }) -->
+<!-- ``` -->
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "boostingOverfitting", echo = FALSE} -->
+<!-- question("Sie haben ein Gradient Boosting Modell verwendet, aber es hat leider zu Overfitting geführt. Welche Möglichkeiten haben Sie, um das Problem des Overfittings beim Boosting zu beheben?", -->
+<!--   answer("Wir senken $\\lambda$ und machen den Lernprozess so langsamer.", correct = TRUE), -->
+<!--   answer("Wir erhöhen die Anzahl Bäume $B$, die trainiert werden sollen.", correct = FALSE), -->
+<!--   answer("Early Stopping: wir lernen nur so lange neue Bäume bis der Fehler auf dem Validierungsdatensatz nicht mehr runter geht.", correct = TRUE), -->
+<!--   answer("Wir reduzieren die Komplexität der einzelnen Bäume, indem wir $d$ reduzieren.", correct = TRUE), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<p>Wir werden später im Deep Learning den Gradient Descent Algorithmus kennen lernen. In der folgenden optionalen Box lernen Sie, inwiefern Gradient Boosting mit Gradienten und Ableitungen zu tun hat.</p>
+<div style="background-color:#fef9e7; padding:10px">
+<p><strong>Optional</strong>: Was hat der Gradient Boosting Algorithmus mit Gradient Descent zu tun?</p>
+<p>Sie werden den <strong>Gradient Descent</strong> Algorithmus später kennenlernen. Der <strong>Gradient Boosting</strong> Algorithmus funktioniert (wie es der Name bereits verrät) ähnlich. Doch es ist vielleicht nicht ganz so offensichtlich, warum das so ist. Schauen wir es uns zusammen an!</p>
+<p>Beim Regressionsproblem versuchen wir in den meisten Fällen die <strong>Summe der quadrierten Residuen</strong> (SQR) zu minimieren. SQR ist also unsere Kostenfunktion. Für eine einzelne Trainingsbeobachtung <span class="math inline">\(i\)</span> können die Kosten wie folgt aufgeschrieben werden:</p>
+<p><span class="math display">\[
+J_i(y_i, \hat{f}(\mathbf{x}_i)) = \frac{1}{2}(y_i - \hat{f}(\mathbf{x}_i))^2
+\]</span></p>
+<p>Die Gesamtkostenfunktion SQR ist dementsprechend die Summe über die individuellen Kosten aller Trainingsbeobachtungen.</p>
+<p>Wir möchten nun unser Boosting Modell <span class="math inline">\(\hat{f}(\mathbf{x}_i)\)</span> so verbessern, dass die Kosten reduziert werden. Dazu rechnen wir die Ableitung unserer Gesamtkosten nach <span class="math inline">\(\hat{f}(\mathbf{x}_i)\)</span> (also dem Funktionswert für die <span class="math inline">\(i\)</span>-te Beobachtung):</p>
+<p><span class="math display">\[
+\begin{split}
+\frac{\partial J}{\partial \hat{f}(\mathbf{x}_i)} &amp;= \frac{\partial \sum_i J_i(y_i, \hat{f}(\mathbf{x}_i))}{\partial \hat{f}(\mathbf{x}_i)}\\ &amp;= \frac{\partial J_i(y_i, \hat{f}(\mathbf{x}_i))}{\partial \hat{f}(\mathbf{x}_i)}\\ &amp;= \frac{2}{2}(y_i - \hat{f}(\mathbf{x}_i))^{2-1}\cdot (-1)\\ &amp;= -(y_i - \hat{f}(\mathbf{x}_i))
+\end{split}
+\]</span></p>
+<p>Wir sehen also, dass die Ableitung (oder eben der <strong>Gradient</strong>) nichts anderes als das negative <strong>Residuum</strong> ist.</p>
+<p>Im zweiten Schritt des Gradient Boosting Algorithmus haben wir gesehen, dass wir einen neuen Baum jeweils wie folgt zum Ensemble hinzufügen:</p>
+<p><span class="math display">\[
+\hat{f}(\mathbf{x}_i) := \hat{f}(\mathbf{x}_i) + \lambda \hat{f}^b(\mathbf{x}_i)
+\]</span></p>
+<p>Wie im Algorithmus beschrieben wird der neue Baum jeweils so gut wie möglich auf die aktuellen Residuen gefittet. Wir können also den neuen Baum <span class="math inline">\(\hat{f}^b(\mathbf{x}_i)\)</span> als eine <strong>Annäherung an die Residuen</strong> (den negativen Gradient) interpretieren. So können wir die Update-Gleichung umschreiben als:</p>
+<p><span class="math display">\[
+\begin{split}
+\hat{f}(\mathbf{x}_i) &amp;:= \hat{f}(\mathbf{x}_i) + \lambda \cdot (y_i - \hat{f}(\mathbf{x}_i))\\
+&amp;:= \hat{f}(\mathbf{x}_i) - \lambda \cdot \frac{\partial J_i(y_i, \hat{f}(\mathbf{x}_i))}{\partial \hat{f}(\mathbf{x}_i)}
+\end{split}
+\]</span></p>
+<p>Erkenne Sie darin den Gradient Descent?</p>
+<p>Quelle: <a href="http://www.chengli.io/tutorials/gradient_boosting.pdf">Cheng Li, A Gentle Introduction to Gradient Boosting</a></p>
+</div>
+<p><br></p>
+</section>
+<section id="gradient-boosting-auf-dem-heart-datensatz" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="gradient-boosting-auf-dem-heart-datensatz"><span class="header-section-number">6.3.2</span> Gradient Boosting auf dem Heart Datensatz</h3>
+<p>Wir fitten hier den Gradient Boosting Algorithmus in einem ersten Schritt mit dem traditionellen <code>gbm</code> Package. Dieses Package erwartet, dass die kategorische Zielvariable 0-1 kodiert ist, weshalb ich in einem ersten Schritt eine Umkodierung vornehme.</p>
+<p>Danach fitten wir mit der Funktion <code>gbm()</code> das Modell. In der Modellformel entferne ich die ursprüngliche Zielvariable <code>hd</code>. Mit <code>distribution = "bernoulli"</code> sagen wir der Funktion, dass es sich um ein binäres Klassifikationsproblem handelt. Die drei wichtigen Hyperparameter heissen hier etwas anders:</p>
+<ul>
+<li><span class="math inline">\(B\)</span> → <code>n.trees</code></li>
+<li><span class="math inline">\(d\)</span> → <code>interaction.depth</code></li>
+<li><span class="math inline">\(\lambda\)</span> → <code>shrinkage</code></li>
+</ul>
+<p>Sie sehen, dass wir via dem Argument <code>cv.folds = 5</code> auch eine interne Cross-Validation betreiben. Wir wollen damit herausfinden, wie viele Trees nötig sind und ob es allenfalls weniger Bäume als <code>n.trees = 10000</code> braucht.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 5.1 Gradient Boosting (gbm)</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">15</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir müssen Zielvariable in 0/1 umkodieren für gbm Package</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>train<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(train<span class="sc">$</span>hd) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting eines GBM Modells</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>gbm_fit <span class="ot">&lt;-</span> <span class="fu">gbm</span>(</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> y <span class="sc">~</span> . <span class="sc">-</span> hd,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">distribution =</span> <span class="st">"bernoulli"</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.trees =</span> <span class="dv">10000</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">interaction.depth =</span> <span class="dv">1</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">shrinkage =</span> <span class="fl">0.001</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">cv.folds =</span> <span class="dv">5</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.cores =</span> <span class="cn">NULL</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Output</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gbm_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>gbm(formula = y ~ . - hd, distribution = "bernoulli", data = train, 
+    n.trees = 10000, interaction.depth = 1, shrinkage = 0.001, 
+    cv.folds = 5, verbose = FALSE, n.cores = NULL)
+A gradient boosted model with bernoulli loss function.
+10000 iterations were performed.
+The best cross-validation iteration was 7362.
+There were 13 predictors of which 13 had non-zero influence.</code></pre>
+<p>Ha! Tatsächlich ist die optimale Anzahl Bäume (also das optimale <span class="math inline">\(B\)</span>) tiefer als 10’000 und liegt bei 7362 Bäumen. Der Cross-Validation Fehler ist bei dieser optimalen Anzahl Bäumen am tiefsten. Dieses Resultat kann man sich auch noch grafisch ausgeben lassen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kostenfunktion für steigende Anzahl Trees</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gbm.perf</span>(gbm_fit, <span class="at">method =</span> <span class="st">"cv"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-gbmcrossval" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gbmcrossval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/gbm_crossval.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gbmcrossval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.9: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Sie sehen, dass wir nach der blau gestrichelten Vertikalen in den Overfitting Bereich kommen: die Kosten auf dem Trainingsdatensatz (in schwarz) gehen weiter runter, aber die Kosten auf den CV Folds beginnen wieder leicht zu steigen (in anderen Worten: die Varianz des Modells beginnt zu steigen).</p>
+<p>Wir fitten nun also das optimale Gradient Boosting Modell mit der optimalen Anzahl Bäumen. Die anderen Hyperparameter tunen wir hier der Einfachheit halber nicht. Mithilfe des Packages <code>vip</code> lassen wir uns die Wichtigkeit der verschiedenen Variablen visualisieren.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finales GBM Modell</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>gbm_final_fit <span class="ot">&lt;-</span> <span class="fu">gbm</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> y <span class="sc">~</span> . <span class="sc">-</span> hd,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">distribution =</span> <span class="st">"bernoulli"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.trees =</span> <span class="dv">7362</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">interaction.depth =</span> <span class="dv">1</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">shrinkage =</span> <span class="fl">0.001</span>,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.cores =</span> <span class="cn">NULL</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="fu">vip</span>(gbm_final_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-gbmvip" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gbmvip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/gbm_vip.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gbmvip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.10: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Wie bereits vermutet ist auch hier die Variable <code>thal</code> am wichtigsten!</p>
+<p>Nun werden wir uns anschauen, wie wir das Gradient Boosting Modell mit <code>tidymodels</code> und der <code>xgboost</code> Library fitten und tunen können. <code>xgboost</code> steht für <strong>Extreme Gradient Boosting</strong> und ist eine optimierte und enorm flexible Implementation des Gradient Boosting Algorithmus.</p>
+<p><code>xgboost</code> hat nicht nur die drei oben erwähnten Hyperparamter, sondern viele weitere, welche das Modell schneller und besser machen können. Eine Übersicht über die Hyperparameter finden Sie <a href="https://rdrr.io/cran/xgboost/man/xgb.train.html">hier</a>.</p>
+<p>Im unten stehenden Code entfernen wir als erstes die 0/1 kodierte Zielvariable, die wir für die <code>gbm</code> Implementation benötigten. Danach spezifizieren wir in typischer <code>tidymodels</code> Manier das Modell und den Workflow. Der Einfachheit halber lassen wir nur die drei bekannten Hyperparameter <code>trees</code> (<span class="math inline">\(B\)</span>), <code>tree_depth</code> (<span class="math inline">\(d\)</span>) und <code>learn_rate</code> (<span class="math inline">\(\lambda\)</span>) tunen. Die weiteren Hyperparameter belassen wir auf den Default Werten. Mit <code>nthread = 8</code> erlauben wir dem Modell ein sogenanntes <strong>Parallel Processing</strong> (eines der tollen Features der <code>xgboost</code> Implementation).</p>
+<p>In der <code>tune_grid()</code> Funktion setzen wir <code>grid = 50</code> und spezifizieren keinen eigenen Grid mit möglichen Hyperparameterkombinationen. Dadurch erstellt <code>tidymodels</code> automatisch ein <strong>Space-filling Design</strong>. Doch was bedeutet das? Aus allen möglichen Kombinationen von Werten für <code>trees</code>, <code>tree_depth</code> und <code>learn_rate</code> wählt <code>tidymodels</code> automatisch 50 Kombinationen, die Sinn machen und die den Raum (<em>Space</em>), welcher durch die drei Hyperparameter aufgespannt wird, möglichst gut ausfüllen (<em>Space-filling</em>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 5.2 Gradient Boosting (xgboost)</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir entfernen y wieder aus Trainingsdatensatz</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> train[ ,<span class="sc">-</span><span class="fu">ncol</span>(train)]</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Spezifikation des XGBoost Modells</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>xgb_mod <span class="ot">&lt;-</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boost_tree</span>(<span class="at">trees =</span> <span class="fu">tune</span>(), <span class="at">tree_depth =</span> <span class="fu">tune</span>(), <span class="at">learn_rate =</span> <span class="fu">tune</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>, <span class="at">event_level =</span> <span class="st">"second"</span>, <span class="at">nthread =</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Workflow</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>xgb_workflow <span class="ot">&lt;-</span> </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(xgb_mod) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(hd <span class="sc">~</span> .)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed für Reproduzierbarkeit</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Model Fitting / Tuning</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co"># So genanntes "Space-filling design": es werden 50 Hyperparameter-Kombinationen getestet, die den</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Hyperparameter-Space so gut wie möglich abdecken.</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>xgb_res <span class="ot">&lt;-</span> </span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  xgb_workflow <span class="sc">%&gt;%</span> </span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(folds,</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">grid =</span> <span class="dv">50</span>,</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>            <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>            <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc))</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir sortieren die Hyperparameter Spezifikationen nach ROC AUC</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>xgb_res <span class="sc">%&gt;%</span> </span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>(<span class="at">metric =</span> <span class="st">"roc_auc"</span>, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code># A tibble: 10 × 9
+   trees tree_depth learn_rate .metric .estimator  mean     n std_err .config              
+   &lt;int&gt;      &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
+ 1  1072          3    0.00597 roc_auc binary     0.890     5  0.0278 Preprocessor1_Model08
+ 2  1918          3    0.00434 roc_auc binary     0.888     5  0.0285 Preprocessor1_Model06
+ 3  1255          5    0.0149  roc_auc binary     0.887     5  0.0230 Preprocessor1_Model15
+ 4   964          2    0.0301  roc_auc binary     0.886     5  0.0188 Preprocessor1_Model05
+ 5  1158          2    0.0132  roc_auc binary     0.885     5  0.0205 Preprocessor1_Model04
+ 6  1082         15    0.0228  roc_auc binary     0.884     5  0.0217 Preprocessor1_Model50
+ 7   562          3    0.00531 roc_auc binary     0.884     5  0.0276 Preprocessor1_Model07
+ 8  1633          8    0.00677 roc_auc binary     0.884     5  0.0234 Preprocessor1_Model26
+ 9  1779          8    0.0169  roc_auc binary     0.884     5  0.0217 Preprocessor1_Model27
+10   168         13    0.108   roc_auc binary     0.884     5  0.0225 Preprocessor1_Model44</code></pre>
+<p>Wir finden so die optimalen Hyperparameterwerte <code>trees = 1072</code>, <code>tree_depth = 3</code> und <code>learn_rate = 0.00597</code>. Wir können die Tuning-Resultate auch grafisch darstellen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Tuning Resultate</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(xgb_res)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-tuningxgb" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tuningxgb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/tuning_xgb.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tuningxgb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.11: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Wir speichern das beste Modell ab und verwenden die Cross-Validation Resultate für den Vergleich des XGBoost Modells mit dem Random Forest und dem Classification Tree mittels der ROC Kurven.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bestes Modell</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>xgb_best <span class="ot">&lt;-</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  xgb_res <span class="sc">%&gt;%</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_best</span>(<span class="at">metric =</span> <span class="st">"roc_auc"</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultate vorbereiten für ROC Kurve</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>xgb_auc <span class="ot">&lt;-</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  xgb_res <span class="sc">%&gt;%</span> </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> xgb_best) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"XGBoost"</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Kurven vergleichen</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(rf_auc, dt_auc, xgb_auc) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> specificity, <span class="at">y =</span> sensitivity, <span class="at">col =</span> model)) <span class="sc">+</span> </span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="at">linewidth =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">lty =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span> </span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">"plasma"</span>, <span class="at">end =</span> .<span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-rocall" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rocall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/roc_allModels.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rocall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.12: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Hier ist es tatsächlich so, dass das Random Forest Ensemble am besten funktioniert. Allerdings ist es sehr wahrscheinlich, dass wir beim Tuning des XGBoost Modells noch nicht das Maximum rausgeholt haben. In der Praxis ist typischerweise das XGBoost noch eine Spur besser als der Random Forest.</p>
+<p>Wie gewohnt fitten wir am Schluss nun noch das optimale Modell <strong>auf dem ganzen Trainingsdatensatz</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit Spezifikation (optimale Hyperparameter Werte)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>last_xgb_mod <span class="ot">&lt;-</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boost_tree</span>(<span class="at">trees =</span> <span class="dv">1072</span>, <span class="at">tree_depth =</span> <span class="dv">3</span>, <span class="at">learn_rate =</span> <span class="fl">0.00597</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>, <span class="at">event_level =</span> <span class="st">"second"</span>, <span class="at">nthread =</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Workflow anpassen (optimales Modell)</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>last_xgb_workflow <span class="ot">&lt;-</span> </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  xgb_workflow <span class="sc">%&gt;%</span> </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_model</span>(last_xgb_mod)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Last Fit (auf ganzem Trainingsdatensatz)</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>last_xgb_fit <span class="ot">&lt;-</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  last_xgb_workflow <span class="sc">%&gt;%</span> </span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train)</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell Output</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>last_xgb_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_parsnip</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>parsnip model object
+
+##### xgb.Booster
+raw: 1.2 Mb 
+call:
+  xgboost::xgb.train(params = list(eta = 0.00597, max_depth = 3, 
+    gamma = 0, colsample_bytree = 1, colsample_bynode = 1, min_child_weight = 1, 
+    subsample = 1), data = x$data, nrounds = 1072, watchlist = x$watchlist, 
+    verbose = 0, nthread = 8, objective = "binary:logistic")
+params (as set within xgb.train):
+  eta = "0.00597", max_depth = "3", gamma = "0", colsample_bytree = "1", colsample_bynode = "1", min_child_weight = "1", subsample = "1", nthread = "8", objective = "binary:logistic", validate_parameters = "TRUE"
+xgb.attributes:
+  niter
+callbacks:
+  cb.evaluation.log()
+# of features: 25 
+niter: 1072
+nfeatures : 25 
+evaluation_log:
+    iter training_logloss
+       1        0.6902110
+       2        0.6873069
+---                      
+    1071        0.1694754
+    1072        0.1693849</code></pre>
+<p>Auch für dieses Modell können wir uns mithilfe des Packages <code>vip</code> die Wichtigkeit der Variablen anzeigen lassen. Das <code>xgboost</code> Package erstellt intern ein One-Hot-Encoding, weshalb wir hier nun einzelne Ausprägungen von kategorischen Variablen als Variablen sehen. Den mit Abstand grössten Effekt hat die Ausprägung <code>normal</code> der kategorischen Variable <code>thal</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>last_xgb_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vip</span>(<span class="at">num_features =</span> <span class="dv">20</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-xgbvip" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-xgbvip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/xgb_vip.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-xgbvip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;6.13: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Nun vergleichen wir die insgesamt 6 Modelle auf dem Testdatensatz:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Testset Performance</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Testset-Performance</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>test_dt_aug <span class="ot">&lt;-</span> <span class="fu">augment</span>(last_dt_fit, test)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>test_rf_aug <span class="ot">&lt;-</span> <span class="fu">augment</span>(last_rf_fit, test)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>test_xgb_aug <span class="ot">&lt;-</span> <span class="fu">augment</span>(last_xgb_fit, test)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC AUC</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>test_dt_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>test_rf_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>test_xgb_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># ACCURACY</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>test_dt_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(<span class="at">truth =</span> hd, .pred_class)</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>test_rf_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(<span class="at">truth =</span> hd, .pred_class)</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>test_xgb_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(<span class="at">truth =</span> hd, .pred_class)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Für die Modelle, die wir nicht mit <code>tidymodels</code> gefittet haben, müssen wir leicht anders vorgehen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Performance der Modelle ohne tidymodels</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>pred_test_bag <span class="ot">&lt;-</span> <span class="fu">predict</span>(bag_fit, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>pred_test_rf <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_fit, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>pred_test_gbm <span class="ot">&lt;-</span> <span class="fu">predict</span>(gbm_final_fit, <span class="at">n.trees =</span> gbm_final_fit<span class="sc">$</span>n.trees, test, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultate in Data Frame Form</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>test_bag_aug <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pred_test_bag) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="at">hd =</span> test<span class="sc">$</span>hd) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">.pred_no =</span> no, <span class="at">.pred_yes =</span> yes) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.pred_class =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(.pred_yes <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"yes"</span>, <span class="st">"no"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)))</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>test_rfc_aug <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pred_test_rf) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="at">hd =</span> test<span class="sc">$</span>hd) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">.pred_no =</span> no, <span class="at">.pred_yes =</span> yes) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.pred_class =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(.pred_yes <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"yes"</span>, <span class="st">"no"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)))</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>test_gbm_aug <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pred_test_gbm) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="at">hd =</span> test<span class="sc">$</span>hd) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">.pred_yes =</span> pred_test_gbm) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.pred_no =</span> <span class="dv">1</span> <span class="sc">-</span> .pred_yes,</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">.pred_class =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(.pred_yes <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"yes"</span>, <span class="st">"no"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)))</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC AUC</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>test_bag_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>test_rfc_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>test_gbm_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> hd, .pred_yes, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a><span class="co"># ACCURACY</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>test_bag_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(hd, .pred_class)</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>test_rfc_aug <span class="sc">%&gt;%</span></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(hd, .pred_class)</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>test_gbm_aug <span class="sc">%&gt;%</span>  </span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(hd, .pred_class)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Die Resultate sehen wie folgt aus:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 26%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modell</th>
+<th>ROC AUC (Testset)</th>
+<th>Accuracy (Testset)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Classification Tree (<code>rpart</code>)</td>
+<td>83.2%</td>
+<td>77.3%</td>
+</tr>
+<tr class="even">
+<td>Bagging (<code>randomForest</code>)</td>
+<td>90.4%</td>
+<td>81.3%</td>
+</tr>
+<tr class="odd">
+<td>Random Forest (<code>randomForest</code>)</td>
+<td>92.9%</td>
+<td>86.7%</td>
+</tr>
+<tr class="even">
+<td>Random Forest (<code>ranger</code>)</td>
+<td><strong>93.3%</strong></td>
+<td><strong>90.7%</strong></td>
+</tr>
+<tr class="odd">
+<td>Gradient Boosting (<code>gbm</code>)</td>
+<td>93.0%</td>
+<td>89.3%</td>
+</tr>
+<tr class="even">
+<td>Gradient Boosting (<code>xgboost</code>)</td>
+<td>90.2%</td>
+<td>84.0%</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
