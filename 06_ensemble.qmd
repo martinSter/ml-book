@@ -1,5 +1,7 @@
 # Ensembles {#sec-ensemble}
 
+**Dieses Kapitel ist Work-in-Progress.**
+
 Ihr habt euch vielleicht bereits gewundert, was gemeint ist mit **Ensembles**. Ein Ensemble Modell ist ein Modell, das auf vielen verschiedenen **individuellen Regressions- oder Klassifikationsmodellen** aufbaut, also ein Ensemble von individuellen Modellen.
 
 Ein grosser Teil der Ensemble Methoden, die wir uns hier anschauen werden, kombinieren viele verschiedene **Decision Tree** Modelle zu einem Ensemble Modell. Konkret heisst das, dass die Vorhersagen der individuellen Decision Trees gemittelt werden.

@@ -327,7 +327,7 @@ $$
 Die Unterschiede zwischen dem Gini Index und Entropie als Kostenfunktion sind in der Praxis meist nicht von grosser Relevanz, aber es kann sich trotzdem lohnen, beide auszuprobieren und mittels Cross-Validation zu überprüfen, welche davon besser funktioniert.
 :::
 
-Drei wichtige (letzte) Punkte gilt es noch zu erwähnen:
+Drei wichtige Punkte gilt es noch zu erwähnen:
 
 * Wie bei der logistischen Regression gesehen (@sec-linclass), geben uns die meisten Klassifkationsmodelle eine **Wahrscheinlichkeit** zurück, dass die Outputvariable $y_i$ der ersten Kategorie angehört ($y_i=1$). Das ist auch für Klassifikationsbäume möglich. Anstelle der am häufigsten vorkommenden Kategorie (*hard prediction*) können wir uns vom Baum auch die **relativen Anteile** der Kategorien in einer Entscheidungsregion (bzw. einem Leaf Node) ausgeben lassen (*soft predictions*). Diese Anteil können als Wahrscheinlichkeiten für die verschiedenen Kategorien interpretiert werden.
 * Ein Klassifikationsbaum ist nicht auf eine binäre Outputvariablen limitiert und kann problemlos auf **mehrklassige Outputvariablen** angewendet werden.
@@ -336,6 +336,69 @@ Drei wichtige (letzte) Punkte gilt es noch zu erwähnen:
     * "grün" vs. "blau" oder "braun"
     * "braun" vs. "blau" oder "grün".
 
+Schauen wir uns zum Schluss dieses Abschnitts an, wie ein Klassifikationsbaum unser Beispiel mit zwei Input-Variablen aus @sec-linclass segmentiert. Ich habe hier das R-Package `tree` verwendet und das Argument `minsize` auf 10 gesetzt (d.h., ein interner Knoten darf nicht weniger als 10 Beobachtungen enthalten):
+
+```{r tree-2D, echo=FALSE, fig.show = 'hold', fig.cap='Decision Boundary für einen Threshold von 50% (bzw. 0.5) für einen Klassifikationsbaum mit `minsize = 10`.', out.width='60%', fig.asp=1, fig.align='center', fig.alt='DB für zwei Input-Variablen (Klassifikationsbaum).'}
+library(latex2exp)
+library(MASS)
+n <- 50
+thres <- 0.5
+set.seed(2)
+Sigma1 <- matrix(c(1,0,0,1.5), 2, 2)
+Sigma2 <- matrix(c(1,0.5,0.5,1), 2, 2)
+class1 <- mvrnorm(n/2, mu = c(4, 4), Sigma1)
+class2 <- mvrnorm(n/2, mu = c(6, 6), Sigma2)
+df <- data.frame(rbind(class1, class2))
+df$y <- c(rep(0, n/2), rep(1, n/2))
+cols <- c(rep(rgb(1, 0, 0, 0.4), n/2), rep(rgb(0, 0, 1, 0.4), n/2))
+model <- tree(y ~ X1 + X2, data = df, control = tree.control(nobs = n, minsize = 10, mindev = 0.0))
+par(oma = c(0.5, 0.5, 0.5, 0.5), pty = "s")
+par(mar = c(4, 5, 0.5, 0.5))
+plot(1, 1,
+     axes = F, ylim = c(0, 10), xlim = c(0, 10),
+     xlab = TeX(r'($x_{i2}$)'), ylab = TeX(r'($x_{i1}$)'),
+     type = "n", xaxs = "i", yaxs = "i",
+     cex = 2, cex.lab = 1.5, cex.axis = 1.5)
+box(lwd = 1)
+axis(side = 1, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+axis(side = 2, at = seq(0, 10, 2), labels = seq(0, 10, 2), cex.axis = 1.5)
+x1 <- seq(0, 10, len = 300)
+x2 <- seq(0, 10, len = 300)
+grid <- expand.grid(X1 = x1, X2 = x2)
+z <- matrix(predict(model, grid), nrow = 300, byrow = TRUE)
+image(x2, x1, z,  col = c(rgb(1,0,0,.1), rgb(0,0,1,.1)), breaks = c(0, .5, 1), add = TRUE)
+contour(x2, x1, z, levels = .5, add = TRUE, drawlabels = FALSE, lwd = 2, col = "grey")
+points(df$X2, df$X1, pch = 16, cex = 2, col = cols)
+```
+
+Wir sehen hier auch gleich zwei Probleme von Bäumen: 
+
+* Die resultierende Decision Boundary ist viel zu kompliziert für dieses Beispiel (**Overfitting**).
+* Die Decision Boundary ist begrenzt auf lineare Segmente, die in einem **rechten Winkel zu den Achsen** verlaufen. Das ist eine starke Limitierung dieses Modells.
+
+Nachfolgend der gefittete Baum:
+
+```{r tree-print, echo=FALSE}
+print(model)
+```
+
+#### Frage {.unnumbered}
+
+Versuchen Sie den obigen R-Output gut zu verstehen. Sehen Sie die Splits im Input Space oben repräsentiert. Warum fehlt der Split repräsentiert durch `6)` und  `7)`?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Der **erste Split** des Baums ist im R-Output durch `2)` und  `3)` repräsentiert und bezieht sich auf die erste Input-Variable. Im Input Space entspricht der Split dem horizontalen Segment auf der Höhe 5.25.
+
+Der **zweite und dritte Split** des Baums ist im R-Output durch `4)` und  `5)` respektive `6)` und  `7)` repräsentiert. Beide beziehen sich auf die zweite Input-Variable.
+
+Der zweite Split ist im Input Space repräsentiert durch das vertikale Segment auf der Höhe 4.66 (im unteren, roten Teil des Input Space). 
+
+Der dritte Split ist im Input Space **nicht** repräsentiert. Warum nicht? Wenn Sie den Split in `6)` und  `7)` genau anschauen, dann sehen Sie, dass in beiden Regionen der Anteil der blauen Beobachtungen über 0.5 liegt (0.67 und 1.0). Das bedeutet, dass dieser Split mit einem Threshold von 0.5 keinen Einfluss auf die Decision Boundary hat.
+
+Der **vierte Split** des Baums ist im R-Output durch `10)` und  `11)` repräsentiert und bezieht sich auf die zweite Input-Variable. Im Input Space entspricht der Split dem vertikalen Segment auf der Höhe 5.92.
+:::
 
 ## Entscheidungsbäume in R
 
