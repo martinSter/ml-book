@@ -214,98 +214,109 @@ Aus obigem Algorithmus ist ersichtlich, dass Gradient Boosting drei wichtige **H
 * Der Hyperparameter $d$ bezeichnet die Anzahl Splits, die wir in den einzelnen Bäumen zulassen. Erstaunlich oft funktionieren Bäume mit einem Split, also $d=1$, gut in der Praxis. In diesem Fall handelt es sich um sogenannte Entscheidungsstümmel (engl. *Decision Stumps*).
 * Der dritte wichtige Hyperparameter ist der Shrinkage Hyperparameter $\lambda \leq 1$. Wir wollen damit sicherstellen, dass das Boosting Ensemble nicht zu schnell lernt. Es hat sich in der Praxis herausgestellt, dass langsam lernende Boosting Ensembles zu einem besseren Ensemble führen. Der Shrinkage Hyperparameter kann auch als eine Form von **Regularisierung** interpretiert werden.
 
-<!-- In diesem Fall fitten wir effektiv ein *additives Modell* (warum?). -->
+Folgende Abbildung zeigt, wie sich der Parameter $B$ auf den Modellfit (links) sowie auf den RMSE auf dem Trainings- und Testdatensatz auswirkt. Für jeden Plot gilt $d=1$ und $\lambda=0.05$.
 
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, echo=FALSE} -->
-<!-- fluidPage( -->
+```{r gbm-ex, echo=FALSE, fig.show = 'hold', fig.cap='Links: Streudiagramme der Trainingsdaten ($n=50$) mit dem Outputwert auf der y-Achse und dem Inputwert auf der x-Achse. Die rotbraunen Kurven repräsentieren die trainierten Gradient Boosting Modelle auf dem Datensatz. Rechts: Vorhersagegüte (gemessen als RMSE) auf Trainings- und Testdaten. Für die Testdaten wurden weitere $n$ Beobachtungen generiert, die aber nicht für das Training verwendet wurden.', fig.width=12, fig.height=14, out.width='100%', fig.align='center', fig.alt='Einfluss von B auf Modellfit.'}
+suppressPackageStartupMessages(
+  library(gbm)
+)
 
-<!--   fluidRow( -->
-<!--     withMathJax(), -->
-<!--     p("In dieser Demo verwenden wir die Gradient Boosting Methode auf einem simplen  -->
-<!--       Datensatz mit einer Input-Variable. Wir schauen uns an, wie sich die  -->
-<!--       Hyperparameter dieser Methode (B, Shrinkage, Anzahl Splits) auf den Fit an -->
-<!--       die Trainingsdaten sowie die Fehler auf Training- und Testdatensatz auswirken.  -->
-<!--       Abgebildet ist immer nur der Trainingsdatensatz. Der Testdatensatz hat immer die -->
-<!--       selbe Grösse wie der Trainingsdatensatz.") -->
-<!--   ), -->
+## -----------------------
+## One scenario = one row
+## -----------------------
+run_scenario <- function(n, B, d, shrink) {
+  # Daten
+  set.seed(123)
+  xtrain <- runif(n, 0, 1)
+  ytrain <- 4 * (xtrain-0.5)^2 + rnorm(n, 0, 0.1)
+  xtest <- runif(n, 0, 1)
+  ytest <- 4 * (xtest-0.5)^2 + rnorm(n, 0, 0.1)
+  train <- data.frame(y = ytrain, x = xtrain)
+  test <- data.frame(y = ytest, x = xtest)
+  # Rechne GBM Modell
+  suppressPackageStartupMessages(
+    model <- gbm(y ~ x, data = train, distribution = "gaussian", n.trees = B, interaction.depth = d, shrinkage = shrink, n.minobsinnode = 1, bag.fraction = 1)
+  )
+  # Data Frame für Zeichnen der Kurven
+  new <- data.frame(x = seq(0, 1, 0.001))
+  # Vorhersagen
+  pred_curves <- predict(model, new, n.trees = B)
+  pred_train <- predict(model, train, n.trees = B)
+  pred_test <- predict(model, test, n.trees = B)
+  rmse <- c(
+    Train = sqrt(mean((ytrain - pred_train)^2)),
+    Test  = sqrt(mean((ytest  - pred_test)^2))
+  )
+  ## ---- Left panel: data + fit ----
+  par(mar = c(5, 4, 3, 1))
+  plot(
+    xtrain, ytrain,
+    pch = 16, cex = 2, col = "steelblue",
+    ylim = c(0, 1),
+    xlab = "x", ylab = "y",
+    main = paste("n =", n, ", B =", B)
+  )
+  lines(seq(0, 1, 0.001), pred_curves, type = "l", col = "rosybrown3", lwd = 2)
+  ## ---- Right panel: RMSE ----
+  par(mar = c(5, 3, 3, 1))
+  barplot(
+    rmse,
+    main = "RMSE",
+    col = "azure2",
+    ylim = c(0, 0.2)
+  )
+  abline(h = 0, lwd = 2)
+  text(
+    x = c(0.7, 1.9),
+    y = 0.025,
+    labels = round(rmse, 2),
+    pos = 3, cex = 1.3
+  )
+}
 
-<!--   fluidRow( -->
-<!--     column(width = 4, numericInput("n_boosting", "Anzahl Beobachtungen", 50, 1, 200, 10)) -->
-<!--   ), -->
+## -----------------------
+## Layout: 3 rows × 2 cols
+## -----------------------
+layout(
+  matrix(1:8, nrow = 4, byrow = TRUE),
+  widths = c(2, 1)
+)
 
-<!--   fluidRow( -->
-<!--     column(width = 4, numericInput("B", "Anzahl Bäume B", 1, 1, 500, 10)), -->
-<!--     column(width = 4, numericInput("shrinkage", "Shrinkage", 1, 0.01, 1, 0.01)), -->
-<!--     column(width = 4, numericInput("splits", "Anzahl Splits", 1, 1, 5, 1)), -->
-<!--   ), -->
+par(
+  cex.axis = 1.4,
+  cex.lab  = 1.5,
+  cex.main = 1.6
+)
 
-<!--   fluidRow( -->
-<!--     column(width = 12, plotOutput("boosting")) -->
-<!--   ) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
+## -----------------------
+## Scenarios
+## -----------------------
+run_scenario(n = 50, B = 100, d = 1, shrink = 0.05)
+run_scenario(n = 50, B = 1000, d = 1, shrink = 0.05)
+run_scenario(n = 50, B = 10000, d = 1, shrink = 0.05)
+run_scenario(n = 50, B = 100000, d = 1, shrink = 0.05)
 
-<!-- ```{r, context = "server"} -->
-<!-- output$boosting <- renderPlot({ -->
+layout(1)
+```
 
-<!--   library(gbm) -->
+Wenn Sie das Buch bis hierhin gelesen haben, dann dürfte Ihnen mittlerweile klar sein, dass mit $B=1000$ ein guter Tradeoff zwischen Under- und Overfitting gefunden wird.
 
-<!--   # Setze den Seed für Reprodzierbarkeit -->
-<!--   set.seed(123) -->
-<!--   # Generiere Daten -->
-<!--   xtrain <- runif(input$n_boosting, 0, 1) -->
-<!--   ytrain <- 4 * (xtrain-0.5)^2 + rnorm(input$n_boosting, 0, 0.1) -->
-<!--   xtest <- runif(input$n_boosting, 0, 1) -->
-<!--   ytest <- 4 * (xtest-0.5)^2 + rnorm(input$n_boosting, 0, 0.1) -->
-<!--   # Kreiere Data Frames -->
-<!--   train <- data.frame(y = ytrain, x = xtrain) -->
-<!--   test <- data.frame(y = ytest, x = xtest) -->
-<!--   # Rechne Regressionsbaum -->
-<!--   model <- reg_boost <- gbm(y ~ x, data = train, distribution = "gaussian",  -->
-<!--                             n.trees = input$B, interaction.depth = input$splits,  -->
-<!--                             shrinkage = input$shrinkage, n.minobsinnode = 1, bag.fraction = 1) -->
-<!--   # Data Frame für Zeichnen der Kurven -->
-<!--   new <- data.frame(x = seq(0, 1, 0.001)) -->
-<!--   # Vorhersagen -->
-<!--   pred_curves <- predict(model, new, n.trees = input$B) -->
-<!--   pred_train <- predict(model, train, n.trees = input$B) -->
-<!--   pred_test <- predict(model, test, n.trees = input$B) -->
-<!--   # 2 Plots nebeneinander -->
-<!--   par(mfrow = c(1,2)) -->
-<!--   par(bg = "#fef9e7") -->
-<!--   # Streuudiagramm -->
-<!--   plot(xtrain, ytrain, col = "blue", pch = 16) -->
-<!--   # Kurve Modell -->
-<!--   lines(seq(0, 1, 0.001), pred_curves, type = "l", col = "red", lwd = 2) -->
-<!--   # RMSE Train/Test -->
-<!--   rmse_train <- sqrt(mean((ytrain - pred_train)^2)) -->
-<!--   rmse_test <- sqrt(mean((ytest - pred_test)^2)) -->
-<!--   # Barplot RMSE -->
-<!--   barplot(c(rmse_train, rmse_test), main = "Root Mean Squared Error (RMSE)",  -->
-<!--           ylim = c(0, 1), names.arg = c("Train", "Test")) -->
-<!--   # RMSE als Text -->
-<!--   text(c(0.7,1.9), y=0.5, labels = c(round(rmse_train, 2), round(rmse_test, 2))) -->
+#### Frage {.unnumbered}
 
-<!-- }) -->
-<!-- ``` -->
+Sie haben ein Gradient Boosting Modell verwendet, aber es hat leider zu Overfitting geführt. Welche Möglichkeiten haben Sie, um das Problem des Overfittings beim Boosting zu beheben?
 
+a. Wir senken $\lambda$ und machen den Lernprozess so langsamer.
+b. Wir erhöhen die Anzahl Bäume $B$, die trainiert werden sollen.
+c. Early Stopping: wir lernen nur so lange neue Bäume bis der Fehler auf dem Validierungsdatensatz nicht mehr runter geht.
+d. Wir reduzieren die Komplexität der einzelnen Bäume, indem wir $d$ reduzieren.
 
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "boostingOverfitting", echo = FALSE} -->
-<!-- question("Sie haben ein Gradient Boosting Modell verwendet, aber es hat leider zu Overfitting geführt. Welche Möglichkeiten haben Sie, um das Problem des Overfittings beim Boosting zu beheben?", -->
-<!--   answer("Wir senken $\\lambda$ und machen den Lernprozess so langsamer.", correct = TRUE), -->
-<!--   answer("Wir erhöhen die Anzahl Bäume $B$, die trainiert werden sollen.", correct = FALSE), -->
-<!--   answer("Early Stopping: wir lernen nur so lange neue Bäume bis der Fehler auf dem Validierungsdatensatz nicht mehr runter geht.", correct = TRUE), -->
-<!--   answer("Wir reduzieren die Komplexität der einzelnen Bäume, indem wir $d$ reduzieren.", correct = TRUE), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Korrekt sind die Antworten **a**., **c**. und **d**.
+
+b. ist nicht korrekt, denn $B$ muss gesenkt werden, um dem Overfitting entgegen zu wirken.
+:::
 
 Wir werden später im zweiten Teil des Buchs den **Gradient Descent** Algorithmus kennen lernen. In der folgenden optionalen Box lernen Sie, inwiefern Gradient Boosting mit Gradienten und Ableitungen zu tun hat.
 
