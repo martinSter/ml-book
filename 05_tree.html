@@ -524,7 +524,7 @@ J = \frac{1}{n} \sum_{k=1}^K \sum_{i \in R_k} \left(y_i - \hat{y}_{R_k}\right)^2
 <p>Leider ist es hier nicht möglich dieses Minimierungsproblem genau (also analytisch) zu lösen, denn es gibt zu viele verschiedene (genauer gesagt: unendlich viele) Möglichkeiten, wie die Recktecke im Input Space angeordnet und kombiniert werden können.</p>
 <p>Beim Training von Entscheidungsbäumen treffen wir deshalb einige vereinfachende Annahmen, um eine <strong>Annäherung an die optimale Lösung</strong> für das Minimum der Kostenfunktion zu finden. Der Trainingsalgorithmus wird <em>Recursive Binary Splitting</em> genannt. Dieser Algorithmus hat die Eigenschaft, dass er <strong>greedy</strong> ist. Doch was bedeutet all das?</p>
 <ul>
-<li><em>Binary</em>: Jeder Split hat genau einen Splitpunkt und führt deshalb zu genau zwei “Child Nodes”. Jeder Split entspricht also einer binären “entweder-oder” Entscheidung. Es gibt aus einem Split nur zwei mögliche Branches (und nicht drei, vier. oder mehr), die nach unten führen.</li>
+<li><em>Binary</em>: Jeder Split hat genau einen Splitpunkt und führt deshalb zu genau zwei “Child Nodes”. Jeder Split entspricht also einer binären “entweder-oder” Entscheidung. Es gibt aus einem Split nur zwei mögliche Branches (und nicht drei, vier, oder mehr), die nach unten führen.</li>
 <li><em>Recursive</em>: Jeder Split basiert auf dem vorangegangenen Split ein Level höher. Der zweite Split splittet also eine der resultierenden Regionen aus dem ersten Split. Wenn Sie nochmal zum zweiten Split beim <code>housingrents</code> Datensatz gehen, dann sehen Sie, dass der zweite Split lediglich die obere Region splittet und nicht den ganzen Input Space. Der zweite Split bezieht sich auf den ersten Split, ist also rekursiv.</li>
 <li><em>Greedy</em>: wir optimieren in jedem Knoten immer nur den nächstmöglichen Split und schauen nicht weiter voraus bzw. den Baum runter. Der Algorithmus ist also in einem gewissen Sinn “geizig”.</li>
 </ul>
@@ -532,18 +532,18 @@ J = \frac{1}{n} \sum_{k=1}^K \sum_{i \in R_k} \left(y_i - \hat{y}_{R_k}\right)^2
 <ol type="1">
 <li>Wir rechnen den Wert der Kostenfunktion für jede Input-Variable und alle möglichen Splitpunkte <span class="math inline">\(s\)</span> und wählen diejenige Input-Variable mit Splitpunkt <span class="math inline">\(s\)</span>, wo <span class="math inline">\(J\)</span> minimal ist. Wir sehen, dass <code>econage</code> mit <span class="math inline">\(s=25\)</span> zum kleinsten Wert für <span class="math inline">\(J\)</span> führt. Darum ist dies unser erster Split im Baum. Gleichzeitig können wir daraus ableiten, dass <code>econage</code> die wichtigste Input-Variable im Datensatz ist. Nachfolgend die Kostenfunktionswerte für ein paar mögliche Splitpunkte:
 <ul>
-<li><code>econage</code> mit <span class="math inline">\(s=25\)</span>: <span class="math inline">\(SQR = 331'686.3\)</span><br>
+<li><code>econage</code> mit <span class="math inline">\(s=25\)</span>: <span class="math inline">\(MSE = 331'686.3\)</span><br>
 </li>
-<li><code>area</code> mit <span class="math inline">\(s=63\)</span>: <span class="math inline">\(SQR = 359'049\)</span><br>
+<li><code>area</code> mit <span class="math inline">\(s=63\)</span>: <span class="math inline">\(MSE = 359'049\)</span><br>
 </li>
-<li><code>nre</code> mit <span class="math inline">\(s=0.5\)</span>: <span class="math inline">\(SQR = 439'140.2\)</span> (Schnittpunkt <span class="math inline">\(s=0.5\)</span> teilt die Beobachtungen in NRE und nicht-NRE)</li>
+<li><code>nre</code> mit <span class="math inline">\(s=0.5\)</span>: <span class="math inline">\(MSE = 439'140.2\)</span> (Schnittpunkt <span class="math inline">\(s=0.5\)</span> teilt die Beobachtungen in NRE und nicht-NRE)</li>
 <li>Viele weitere Möglichkeiten…</li>
 </ul></li>
 <li>Basierend auf den zwei Regionen aus dem ersten Split, wählen wir den zweiten Split so, dass wiederum <span class="math inline">\(J\)</span> minimiert wird. Es resultieren drei Regionen. Wir sehen, dass <code>area</code> mit <span class="math inline">\(s=63\)</span> der nächstbeste Split ist.
 <ul>
-<li><code>area</code> mit <span class="math inline">\(s=63\)</span>: <span class="math inline">\(SQR = 298'849\)</span><br>
+<li><code>area</code> mit <span class="math inline">\(s=63\)</span>: <span class="math inline">\(MSE = 298'849\)</span><br>
 </li>
-<li><code>nre</code> mit <span class="math inline">\(s=0.5\)</span>: <span class="math inline">\(SQR = 328'305\)</span></li>
+<li><code>nre</code> mit <span class="math inline">\(s=0.5\)</span>: <span class="math inline">\(MSE = 328'305\)</span></li>
 <li>Viele weitere Möglichkeiten…</li>
 </ul></li>
 <li>Wir können so fortfahren bis ein <strong>Stoppkriterium</strong> erfüllt ist (z.B. maximale Tiefe des Baums erreicht).</li>
@@ -626,7 +626,7 @@ f(\mathbf{x}_i) = \sum_{k=1}^K \hat{y}_{R_k} \cdot \mathbb{1}_{\{\mathbf{x}_i \i
 <p>Klassifikationsbäume funktionieren vom Prinzip her fast gleich wie Regressionsbäume. Auch hier versuchen wir den Input Space (mit rechteckigen Formen) so zu segmentieren, dass die resultierenden Regionen die kategorische Outputvariable möglichst gut klassifizieren. Es gibt jedoch <strong>zwei zentrale Unterschiede</strong> im Vergleich zum Regressionsproblem:</p>
 <ul>
 <li><p>Die <strong>Vorhersage</strong> in einer Region <span class="math inline">\(R_k\)</span> entspricht nicht wie beim Regressionsbaum dem Mittelwert über die Outputvariable, sondern der <strong>am häufigsten vorkommenden Output-Kategorie</strong> in der Entscheidungsregion <span class="math inline">\(R_k\)</span>.</p></li>
-<li><p>Der Trainingsalgorithmus minimiert nicht den MAE, sondern den <strong>Gini Index</strong>. Der Gini Index ist ein Mass für die “Reinheit” in einem Leaf Node. Warum ist das ein gutes Gütekriterium? Ein perfekter Baum hat in jedem Leaf Node nur noch Beobachtungen einer Kategorie. In dem Fall ist die “Reinheit” maximal. Schauen wir uns doch kurz die Formel für die Berechnung des Gini Indexes (für die <span class="math inline">\(k\)</span>-te Entscheidungsregion <span class="math inline">\(R_k\)</span>) an:</p>
+<li><p>Der Trainingsalgorithmus minimiert nicht den MSE, sondern den <strong>Gini Index</strong>. Der Gini Index ist ein Mass für die “Reinheit” in einem Leaf Node. Warum ist das ein gutes Gütekriterium? Ein perfekter Baum hat in jedem Leaf Node nur noch Beobachtungen einer Kategorie. In dem Fall ist die “Reinheit” maximal. Schauen wir uns doch kurz die Formel für die Berechnung des Gini Indexes (für die <span class="math inline">\(k\)</span>-te Entscheidungsregion <span class="math inline">\(R_k\)</span>) an:</p>
 <p><span class="math display">\[
 G_k = \sum_{l=1}^L \hat{p}_{kl} \cdot (1-\hat{p}_{kl})
 \]</span> <span class="math inline">\(\hat{p}_{kl}\)</span> beschreibt hier den Anteil der <span class="math inline">\(l\)</span>-ten Output-Kategorie in der <span class="math inline">\(k\)</span>-ten Entscheidungsregion <span class="math inline">\(R_k\)</span>. Die Gesamtkostenfunktion ist dann einfach die Summe über die Gini Indizes in den verschiedenen Regionen, also <span class="math inline">\(\sum_k G_k\)</span>.</p></li>
