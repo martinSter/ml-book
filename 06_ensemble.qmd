@@ -2,9 +2,9 @@
 
 Ein Ensemble Modell ist ein Modell, das auf vielen verschiedenen **individuellen Regressions- oder Klassifikationsmodellen** aufbaut, also ein Ensemble von individuellen Modellen. Der Grossteil der Ensemble Modelle verwendet als individuelle Modelle **Entscheidungsbäume**. Konkret heisst das, dass die Vorhersagen der individuellen Entscheidungsbäume in geeigneter Form **aggregiert** werden. Eine schöne Analogie für Ensemble Methoden ist das Konzept **Wisdom of the Crowd**: wir kombinieren das "Wissen" von vielen verschiedenen Modellen zu einem starken Ensemble.
 
-Der Vorteil von diesem Vorgehen ist, dass Ensemble Modelle oft (viel) bessere Vorhersagen machen als ein individueller Entscheidungsbaum. Tatsächlich ist es so, dass Ensemble Modelle sogar dann gut funktionieren, wenn die individuellen Modelle des Ensembles nur leicht bessere Vorhersagen als der Zufall machen. Man spricht darum manchmal von Ensembles von **Weak Lerners**.
+Der Vorteil von diesem Vorgehen ist, dass Ensemble Modelle oft (viel) bessere Vorhersagen machen als ein individueller Entscheidungsbaum. Tatsächlich ist es so, dass Ensemble Modelle sogar dann gut funktionieren, wenn die individuellen Modelle des Ensembles nur leicht bessere Vorhersagen als der Zufall machen. Man spricht darum manchmal von Ensembles von **Weak Learners**.
 
-Ensemble Modelle sind (neben Modellen aus dem Deep Learning) die wettbewerbsfähigsten Modelle in der Praxis. Der Nachteil ist, dass wir mit Ensemble Modellen stärker in den Bereich von **Black-Box** Modellen vorrücken. Das heisst, es wird nun schwieriger, die Einflüsse der Input-Variablen auf unsere Zielvariable genau zu verstehen.
+Ensemble Modelle sind (neben Modellen aus dem Deep Learning) die wettbewerbsfähigsten Modelle in der Praxis. Der Nachteil ist, dass wir mit Ensemble Modellen stärker in den Bereich von **Black-Box** Modellen vorrücken. Das heisst, es wird nun schwieriger, die Einflüsse der Input-Variablen auf unsere Outputvariable genau zu verstehen.
 
 Doch warum funktionieren Ensembles so gut? Hier hilft eine Analogie zur **klassischen Statistik**, die in [@islr, Kapitel 8] gut dargelegt wird. Wir nehmen an, wir haben eine Stichprobe von $n$ Beobachtungen (z.B. Hauspreise).
 
@@ -25,7 +25,7 @@ Eine ganz simple Form von Ensembles sind sogenannnte **Voting Modelle**. In viel
 
 ![Die Idee von Voting Modellen anhand des Spam Filter Problems.](images/VotingClassifier.png){width=60% #fig-votingclassifier}
 
-Auch dieses Kapitel ist teilweise inspiriert durch [@islr, Kapitel 8] und [@Geron, Kapitel 7].
+Auch dieses Kapitel ist inspiriert durch [@islr, Kapitel 8] und [@Geron, Kapitel 7].
 
 ## Bagging
 
@@ -49,7 +49,7 @@ Bootstrapping wird in der klassischen Statistik angewendet, um die Unsicherheit 
 
 Bootstrapping ist im Prinzip eine besondere Art von **Sampling**: wir ziehen zufällig $n$ Beobachtungen aus einem Datensatz der Grösse $n$ **mit Zurücklegen**. Das Zurücklegen ist der zentrale Aspekt: dadurch werden gewisse Beobachtungen mehr als einmal in unserem Bootstrap Sample landen und gewisse Beobachtungen gar nicht. Nur so kriegen wir unterschiedliche Bootstrap Samples.
 
-Typischerweise ziehen wir insgesamt $B$ solche Bootstrap Samples (z.B. $B=1000$) und kriegen so viele **verschiedene Subsets** unseres Datensatzes. Jedes Subset hat haber gleich viele Beobachtungen ($n$) wie der Ursprungsdatensatz.
+Typischerweise ziehen wir insgesamt $B$ solche Bootstrap Samples (z.B. $B=1000$) und kriegen so viele **verschiedene Subsets** unseres Datensatzes. Jedes Subset hat aber gleich viele Beobachtungen ($n$) wie der Ursprungsdatensatz.
 :::
 
 Am besten lässt sich das Prinzip des Bootstrappings anhand eines einfachen Beispiels illustrieren. Wir haben folgende Stichprobe der Grösse $n=10$:
@@ -108,7 +108,7 @@ Im Fall des **Klassifikationsproblems** können wir zwischen einem **Soft Vote**
 * Beim Soft Vote rechnen wir den Durchschnitt über die vorhergesagten Wahrscheinlichkeiten der $B$ Bäume.
 * Beim Hard Vote entscheiden wir uns für die "hard prediction", die unter den $B$ Bäumen am häufigsten vorkommt.
 
-Folgende Abbildung zeigt das Vorgehen schematisch anhand des `housingrents` Datensatzes, den Sie bereits von den Entscheidungsbäumen kennen. Es handelt sich hierbei um ein Regressionsproblem:
+Folgende Abbildung zeigt das Vorgehen schematisch anhand des `housingrents` Datensatzes, den Sie bereits aus @sec-tree kennen. Es handelt sich hierbei um ein Regressionsproblem:
 
 ![Bagging Ensemble mit $B=3$ Bäumen für das `housingrents` Problem. Für eine Testbeobachtung (Wohnung) mit einem ökonomischen Alter von 9 Jahren und einer Fläche von 95 Quadratmetern, die im Besitz der Firma NRE ist, wird durch unser Ensemble eine Miete von CHF 2'150 vorhergesagt.](images/Bagging.PNG){width=90% #fig-bagging}
 
@@ -136,7 +136,7 @@ Für grosse Trainingsdatensätze kann das ein sehr wertvolles Vorgehen sein, wei
 
 ### Variable Importance
 
-Wir bewegen uns hier nun immer stärker in Richtung **Black-Box** Modelle. Darum wird das Thema **Variable Importance** (VIP) nun wichtig. Das heisst, wir müssen uns nun verstärkt überlegen, wie wir aus dem Modell lernen können, welche Input-Variablen im Modell wichtig sind.
+Wir bewegen uns hier nun immer stärker in Richtung **Black-Box** Modelle. Darum wird das Thema **Variable Importance** (VIP) nun wichtig. Das heisst, wir müssen uns nun verstärkt überlegen, wie wir aus dem Modell lernen können, welche Input-Variablen wichtig sind.
 
 Beim linearen und logistischen Regressionsmodell war das relativ einfach, da man die Wichtigkeit einer Input-Variable sehr gut anhand des dazugehörigen Modellparameters abschätzen kann. Auch bei Entscheidungsbäumen ist es simpel: Variablen, welche in Splits weiter oben im Baum verwendet werden, sind tendenziell wichtiger als Variablen, die in Splits weiter unten vorkommen und garantiert wichtiger als Variablen, die im Baum *nicht* verwendet werden.
 
@@ -162,7 +162,7 @@ Abgesehen davon, funktionieren Random Forests aber sonst genau gleich wie Baggin
 
 Was heisst das konkret für das `housingrents` Beispiel? Die dominante Variable `econage` steht so nicht für jeden ersten Split zur Verfügung und so zwingen wir die Bäume zu mehr Diversität.
 
-$m$ ist der wichtigste Hyperparameter von Random Forest Modellen, weshalb wir den optimalen Wert für $m$ typischwerweise mittels Hyperparameter Tuning suchen. Wenn die Trainingsdaten jedoch gross sind, dann kann ein solches Tuning allerdings lange dauern. In der Praxis hat sich darum $m=\sqrt{p}$ als guter Wert herausgestellt. Wenn wir also kein Hyperparameter-Tuning machen wollen, dann kann $m$ manuell auf $\sqrt{p}$ gesetzt werden. Die Anzahl Bäume $B$ kann problemlos auf einen grossen Wert gesetzt werden (z.B. $B=10'000$). Hierbei besteht keine Gefahr für Overfitting. Warum nicht? Der Hyperparameter $B$ kann hier wie die Grösse einer Stichprobe angeschaut werden und aus der klassischen Statistik wissen wir, dass unsere Schätzer mit grösseren Stichproben genauer und besser werden (und nie schlechter).
+$m$ ist der wichtigste Hyperparameter von Random Forest Modellen, weshalb wir den optimalen Wert für $m$ typischwerweise mittels Hyperparameter Tuning suchen. Wenn die Trainingsdaten gross sind, dann kann ein solches Tuning allerdings lange dauern. In der Praxis hat sich darum $m=\sqrt{p}$ als guter Wert herausgestellt. Wenn wir also kein Hyperparameter-Tuning machen wollen, dann kann $m$ manuell auf $\sqrt{p}$ gesetzt werden. Die Anzahl Bäume $B$ kann problemlos auf einen grossen Wert gesetzt werden (z.B. $B=10'000$). Hierbei besteht keine Gefahr für Overfitting. Warum nicht? Der Hyperparameter $B$ kann hier wie die Grösse einer Stichprobe angeschaut werden und aus der klassischen Statistik wissen wir, dass unsere Schätzer mit grösseren Stichproben genauer und besser werden (und nie schlechter).
 
 Die Tatsache, dass ein Random Forest in vielen Fällen auch ohne Hyperparameter Tuning gute Resultate liefert, ist übrigens einer der Hauptgründe, warum dieses Modell in der Praxis so beliebt ist.
 
@@ -205,7 +205,7 @@ Der **Lernalgorithmus** funktioniert wie folgt [@islr, Kapitel 8]:
 2. Danach iterieren wir über $B$ Bäume, also über $b=1,2,\dots,B$:
     + Wir fitten den $b$-ten Baum $\hat{f}_b$ mit insgesamt $d$ Splits so gut wie möglich auf die aktuellen Residuen $r_i$.
     + Wir updaten das Boosting Modell mit dem im vorherigen Schritt gefitteten Baum, indem wir den neuen Baum wie folgt hinzufügen: $\hat{f}(\mathbf{x}_i) := \hat{f}(\mathbf{x}_i) + \lambda \hat{f}_b(\mathbf{x}_i)$. Wir fügen also die Vorhersage des neuen Baums zum Modell hinzu, multiplizieren die neuen Vorhersagen aber mit dem **Shrinkage** Faktor $\lambda$.
-    + Nun berechnen wir die neuen Residuen zwischen den Werten der Zielvariable und den aktuellen Vorhersagen des Boosting Modells für alle Trainingsbeobachtungen: $r_i := y_i - \hat{f}(\mathbf{x}_i)$.
+    + Nun berechnen wir die neuen Residuen zwischen den Werten der Outputvariable und den aktuellen Vorhersagen des Boosting Modells für alle Trainingsbeobachtungen: $r_i := y_i - \hat{f}(\mathbf{x}_i)$.
 3. Nachdem wir über alle $B$ Bäume iteriert haben, kriegen wir unser finales Boosting Modell, nämlich $\hat{f}(\mathbf{x}_i) = \sum_{b=1}^B \lambda \hat{f}_b(\mathbf{x}_i)$.
 
 Aus obigem Algorithmus ist ersichtlich, dass Gradient Boosting drei wichtige **Hyperparameter** hat:
@@ -564,9 +564,9 @@ Die Variable `thal` geht auch hier als die wichtigste Variable hervor.
 
 ### Gradient Boosting
 
-Wir fitten hier den Gradient Boosting Algorithmus in einem ersten Schritt mit dem traditionellen `gbm` Package. Dieses Package erwartet, dass die kategorische Zielvariable 0/1 kodiert ist, weshalb ich in einem ersten Schritt eine Umkodierung vornehme.
+Wir fitten hier den Gradient Boosting Algorithmus in einem ersten Schritt mit dem traditionellen `gbm` Package. Dieses Package erwartet, dass die kategorische Outputvariable 0/1 kodiert ist, weshalb ich in einem ersten Schritt eine Umkodierung vornehme.
 
-Danach fitten wir mit der Funktion `gbm()` das Modell. In der Modellformel entferne ich die ursprüngliche Zielvariable `hd`. Mit `distribution = "bernoulli"` sagen wir der Funktion, dass es sich um ein binäres Klassifikationsproblem handelt. Die drei wichtigen Hyperparameter heissen hier etwas anders:
+Danach fitten wir mit der Funktion `gbm()` das Modell. In der Modellformel entferne ich die ursprüngliche Outputvariable `hd`. Mit `distribution = "bernoulli"` sagen wir der Funktion, dass es sich um ein binäres Klassifikationsproblem handelt. Die drei wichtigen Hyperparameter heissen hier etwas anders:
 
 * $B$ &rarr; `n.trees`
 * $d$ &rarr; `interaction.depth`

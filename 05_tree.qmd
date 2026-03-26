@@ -134,21 +134,21 @@ Leider ist es hier nicht möglich dieses Minimierungsproblem genau (also analyti
 
 Beim Training von Entscheidungsbäumen treffen wir deshalb einige vereinfachende Annahmen, um eine **Annäherung an die optimale Lösung** für das Minimum der Kostenfunktion zu finden. Der Trainingsalgorithmus wird *Recursive Binary Splitting* genannt. Dieser Algorithmus hat die Eigenschaft, dass er **greedy** ist. Doch was bedeutet all das?
 
-* *Binary*: Jeder Split hat genau einen Splitpunkt und führt deshalb zu genau zwei "Child Nodes". Jeder Split entspricht also einer binären "entweder-oder" Entscheidung. Es gibt aus einem Split nur zwei mögliche Branches (und nicht drei, vier. oder mehr), die nach unten führen.
+* *Binary*: Jeder Split hat genau einen Splitpunkt und führt deshalb zu genau zwei "Child Nodes". Jeder Split entspricht also einer binären "entweder-oder" Entscheidung. Es gibt aus einem Split nur zwei mögliche Branches (und nicht drei, vier, oder mehr), die nach unten führen.
 * *Recursive*: Jeder Split basiert auf dem vorangegangenen Split ein Level höher. Der zweite Split splittet also eine der resultierenden Regionen aus dem ersten Split. Wenn Sie nochmal zum zweiten Split beim `housingrents` Datensatz gehen, dann sehen Sie, dass der zweite Split lediglich die obere Region splittet und nicht den ganzen Input Space. Der zweite Split bezieht sich auf den ersten Split, ist also rekursiv.
 * *Greedy*: wir optimieren in jedem Knoten immer nur den nächstmöglichen Split und schauen nicht weiter voraus bzw. den Baum runter. Der Algorithmus ist also in einem gewissen Sinn "geizig".
 
 Am besten schauen wir uns diesen Trainingsalgorithmus wiederum anhand des `housingrents` Datensatzes an:
 
 1. Wir rechnen den Wert der Kostenfunktion für jede Input-Variable und alle möglichen Splitpunkte $s$ und wählen diejenige Input-Variable mit Splitpunkt $s$, wo $J$ minimal ist. Wir sehen, dass `econage` mit $s=25$ zum kleinsten Wert für $J$ führt. Darum ist dies unser erster Split im Baum. Gleichzeitig können wir daraus ableiten, dass `econage` die wichtigste Input-Variable im Datensatz ist. Nachfolgend die Kostenfunktionswerte für ein paar mögliche Splitpunkte:  
-    * `econage` mit $s=25$: $SQR = 331'686.3$  
-    * `area` mit $s=63$: $SQR = 359'049$  
-    * `nre` mit $s=0.5$: $SQR = 439'140.2$ (Schnittpunkt $s=0.5$ teilt die Beobachtungen in NRE und nicht-NRE)
+    * `econage` mit $s=25$: $MSE = 331'686.3$  
+    * `area` mit $s=63$: $MSE = 359'049$  
+    * `nre` mit $s=0.5$: $MSE = 439'140.2$ (Schnittpunkt $s=0.5$ teilt die Beobachtungen in NRE und nicht-NRE)
     * Viele weitere Möglichkeiten...
 
 2. Basierend auf den zwei Regionen aus dem ersten Split, wählen wir den zweiten Split so, dass wiederum $J$ minimiert wird. Es resultieren drei Regionen. Wir sehen, dass `area` mit $s=63$ der nächstbeste Split ist.  
-    * `area` mit $s=63$: $SQR = 298'849$  
-    * `nre` mit $s=0.5$: $SQR = 328'305$ 
+    * `area` mit $s=63$: $MSE = 298'849$  
+    * `nre` mit $s=0.5$: $MSE = 328'305$ 
     * Viele weitere Möglichkeiten...
 
 3. Wir können so fortfahren bis ein **Stoppkriterium** erfüllt ist (z.B. maximale Tiefe des Baums erreicht).
@@ -210,7 +210,7 @@ run_scenario <- function(n, min_nodes) {
     pch = 16, cex = 2, col = "steelblue",
     ylim = c(0, 1),
     xlab = "x", ylab = "y",
-    main = paste("n =", n, ", min_nodes =", min_nodes)
+    main = paste("n =", n, ", minsize =", min_nodes)
   )
   lines(seq(0, 1, 0.001), pred_curves, type = "l", col = "rosybrown3", lwd = 2)
   # Decision Boundaries
@@ -289,7 +289,7 @@ $$
 Klassifikationsbäume funktionieren vom Prinzip her fast gleich wie Regressionsbäume. Auch hier versuchen wir den Input Space (mit rechteckigen Formen) so zu segmentieren, dass die resultierenden Regionen die kategorische Outputvariable möglichst gut klassifizieren. Es gibt jedoch **zwei zentrale Unterschiede** im Vergleich zum Regressionsproblem:
 
 * Die **Vorhersage** in einer Region $R_k$ entspricht nicht wie beim Regressionsbaum dem Mittelwert über die Outputvariable, sondern der **am häufigsten vorkommenden Output-Kategorie** in der Entscheidungsregion $R_k$.
-* Der Trainingsalgorithmus minimiert nicht den MAE, sondern den **Gini Index**. Der Gini Index ist ein Mass für die "Reinheit" in einem Leaf Node. Warum ist das ein gutes Gütekriterium? Ein perfekter Baum hat in jedem Leaf Node nur noch Beobachtungen einer Kategorie. In dem Fall ist die "Reinheit" maximal. Schauen wir uns doch kurz die Formel für die Berechnung des Gini Indexes (für die $k$-te Entscheidungsregion $R_k$) an:
+* Der Trainingsalgorithmus minimiert nicht den MSE, sondern den **Gini Index**. Der Gini Index ist ein Mass für die "Reinheit" in einem Leaf Node. Warum ist das ein gutes Gütekriterium? Ein perfekter Baum hat in jedem Leaf Node nur noch Beobachtungen einer Kategorie. In dem Fall ist die "Reinheit" maximal. Schauen wir uns doch kurz die Formel für die Berechnung des Gini Indexes (für die $k$-te Entscheidungsregion $R_k$) an:
   
   $$
   G_k = \sum_{l=1}^L \hat{p}_{kl} \cdot (1-\hat{p}_{kl})
