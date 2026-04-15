@@ -23,7 +23,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -73,6 +127,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -238,8 +321,26 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Inhaltsverzeichnis</h2>
+   
+  <ul>
+  <li><a href="#modellspezifikation" id="toc-modellspezifikation" class="nav-link active" data-scroll-target="#modellspezifikation"><span class="header-section-number">9.1</span> Modellspezifikation</a>
+  <ul class="collapse">
+  <li><a href="#farbbilder" id="toc-farbbilder" class="nav-link" data-scroll-target="#farbbilder"><span class="header-section-number">9.1.1</span> Farbbilder</a></li>
+  <li><a href="#convolution-layers" id="toc-convolution-layers" class="nav-link" data-scroll-target="#convolution-layers"><span class="header-section-number">9.1.2</span> Convolution Layers</a></li>
+  <li><a href="#pooling-layers" id="toc-pooling-layers" class="nav-link" data-scroll-target="#pooling-layers"><span class="header-section-number">9.1.3</span> Pooling Layers</a></li>
+  <li><a href="#architektur" id="toc-architektur" class="nav-link" data-scroll-target="#architektur"><span class="header-section-number">9.1.4</span> Architektur</a></li>
+  <li><a href="#data-augmentation" id="toc-data-augmentation" class="nav-link" data-scroll-target="#data-augmentation"><span class="header-section-number">9.1.5</span> Data Augmentation</a></li>
+  </ul></li>
+  <li><a href="#beispiel-resnet" id="toc-beispiel-resnet" class="nav-link" data-scroll-target="#beispiel-resnet"><span class="header-section-number">9.2</span> Beispiel: ResNet</a></li>
+  <li><a href="#anwenden-von-modellen" id="toc-anwenden-von-modellen" class="nav-link" data-scroll-target="#anwenden-von-modellen"><span class="header-section-number">9.3</span> Anwenden von Modellen</a>
+  <ul class="collapse">
+  <li><a href="#anwenden-eines-bestehenden-cnns-option-2" id="toc-anwenden-eines-bestehenden-cnns-option-2" class="nav-link" data-scroll-target="#anwenden-eines-bestehenden-cnns-option-2"><span class="header-section-number">9.3.1</span> Anwenden eines bestehenden CNNs (Option 2)</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -263,9 +364,440 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Coming soon.</p>
+<p>Im zweiten Kapitel zum Thema Deep Learning befassen wir uns nun mit dem Thema <strong>Computer Vision</strong> und den dazugehörenden <strong>Convolutional Neural Networks</strong> (CNNs). Computer Vision heisst, wir wollen einem Computer bzw. einem Modell das “Sehen” beibringen. Das Modell soll zum Beispiel Gesichter erkennen, Bilder klassifizieren oder Objekte auf Bildern oder in Videos lokalisieren. Die ersten richtig grossen Durchbrüche von Deep Learning fanden ab 2010 im Bereich Computer Vision statt.</p>
+<section id="modellspezifikation" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="modellspezifikation"><span class="header-section-number">9.1</span> Modellspezifikation</h2>
+<p>Ganz grob funktionieren CNNs so, dass sie in den ersten paar Layers nach dem Input Layer <strong>kleine Muster</strong> (sogenannte <em>low-level features</em>) identifizieren, z.B. horizontale oder vertikale Segmente, Halbkreise, Kreise, etc. In späteren Layers werden diese kleinen Muster zu grösseren, komplexeren Muster (sogenannte <em>high-level features</em>) kombiniert. Auch hier findet also ein autonomer (und automatischer) Feature Engineering Prozess statt. Am Schluss macht das CNN seine Vorhersagen basierend auf den abstrakten Muster und Formen, die es im Bild erkannt hat.</p>
+<p>Vielleicht wundern Sie sich, warum wir dazu nicht die ANN Modelle aus <a href="08_ann.html" class="quarto-xref"><span>Kapitel 8</span></a> verwenden. Das Problem ist, dass ANNs, wie wir sie kennen gelernt haben, nur für ganz kleine Bilder (die MNIST Bilder hatten eine ganz kleine Auflösung von <span class="math inline">\(28 \times 28\)</span> Pixels) funktionieren. Für Bilder mit einer höheren Auflösung hätte unser ANN schnell mal viel zu viele Parameter und wäre <strong>nicht mehr trainierbar</strong>.</p>
+<section id="frage" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
+<p>Wie viele Parameter (ohne Bias Terms) hätte ein ANN zwischen Input Layer und Hidden Layer, wenn die Bilder eine Auflösung von <span class="math inline">\(200 \times 200\)</span> Pixels haben und wir 100 Neurons im Hidden Layer haben?</p>
+<ul>
+<li>100</li>
+<li>4 Mio.</li>
+<li>40’000</li>
+<li>400’000</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Dieses ANN hätte 40’000 Input Neurons (so viele wie das Bild Pixels hat) und dementsprechend <span class="math inline">\(100 \cdot 40'000 = 4 \text{Mio.}\)</span> Parameter.</p>
+</div>
+</div>
+</div>
+<p>Um dieses Problem zu beheben, wurden CNNs entwickelt. Wie CNNs funktionieren und was für Arten von Layers sie enthalten, werden wir uns in diesem ersten Abschnitt zu CNNs anschauen.</p>
+</section>
+<section id="farbbilder" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="farbbilder"><span class="header-section-number">9.1.1</span> Farbbilder</h3>
+<p>Wir werden hier nun mit <strong>farbigen Bildern</strong> arbeiten. Im Fall von <em>Grayscale</em> Bildern (wie bei MNIST) konnte jedes Bild durch einen 2D-Array (= Matrix) dargestellt werden. Für farbige Bilder brauchen wir drei Dimensionen, denn jedes Pixel in einem Bild wird definiert durch den Anteil von Rot, Blau und Grün (RBG). Wir können uns ein farbiges Bild als drei Matrizen, welche übereinandergelegt werden, vorstellen:</p>
+<div id="fig-colimg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-colimg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/colorImage.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-colimg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.1: Ein Farbbild kann man sich als drei übereinander gelegte Matrizen, welche den Rot-, Grün- und Blauanteil definieren vorstellen. Man spricht oft auch von den drei Farbchannels. Die meisten realen Bilder haben selbstverständlich eine viel höhere Auflösung (in den drei Farbchannels) als <span class="math inline">\(12 \times 12\)</span> Pixels.
+</figcaption>
+</figure>
+</div>
+<p>Im folgenden Code Block können Sie beispielsweise die Dimensionen eines Farbbilds eines Zebras (Quelle: Joachim Huber, via Wikimedia Commons, CC BY-SA 2.0) anschauen. Das Bild wurde im Hintergrund bereits geladen und kann hier als <code>zebra</code> aufgerufen werden:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensionen des Bilds</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(zebra)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1277 1920    3</code></pre>
+</div>
+</div>
+<p>Das Bild ist also 1277 Pixel hoch, 1920 Pixel brei und die dritte Dimension beschreibt die drei Farbchannels.</p>
+<p>Wir können das Bild selbstverständlich auch direkt in R plotten:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Leere Plot-Hülle</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bild plotten</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rasterImage</span>(zebra, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="09_cnn_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Wichtig</strong>: Anders als bei den ANNs müssen wir bei einem CNN das Bild <em>nicht</em> in einen langen Input-Datenvektor umformen (bzw. <em>flatten</em>). Wir werden das Bild also in der oben schematisch dargestellten 3D Struktur in das CNN einspeisen können. Warum das so ist, werden wir weiter unten sehen.</p>
+</section>
+<section id="convolution-layers" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="convolution-layers"><span class="header-section-number">9.1.2</span> Convolution Layers</h3>
+<p>Um genau zu verstehen, was in einem <strong>Convolution Layer</strong> passiert, werden wir uns hier der Einfachheit halber wieder ein MNIST Beispiel anschauen. Im MNIST haben wir <em>Grayscale</em> Bilder und darum kann das Bild durch eine Matrix dargestellt werden und wir müssen uns vorerst nicht mit den Farbchannels herumschlagen. Die meisten CNNs sind aber für Farbbilder (mit drei Farbchannels) konzipiert.</p>
+<section id="convolution-anhand-von-mnist" class="level4">
+<h4 class="anchored" data-anchor-id="convolution-anhand-von-mnist">Convolution anhand von MNIST</h4>
+<p>In einem Convolution Layer <strong>schieben</strong> wir mehrere sogenannte <strong>Convolution Filters</strong> über ein Bild. Diese Filter haben das Ziel kleine Muster und Formen im Bild zu erkennen. Doch wie sieht so ein Filter aus? Ein Convolution Filter kann durch eine kleine Matrix dargestellt werden. Häufig werden <span class="math inline">\(3 \times 3\)</span> Filter (also <span class="math inline">\(3 \times 3\)</span> Matrizen) verwendet. Im Beispiel weiter unten werden wir folgenden einfachen Filter verwenden:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+0 &amp; 0 &amp; 0\\
+1 &amp; 1 &amp; 1\\
+0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</span> Wir werden sehen, dass sich dieser Convolution Filter eignet, um <strong>horizontale Segmente</strong> im Bild zu erkennen. Überlegen Sie sich kurz anhand der Elemente in der Matrix, warum dieser Filter dafür geeignet sein könnte.</p>
+<p>In der folgenden Abbildung schauen wir uns wie in <a href="08_ann.html" class="quarto-xref"><span>Kapitel 8</span></a> das Bild der handgeschriebenen “7” an. Der Prozess der Convolution beginnt beim Pixel links oben. Wir legen den Filter über das Bild, so dass die <strong>Mitte des Filters</strong> genau auf dem Pixel links oben liegt. Dann multiplizieren wir die Werte des Filters mit den darunter liegenden Pixelwerten und summieren die Werte aller Multiplikationen auf. Der resultierende Wert ist dann der Pixelwert links oben im Output (rechter Teil der Abbildung mit dem Untertitel <em>Convolution</em>). Damit das auch bei allen Pixels am Rand des Bilds funktioniert, umrahmen wir das Bild mit Nullen. Dieser Schritt wird in der Praxis <strong>Zero-Padding</strong> genannt. Wir sehen in untenstehender Abbildung, dass die Convolution für das Pixel links oben zu einem Wert von 0 führt:</p>
+<div id="fig-conv1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-conv1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/conv1.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conv1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.2: Prozess der Convolution anhand eines vereinfachten MNIST Bilds der handgeschriebenen Zahl 7.
+</figcaption>
+</figure>
+</div>
+<p>Nun schieben wir den Convolution Filter über das Bild bis wir die Convolution für jedes Pixel berechnet haben. In der nächsten Abbildung schauen wir uns (als weiteres Beispiel) die Convolution für das Pixel in der dritten Zeile und fünften Spalte an. Hier ist der Output der Convolution nun 3:</p>
+<div id="fig-conv2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-conv2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/conv2.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conv2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.3: Prozess der Convolution anhand eines vereinfachten MNIST Bilds der handgeschriebenen Zahl 7. Das zentrale Pixel unter dem Filter ist das Pixel in der dritten Zeile und fünften Spalte. Der Output der Convolution ist 3.
+</figcaption>
+</figure>
+</div>
+<p>Eine animierte Version des Convolution Prozesses sieht wie folgt aus:</p>
+<div id="fig-convgif" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-convgif-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Convolution_arithmetic.gif" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-convgif-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.4: Das GIF zeigt, wie ein Convolution Filter über das Bild (in Blau) geschoben wird. Die grünze Matrix enthält die Resultate der Convolution. Quelle des GIFs: Vincent Dumoulin und Francesco Visin, via Wikimedia Commons, MIT.
+</figcaption>
+</figure>
+</div>
+<p>Sobald wir den Filter über das ganze Bild geschoben haben und für jedes Pixel die Convolution berechnet haben, kriegen wir den vollständigen <strong>Output dieses Filters</strong> (rechts):</p>
+<div id="fig-conv3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-conv3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/conv3.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conv3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.5: Rechts der Output des Convolution Filters nachdem er vollständig über das Bild links geschoben wurde.
+</figcaption>
+</figure>
+</div>
+<p>Sie sehen, dass im Output (rechts) die horizontalen Segmente hervorgehoben sind, weil sie höhere Convolution Resultate erzielten (max. den Wert 3). Der Filter hat also tatsächlich dieses Muster erkennen können. Allgemein gilt: der Filter gibt dann grosse Werte zurück, wenn das Muster in der jeweiligen <span class="math inline">\(3 \times 3\)</span> Submatrix des Bilds dem Filter ähnlich ist. Wir haben hier den Filter jeweils um ein Pixel nach rechts (oder unten) verschoben. In diesem Fall spricht man von einem <strong>Stride</strong> von 1. Mit einem Stride von 2 würden wir den Filter jeweils um 2 Pixel verschieben. Der Output (die Convolution) wäre dann nur halb so gross wie das Bild (hier also <span class="math inline">\(6 \times 6\)</span> Pixel).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Schlüsselschritt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Und nun der Schlüsselschritt im Verständnis: im obigen Beispiel waren die Werte des Filters (bzw. der Matrix) gegeben. In einem CNN werden die <strong>Werte des Filters jedoch automatisch via Backpropagation gelernt</strong>. Das CNN lernt also automatisch, auf welche Muster die Filter in den Convolution Layers achten sollen bzw. welche Muster besonders wertvoll sind, um gute Vorhersagen zu machen. Aus meiner Sicht ist das die Magie von CNNs.</p>
+</div>
+</div>
+</section>
+<section id="convolution-für-farbbilder" class="level4">
+<h4 class="anchored" data-anchor-id="convolution-für-farbbilder">Convolution für Farbbilder</h4>
+<p>Im Fall von Farbbildern ist das ganze etwas komplexer. In dem Fall hat jeder Convolution Filter <strong>drei (Filter-)Matrizen</strong> (mit potentiell anderen Gewichten), eine pro Farbchannel. Die Convolution findet dann für jeden Channel separat statt und am Schluss werden die drei resultierenden Convolutions wieder <strong>übereinandergelegt</strong> und <strong>pixelweise summiert</strong>, so dass jeder Convolution Filter lediglich einen zweidimensionalen Output ausgibt. Ganz am Schluss eines Convolution Layers wird auf jedem Pixel des zweidimensionalen Outputs noch die <strong>Aktivierungsfunktion ReLU</strong> angewendet.</p>
+<p>Wie bereits erwähnt, hat ein Convolution Layer typischerweise <strong>mehrere Filter</strong>, die alle unterschiedliche Muster erkennen können. Ganz allgemein sagen wir, dass ein Convolution Layer <span class="math inline">\(K\)</span> Filter hat. Der finale Output jedes Filteres wird dann <strong>Feature Map</strong> genannt. Das heisst, ein Convolution Layer mit <span class="math inline">\(K\)</span> Filtern führt zu <span class="math inline">\(K\)</span> Feature Maps. Dieser Vorgang ist in folgender Abbildung dargestellt:</p>
+<div id="fig-convlayer" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-convlayer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/convolutionLayer.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-convlayer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.6: Ein vollständiger Convolution Layer für Farbbilder. Ein Layer hat insgesamt <span class="math inline">\(K\)</span> Filter und jeder Filter besteht aus drei Filtermatrizen. So resultieren <span class="math inline">\(K\)</span> Feature Maps.
+</figcaption>
+</figure>
+</div>
+<p>Überlegen wir uns kurz, wie viele Parameter (Gewichte) dieser Convolution Layer hat. Jeder der <span class="math inline">\(K\)</span> Filter hat <em>drei</em> <span class="math inline">\(3 \times 3\)</span> Matrizen, d.h. jeder Filter hat insgesamt 27 Parameter<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, plus einen Bias Term pro Filter. Daraus folgt, dass ein Convolution Layer in unserem Beispiel insgesamt <span class="math inline">\((27 + 1) \cdot K\)</span> Parameter hat. Das sind in der Regel wesentlich weniger Parameter als wenn wir ein reguläres ANN verwenden würden, um das Problem zu lösen.</p>
+</section>
+<section id="ann-vs.-cnn" class="level4">
+<h4 class="anchored" data-anchor-id="ann-vs.-cnn">ANN vs.&nbsp;CNN</h4>
+<p>Um uns den Unterschied zwischen klassischen ANN und CNN noch klarer zu vergegenwärtigen, gehen wir kurz zum vereinfachten MNIST Beispiel zurück. Folgende Abbildung zeigt, was in einem ANN und einem CNN mit dem <span class="math inline">\(12 \times 12\)</span> Bild einer handgeschriebenen “7” passiert:</p>
+<div id="fig-anncnn" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anncnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ann_vs_cnn.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anncnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.7: Architektur eines ANNs vs.&nbsp;Convolution in einem CNN.
+</figcaption>
+</figure>
+</div>
+<p>Für das ANN (oberer Teil der Abbildung) werden die Pixel in einen 1D Input Layer <em>geflatted</em>. Der zentrale Punkt ist, dass danach <strong>jedes Pixel</strong> aus dem Input Layer mit <strong>jedem Neuron</strong> im Hidden Layer durch ein Gewicht verbunden ist. Für grosse Bilder (z.B. <span class="math inline">\(1000 \times 1000\)</span> Pixel) ist diese Architektur nicht mehr rechenbar.</p>
+<p>Dieses Problem wird durch CNNs gelöst (unterer Teil der Abbildung). Das Bild wird im Originalformat (im Fall eines Grayscale Bilds ist das 2D) im Input Layer dargestellt. Jeder <strong>Feature Map</strong> im Convolution Layer ist dann ebenfalls zweidimensional, alle Feature Maps zusammen sind dann aber ein 3D Konstrukt (gestapelte Matrizen). Jedes Pixel in einem Feature Map ist in einem gewissen Sinn ein Neuron. Der zentrale Punkt hier ist, dass jedes Pixel (Neuron) in einem Feature Map <strong>nur mit 9 Pixels</strong> im Input Layer verbunden ist und darum die <strong>Konnektivität</strong> im Netzwerk sehr <strong>lokal</strong> ist. Ausserdem verwendet jedes Pixel (Neuron) in einem Feature Map denselben Filter und darum die selben Parameter. Dies wird oft als <strong>Weight Sharing</strong> bezeichnet. Die lokale Konnektivität und das Weight Sharing begrenzen die Anzahl Gewichte im Vergleich zu einem klassischen ANN massiv.</p>
+</section>
+</section>
+<section id="pooling-layers" class="level3" data-number="9.1.3">
+<h3 data-number="9.1.3" class="anchored" data-anchor-id="pooling-layers"><span class="header-section-number">9.1.3</span> Pooling Layers</h3>
+<p>Nach einem Convolutional Layer kommt in einem CNN oft ein sogenannter <strong>Pooling Layer</strong>. Die Funktionsweise dieser Art von Layer ist glücklicherweise viel einfacher als diejenige des Convolution Layers.</p>
+<p>In den allermeisten Fällen wird heutzutage ein sogenanntes <strong>Max-Pooling</strong> angewendet. Dabei wird ganz einfach ein <span class="math inline">\(2 \times 2\)</span> Quadrat über die Outputs eines Convolution Filters (also die Feature Maps) geschoben. Für jeden nicht-überlappenden <span class="math inline">\(2 \times 2\)</span> Pixelblock wird der maximale Pixelwert in den Pooling Layer übernommen. Am besten schaut wir uns dazu das Beispiel in unten stehender Abbildung an:</p>
+<div id="fig-pooling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pooling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/pooling.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pooling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.8: Links: Originales MNIST Bild. Mitte: Output eines Convolution Layers (1 Feature Map). Rechts: Output eines Pooling Layers.
+</figcaption>
+</figure>
+</div>
+<p>Ganz wichtig: Indem wir Max-Pooling mit einem <span class="math inline">\(2 \times 2\)</span> Quadrat betreiben, <strong>reduzieren</strong> wir jeden Feature Map <strong>in beide Richtungen</strong> um den <strong>Faktor 2</strong>. Der Pooling Layer reduziert also jeden Feature Map von <span class="math inline">\(12 \times 12\)</span> zu <span class="math inline">\(6 \times 6\)</span>.</p>
+<p>Die Alternative zu Max-Pooling wäre <strong>Mean-Pooling</strong>, wo für jeden <span class="math inline">\(2 \times 2\)</span> Pixelblock der Mittelwert über die vier Pixel gerechnet und in den Pooling Layer übernommen wird.</p>
+<p>Ein Pooling Layer erfüllt viele verschiedene Zwecke:</p>
+<ul>
+<li>Er reduziert die <strong>Anzahl Berechnungen</strong> sowie die <strong>Auslastung des Arbeitsspeichers</strong> (RAM). In obigem Beispiel haben wir gesehen, dass sich die Pixels bzw. Neurons in einem Feature Map um den Faktor 4 von 144 auf 36 verringern.</li>
+<li>Er soll (durch <em>Downsampling</em>) das <strong>Overfitting</strong> bekämpfen.</li>
+<li>Er führt zu einer sogenannten <strong>Location Invariance</strong>, d.h., ob zum Beispiel eine horizontale Linie in der zweiten, dritten oder vierten Zeile von Pixels liegt, soll keine Rolle spielen und dementsprechend soll ein möglichst ähnliches Signal an den nächsten Layer weiter gegeben werden.</li>
+</ul>
+</section>
+<section id="architektur" class="level3" data-number="9.1.4">
+<h3 data-number="9.1.4" class="anchored" data-anchor-id="architektur"><span class="header-section-number">9.1.4</span> Architektur</h3>
+<p>Wie eine <strong>vereinfachte Architektur</strong> eines CNNs aussieht, zeigt folgende Abbildung:</p>
+<!-- ![Bla.](images/architektur.PNG){width=80% #fig-archit} -->
+<p>Ihr seht, dass ein CNN typischerweise mehrere Abfolgen von Convolution und Pooling Layers enthält. Wir sehen im ersten Convolution Layer <strong>5 Feature Maps</strong>, d.h. wir haben hier <span class="math inline">\(K=5\)</span> Filter angewendet und jeder Filter bestand aus drei kleinen Matrizen (z.B. <span class="math inline">\(3\times 3\)</span>). Danach folgt bereits ein erster Pooling Layer, der die 5 Feature Maps kleiner macht. Danach kommt ein zweiter Convolution Layer, der zu <strong>10 Feature Maps</strong> führt, d.h. wir haben hier <span class="math inline">\(K=10\)</span> Filter angewendet. <strong>Ganz wichtig</strong>: jeder der 10 Filter besteht in diesem Schritt aus <strong>5</strong> kleinen Matrizen (z.B. <span class="math inline">\(3\times 3\)</span>). Warum? Weil jeder Filter 5 Feature Maps aus dem vorherigen Layer verarbeiten muss. Danach folgt ein zweiter Pooling Layer, der die 10 Feature Maps verkleinert. Wir können beobachten, dass die Feature Maps durch das Pooling stets etwas kleiner werden. Dafür erhöhen wir grundsätzlich die <em>Anzahl</em> Feature Maps von Layer zu Layer, indem wir in jedem Convolution Layer die Anzahl Filter <span class="math inline">\(K\)</span> erhöhen. In unserem Beispiel haben wir <span class="math inline">\(K\)</span> vom ersten zum zweiten Convolution Layer von 5 auf 10 erhöht.</p>
+<p>Nach diesen zwei Convolution-Pooling Sequenzen wird der letzte Pooling Output <em>geflatted</em> und es folgen noch ein paar <strong>dense (fully connected) Layers</strong> wie wir sie aus einer klassischen ANN Architektur kennen. Und ganz am Schluss kommt der Output Layer, welcher in Bildklassifikationsproblemen meist ein <strong>Softmax</strong> Layer ist, da wir versuchen ein Bild in eine von z.B. 7 Kategorien zu klassifizieren (z.B. Vogel, Haus, Baum, Person, etc.).</p>
+<p>Die Architektur eines CNNs sowie die Ausgestaltung der einzelnen Layers ist enorm flexibel und es gibt <strong>unzählige Hyperparameter</strong>:</p>
+<ul>
+<li>Anzahl Convolution Layers</li>
+<li>Anzahl Pooling Layers</li>
+<li>Stride</li>
+<li>Dimensionen der Convolution Filter</li>
+<li>Zero-Padding: ja oder nein</li>
+<li>Max- oder Mean-Pooling</li>
+<li>Viele weitere</li>
+</ul>
+</section>
+<section id="data-augmentation" class="level3" data-number="9.1.5">
+<h3 data-number="9.1.5" class="anchored" data-anchor-id="data-augmentation"><span class="header-section-number">9.1.5</span> Data Augmentation</h3>
+<p>Eine Technik, welche CNNs massiv verbessert hat, ist <strong>Data Augmentation</strong>. Bei dieser Technik werden die Bilder während des Trainings leicht verändert. Zum Beispiel kann ein gegebenes Bild leicht verschoben oder rotiert, einen Ausschnitt daraus gewählt oder die Lichtbedingungen verändert werden. Ein Beispiel seht ihr in folgender Abbildung (Quelle: TseKiChung via Wikimedia):</p>
+<div id="fig-dataaugment" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dataaugment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/data_aug.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dataaugment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.9: Quelle der Abbildung: TseKiChung, via Wikimedia Commons, CC BY-SA 4.0
+</figcaption>
+</figure>
+</div>
+<p>Data Augmentation wirkt wie <strong>Regularisierung</strong> und kann das Overfitting von CNNs wesentlich eindämmen. Ein weiterer toller Aspekt von Data Augmentation ist, dass die Veränderungen der Bilder <strong>on the fly</strong> während des Modelltrainings gemacht werden können und die veränderten Bilder nicht abgespeichert werden müssen. Mit Keras und TensorFlow können wir direkt nach dem Input Layer spezielle Layers ins Modell aufnehmen, die solche Data Augmentation Schritte für uns durchführen. Details dazu findet ihr <a href="https://tensorflow.rstudio.com/examples/image_classification_from_scratch.html#using-image-data-augmentation">hier</a>.</p>
+</section>
+</section>
+<section id="beispiel-resnet" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="beispiel-resnet"><span class="header-section-number">9.2</span> Beispiel: ResNet</h2>
+<p>Wir schauen uns hier die Architektur des Modells <strong>ResNet34</strong> an, das im Jahr 2015 von Microsoft Mitarbeitenden vorgeschlagen wurde (<a href="https://arxiv.org/abs/1512.03385">He et al., 2015</a>). Eine Variante dieses Modells hat 2015 die sogenannte ImageNet Challenge gewonnen (dazu später mehr).</p>
+<p>Der Name ResNet34 ist dadurch begründet, dass <strong>Skip Connections</strong> verwendet werden und dadurch <strong>Residuen (Res)</strong> gelernt werden (ähnlich wie Gradient Boosting). Was Skip Connections genau sind, sehen wir etwas weiter unten. Ausserdem hat das Modell 34 Layers, wobei die Pooling Layers nicht mitgezählt werden.</p>
+<p>Die Architektur des ResNet34 sieht wie folgt aus:</p>
+<div id="fig-resnet34" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resnet34-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/resnet34.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resnet34-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;9.10: Quelle der Abbildung: <a href="https://arxiv.org/abs/1512.03385">He et al., 2015</a>
+</figcaption>
+</figure>
+</div>
+<p>Schauen wir uns die einzelnen Komponenten schrittweise (von links nach rechts) an:</p>
+<ul>
+<li>Als Input erwartet das Modell Farbbilder mit einer Auflösung von <span class="math inline">\(224\times 224\)</span> Pixels (mit 3 Farbchannels).</li>
+<li>Im ersten Convolution Layer (orange) werden <span class="math inline">\(K=64\)</span> Filter der Grösse <span class="math inline">\(7\times 7\)</span> verwendet. Weil wir einen <strong>Stride von 2</strong> (in der Abbildung gekennzeichnet durch “/2”) verwenden (die Filter also immer um 2 und nicht nur um 1 Pixel verschieben), reduzieren wir die Input Bilder um die Hälfte. Die 64 resultierenden Feature Maps haben also je eine Grösse von <span class="math inline">\(112\times 112\)</span> Pixels.</li>
+<li>Danach folgt ein Max. Pooling Layer, ebenfalls mit einem Stride von 2, so dass die Dimensionen der 64 Feature Maps nochmal halbiert werden auf <span class="math inline">\(56\times 56\)</span> Pixels.</li>
+<li>Nun folgen <strong>6 Convolution Layers</strong> (violett). Jeder Layer hat <span class="math inline">\(K=64\)</span> Filter der Grösse <span class="math inline">\(3\times 3\)</span> und einem Stride von 1, was bedeutet, dass die Dimensionen der resultierenden Feature Maps im Moment nicht halbiert werden. Der zentrale Aspekt dieser Architektur sind die Pfeile oberhalb der Layers. Sie stellen die <strong>Skip Connections</strong> dar. Der erste solche Pfeil bedeutet, dass der Output aus dem Pooling Layer nicht nur in den ersten violetten Convolution Layer einfliesst, sondern auch direkt in den dritten violetten Layer. Der Output des Pooling Layers kann also auch gewisse Layer überspringen (<em>skippen</em>). Solche Skip Connections haben viele Vorteile. Zum Beispiel “fliessen” die wesentlichen Informationen so schneller durch das Modell und das Training des Modells wird kürzer. Was in der Abbildung nicht dargestellt ist: in jedem Convolution Layer wird nach der Convolution, eine Batch Normalization (d.h. Standardizierung der Outputs) betrieben bevor die Outputs noch durch die ReLU Aktivierungsfunktion fliessen.</li>
+<li>Es folgen <strong>8 weitere Convolution Layers</strong> (grün), in denen jeweils <span class="math inline">\(K=128\)</span> Filter der Grösse <span class="math inline">\(3\times 3\)</span> verwendet werden. Um die Architektur ausgeglichen zu halten, wird im ersten grünen Convolution Layer ein Stride von 2 verwendet, wodurch sich die Dimensionen der Feature Maps auf <span class="math inline">\(28\times 28\)</span> Pixels reduzieren. Das stellt jedoch ein Problem für die Skip Connection dar. Der Output aus dem letzten violetten Convolution Layer enthält 64 Feature Maps der Grösse <span class="math inline">\(56\times 56\)</span> und soll nun nach den ersten beiden grünen Convolution Layers hinzu addiert werden. Der dazugehörige <strong>gestrichelte</strong> Pfeil stellt dar, dass bei dieser Skip Connection der Output aus dem letzten violetten Layer angepasst wird, so dass er ebenfalls 128 Feature Maps der Grösse <span class="math inline">\(28\times 28\)</span> entspricht.</li>
+<li>Nun folgen <strong>12 weitere Convolution Layers</strong> (rot), in denen jeweils <span class="math inline">\(K=256\)</span> Filter der Grösse <span class="math inline">\(3\times 3\)</span> verwendet werden. Auch hier haben die Filter des ersten Layers der roten Gruppe einen Stride von 2, wodurch die Dimensionen der Feature Maps auf <span class="math inline">\(14\times 14\)</span> reduziert werden. Dadurch muss auch hier die erste Skip Connection entsprechend angepasst werden.</li>
+<li>Danach folgt die letzte Gruppe von <strong>6 Convolution Layers</strong> (blau), in denen jeweils <span class="math inline">\(K=512\)</span> Filter der Grösse <span class="math inline">\(3\times 3\)</span> verwendet werden. Durch den Stride von 2 im ersten Layer der Gruppe reduziert sich die Grösse der Feature Maps auf nur noch <span class="math inline">\(7\times 7\)</span>.</li>
+<li>Nun kommt ein <strong>Global Average Pooling</strong> Layer, der für jeden der resultierenden 512 Feature Maps des letzten Convolution Layers den Mittelwert über die <span class="math inline">\(7\times 7 = 49\)</span> Pixels rechnet.</li>
+<li>Die resultierenden 512 Mittelwerte sind <strong>fully connected</strong> mit den 1000 Output Neurons. Letztere sind nötig, weil die ImageNet Challenge 1000 mögliche Kategorien hat. Die 1000 Outputs der Output Neurons werden mittels <strong>Softmax</strong> in Wahrscheinlichkeiten umgerechnet.</li>
+</ul>
+<p>Wow! Ziemlich komplex das Ganze, aber die einzelnen Komponenten sind eigentlich erstaunlich simpel.</p>
+</section>
+<section id="anwenden-von-modellen" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="anwenden-von-modellen"><span class="header-section-number">9.3</span> Anwenden von Modellen</h2>
+<p>Es gibt viele verschiedene Möglichkeiten, wie ihr Deep Learning Modelle anwenden könnt. Die verschiedenen Möglichkeiten unterscheiden sich im Grad der technischen Komplexität und hängen davon ab, ob eine bestehende Lösung euer konkretes Problem bereits vollumfänglich abbildet. Konkret gibt es folgende Möglichkeiten:</p>
+<ol type="1">
+<li>Ihr verwendet ein Deep Learning Modell über <strong>API-Services</strong>, welche oft von grossen Firmen wie Amazon, Google oder OpenAI angeboten werden. Das ist sehr einfach, hat jedoch den Nachteil, dass ihr keinerlei Flexibilität habt und das Modell nicht verändern könnt. Ausserdem sind solche Dienstleistungen in den meisten Fällen kostenpflichtig.</li>
+<li>Wie weiter unten demonstriert, könnt ihr <strong>bestehende (trainierte) Modelle</strong> (vor allem CNNs) auch direkt mit Keras herunterladen und verwenden. Dabei habt ihr vollen Einblick in das Modell und allzu schwierig ist es dank Keras auch nicht. Für mobile Applikationen enthält Keras sogar sogenannte <em>Lightweight Models</em> (<a href="https://tensorflow.rstudio.com/reference/keras/application_mobilenet_v2.html">MobileNet</a>).</li>
+<li>Wenn es für euer Problem, das ihr lösen wollt, keine vorgefertigte Lösung gibt (zum Beispiel wenn ihr andere Kategorien als die ImageNet Kategorien vorhersagen wollt), dann könnt ihr ein bestehendes (CNN) Modell nehmen und nur die letzten paar Layers trainieren. Dieser Prozess wird <strong>Transfer Learning</strong> genannt und ist enorm hilfreich. Die Convolution Layers von grossen Modellen, die von Google, Microsoft, etc. trainiert wurden, eignen sich oft auch für andere Probleme. Eine Anleitung für das Transfer Learning findet ihr <a href="https://tensorflow.rstudio.com/guides/keras/transfer_learning.html">hier</a>.</li>
+<li><em>Last but not least</em> könnt ihr natürlich auch ein <strong>eigenes Modell von Grund auf trainieren</strong>. Doch dazu braucht ihr erst einmal einen sehr grossen und vor allem <strong>gelabelten</strong> Datensatz. Für das Labelling greifen die Entwicklerinnen und Entwickler von DL Modellen oft auf Crowdsourcing Plattformen wie z.B. AmazonTurk zurück. Wie das Trainieren eines eigenen CNNs funktioniert, ist in diesem <a href="https://tensorflow.rstudio.com/examples/cifar10_cnn">Tutorial</a> oder in HOML (für Python) beschrieben. Für realistische Modelle empfehle ich euch, eine Cloud Lösung zu verwenden (z.B. <a href="https://colab.research.google.com/">Google Colab</a>), denn unsere Rechner haben grundsätzlich zu wenig Processing Power und vor allem auch zu wenig Arbeitsspeicher (RAM), ausser ihr habt eine <strong>Graphics Processing Unit</strong> (GPU) und ganz viel RAM. Wie ihr lokal mit R eine GPU einbindet, ist <a href="https://tensorflow.rstudio.com/install/local_gpu">hier</a> beschrieben.</li>
+</ol>
+<section id="anwenden-eines-bestehenden-cnns-option-2" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="anwenden-eines-bestehenden-cnns-option-2"><span class="header-section-number">9.3.1</span> Anwenden eines bestehenden CNNs (Option 2)</h3>
+<p>Wir schauen uns hier ein bestehendes CNN an, das mit den Daten aus der <a href="https://www.image-net.org/index.php">ImageNet Challenge</a> trainiert wurde. Der entsprechende Datensatz enthält über 14 Millionen Bilder, welche alle <strong>gelabelt</strong> sind. Jedes Bild muss in eine von 1000 Kategorien klassifiziert werden. Die möglichen Kategorien findet ihr <a href="https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a">hier</a>. Die Performance wird mit der <strong>Top-5 Error Rate</strong> gemessen, d.h. eine Vorhersage entspricht nur dann einem Fehler, wenn das wahre Label nicht unter den Top-5 Vorhersagen des Modells ist. Das aktuell beste Modell hat eine Top-5 Error Rate von etwas mehr als 2%. Wow!</p>
+<p>Wir werden hier das <strong>ResNet50</strong> Modell verwenden. Eine Variante davon hat die 2015 ImageNet Challenge gewonnen mit einer Top-5 Error Rate von weniger als 3.6% (vgl. HOML, p.&nbsp;505). Wir haben uns im vorherigen Kapitel bereits die Architektur des etwas kleineren Modells <strong>ResNet34</strong> angeschaut.</p>
+<p>Als erstes laden wir das trainierte Modell mit Keras. Dazu verwenden wir die Funktion <code>application_resnet50()</code>. Wir kriegen das Modell mit den optimalen Gewichten, indem wir das Argument <code>weights = "imagenet"</code> setzen. Mit der <code>summary()</code> Funktion können wir uns die Architektur des Modells anschauen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages laden</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tensorflow)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jpeg)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Als erstes laden wir das resnet50 Model und zwar mit den optimalen Gewichten.</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">application_resnet50</span>(<span class="at">weights =</span> <span class="st">"imagenet"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Schauen wir uns die Architektur dieses Modells mal an.</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>Model: "resnet50"
+__________________________________________________________________________________________________
+Layer (type)                           Output Shape               Param #        Connected to                            
+==================================================================================================
+input_1 (InputLayer)                   [(None, 224, 224, 3)]      0                                                      
+__________________________________________________________________________________________________
+conv1_pad (ZeroPadding2D)              (None, 230, 230, 3)        0              input_1[0][0]                           
+__________________________________________________________________________________________________
+conv1_conv (Conv2D)                    (None, 112, 112, 64)       9472           conv1_pad[0][0]                         
+__________________________________________________________________________________________________
+conv1_bn (BatchNormalization)          (None, 112, 112, 64)       256            conv1_conv[0][0]                        
+__________________________________________________________________________________________________
+conv1_relu (Activation)                (None, 112, 112, 64)       0              conv1_bn[0][0]                          
+__________________________________________________________________________________________________
+pool1_pad (ZeroPadding2D)              (None, 114, 114, 64)       0              conv1_relu[0][0]                        
+__________________________________________________________________________________________________
+pool1_pool (MaxPooling2D)              (None, 56, 56, 64)         0              pool1_pad[0][0]                         
+__________________________________________________________________________________________________
+
+...
+
+_______________________________________________________________________________________________________
+avg_pool (GlobalAveragePooling2D)      (None, 2048)               0              conv5_block3_out[0][0]                  
+_______________________________________________________________________________________________________
+probs (Dense)                          (None, 1000)               2049000        avg_pool[0][0]                          
+=======================================================================================================
+Total params: 25,636,712
+Trainable params: 25,583,592
+Non-trainable params: 53,120
+_______________________________________________________________________________________________________</code></pre>
+<p>Die Architektur des Modells ist riesig, weshalb ich sie hier verkürzt dargestellt habe. Ihr seht beim <strong>Input Layer</strong>, dass das Modell Farbbilder (3 Channels) mit einer Auflösung von <strong>224 x 224 Pixel</strong> erwartet. Nach dem Input Layer kommt der <strong>erste Convolutional Layer</strong> (= oranger Layer in ResNet34 Architektur). In Keras bzw. TensorFlow werden die <strong>einzelnen Elemente</strong> eines Convolution Layers separat dargestellt. Der erste Layer setzt sich zusammen aus:</p>
+<ul>
+<li><code>conv1_pad (ZeroPadding2D)</code>: In einem ersten Schritt wird das Zero Padding gemacht und da brauchen wir selbstverständlich keine Gewichte dazu.</li>
+<li><code>conv1_conv (Conv2D)</code>: Dann kommen 64 (7 x 7) Convolution Filters. Überlegen wir uns doch kurz, wie wir auf die insgesamt 9472 Gewichte kommen. Wir haben 64 Filter, wovon jeder drei 7 x 7 Matrizen enthält. Warum drei? Weil wir pro Farbchannel eine separate 7 x 7 Matrix haben. Das gibt uns bereits <span class="math inline">\(64 \cdot 3 \cdot 7 \cdot 7 = 9408\)</span> Gewichte. Dazu kommen noch 64 Bias Terms, was uns dann insgesamt <span class="math inline">\(9408 + 64 = 9472\)</span> Gewichte gibt.</li>
+<li><code>conv1_bn (BatchNormalization)</code>: Danach kommt eine sogenannte <strong>Batch Normalization</strong>, was vereinfacht nichts anderes als eine Standardisierung der Outputs der Convolution Filters ist.</li>
+<li><code>conv1_relu (Activation)</code>: ReLU Aktivierung der standardisierten Outputs in den 64 Feature Maps.</li>
+</ul>
+<p>Danach folgt der Max. Pooling Layer, welcher in Keras bzw. TensorFlow ebenfalls in zwei Unterschritte aufgeteilt wird: <code>pool1_pad (ZeroPadding2D)</code> und <code>pool1_pool (MaxPooling2D)</code>. Nicht abgebildet werden die diversen Gruppen von Convolution Layers.</p>
+<p>Der Output Layer ist <strong>dense</strong> und enthält 1000 Neurons, da wir die Wahrscheinlichkeiten für 1000 Kategorien rechnen wollen. Der zweitletzte Global Average Pooling Layer hat 2048 Neurons (in ResNet34 hatten wir hier nur 512 Neurons), wodurch der Output Layer insgesamt <span class="math inline">\((2048 + 1) \cdot 1000 = 2'049'000\)</span> Gewichte hat. Ganz unten im Output ist ersichtlich, dass das Modell insgesamt über 25 Millionen Parameter hat, wovon die meisten trainiert werden müssten. Hier haben wir aber die bereits trainierten (optimalen) Gewichte importieren können.</p>
+<p>Nun extrahieren wir die Gewichte aus dem Modell und schauen uns den <strong>ersten Filter</strong> im <strong>ersten Convolutional Layer</strong> an. Anhand des Indexings, <code>[ , , , 1]</code>, seht ihr, dass die Gewichte in einem 4-dimensionalen Array gespeichert sind. Die ersten beiden Dimensionen bezeichnen die Dimensionen der Filtermatrizen (also 7 x 7). Die dritte Dimension bezeichnet die Anzahl Feature Maps, welche der Convolutional Layer aus dem vorherigen Layer erwartet. In unserem Fall sind das 3, da wir im ersten Convolutional Layer die drei Farbchannels aus dem Input Layer erhalten. Die vierte Dimension bezeichnet die Anzahl Filter des vorliegenden Convolutional Layers. Mit der <code>1</code> spezifizieren wir, dass wir nur den ersten Filter anschauen wollen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir können auch die Gewichte extrahieren.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>optimal_weights <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">get_weights</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Erster Convolution Filter im ersten Conv. Layer</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>optimal_weights[[<span class="dv">1</span>]][ , , , <span class="dv">1</span>]</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>, , 1
+
+             [,1]        [,2]         [,3]         [,4]        [,5]        [,6]        [,7]
+[1,]  0.028252628  0.01818723  0.015884932  0.002420052 -0.05301533 -0.04735583  0.01854295
+[2,]  0.007990093  0.02488567  0.076726004  0.090264283 -0.01891512 -0.07935619 -0.01536172
+[3,] -0.027473288 -0.06575351  0.019992139  0.184763417  0.11552856 -0.08998038 -0.09464549
+[4,] -0.009787651 -0.07923734 -0.129819512  0.095235661  0.27007112  0.09940726 -0.01493159
+[5,]  0.023180470 -0.04645163 -0.183006614 -0.156041548  0.05361670  0.08349565  0.03695760
+[6,]  0.042254806  0.04594706 -0.046616178 -0.127040774 -0.02102392  0.03322218  0.02505229
+[7,]  0.014630316  0.03523030  0.004108737 -0.060385078 -0.01716923  0.01151425  0.00479147
+
+, , 2
+
+             [,1]        [,2]        [,3]        [,4]        [,5]         [,6]        [,7]
+[1,]  0.005868278  0.01875543  0.03614214  0.01715494 -0.09355789 -0.124100089 -0.02680790
+[2,] -0.007687946  0.02429662  0.14944476  0.21562344  0.01338885 -0.176872283 -0.12294715
+[3,] -0.074660495 -0.15249401  0.06102424  0.41499856  0.33233449 -0.081507459 -0.21111147
+[4,] -0.054444715 -0.25528842 -0.26442963  0.21033862  0.57014650  0.277241141 -0.02648117
+[5,]  0.023048820 -0.17785294 -0.41178319 -0.26845443  0.18579270  0.250555605  0.09637067
+[6,]  0.097701266  0.03894836 -0.19233614 -0.29224005 -0.03729927  0.099565394  0.10021943
+[7,]  0.061221115  0.06344386 -0.02231540 -0.17049119 -0.08630268  0.007418274  0.02751930
+
+, , 3
+
+              [,1]        [,2]        [,3]         [,4]          [,5]        [,6]        [,7]
+[1,] -0.0024409075  0.01904538  0.02179598 -0.003380956 -0.0769589692 -0.07131131  0.01439408
+[2,]  0.0003704716  0.02912742  0.11718027  0.150795683 -0.0093867844 -0.13021459 -0.07923260
+[3,] -0.0334048420 -0.08807442  0.08053155  0.324004412  0.2164803147 -0.09732457 -0.17507587
+[4,] -0.0174925867 -0.15134996 -0.18083088  0.167103648  0.4065239429  0.16355224 -0.07702903
+[5,]  0.0203978457 -0.10906302 -0.27673617 -0.172197968  0.1320384443  0.14969076  0.02951569
+[6,]  0.0638262108  0.04572181 -0.11566665 -0.178826123  0.0007846743  0.06553538  0.06971015
+[7,]  0.0186353922  0.03358492 -0.02011830 -0.127520546 -0.0607556999  0.00784576  0.02711843</code></pre>
+<p>Wie erwartet besteht der erste Filter aus <strong>drei 7 x 7 Matrizen</strong>.</p>
+<p>Wir laden nun das Bild des Zebras mit der Funktion <code>image_load()</code> und lassen es durch die Funktion gleich in die korrekte Auflösung überführen. Wir erinnern uns, dass <em>ResNet50</em> Bilder mit einer Auflösung von 224 x 224 Pixels erwartet. Danach konvertieren wir das Bild in einen 3D-Array:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lade ein Bild mit 'image_load()'</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Wichtig: resnet50 erwartet eine Auflösung von 224 x 224 Pixels</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>img <span class="ot">&lt;-</span> <span class="fu">image_load</span>(<span class="st">"zebra.jpg"</span>, <span class="at">target_size =</span> <span class="fu">c</span>(<span class="dv">224</span>, <span class="dv">224</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir konvertieren das Bild in einen 3D-Array (letzte Dimension sind die drei Farbchannels)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">image_to_array</span>(img)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Wir können das Bild mit geringerer Auflösung nochmals plotten:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quadratischer Plot in R</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty =</span> <span class="st">"s"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Leere Plot-Hülle</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Bild plotten</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rasterImage</span>(x <span class="sc">/</span> <span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- ![Bla.](images/zebra_224_224.jpeg){width=60% #fig-zebra} -->
+<p>Nun verändern wir die Dimensionalität des Bilds in einen 4-D Array. Warum wir das tun, ist im Code Kommentar unten beschrieben.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier müssen wir noch eine vierte Dimension voranstellen.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Diese Dimension bezeichnet die Batchgrösse. Da wir hier</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># nur für ein Bild eine Vorhersage machen wollen, hat diese</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimension den Wert 1.</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">array_reshape</span>(x, <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">dim</span>(x)))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Die Funktion <code>imagenet_preprocess_input()</code> enthält alle notwendigen Preprocessing Schritte, welche das Modell erwartet.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Und nun noch ein paar spezifischen Preprocessing Schritte,</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># welche in der Funktion 'imagenet_preprocess_input()' def. sind.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">imagenet_preprocess_input</span>(x)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun können wir die Vorhersage des Modells für unser Bild <code>x</code> rechnen und die Top-5 Vorhersagen ausgeben lassen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun rechnen wir die Vorhersage</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">predict</span>(x)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Schöner Output</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">imagenet_decode_predictions</span>(preds, <span class="at">top =</span> <span class="dv">5</span>)[[<span class="dv">1</span>]]</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>  class_name class_description        score
+1  n02391049             zebra 9.998761e-01
+2  n02129604             tiger 2.369525e-05
+3  n02422699            impala 1.781611e-05
+4  n02422106        hartebeest 1.060396e-05
+5  n02123159         tiger_cat 8.302844e-06</code></pre>
+<p>Das Modell hat kein Problem, das Bild korrekt zu klassifizieren! Doch was passiert eigentlich in all diesen Convolution Layers? Der folgende <a href="https://machinelearningmastery.com/how-to-visualize-filters-and-feature-maps-in-convolutional-neural-networks/">Blogpost</a> zeigt die Outputs der Convolutions Layers für eine andere bekannte CNN Architektur, nämlich VGG16.</p>
+<p>Im Bereich Computer Vision gibt es viele verschiedene Probleme. Das Hauptproblem ist die Klassifikation eines Objekts in einem Bild - das Problem, das wir bis jetzt betrachtet haben. Andere Probleme sind die <strong>gleichzeitige Klassifikation und Lokalisation</strong> eines Objekts in einem Bild, die Erkennung von <strong>mehreren Objekten</strong> in einem Bild oder die <strong>Klassifikation jedes Pixels</strong> in einem Bild. All diese Varianten des Standard Computer Vision Problems sind in <span class="citation" data-cites="Geron">(<a href="references.html#ref-Geron" role="doc-biblioref">Géron 2022, Kap. 14</a>)</span> im Detail beschrieben.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Geron" class="csl-entry" role="listitem">
+Géron, Aurélien. 2022. <em>Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems</em>. 3. Aufl. O’Reilly.
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><span class="math inline">\(3^3 = 27\)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
