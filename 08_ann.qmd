@@ -14,16 +14,13 @@ Heute sprechen wir fast ausschliesslich von Deep Learning oder AI, doch eigentli
 
 Wir beginnen das Kapitel mit einer Einführung in das MNIST Problem, das *Hello World* im DL. Danach beschreiben wir ausführlich die Modellspezifikation oder -architektur des ANNs. In einem weiteren Schritt widmen wir uns dem Modelltraining und schauen uns danach alles anhand eines einfachen Beispiels an, nämlich dem einfachen (nur eine Input-Variable) Regressionsbeispiel. Nach einem kurzen Abstecher in Architekturen für Multi-Output Probleme schauen wir uns zum Schluss noch die Anwendung in `R` an.
 
-<!-- TODO: Referenz zu Perceptron! -->
-<!-- TODO: Referenz zu Aktivierungsfunktionen -->
-
 ## MNIST
 
 Der bekannte **MNIST** Datensatz ist ein Beispiel aus dem Bereich **Computer Vision**. Der Datensatz enthält Bilder von handgeschriebenen Zahlen, wie folgender Ausschnitt zeigt:
 
 ![Ausschnitt aus dem MNIST Datensatz. Für jede Zahl sind 16 Bilder handgeschriebener Zahlen gezeigt. Quelle des Bilds: [Wikipedia](https://en.wikipedia.org/wiki/MNIST_database).](images/MnistExamples.png){width=70% #fig-mnistex}
 
-Jede handgeschriebene "2" sieht anders aus, hat aber doch gewisse Ähnlichkeiten mit den anderen Bildern einer "2". Dasselbe gilt für alle anderen Zahlen. Wir werden später nach Modellen suchen, welche einem handgeschriebenen Bild die korrekte Zahl zuordnen können. Hierbei handelt es sich um ein **Klassifikationsproblem** mit einer **Zielvariable mit 10 möglichen Kategorien**, nämlich die Zahlen 0 bis 9.
+Jede handgeschriebene "2" sieht anders aus, hat aber doch gewisse Ähnlichkeiten mit den anderen Bildern einer "2". Dasselbe gilt für alle anderen Zahlen. Wir werden später nach Modellen suchen, welche einem handgeschriebenen Bild die korrekte Zahl zuordnen können. Hierbei handelt es sich um ein **Klassifikationsproblem** mit einer **Outputvariable mit 10 möglichen Kategorien**, nämlich die Zahlen 0 bis 9.
 
 Der MNIST Datensatz ist hier im Hintergrund bereits geladen und in einen Trainings- und Testdatensatz aufgeteilt. Warum ist der Datensatz bereits aufgeteilt? So arbeiten alle ML-Expert:innen auf der ganzen Welt mit demselben Trainings- und Testset und die Performances sind direkt vergleichbar. Ausserdem sind die beiden Datensätze **balanced**, d.h. die Zahlen 0-9 kommen in beiden Datensätzen etwa gleich oft vor.
 
@@ -42,7 +39,7 @@ y_test <- mnist$test$y
 Die Outputvariable in Trainings- und Testset kann als `y_train` bzw. `y_test` aufgerufen werden. Dabei handelt es sich um Vektoren, welche die wahren Zahlen enthalten. Prüfen wir als erstes kurz die Dimensionen der beiden Vektoren. Da es sich um (eindimensionale) Vektoren handelt, gibt uns die Funktion `dim()` lediglich eine Zahl zurück, die der Anzahl Elemente im Vektor entspricht.
 
 ```{r}
-# Überprüfe Dimensionen der Zielvariable
+# Überprüfe Dimensionen der Outputvariable
 dim(y_train)
 dim(y_test)
 ```
@@ -232,7 +229,16 @@ g(z) = \frac{e^z}{1+e^z}=\frac{1}{1+e^{-z}}
 $$
 Für jeden reellen Wert $z$ gibt uns die Funktion $g(z)$ einen Wert zwischen 0 und 1 zurück.
 
-Die Sigmoid Funktion ist allerdings bei weitem nicht die einzige Aktivierungsfunktion. Heute wird für die Aktivierung der Neurons in den Hidden Layers for allem die **ReLU** Funktion verwendet. ReLU steht für *Rectified Linear Unit* und die Funktion ist wie folgt definiert:
+Wir haben beim Perceptron (@sec-intro) ebenfalls bereits eine Form von Aktivierung kennen gelernt, die wie folgt aussah:
+
+$$
+g(z) = \begin{cases}
+			-1, & z < 0\\
+      +1, & z \geq 0
+		\end{cases}
+$$
+
+Die Perceptron Aktivierung und die Sigmoid Funktion sind allerdings bei weitem nicht die einzigen Aktivierungsfunktionen. Heute wird für die Aktivierung der Neurons in den Hidden Layers for allem die **ReLU** Funktion verwendet. ReLU steht für *Rectified Linear Unit* und die Funktion ist wie folgt definiert:
 
 $$
 g(z) = 
@@ -387,7 +393,64 @@ $$
 
 Wir haben in diesem Abschnitt ein sehr einfaches ANN betrachtet, das einen Input Layer, einen Hidden Layer und einen Output Layer hat. Von nun an werden wir uns etwas komplexere ANNs anschauen, diese werden jedoch immer einen Input Layer und einen Output Layer haben. Was aber variieren kann, sind die **Anzahl Hidden Layers**. Je mehr Hidden Layers wir haben, desto tiefer ("deep") ist unser Modell. Für komplexe Probleme (z.B. Bilderkennung) braucht es sehr tiefe ANN mit vielen Hidden Layers. Es ist also im Ermessen von Ihnen als Data Scientist:in, wie viele Hidden Layers Sie ins Modell aufnehmen. Ausserdem müssen Sie für jeden Hidden Layer bestimmen, wie viele Neurons der Layer enthalten soll. Und das sind nur mal zwei Hyperparameter des Modells, es gibt noch viele weitere.
 
+::: {.callout-caution collapse="true"}
+## Wie das XOR Problem gelöst wird (optional)
 
+Das Problem des Perceptrons ist, dass es **keinen Hidden Layer** gibt. Darum kann das einfache Perceptron keine *nicht* linear-separierbare Probleme lösen.
+
+Das ändert sich jedoch sofort, wenn wir einen Hidden Layer mit beispielsweise zwei Neurons verwenden. Im folgenden Beispiel ist die Aktivierung eine **Heavyside Step** Funktion (die der Perceptron Aktivierung sehr ähnlich ist):
+
+$$
+g(z) = \begin{cases}
+			0, & z < 0\\
+      1, & z \geq 0
+		\end{cases}
+$$
+
+Sie erinnern sich, dass wir beim XOR Problem zwei Input-Variablen $x_{i1}$ und $x_{i2}$ haben, die je nur die Werte $\{0,1\}$ annehmen können.
+
+Im ersten Neuron im Hidden Layer wird folgendes gerechnet:
+
+$$
+g\left(z_1^{(1)}\right) = g(-0.5 + 1\cdot x_1 + 1\cdot x_2)
+$$
+Lassen Sie uns diese Berechnung für die vier möglichen Kombinationen von Input-Werten machen:
+
+* Falls $x_{i1}=0$ und $x_{i2}=0$, dann ist $g\left(z_1^{(1)}\right) = 0$.
+* Falls $x_{i1}=1$ und $x_{i2}=1$, dann ist $g\left(z_1^{(1)}\right) = 1$.
+* Falls $x_{i1}=1$ und $x_{i2}=0$, dann ist $g\left(z_1^{(1)}\right) = 1$.
+* Falls $x_{i1}=0$ und $x_{i2}=1$, dann ist $g\left(z_1^{(1)}\right) = 1$.
+
+Was in diesem ersten Neuron im Hidden Layer effektiv umgesetzt wird, ist die **OR** Logik. Das Neuron wird aktiviert, wenn mindestens eine der Input-Variablen aktiviert (= 1) ist.
+
+Was passiert im zweiten Neuron des Hidden Layers?
+
+$$
+g\left(z_2^{(1)}\right) = g(-1.5 + 1\cdot x_1 + 1\cdot x_2)
+$$
+Auch hier schauen wir uns die Berechnungen konkret an:
+
+* Falls $x_{i1}=0$ und $x_{i2}=0$, dann ist $g\left(z_2^{(1)}\right) = 0$.
+* Falls $x_{i1}=1$ und $x_{i2}=1$, dann ist $g\left(z_2^{(1)}\right) = 1$.
+* Falls $x_{i1}=1$ und $x_{i2}=0$, dann ist $g\left(z_2^{(1)}\right) = 0$.
+* Falls $x_{i1}=0$ und $x_{i2}=1$, dann ist $g\left(z_2^{(1)}\right) = 0$.
+
+Das zweite Neuron setzt die **AND** Logik um und wird nur aktiviert, wenn beide Input-Variablen aktiviert (= 1) sind.
+
+Im Output Neuron passiert dann folgende Berechnung:
+
+$$
+g\left(z_1^{(2)}\right) = g\left(-0.5 + 1\cdot g\left(z_1^{(1)}\right) - 1\cdot g\left(z_2^{(1)}\right)\right)
+$$
+Welche finalen Modelloutputs ergeben sich daraus?
+
+* Falls $g\left(z_1^{(1)}\right) = 0$ und $g\left(z_2^{(1)}\right) = 0$, dann ist $g\left(z_1^{(2)}\right) = 0$.
+* Falls $g\left(z_1^{(1)}\right) = 1$ und $g\left(z_2^{(1)}\right) = 1$, dann ist $g\left(z_1^{(2)}\right) = 0$.
+* Falls $g\left(z_1^{(1)}\right) = 1$ und $g\left(z_2^{(1)}\right) = 0$, dann ist $g\left(z_1^{(2)}\right) = 1$.
+* Falls $g\left(z_1^{(1)}\right) = 1$ und $g\left(z_2^{(1)}\right) = 0$, dann ist $g\left(z_1^{(2)}\right) = 1$.
+
+Wow, unser Modell kann das XOR Problem nun perfekt lösen. Was war dafür nötig? Zwei nicht-lineare Transformationen im Hidden Layer.
+:::
 
 
 ## Modelltraining
@@ -708,264 +771,177 @@ Sie sehen oben, dass jede Ableitung **eine Summe über den ganzen Datensatz** be
 
 In jedem Schritt wird die Ableitung mit einem anderen Subset aus den Trainingsdaten (d.h. einem anderen Mini-Batch) gerechnet. Wenn ein Mini-Batch 128 Beobachtungen und der Trainingsdatensatz $n=10'000$ Beobachtungen enthält, dann benötigen wir $10'000/128 \approx 78$ Gradient Descent Schritte, um jede Beobachtung im Trainingsdatensatz einmal verwendet zu haben. Nach diesen 78 Schritten haben wir eine sogenannte **Epoche** des Trainings abgeschlossen.
 
+#### Initialisierung der Gewichte
+
+Ganz zu Beginn des Backpropagation Algorithmus müssen alle Gewichte des ANNs mit irgendwelchen Werten **initialisiert** werden. Es gibt viele Arten, wie die Gewichte initialisiert werden können, aber die wichtigste Erkenntnis ist, dass die Gewichte zufällig mit unterschiedlichen Werten initialisiert werden (z.B. durch Ziehen aus einer Standardnormalverteilung).
+
+Eine andere Idee könnte sein, die Gewichte alle **mit 0 zu initialisieren**. Doch warum ist das eine schlechte Idee? Das Problem ist, dass in diesem Fall die Neurons im Hidden Layer **nicht unterscheidbar** sind und sich auch nach vielen Backpropagation Iterationen nicht unterscheiden. Das ANN hat dann effektiv nur ein Neuron, auch wenn die Architektur ganz viele Neurons beinhaltet. 
+
 #### Kurze Zusammenfassung
 
 Zusammenfassend können wir sagen, dass der *Backpropagation* Algorithmus uns erlaubt die Gewichte bzw. Parameter eines ANNs so zu verändern, dass die Kosten kleiner werden. Wir iterieren diesen Algorithmus so lange bis wir ein Minimum erreicht haben. Wir werden später sehen, dass wir die Berechnungen des *Backpropagation* Algorithmus zum Glück nicht selber machen müssen. Dazu gibt es wunderbare Software (z.B. **TensorFlow** oder **PyTorch**).
 
 ### Vermeidung von Overfitting
 
-Wenn wir den Backpropagation Algorithmus uneingeschränkt anwenden, dann führt das unweigerlich zu **Overfitting**, denn ANNs sind enorm flexible Modelle und die Gewichte werden sich so lange anpassen bis das ANN die Trainingsdaten fast perfekt abbildet. Wir wollen dieses Overfitting aber unbedingt vermeiden! Dazu gibt es verschiedene Methoden.
+Wenn wir den Backpropagation Algorithmus uneingeschränkt anwenden, dann führt das unweigerlich zu **Overfitting**, denn ANNs sind enorm flexible Modelle und die Gewichte werden sich so lange anpassen bis das ANN die Trainingsdaten fast perfekt abbildet. Wir wollen dieses Overfitting aber unbedingt vermeiden. Dazu gibt es verschiedene Methoden.
 
-Eine ganz einfache Art, das Overfitting zu vermeiden ist das sogenannte **Early Stopping**. Die Idee ist, dass wir den Backpropagation Algorithmus nur so lange laufen lassen bis der Loss auf einem separaten Validierungsdatensatz (Beobachtungen, die nicht für das Training verwendet werden) nicht mehr sinkt. Das ist eine sehr einfache, aber effektive Art Overfitting zu vermeiden.
+Eine ganz einfache Art, das Overfitting zu vermeiden ist das sogenannte **Early Stopping**. Die Idee ist, dass wir den Backpropagation Algorithmus nur so lange laufen lassen bis die Kosten auf einem separaten Validierungsdatensatz (Beobachtungen, die nicht für das Training verwendet werden) nicht mehr sinken. Das ist eine sehr einfache, aber effektive Art, Overfitting zu vermeiden.
 
-Eine andere Form haben wir bereits kennen gelernt: **Regularisierung**. Wir fügen einen Ridge oder Lasso Regularisierungsterm zur Loss Funktion hinzu.
+Eine andere Art, Overfitting zu vermeiden haben wir bereits kennen gelernt: **Regularisierung**. Wir fügen einen Ridge oder Lasso Regularisierungsterm zur Kostenfunktion hinzu.
 
-Eine dritte Form zur Vermeidung von Overfitting ist **Dropout Learning**. Die Idee ist, dass bei jedem Gradient Descent Schritt (für jede Beobachtung $i$ separat) eine vorgegebene Anzahl zufällig ausgewählter Neurons im Hidden Layer nicht berücksichtigt werden. Dadurch vermeiden wir, dass sich die Neurons im Hidden Layer allzu stark spezialisieren und *Noise* in den Daten abbilden.
+Eine dritte Art der Vermeidung von Overfitting ist **Dropout Learning**. Die Idee ist, dass bei jedem Gradient Descent Schritt (für jede Beobachtung $i$ separat) eine vorgegebene Anzahl zufällig ausgewählter Neurons im Hidden Layer nicht berücksichtigt werden. Dadurch vermeiden wir, dass sich die Neurons im Hidden Layer allzu stark spezialisieren und *Noise* in den Daten abbilden.
 
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "overfittingann_mc", echo = FALSE} -->
-<!-- question("Welche der folgenden Methoden dienen der Vermeidung von Overfitting?", -->
-<!--   answer("Gradient Descent"), -->
-<!--   answer("Early Stopping", correct = TRUE), -->
-<!--   answer("Dropout Learning", correct = TRUE), -->
-<!--   answer("Regularisierung", correct = TRUE), -->
-<!--   answer("Aktivierungsfunktionen"), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
+#### Frage {.unnumbered}
 
-<!-- Hier nun einige Übungen zu ANNs: -->
+Welche der folgenden Methoden dienen der Vermeidung von Overfitting?
 
-<!-- ```{r, echo = F, message = F, warning = F} -->
-<!-- tags$iframe(style = "height:700px; width:100%", src = "www/Aufgaben_DL1.pdf") -->
-<!-- ``` -->
+* Gradient Descent
+* Early Stopping
+* Dropout Learning
+* Regularisierung
+* Aktivierungsfunktionen
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Der Vermeidung von Overfitting dienen Early Stopping, Dropout Learning und Regularisierung.
+
+Gradient Descent ist Teil des Backpropagation Algorithmus und hat per se nichts mit der Vermeidung von Overfitting zu tun.
+
+Die Aktivierungsfunktionen sind Teil der Architektur eines ANNs und haben ebenfalls nicht direkt mit der Vermeidung von Overifitting zu tun.
+:::
 
 ## Beispiel einfache Regression
 
-In diesem Abschnitt schauen wir uns an, wie wir ein einfaches Regressionsproblem mit einem ANN modellieren können. Es ist ein *einfaches* Regressionsproblem, weil wir nur eine Input Variable $x$ haben. Der wahre Zusammenhang zwischen $x$ und dem Output $y$ ist allerdings nicht linear, sondern entspricht einer Sinus-Kurve, weshalb ein einfaches lineares Regressionsmodell der Form $y=b_0 + b_1 \cdot x$ keine gute Lösung finden würde. Wir werden aber sehen, dass ein einfaches ANN mit drei Neurons im Hidden Layer (plus Bias) eine gute Lösung findet. Folgende Abbildung zeigt die Architektur des ANNs, das wir verwenden werden:
+In diesem Abschnitt schauen wir uns an, wie wir ein einfaches Regressionsproblem mit einem ANN modellieren können. Es ist ein *einfaches* Regressionsproblem, weil wir nur eine Input-Variable $x_i$ haben. Der wahre Zusammenhang zwischen $x_i$ und dem Output $y_i$ ist allerdings nicht linear, sondern entspricht einer Sinus-Kurve, weshalb ein einfaches lineares Regressionsmodell der Form $\hat{y}_i = w_0 + w_1 \cdot x_i$ keine gute Lösung finden würde. Wir werden aber sehen, dass ein einfaches ANN mit drei Neurons im Hidden Layer (plus Bias) eine gute Lösung findet. Folgende Abbildung zeigt die Architektur des ANNs, das wir verwenden werden:
 
-![Bla.](images/ANN_EXAMPLE.png){width=60% #fig-annexample}
+![Architektur für ein ANN mit einer Input-Variable $x_i$ und einem reellen Output $y_i$. Das Modell hat insgesamt 10 Gewichte (6 im ersten (Hidden) Layer und 4 im zweiten (Output) Layer).](images/ANN_EXAMPLE.png){width=60% #fig-annexample}
 
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "numparam_mc", echo = FALSE} -->
-<!-- question("Wie viele Parameter hat dieses ANN?", -->
-<!--   answer("4"), -->
-<!--   answer("10", correct = TRUE, message = "Dieses ANN hat 6 Gewichte im ersten Layer und 4 Gewichte im zweiten Layer. Das ergibt insgesamt 10 Gewichte oder Parameter."), -->
-<!--   answer("6"), -->
-<!--   answer("Dieses ANN hat keine Parameter, nur Gewichte."), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
+In den nächsten Abbildung (oben) sind die 100 Trainingsdatenpunkte in Blau visualisiert. Die rötliche Kurve zeigt das trainierte ANN nach 100'000 Epochen mit einer Lernrate von $\alpha = 0.01$. Wir sehen, dass sich das ANN ausser rechts oben sehr gut an die Trainingsdaten angepasst hat und der wahren zugrundeliegenden Sinuskurve relativ nahe kommt.
 
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, echo=FALSE} -->
-<!-- # https://stackoverflow.com/questions/64681705/layout-shiny-app-to-set-heights-of-elements-to-add-up-to-100-of-window-size -->
-<!-- fluidPage( -->
+```{r ann-linreg, echo=FALSE, fig.show = 'hold', fig.cap='Oben: 100 Trainingsdatenpunkte (in Blau) sowie der Modelloutput (in Rot). Links unten: Kostenwerte über die Epochen. Die x-Axchse ist logarithmisch transformiert. Rechts unten: Aktivierungen im Hidden Layer für jeden möglichen $x$-Wert.', out.width='95%', fig.asp=0.7, fig.align='center', fig.alt='ANN für einfaches Regressionsproblem.', warning=FALSE}
+# Anzahl Epochen
+epochs <- 100000
+# Lernrate GD (alpha)
+learning_rate <- 0.01
+# 100 zufällige Trainingsdatenpunkte generieren
+set.seed(42)
+n <- 100
+x <- runif(n, 0, 9)
+y <- sin(x) + 1.5 + rnorm(n, 0, 0.1)
+# Input-Daten Matrix
+X <- rbind(1, x)
+# Sigmoid Aktivierung
+sigmoid <- function(z) {1 / (1 + exp(-z))}
+# Forward-Pass
+forward <- function(X, W1, w2) {
+  Z  <- W1 %*% X
+  A  <- sigmoid(Z)
+  A1 <- rbind(1, A)
+  t  <- w2 %*% A1
+  list(Aktivierung = A, Aktivierung1 = A1, Output = t)
+}
+# Gradienten erster und zweiter Layer
+gradient_first_layer <- function(n, w2, y, t, A, X) {
+  -1/n * ((w2[2:length(w2)] %*% (y - t) * A * (1 - A)) %*% t(X))
+}
+gradient_second_layer <- function(n, y, t, A1) {
+  -1/n * (y - t) %*% t(A1)
+}
+# Gewichte zufällig initialisieren
+W1 <- matrix(rnorm(6), nrow = 3)
+w2 <- rnorm(4)
+# Leeren Vektor für Kostenwerte (Loss) initialisieren
+loss <- vector("double", epochs)
+# Iteration über Epochen
+for (i in 1:epochs) {
+  # Forward-Pass
+  out <- forward(X, W1, w2)
+  # Aktuelle Kosten
+  loss[i] <- mean((out$Output - y)^2)
+  # Backward-Pass
+  g1 <- gradient_first_layer(n, w2, y, out$Output, out$Aktivierung, X)
+  g2 <- gradient_second_layer(n, y, out$Output, out$Aktivierung1)
+  # Gradient Descent Schritte
+  W1 <- W1 - learning_rate * g1
+  w2 <- w2 - learning_rate * g2
+}
+# Plot Layout
+layout(mat = matrix(c(1, 1, 2, 3), nrow = 2, ncol = 2, byrow = TRUE),
+       widths  = c(2, 2),
+       heights = c(6, 6))
+# Sequenz für Plots
+x_seq  <- seq(0, 9, 0.01)
+X_plot <- rbind(1, x_seq)
+# ---- Plot 1: Daten & Modell ----
+par(mar = c(5, 4, 0.5, 0.5))
+plot(0, 0, type = "n", xlab = "x", ylab = "y",
+     xlim = c(0, 9), ylim = c(0, 3),
+     cex.axis = 1.3, cex.lab = 1.3)
+grid()
+points(x, y, col = "steelblue", pch = 20, cex = 1.5)
+lines(x_seq, forward(X_plot, W1, w2)$Output, col = "rosybrown3", lwd = 3)
+# ---- Plot 2: Kosten pro Epoche ----
+plot(seq(1, epochs, 1), loss, type = "l", col = "rosybrown3", lwd = 3,
+     xlab = "Epochen", ylab = "Kosten",
+     log = "x", cex.axis = 1.3, cex.lab = 1.3)
+grid()
+# ---- Plot 3: Aktivierungen ----
+act <- sigmoid(W1 %*% X_plot)
+plot(0, 0, type = "n", yaxt = "n", xlab = "x", ylab = "Aktivierungen",
+     xlim = c(0, 9), ylim = c(0, 1), cex.axis = 1.3, cex.lab = 1.3)
+grid()
+lines(x_seq, act[1, ], col = "rosybrown3", lwd = 2, lty = 1)
+lines(x_seq, act[2, ], col = "rosybrown3", lwd = 2, lty = 2)
+lines(x_seq, act[3, ], col = "rosybrown3", lwd = 2, lty = 3)
+axis(2, at = seq(0, 1, 0.5), lwd = 0, lwd.ticks = 1, cex.axis = 1.3)
+legend(x = "topright",
+       legend = c(expression(g(z[1]^{(1)})),
+                  expression(g(z[2]^{(1)})),
+                  expression(g(z[3]^{(1)}))),
+       lty = c(1, 2, 3),
+       col = c("rosybrown3", "rosybrown3", "rosybrown3"),
+       lwd = 2, cex = 1.1)
+```
 
-<!--   h4("ANN für einfaches Regressionsproblem"), -->
+Im Plot links unten sehen wir, wie sich die Kosten über die 100'000 Epochen entwickeln. Rechts unten sind die Aktivierungen im Hidden Layer für jeden möglichen $x$-Wert dargestellt. 
 
-<!--   plotOutput("annPlots", height = "60vh", width = "50vw"), -->
+::: {.callout-note}
+## Takeaway
 
-<!--   hr(), -->
+Die finale Modellkurve im Plot oben ist im Prinzip nichts anderes als eine **Kombination der drei Aktivierungskurven** im Plot rechts unten.
 
-<!--   fluidRow( -->
-<!--     column(3, -->
-<!--            numericInput("epochs", "Anzahl Epochen", 100, 1, 20000), -->
-<!--            numericInput("learning_rate", "Lernrate", 0.01, 0.001, 0.5), -->
-<!--            br() -->
-<!--            ), -->
-<!--     column(4, offset = 1, -->
-<!--            radioButtons("activation",  -->
-<!--                         "Aktivierungsfunktion:",  -->
-<!--                         c("Sigmoid" = "sigmoid", "Keine Aktivierung" = "none")) -->
-<!--            ), -->
-<!--     column(4, -->
-<!--            radioButtons("init_weights", -->
-<!--                         "Initialisierung der Gewichte:",  -->
-<!--                         c("Random" = "random_norm", "0-Initialisierung" = "zero")) -->
-<!--            ) -->
-<!--     ) -->
-<!--   ) -->
-<!-- ``` -->
-<!-- </div><br> -->
+Für jeden möglichen $x$-Wert werden die entsprechenden Aktivierungen linear (und mit Konstante) zum Output des Modells kombiniert.
+:::
 
-<!-- ```{r, context="server"} -->
-<!-- output$annPlots <- renderPlot({ -->
+Sie können das `R`-Skript [hier](data/simple-ann.R) herunterladen. Probieren Sie verschiedene Werte für die Anzahl Epochen und die Lernrate aus und schauen Sie, wie sich der Output verändert.
 
-<!--   # Plot Layout -->
-<!--   layout(mat = matrix(c(1, 1, 2, 3), nrow = 2, ncol = 2, byrow = TRUE), -->
-<!--          widths = c(2, 2), -->
-<!--          heights = c(6, 4)) -->
-
-<!--   # Parameter und Daten Generation -->
-<!--   set.seed(42) -->
-<!--   n <- 100 -->
-<!--   x <- runif(n, 0, 9) -->
-<!--   t <- sin(x) + 1.5 + rnorm(n, 0, 0.1) -->
-<!--   epochs <- input$epochs -->
-<!--   learning_rate <- input$learning_rate -->
-
-<!--   # Definiere Aktivierungsfunktionen -->
-<!--   sigmoid <- function(z){1 / (1 + exp(-z))} -->
-<!--   none <- function(z){z} -->
-
-<!--   # Definieren Initialisierungsfunktionen -->
-<!--   random_norm <- function(){ -->
-<!--     W1 <- matrix(rnorm(6), nrow = 3) -->
-<!--     w2 <- rnorm(4) -->
-<!--     return(list("W1" = W1, "w2" = w2)) -->
-<!--   } -->
-
-<!--   zero <- function(){ -->
-<!--     W1 <- matrix(0, 3, 2) -->
-<!--     w2 <- rep(0, 4) -->
-<!--     return(list("W1" = W1, "w2" = w2)) -->
-<!--   } -->
-
-<!--   # Gewichte initialisieren -->
-<!--   if(input$init_weights == "random_norm") weights <- random_norm() -->
-<!--   else weights <- zero() -->
-
-<!--   # Initialisierte Gewichte extrahieren -->
-<!--   W1 <- weights$W1 -->
-<!--   w2 <- weights$w2 -->
-
-<!--   # Erstelle Matrix für Inputs -->
-<!--   X <- rbind(1, x) -->
-
-<!--   # Hole Aktivierungsfunktion -->
-<!--   activation_fun <- get(input$activation) -->
-
-<!--   # Forward-pass -->
-<!--   forward <- function(X, W1, w2){ -->
-<!--     # Erster Layer -->
-<!--     Z <- W1 %*% X -->
-<!--     # Aktivierung -->
-<!--     A <- do.call(activation_fun, list(Z)) -->
-<!--     # Bias Term hinzufügen -->
-<!--     A1 <- rbind(1, A) -->
-<!--     # Zweiter Layer -->
-<!--     y <- w2 %*% A1 -->
-<!--     # Liste mit Outputs -->
-<!--     out <- list("Aktivierung" = A, "Aktivierung1" = A1, "Output" = y) -->
-<!--     # Gebe Output zurück -->
-<!--     return(out) -->
-<!--   } -->
-
-<!--   # Gradient zweiter Layer -->
-<!--   gradient2 <- function(n, y, t, A1) {2/n * (y - t) %*% t(A1)} -->
-
-<!--   # Gradient erster Layer -->
-<!--   gradient1 <- function(n, w2, y, t, A, X, activation = "sigmoid") { -->
-<!--     if(activation == "sigmoid"){ -->
-<!--       return(2/n * ((w2[2:length(w2)] %*% (y - t) * A * (1 - A)) %*% t(X))) -->
-<!--     } else {return(2/n * ((w2[2:length(w2)] %*% (y - t)) %*% t(X)))} -->
-
-<!--   } -->
-
-<!--   # Leerer Vektor für Loss -->
-<!--   loss <- vector("double", epochs) -->
-
-<!--   # Gradient Descent Loop -->
-<!--   for (i in 1:epochs) { -->
-<!--     # Forward-Pass -->
-<!--     out <- forward(X, W1, w2) -->
-<!--     # Berechnung Loss -->
-<!--     loss[i] <- mean((out$Output - t)^2) -->
-<!--     # Berechnung Gradients -->
-<!--     g1 <- gradient1(n, w2, out$Output, t, out$Aktivierung, X, input$activation) -->
-<!--     g2 <- gradient2(n, out$Output, t, out$Aktivierung1) -->
-<!--     # Update Gewichte -->
-<!--     W1 <- W1 - learning_rate * g1 -->
-<!--     w2 <- w2 - learning_rate * g2 -->
-<!--   } -->
-
-<!--   # Erstelle x-Sequenz für Plots -->
-<!--   x_seq <- seq(0, 9, 0.01) -->
-<!--   X_plot <- rbind(1, x_seq) -->
-
-<!--   # Margins für Plots -->
-<!--   par(mar = c(5, 4, 0.5, 0.5)) -->
-
-<!--   # Leeres Streuudiagramm -->
-<!--   plot(0, 0, type = "n", xlab = "x", ylab = "t",  -->
-<!--        xlim = c(0, 9), ylim = c(0, 3), -->
-<!--        cex.axis = 1.3, cex.lab = 1.3) -->
-<!--   # Grid -->
-<!--   grid() -->
-<!--   # Datenpunkte -->
-<!--   points(x, t, col = "blue", pch = 20, cex = 1.5) -->
-<!--   # Kurve des Modells -->
-<!--   lines(x_seq, forward(X_plot, W1, w2)$Output, type = "l", col = "red", lwd = 3, lty = 1) -->
-
-<!--   # Loss Plot -->
-<!--   plot(seq(1,epochs,1), loss, type = "l", col = "magenta", lwd = 3, lty = 1,  -->
-<!--        xlab = "Epochen", ylab = "Loss",  -->
-<!--        log = "xy", cex.axis = 1.3, cex.lab = 1.3) -->
-<!--   grid() -->
-
-<!--   # Rechne Aktivierungen -->
-<!--   act <- activation_fun(W1 %*% X_plot) -->
-
-<!--   # Plot Aktivierungen -->
-<!--   plot(0, 0, type = "n", yaxt = "n", xlab = "x", ylab = "Aktivierungen",  -->
-<!--        xlim = c(0, 9), ylim = c(0,1), cex.axis = 1.3, cex.lab = 1.3) -->
-<!--   grid() -->
-<!--   lines(x_seq, act[1, ], type = "l", col = "darkorange2", lwd = 3, lty = 1) -->
-<!--   lines(x_seq, act[2, ], type = "l", col = "green", lwd = 3, lty = 2) -->
-<!--   lines(x_seq, act[3, ], type = "l", col = "black", lwd = 3, lty = 3) -->
-<!--   # axis(1, at = seq(0, 900, 200), labels = seq(0, 9, 2), lwd = 0, lwd.ticks = 1) -->
-<!--   axis(2, at = seq(0, 1, 0.5), lwd = 0, lwd.ticks = 1, cex.axis = 1.3) -->
-<!--   legend(x = "topright",  -->
-<!--          legend = c(expression(g(z[1]^{(1)})), expression(g(z[2]^{(1)})), expression(g(z[3]^{(1)}))),  -->
-<!--          lty = c(1, 2, 3), col = c("darkorange2", "green", "black"), lwd = 3, cex = 1.1)  -->
-<!--     }) -->
-<!-- ``` -->
-
-### Initialisierung der Gewichte
-
-Warum findet das ANN keine gute Lösung, wenn alle Gewichte zu Beginn 0 betragen, also mit Nullen initialisiert sind? Das Problem ist, dass in diesem Fall die Neurons im Hidden Layer nicht unterscheidbar sind und sich auch nach vielen Backpropagation Iterationen nicht unterscheiden. Das ANN hat dann effektiv nur ein Neuron, auch wenn die Architektur ganz viele Neurons enthält. Es ist also äusserst wichtig, dass die Gewichte zufällig initialisiert werden. Z.B. kann man die ursprünglichen Gewichte aus einer Standardnormalverteilung mit Mittelwert 0 und Standardabweichung 1 ziehen.
-
-### Backpropagation Step-by-Step
-
-In dem Foliensatz schauen wir uns nun den Backpropagation Algorithmus für das einfache Beispiel Schritt für Schritt an.
-
-<!-- ```{r, echo = F, message = F, warning = F} -->
-<!-- tags$iframe(style = "height:700px; width:100%", src = "www/Backprop_ANN_Beispiel.pdf") -->
-<!-- ``` -->
-
-
+Ein Foliensatz mit weiteren Informationen zu diesem Beispiel und den genauen Herleitungen der Gradienten kann [hier](data/Backprop_ANN_Beispiel.pdf) heruntergeladen werden.
 
 
 ## Multi-Output Modelle
 
-ANNs und Deep Learning im Allgemeinen sind insbesondere auch darum populär, weil es sehr klar ist, wie Modelle mit mehr als einer Output Variable (Zielvariable) gerechnet werden können. In diesem Zusammenhang spricht man von **Multi-Output** Modellen. Wir schauen uns zuerst Multi-Output Modelle für das Regressionsproblem und danach für das Klassifikationsproblem an.
+ANNs und Deep Learning im Allgemeinen sind insbesondere auch darum populär, weil es sehr klar ist, wie Modelle mit mehr als einer Outputvariable gerechnet werden können. In diesem Zusammenhang spricht man von **Multi-Output** Modellen. Wir schauen uns zuerst Multi-Output Modelle für das Regressionsproblem und danach für das Klassifikationsproblem an.
 
 ### Regressionsproblem
 
-Wenn wir ein Regressionsproblem mit mehreren Output Variablen (Zielvariablen) mit einem ANN rechnen wollen, dann können wir einfach für jede Output Variable ein separates Neuron im Output Layer hinzufügen. Hier ein Beispiel mit zwei Output Variablen.
+Wenn wir ein Regressionsproblem mit mehreren Outputvariablen mit einem ANN rechnen wollen, dann können wir einfach für jede Outputvariable ein **separates Neuron** im Output Layer hinzufügen. Hier ein Beispiel mit zwei Outputvariablen.
 
-![Bla.](images/ANN_MULTI_REG.png){width=60% #fig-annmultireg}
+![Einfaches ANN mit zwei Neurons im Output Layer.](images/ANN_MULTI_REG.png){width=60% #fig-annmultireg}
 
 Wir sehen, dass beide Neurons im Output Layer mit den Aktivierungen sowie dem Bias aus dem Hidden Layer gefüttert werden. Weil wir uns hier das Regressionsproblem anschauen, wird in den Output Neurons lediglich eine gewichtete Summe gerechnet, die dann auch gleich der Output des Modells ist. Es gilt allerdings zu erwähnen, dass auch im Regressionsproblem eine Aktivierung möglich ist, z.B. dann wenn die Outputs nicht negativ sein dürfen. In dem Fall kann die ReLU Funktion verwendet werden.
 
+Interessanterweise wirken Multi-Output Probleme **regularisierend** auf das Modell. Warum? Die Gewichte des Modells müssen sich nun während des Trainings so anpassen, dass sie gute Vorhersagen für zwei (oder mehr) Teilprobleme machen. Dadurch werden sie gezwungen, sich nicht zu stark auf ein Problem zu fokussieren.
+
 ### Klassifikationsproblem
 
-Wir haben oben bereits gelernt, dass wir ein ANN mit einem Neuron im Output Layer verwenden können, wenn ein Klassifikationsproblem mit einer Output Variable vorliegt. In diesem Fall verwenden wir im Output Neuron die Sigmoid Aktivierungsfunktion, um die gewichtete Summe in eine Wahrscheinlichkeit zu überführen.
+Wir haben weiter oben bereits gelernt, dass wir ein ANN mit einem Neuron im Output Layer verwenden können, wenn ein (binäres) Klassifikationsproblem mit einer Output Variable vorliegt. In diesem Fall verwenden wir im Output Neuron die **Sigmoid** Aktivierungsfunktion, um die gewichtete Summe in eine Wahrscheinlichkeit zu überführen.
 
-Selbstverständlich können wir auch für das Klassifikationsproblem ein **Multi-Output** Modell rechnen, das gleichzeitig mehrere Output Variablen vorhersagt.
+Selbstverständlich können wir auch für das Klassifikationsproblem ein **Multi-Output** Modell rechnen, das gleichzeitig mehrere separate Output Variablen vorhersagt.
 
-Das häufigere Problem ist allerdings, dass wir ein Klassifkationsproblem lösen wollen, das mehr als zwei Klassen hat. Wenn es sich also nicht um ein binäres Klassifikationsproblem handelt. Z.B. wollen wir basierend auf einem Bild einer von Hand geschriebenen Zahl vorhersagen, ob es sich um eine 0, 1, 2, ... oder 9 handelt (MNIST). Dabei sind die 10 möglichen Output Werte (die Zahlen zwischen 0 und 9) nicht voneinander unabhängig. In diesem Fall spricht man von einem **Multi-Class** Problem. Die Architektur eines solchen Multi-Class Problems mit drei möglichen Klassen ist in folgender Abbildung dargestellt:
+Das häufigere Problem ist allerdings, dass wir ein Klassifkationsproblem lösen wollen, das mehr als zwei Klassen hat (also nicht binäre ist). Zum Beispiel wollen wir basierend auf einem Bild einer von Hand geschriebenen Zahl vorhersagen, ob es sich um eine 0, 1, 2, ... oder 9 handelt (MNIST). Dabei sind die 10 möglichen Output Werte (die Zahlen zwischen 0 und 9) nicht voneinander unabhängig. In diesem Fall spricht man von einem **Multi-Class** Problem. Die Architektur eines solchen Multi-Class Problems mit drei möglichen Klassen ist in folgender Abbildung dargestellt:
 
-![Bla.](images/ANN_MULTI_CLASS.png){width=60% #fig-annmulticlass}
+![ANN Architektur für ein Multi-Class Problem mit drei möglichen Klassen bzw. Kategorien. Die Modelloutputs für die drei Klassen sollen sich zu 1 aufsummieren, so dass sie als Verteilung über die drei möglichen Klassen interpretiert werden können.](images/ANN_MULTI_CLASS.png){width=60% #fig-annmulticlass}
 
 Es gibt eine zusätzliche Komponente im Vergleich zum ANN für das Regressionsproblem, das wir oben angeschaut haben, und zwar benötigen wir einen sogenannten **Softmax** Layer. Dieser stellt sicher, dass die gewichteten Summen aus dem Output Layer in Wahrscheinlichkeiten transformiert werden und zwar so, dass die Summe über alle Wahrscheinlichkeiten 1 ergibt.
 
@@ -973,54 +949,48 @@ Die gewichtete Summe für das erste Output Neuron bezeichnen wir wie oben als $z
 
 $$
 \begin{aligned}
-\sigma(z_1^{(2)}) &= \frac{e^{z_1^{(2)}}}{\sum_{j=1}^{K} e^{z_j^{(2)}}}\\
+\sigma\left(z_1^{(2)}\right) &= \frac{e^{z_1^{(2)}}}{\sum_{j=1}^{K} e^{z_j^{(2)}}}\\
 &= \frac{e^{z_1^{(2)}}}{e^{z_1^{(2)}} + e^{z_2^{(2)}} + e^{z_3^{(2)}}}
 \end{aligned}
 $$
 
-Sie sehen, dass alle gewichteten Summen aus dem Output Layer exponiert werden, z.B. $e^{z_1^{(2)}}$. Dadurch werden potenziell negative gewichtete Summen positiv gemacht. Durch das Exponieren wird die grösste gewichtete Summe zur dominanten Komponente. Das ist auch der Grund für den Namen Softmax: es handelt sich in einem gewissen Sinne um eine sanfte (softe) Annäherung an die Max-Funktion. Folgende Aufgabe hilft beim Verständnis:
+Sie sehen, dass alle gewichteten Summen aus dem Output Layer **exponiert** werden, z.B. $e^{z_1^{(2)}}$. Dadurch werden potenziell negative gewichtete Summen positiv gemacht. Durch das Exponieren wird die grösste gewichtete Summe zur **dominanten Komponente**. Das ist auch der Grund für den Namen Softmax: es handelt sich in einem gewissen Sinne um eine sanfte Annäherung an die Max-Funktion.
 
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "softmax_numeric", echo = FALSE} -->
-<!-- question_text( -->
-<!-- "Die gewichteten Summen der drei Output Neurons betragen 1, 3 und 9. Was ist die Wahrscheinlichkeit der dritten Output Variable wenn Sie die Softmax Funktion anwenden? Runden Sie Ihr Resultate auf vier Nachkommastellen.", -->
-<!-- answer("0.0025", message = "Das wäre die Wahrscheinlichkeit der zweiten Output Variable."), -->
-<!-- answer("0.0003", message = "Das wäre die Wahrscheinlichkeit der ersten Output Variable."), -->
-<!-- answer("0.9972", correct = TRUE), -->
-<!-- correct = "Richtig!", -->
-<!-- incorrect = "Falsch!", -->
-<!-- allow_retry = TRUE) -->
-<!-- ``` -->
-<!-- </div><br> -->
+#### Frage {.unnumbered}
 
+Die gewichteten Summen der drei Output Neurons betragen 1, 3 und 9. Was ist die Wahrscheinlichkeit der dritten Output Variable wenn Sie die Softmax Funktion anwenden?
 
+::: {.callout-tip collapse="true"}
+## Lösung
+
+$$
+\begin{aligned}
+\sigma\left(z_3^{(2)}\right) &= \frac{e^{z_3^{(2)}}}{\sum_{j=1}^{K} e^{z_j^{(2)}}}\\
+&= \frac{e^{9}}{e^{1} + e^{3} + e^{9}}\\
+&= \frac{8103.084}{2.718 + 20.086 + 8103.084}\\
+&= 0.997
+\end{aligned}
+$$
+Der Softmax wird hier dominiert von $e^{9}=8103.084$, weshalb der Output für die dritte Klasse 99.7%.
+:::
 
 ## ANNs in R
 
-Das `keras` Package enthält den MNIST Datensatz bereits und wir können ihn darum sehr einfach in R laden. Zuerst müssen wir allerdings die Systemvariable `RETICULATE_PYTHON` setzen, so dass R die korrekte Python Installation (nämlich diejenige im Conda Environment "tf") findet. Danach laden wir die beiden wichtigen R Packages `keras` und `tensorflow` sowie das altbekannte `tidyverse`.
-
-```{r, eval = FALSE}
-# Benötigen wir, um R zur korrekten Python Installation zu leiten.
-# Muss zwingend als erster Befehl ausgeführt werden.
-Sys.setenv(RETICULATE_PYTHON="C:/Users/martin.sterchi/AppData/Local/anaconda3/envs/tf/python.exe")
-
-# Packages laden
-library(tidyverse)
-library(tensorflow)
-library(keras)
-
-# Clean-up Environment
-rm(list = ls())
-
-# Working Directory
-setwd("...")
-```
+In der Praxis werden ANNs häufig mit `keras` und `tensorflow` trainiert, welche ursprünglich für Python entwickelt wurden. Glücklicherweise gibt es seit einigen Jahren `R`-Packages, welche uns eine Schnittstelle zu diesen wichtigen Softwarepackages ermöglichen. Für die notwendigen Installationen in `R` konsultieren Sie bitte die folgende [Quelle](https://tensorflow.rstudio.com/).
 
 ### Preprocessing der Daten
 
-Nun laden wir MNIST direkt aus dem `keras` Package mit der Funktion `dataset_mnist()`. Danach führen wir die Preprocessing Schritte durch, die wir bereits weiter oben besprochen haben.
+Wir beginnen hier damit, die notwendigen Packages zu laden. Das `keras3` Package enthält den MNIST Datensatz bereits und wir können ihn darum sehr einfach mit `dataset_mnist()` laden. Danach führen wir die Preprocessing Schritte durch, die wir bereits am Anfang dieses Kapitels besprochen haben.
 
-```{r, eval = FALSE}
+```{r, message=FALSE, warning=FALSE}
+# Packages laden
+library(tidyverse)
+library(tensorflow)
+library(keras3)
+
+# Seed
+tensorflow::set_random_seed(42)
+
 # Lade MNIST Daten direkt aus Keras
 mnist <- dataset_mnist()
 
@@ -1039,10 +1009,10 @@ X_train <- X_train / 255
 X_test <- X_test / 255
 ```
 
-Unsere Zielvariable enthält ja bekanntlich die Zahlen 0 bis 9, es handelt sich also um ein **Multi-Class** Problem. Wir werden dem Deep Learning Modell die Zielvariable **one-hot-encoded** übergeben müssen. Das können wir bereits hier mit der Funktion `to_categorical()` vorbereiten.
+Unsere Outputvariable enthält ja bekanntlich die Zahlen 0 bis 9, es handelt sich also um ein **Multi-Class** Problem. Wir werden dem Modell die Outputvariable **one-hot-encoded** übergeben müssen. Das können wir bereits hier mit der `keras3` Funktion `to_categorical()` vorbereiten.
 
-```{r, eval = FALSE}
-# One-Hot-Encoding für Zielvariable
+```{r}
+# One-Hot-Encoding für Outputvariable
 y_train <- to_categorical(y_train, 10)
 y_test <- to_categorical(y_test, 10)
 
@@ -1050,73 +1020,58 @@ y_test <- to_categorical(y_test, 10)
 head(y_train)
 ```
 
-```
-     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-[1,]    0    0    0    0    0    1    0    0    0     0
-[2,]    1    0    0    0    0    0    0    0    0     0
-[3,]    0    0    0    0    1    0    0    0    0     0
-[4,]    0    1    0    0    0    0    0    0    0     0
-[5,]    0    0    0    0    0    0    0    0    0     1
-[6,]    0    0    1    0    0    0    0    0    0     0
-```
-
 Sie sehen, dass jede Zeile in obigem Output einer Beobachtung entspricht. Die erste Zeile entspricht einer 5 (Achtung: es sieht aus als wäre es eine 6, aber das Indexing beginnt leider in R immer bei 1, weshalb die erste Spalte den Nullen entspricht, die zweite Spalten den Einsen, usw.).
 
 ### Erstes Modell
 
-Nun initialisieren wir unser ANN Modell mit der Keras Funktion `keras_model_sequential()`. Danach fügen wir die Layers des ANN mithilfe des Pipe Operators `%>%` schrittweise hinzu. 
+Nun initialisieren wir unser ANN Modell mit der Funktion `keras_model_sequential()`. Danach fügen wir die Layers des ANNs mithilfe des Pipe Operators `|>` schrittweise hinzu. 
 
 Der erste Layer ist ein **Hidden Layer**: wir definieren, dass wir 100 Neurons wollen und für die Aktivierungsfunktion verwenden wir ReLU. Mit dem Argument `input_shape = c(784)` sagen wir dem Hidden Layer, dass der Input Layer 784 (+1) Neurons enthält. 
 
 Der zweite Layer ist ein weiterer **Hidden Layer** mit 50 Neurons und ebenfalls einer ReLU Aktivierungsfunktion.
 
-Der letzte Layer ist der **Output Layer**, der zwingend 10 Neurons haben muss, da wir ja 10 mögliche Kategorien in der Zielvariable haben (die Zahlen 0 - 9). Die Aktivierungsfunktion im Output Layer ist **Softmax**, da die 10 Wahrscheinlichkeiten sich auf 1 summieren sollen.
+Der letzte Layer ist der **Output Layer**, der zwingend 10 Neurons haben muss, da wir ja 10 mögliche Kategorien in der Outputvariable haben (die Zahlen 0 - 9). Die Aktivierungsfunktion im Output Layer ist **Softmax**, da die 10 Wahrscheinlichkeiten sich auf 1 summieren sollen.
 
-```{r, eval = FALSE}
+```{r}
 # Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers
 # sequenziell hinzufügen werden.
 ann1 <- keras_model_sequential()
 
 # Hier werden die zwei Hidden Layers und der Output Layer hinzugefügt.
-ann1 %>% 
-  layer_dense(units = 100, activation = 'relu', input_shape = c(784)) %>%
-  layer_dense(units = 50, activation = 'relu') %>%
+ann1 |> 
+  layer_dense(units = 100, activation = 'relu', input_shape = c(784)) |>
+  layer_dense(units = 50, activation = 'relu') |>
   layer_dense(units = 10, activation = 'softmax')
 ```
 
 Mit dem `summary()` Befehl können wir uns die Architektur unseres Modells anschauen:
 
-```{r, eval = FALSE}
-# Wir überprüfen die Architektur
+```{r}
+# Wir überprüfen die Architektur.
 summary(ann1)
 ```
 
-```
-Model: "sequential_1"
-________________________________________________________________________________
- Layer (type)                       Output Shape                        Param #            
-================================================================================
- dense_1 (Dense)                    (None, 100)                         78500              
- dense_2 (Dense)                    (None, 50)                          5050            
- dense_3 (Dense)                    (None, 10)                          510                
-================================================================================
-Total params: 84060 (328.36 KB)
-Trainable params: 84060 (328.36 KB)
-Non-trainable params: 0 (0.00 Byte)
-________________________________________________________________________________
-```
+Wir sehen, dass unser Modell zwischen dem Input Layer und dem ersten Hidden Layer insgesamt **78'500 Gewichte** trainieren wird. Wie kommt man auf diese Zahl? Wir haben 784 Neurons im Input Layer und 100 Neurons im Hidden Layer und jedes Paar von Neurons in den beiden Layers ist durch ein Gewicht verknüpft. Das heisst, wir haben schon mal $784 \cdot 100 = 78'400$ Gewichte. Die restlichen 100 Gewichte sind die Konstanten, dargestellt durch die Pfeile vom 1-Neuron im Input Layer zu allen Neurons im Hidden Layer.
 
-Wir sehen, dass unser Modell zwischen dem Input Layer und dem ersten Hidden Layer insgesamt **78'500 Gewichte** trainieren wird. Wie kommt man auf diese Zahl? Wir haben 784 Neurons im Input Layer und 100 Neurons im Hidden Layer und jedes Paar von Neurons in den beiden Layers ist durch ein Gewicht verknüpft. Das heisst, wir haben schon mal $784 \cdot 100 = 78'400$ Gewichte. Die restlichen 100 Gewichte sind die Konstanten, dargestellt durch die Pfeile vom 1-Neuron im Input-Layer zu allen Neurons im Hidden Layer.
+#### Frage {.unnumbered}
 
-<div style = "background-color:#fef9e7; padding:10px">
-**Aufgabe**: Überlegen Sie sich, warum wir zwischen dem zweiten Hidden Layer und dem Output Layer 510 Gewichte trainieren werden.
-</div><br>
+Überlegen Sie sich, warum wir zwischen dem zweiten Hidden Layer und dem Output Layer 510 Gewichte trainieren werden.
 
-Nun kommt der Schritt, in dem wir das Modell **kompilieren**. Konkret heisst das: wir definieren, wie es trainiert werden soll (das Training passiert hier aber noch nicht). Wir definieren die **Kostenfunktion**, hier wählen wir `"categorical_crossentropy"`, eine Erweiterung des Log-Loss auf das Multi-Class Problem. Der **Optimieralgorithmus** heisst *Adam* und ist eine Erweiterung des Gradient Descents, den ihr bereits kennt. Als **Gütemass** wählen wir die *Accuracy*, da die Verteilung der 10 Zahlen schön **balanced** ist.
+::: {.callout-tip collapse="true"}
+## Lösung
 
-```{r, eval = FALSE}
+Wir haben im zweiten Hidden Layer 50 Neurons, die alle mit den 10 Output Neurons verknüpft sind. Daraus ergeben sich schon mal $50 \cdot 10 = 500$ Gewichte. Dazu kommen noch die 10 Konstanten, je eine pro Output Neuron.
+:::
+
+Nun kommt der Schritt, in dem wir das Modell **kompilieren**. Konkret heisst das, wir definieren, wie es trainiert werden soll (das Training passiert hier aber noch nicht):
+
+* Wir definieren die **Kostenfunktion** (hier wählen wir `"categorical_crossentropy"`, eine Erweiterung des Log-Loss auf das Multi-Class Problem).
+* Der **Optimieralgorithmus** heisst *Adam* und ist eine Erweiterung des Gradient Descents, den ihr bereits kennt.
+* Als **Gütemass** wählen wir die *Accuracy*, da die Verteilung der 10 Zahlen im MNIST schön **balanced** ist.
+
+```{r}
 # Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.
-ann1 %>% 
+ann1 |> 
   compile(
     loss = "categorical_crossentropy", 
     optimizer = "adam", 
@@ -1124,83 +1079,66 @@ ann1 %>%
     )
 ```
 
-Nun fitten (oder trainieren) wir unser erstes Deep Learning Modell! Dazu rufen wir die `fit()` Funktion auf und übergeben die Trainingsdaten sowie die Zielvariable (im one-hot-encoded Format). Mit `epochs = 10` definieren wir, dass der ganze Trainingsdatensatz insgesamt 10 Mal durch das Netzwerk hindurchgeschleust wird, um die Gewichte zu optimieren. Dabei wird bei jedem Forward- und Backward-Pass über das Netzwerk nur ein sogenannter **Mini-Batch** von 32 Beobachtungen durch das Netzwerk geschickt. Mit `validation_split = 0.1` definieren wir, dass 10% des Trainingsdatensatzes nicht verwendet werden, damit wir Beobachtungen haben, um den Grad des Overfittings abzuschätzen.
+Nun fitten (oder trainieren) wir unser erstes Deep Learning Modell. Dazu rufen wir die `fit()` Funktion auf und übergeben die Trainingsdaten sowie die Outputvariable (im one-hot-encoded Format). Mit `epochs = 10` definieren wir, dass der ganze Trainingsdatensatz insgesamt 10 Mal durch das Modell hindurchgeschleust wird, um die Gewichte zu optimieren. Dabei wird bei jedem Forward- und Backward-Pass über das Netzwerk nur ein sogenannter **Mini-Batch** von 32 Beobachtungen durch das Netzwerk geschickt. Mit `validation_split = 0.1` definieren wir, dass 10% des Trainingsdatensatzes nicht verwendet werden, damit wir Beobachtungen haben, um den Grad des Overfittings abzuschätzen.
 
-<div style = "background-color:#fef9e7; padding:10px">
-**Aufgabe**: Wie kommt man auf die 1688 Trainingsschritte pro Epoche?
-</div><br>
-
-Wichtig: Wir können auch in Deep Learning Modellen **Gewichte** (Achtung, hier sind *nicht* die Parameter des Modells gemeint) verwenden, um gewissen Beobachtungen während des Trainings mehr oder weniger Gewicht zu geben. Wie das funktionieren würde, findet ihr [hier](https://tensorflow.rstudio.com/guides/keras/training_with_built_in_methods.html#using-sample-weighting-and-class-weighting).
-
-```{r, eval = FALSE}
-# Nun trainieren wir das Modell
-history <- ann1 %>% 
+```{r}
+# Nun trainieren wir das Modell.
+history <- ann1 |> 
   fit(X_train, y_train, epochs = 10, batch_size = 32, validation_split = 0.1)
 ```
 
-```
-Epoch 1/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.2809 - accuracy: 0.9174 - val_loss: 0.1299 - val_accuracy: 0.9608
-Epoch 2/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.1201 - accuracy: 0.9628 - val_loss: 0.1043 - val_accuracy: 0.9665
-Epoch 3/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.0852 - accuracy: 0.9731 - val_loss: 0.1063 - val_accuracy: 0.9678
-Epoch 4/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.0649 - accuracy: 0.9792 - val_loss: 0.0858 - val_accuracy: 0.9723
-Epoch 5/10
-1688/1688 [==================] - 8s 4ms/step - loss: 0.0498 - accuracy: 0.9838 - val_loss: 0.0791 - val_accuracy: 0.9765
-Epoch 6/10
-1688/1688 [==================] - 6s 4ms/step - loss: 0.0422 - accuracy: 0.9864 - val_loss: 0.0945 - val_accuracy: 0.9732
-Epoch 7/10
-1688/1688 [==================] - 5s 3ms/step - loss: 0.0337 - accuracy: 0.9896 - val_loss: 0.0865 - val_accuracy: 0.9765
-Epoch 8/10
-1688/1688 [==================] - 5s 3ms/step - loss: 0.0295 - accuracy: 0.9904 - val_loss: 0.0947 - val_accuracy: 0.9762
-Epoch 9/10
-1688/1688 [==================] - 5s 3ms/step - loss: 0.0233 - accuracy: 0.9921 - val_loss: 0.0845 - val_accuracy: 0.9787
-Epoch 10/10
-1688/1688 [==================] - 6s 3ms/step - loss: 0.0215 - accuracy: 0.9929 - val_loss: 0.0866 - val_accuracy: 0.9772
-```
+#### Frage {.unnumbered}
+
+Sie sehen im Output oben, dass wir in jeder Epoche 1688 Trainingsschritte machen. Wie kommt man auf die 1688 Trainingsschritte pro Epoche?
+
+::: {.callout-tip collapse="true"}
+## Lösung
+
+Wir haben insgesamt 54'000 Beobachtungen, die als Trainingsdatenpunkte zur Verfügung stehen (90% des ursprünglichen Datensatzes, die restlichen 10% brauchen wir als Validierungsdaten).
+
+Die Grösse der Mini-Batches haben wir als 32 festgelegt. Dadurch werden während jeder Epoche $54'000/32 \approx 1688$ Mini-Batches gebildet. Für jeden Mini-Batch gibt es einen Forward- und Backward-Pass, nach denen die Gewichte angepasst werden.
+:::
 
 Der Fortschritt des Modell Fitting Prozesses wird in der R Konsole (wie oben) dargestellt. Da wir den Modell Fitting Prozess auch im Objekt `history` gespeichert haben, können wir den Fortschritt plotten:
 
-```{r, eval = FALSE}
-# Plots des Lernoutputs
+```{r}
+# Plots des Lernoutputs.
 plot(history, smooth = TRUE)
 ```
 
-![Bla.](images/train_val_error.png){width=90% #fig-trainvalerror}
-
-Wir sehen sowohl den Wert der Kostenfunktion als auch den Wert der Accuracy über die Trainingsepochen. **Wichtig**: wie beurteilen wir, ob ein Overfitting stattgefunden hat?
+Wir sehen sowohl den Wert der Kostenfunktion (unten) als auch den Wert der Accuracy (oben) über die Trainingsepochen. Wie beurteilen wir, ob ein Overfitting stattgefunden hat?
 
 * Wenn die rote Trainingskurve im oberen Plot weit unter der blauen Kurve oder im unteren Plot weit über der blauen Kurve liegt, dann sind wir im Overfitting Bereich.
 
-Das ist hier klar der Fall. Auf dem Validierungsdatensatz ist relativ bald keine klare Verbesserung mehr ersichtlich. Wir müssen also das Modell verbessern, damit es nicht mehr zu Overfitting kommt.
+Das ist hier klar der Fall. Auf dem Validierungsdatensatz ist relativ bald **keine klare Verbesserung** mehr ersichtlich. Wir müssen also das Modell verbessern, damit es nicht mehr zu Overfitting kommt.
 
-<div style = "background-color:#fef9e7; padding:10px">
-**Optional**: Warum beginnen die beiden Kurven jeweils an unterschiedlichen Stellen?
+::: {.callout-caution collapse="true"}
+## Warum beginnen die beiden Kurven jeweils an unterschiedlichen Stellen? (optional)
 
-Der Loss und die Accuracy auf dem *Validierungsdatensatz* werden jeweils am Ende einer Epoche gemessen. Der Loss und die Accuracy auf dem *Trainingsdatensatz* werden hingegeben während der Epoche gemessen.
-</div><br>
+Die Kosten (Loss) und die Accuracy auf dem *Validierungsdatensatz* werden jeweils **am Ende** einer Epoche gemessen.
+
+Die Kosten (Loss) und die Accuracy auf dem *Trainingsdatensatz* werden hingegeben **während** der Epoche als laufende Mittelwerte gemessen. 
+:::
 
 ### Zweites Modell
 
 Wir werden hier zwei Techniken verwenden, um das Overfitting zu vermeiden: **Dropout Learning** und **Early Stopping**. Wir haben das Dropout Learning weiter oben bereits kennen gelernt. Sie sehen in unten stehendem Code, dass in den beiden Hidden Layers je **20%** zufällig ausgewählte Neurons während des Trainings ignoriert werden. Falls das Overfitting sehr stark ist, dann könnte hier auch eine höhere Prozentzahl gewählt werden. Ansonsten ist das Modell dasselbe wie vorher.
 
-```{r, eval = FALSE}
+```{r}
 # Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers
 # sequenziell hinzufügen werden.
 ann2 <- keras_model_sequential()
 
 # Hier werden die Hidden Layers, die Dropout Layers und der Output Layer hinzugefügt.
-ann2 %>% 
-  layer_dense(units = 100, activation = 'relu', input_shape = c(784)) %>%
-  layer_dropout(0.2) %>%
-  layer_dense(units = 50, activation = 'relu') %>%
-  layer_dropout(0.2) %>%
+ann2 |> 
+  layer_dense(units = 100, activation = 'relu', input_shape = c(784)) |>
+  layer_dropout(0.2) |>
+  layer_dense(units = 50, activation = 'relu') |>
+  layer_dropout(0.2) |>
   layer_dense(units = 10, activation = 'softmax')
 
 # Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.
-ann2 %>% 
+ann2 |> 
   compile(
     loss = "categorical_crossentropy", 
     optimizer = "adam", 
@@ -1208,126 +1146,79 @@ ann2 %>%
   )
 ```
 
-<div style = "background-color:#fef9e7; padding:10px">
-**Optional**: Analogie zu Dropout Learning aus HOML (p. 394)
+Nun bereiten wir die zweite Technik zur Vermeidung des Overfittings vor, nämlich **Early Stopping**. Die Technik wurde von Geoffrey Hinton (einem der "Godfathers" des Deep Learnings) erfunden und er hat die Technik einmal einen *"beautiful free lunch"* genannt. Die Technik des Early Stoppings ist nämlich erstaunlich einfach: wir stoppen das Training sobald die Kosten auf dem Validierungsdatensatz nicht mehr weiter sinken, denn wenn wir nun weiter trainieren, dann kommen wir in den Overfitting-Bereich.
 
-*“It is quite surprising at first that this rather brutal technique works at all. Would a company perform better if its employees were told to toss a coin every morning to decide whether or not to go to work? Well, who knows; perhaps it would! The company would obviously be forced to adapt its organization; it could not rely on any single person to fill in the coffee machine or perform any other critical tasks, so this expertise would have to be spread across several people. Employees would have to learn to cooperate with many of their coworkers, not just a handful of them. The company would become much more resilient. If one person quit, it wouldn’t make much of a difference. It’s unclear whether this idea would actually work for companies, but it certainly does for neural networks. Neurons trained with dropout cannot co-adapt with their neighboring neurons; they have to be as useful as possible on their own. They also cannot rely excessively on just a few input neurons; they must pay attention to each of their input neurons. They end up being less sensitive to slight changes in the inputs. In the end you get a more robust network that generalizes better.”*
-</div><br>
+In der Praxis kann Early Stopping in Keras mit sogenannten **Callbacks** implementiert werden, was wir nachfolgend machen. Das Argument `patience = 5` bedeutet, dass wir sobald der Validierungsloss nicht mehr weiter sinkt, noch 5 Epochen lang Geduld haben und schauen, ob er weiter sinkt. Wenn er nach diesen 5 Epochen nicht weiter gesunken ist, dann stoppen wir das Training. Mit `restore_best_weights = TRUE` werden am Schluss nur die Gewichte des insgesamt besten Modells gespeichert.
 
-Nun bereiten wir die zweite Technik zur Vermeidung des Overfittings vor, nämlich **Early Stopping**. Die Technik wurde von Geoffrey Hinton (einem Übervater des Deep Learnings) erfunden und er hat die Technik einmal einen *"beautiful free lunch"* genannt. Die Technik des Early Stoppings ist nämlich erstaunlich einfach: wir stoppen das Training sobald der Loss bzw. die Accuracy auf dem Validierungsdatensatz nicht mehr weiter sinkt, denn wenn wir nun weiter trainieren, dann kommen wir in den Overfitting Bereich.
-
-In der Praxis kann Early Stopping in Keras mit sogenannten **Callbacks** implementiert werden, was wir im folgenden Code Fenster machen. Das Argument `patience = 5` bedeutet, dass wir sobald der Validierungsloss nicht mehr weiter sinkt, noch 5 Epochen lang Geduld haben und schauen, ob er weiter sinkt. Wenn er nach diesen 5 Epochen nicht weiter gesunken ist, dann stoppen wir das Training. Mit `restore_best_weights = TRUE` werden am Schluss nur die Gewichte des insgesamt besten Modells gespeichert.
-
-```{r, eval = FALSE}
+```{r}
 # Early stopping callback
 early_stopping_cb <- callback_early_stopping(patience = 5, restore_best_weights = TRUE)
 ```
 
 Nun trainieren wir das neue Modell. Wir setzen nun eine relativ hohe Zahl Epochen, weil wir der `fit()` Funktion eben auch den Early Stopping Callback mitgeben. Das heisst, es ist unwahrscheinlich, dass wir hier wirklich 30 Epochen lang trainieren werden.
 
-```{r, eval = FALSE}
+```{r}
 # Nun trainieren wir das Modell
-history <- ann2 %>% 
+history <- ann2 |> 
   fit(X_train, y_train, epochs = 30, batch_size = 32, validation_split = 0.1, callbacks = early_stopping_cb)
 ```
 
-```
-Epoch 1/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.3938 - accuracy: 0.8821 - val_loss: 0.1225 - val_accuracy: 0.9647
-Epoch 2/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.1885 - accuracy: 0.9441 - val_loss: 0.0917 - val_accuracy: 0.9732
-Epoch 3/30
-1688/1688 [===================] - 5s 3ms/step - loss: 0.1530 - accuracy: 0.9542 - val_loss: 0.0812 - val_accuracy: 0.9760
-Epoch 4/30
-1688/1688 [===================] - 5s 3ms/step - loss: 0.1275 - accuracy: 0.9611 - val_loss: 0.0780 - val_accuracy: 0.9763
-Epoch 5/30
-1688/1688 [===================] - 5s 3ms/step - loss: 0.1137 - accuracy: 0.9660 - val_loss: 0.0761 - val_accuracy: 0.9787
-Epoch 6/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.1020 - accuracy: 0.9690 - val_loss: 0.0774 - val_accuracy: 0.9770
-Epoch 7/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0957 - accuracy: 0.9710 - val_loss: 0.0747 - val_accuracy: 0.9770
-Epoch 8/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0922 - accuracy: 0.9719 - val_loss: 0.0713 - val_accuracy: 0.9795
-Epoch 9/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0821 - accuracy: 0.9745 - val_loss: 0.0785 - val_accuracy: 0.9792
-Epoch 10/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0790 - accuracy: 0.9754 - val_loss: 0.0771 - val_accuracy: 0.9812
-Epoch 11/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0779 - accuracy: 0.9761 - val_loss: 0.0708 - val_accuracy: 0.9807
-Epoch 12/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0718 - accuracy: 0.9771 - val_loss: 0.0746 - val_accuracy: 0.9797
-Epoch 13/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0687 - accuracy: 0.9785 - val_loss: 0.0677 - val_accuracy: 0.9810
-Epoch 14/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0650 - accuracy: 0.9801 - val_loss: 0.0730 - val_accuracy: 0.9815
-Epoch 15/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0638 - accuracy: 0.9802 - val_loss: 0.0659 - val_accuracy: 0.9810
-Epoch 16/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0609 - accuracy: 0.9808 - val_loss: 0.0776 - val_accuracy: 0.9807
-Epoch 17/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0587 - accuracy: 0.9819 - val_loss: 0.0777 - val_accuracy: 0.9803
-Epoch 18/30
-1688/1688 [===================] - 6s 3ms/step - loss: 0.0558 - accuracy: 0.9817 - val_loss: 0.0765 - val_accuracy: 0.9802
-Epoch 19/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0553 - accuracy: 0.9816 - val_loss: 0.0799 - val_accuracy: 0.9820
-Epoch 20/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0568 - accuracy: 0.9816 - val_loss: 0.0831 - val_accuracy: 0.9797
+Wir sehen, dass das Training nach 17 Epochen gestoppt wurde.^[Es kann sein, dass das Training bei Ihnen aufgrund der zufälligen Initialisierung länger oder weniger lange dauert.] Tatsächlich war der Validierungsloss nach Epoche 12 am tiefsten (0.0722) und hat sich in den nächsten 5 Epochen nur wieder erhöht.
+
+Schauen wir uns nochmal kurz die bekannten Kurven an:
+
+```{r}
+# Plots des Lernoutputs.
+plot(history, smooth = TRUE)
 ```
 
-Wir sehen, dass das Training nach 20 Epochen gestoppt wurde. Tatsächlich war der Validierungsloss nach Epoche 15 am tiefsten (0.0659) und hat sich in den nächsten 5 Epochen nur wieder erhöht.
-
-Schauen wir uns nochmal kurz die bekannten Kurven an, die wir mit `plot(history, smooth = TRUE)` generieren können:
-
-![Bla.](images/train_val_error_2.png){width=90% #fig-trainvalerror2}
-
-Das sieht nun viel besser aus. Auf der Höhe von Epoche 15 sind die beiden Loss Kurven und die beiden Accuracy Kurven nun sehr nahe beieinander. Wir machen kein Overfitting und sind nun zufrieden mit diesem Modell.
+Das sieht nun viel besser aus. Auf der Höhe von Epoche 12 sind die beiden Loss Kurven und die beiden Accuracy Kurven nun sehr nahe beieinander. Wir machen kein oder kaum Overfitting und sind nun zufrieden mit diesem Modell.
 
 ### Finales Modell evaluieren
 
-Nachdem wir das Modell trainiert haben, können wir uns die optimalen Gewichte anschauen, indem wir sie mit `get_weights()` aus dem Modellobjekt `ann2` extrahieren. Das Objekt `trained_weights` ist eine Liste mit 6 Elementen. Überlegt euch kurz, ob die Dimensionen der 6 Elemente in der Liste Sinn machen.
+Nachdem wir das Modell trainiert haben, können wir uns die optimalen Gewichte anschauen, indem wir sie mit `get_weights()` aus dem Modellobjekt `ann2` extrahieren. Das Objekt `trained_weights` ist eine Liste mit 6 Elementen.
 
-```{r, eval = FALSE}
-# Optimale Gewichte anschauen
-trained_weights <- ann2 %>% 
+```{r}
+# Optimale Gewichte
+trained_weights <- ann2 |> 
   get_weights()
 ```
 
+Schauen wir uns doch mal die Dimensionen des ersten Objekts an:
+
+```{r}
+# Erste Gewichtsmatrix
+dim(trained_weights[[1]])
+```
+
+Wir haben hier also die Gewichte zwischen dem Input Layer (784 Neurons) und dem ersten Hidden Layer (100 Neurons).
+
 Mit `evaluate()` können wir das Modell auf dem **Testset** evaluieren.
 
-```{r, eval = FALSE}
+```{r}
 # Evaluation Testset Performance
-ann2 %>% 
+ann2 |> 
   evaluate(X_test, y_test, verbose = 0)
 ```
 
-```
-      loss   accuracy 
-0.08615529 0.97810000
-```
-
-Wir kriegen sowohl den Wert der Kostenfunktion (auf dem Testset) als auch die Accuracy. Ihr seht, dass wir aktuell knapp 98% aller Bilder korrekt klassifizieren!
+Wir kriegen sowohl den Wert der Kostenfunktion (auf dem Testset) als auch die Accuracy. Ihr seht, dass wir aktuell knapp 98% aller Bilder korrekt klassifizieren - nicht schlecht.
 
 Wir können nun die Vorhersagen für alle Beobachtungen im Testset rechnen (mit `predict()`). 
 
-```{r, eval = FALSE}
+```{r}
 # Vorhersagen auf Testset
-pred_test <- ann2 %>% 
+pred_test <- ann2 |> 
   predict(X_test)
 
 # Erste Zeile
 head(pred_test, 1)
 ```
 
-```
-             [,1]         [,2]         [,3]         [,4]         [,5]         [,6]         [,7]      [,8]         [,9]        [,10]
-[1,] 6.685255e-13 5.311204e-10 8.525921e-08 5.529179e-09 5.470584e-12 1.843249e-10 1.825414e-17 0.9999895 3.462339e-11 1.033705e-05
-```
-
 Das Modell gibt uns für jede Beobachtung (hier die erste) 10 Wahrscheinlichkeiten (Spalten) zurück, eine für jede mögliche Zahl 0 - 9. Dabei muss beachtet werden, dass die Wahrscheinlichkeiten in der ersten Spalte (mit `[,1]` bezeichnet) den Wahrscheinlichkeiten für die Zahl 0 entsprechen, etc.
 
 Wir können aus diesen 10 Wahrscheinlichkeiten die **harten Vorhersagen** mit `apply()` ableiten. Wir rechnen am Schluss `- 1`, da wie bereits erwähnt der Index 1 der Zahl 0 entspricht, der Index 2 der Zahl 1, usw.
 
-```{r, eval = FALSE}
+```{r}
 # Harte Vorhersagen auf Testset
 .pred_class <- apply(pred_test, 1, which.max) - 1
 
@@ -1337,12 +1228,12 @@ truth <- apply(y_test, 1, which.max) - 1
 
 Nun haben wir die Zutaten, um eine Konfusionsmatrix zu rechnen. Hier bietet es sich an, die Zellen der Matrix mit `ggplot2` visuell darzustellen:
 
-```{r, eval = FALSE}
+```{r}
 # Konfusionsmatrix
-bind_cols(.pred_class = .pred_class, truth = truth) %>% 
-  mutate_all(factor, levels = 0:9, labels = 0:9) %>% 
-  group_by(.pred_class, truth) %>% 
-  count() %>% 
+bind_cols(.pred_class = .pred_class, truth = truth) |> 
+  mutate_all(factor, levels = 0:9, labels = 0:9) |> 
+  group_by(.pred_class, truth) |> 
+  count() |> 
   ggplot(aes(x = truth, y = .pred_class, fill = n)) +
   geom_tile() + 
   theme_bw() + 
@@ -1353,16 +1244,20 @@ bind_cols(.pred_class = .pred_class, truth = truth) %>%
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
 
-![Bla.](images/confMat.png){width=90% #fig-confmatmnist}
+Es kann sein, dass die Zahlen, die Sie kriegen für die Konfusionsmatrix von denjenigen in obiger Abbildung abweichen. Der Grund hierfür ist, dass ein Modell durch die zufällige Initialisierung der Gewichte jedes Mal etwas anders trainiert wird und dementsprechend auch leicht andere Vorhersagen (und Fehler) macht. In oben abgebildeter Konfusionsmatrix machen wir zum Beispiel 12 Mal den Fehler, eine 9 als eine 4 vorherzusagen. Mit unten stehendem Code können wir uns die Bilder, welche eine 9 darstellen aber als 4 klassifiziert wurden, anschauen.
 
-Es kann sein, dass die Zahlen, die ihr kriegt für die Konfusionsmatrix von denjenigen in obiger Abbildung abweichen. Der Grund hierfür ist, dass ein Modell durch die zufällige Initialisierung der Gewichte jedes Mal etwas anders trainiert wird und dementsprechend auch leicht andere Vorhersagen (und Fehler) macht. In oben abgebildeter Konfusionsmatrix machen wir zum Beispiel 18 Mal den Fehler, eine 9 als eine 4 vorherzusagen. Mit unten stehendem Code können wir uns die Bilder, welche eine 9 darstellen aber als 4 klassifiziert wurden, anschauen. Abgebildet ist nur ein Beispielsbild.
-
-```{r, eval = FALSE}
-# Definiere Grauabstufungen
+```{r}
+# Definiere Grauabstufungen.
 grays <- rgb(red = (0:255)/255, blue = (0:255)/255, green = (0:255)/255)
 
+# Index mit den als 4 vorhergesagten 9-Bilder.
+wrong <- which(truth == 9 & .pred_class == 4)
+
+# Anordnung der Plots
+par(mfrow = c(3, 4), mar = c(0.5, 0.5, 1.5, 0.5))
+
 # Falsche Bilder anschauen
-for (x in which(truth == 9 & .pred_class == 4)) {
+for (x in wrong) {
   
   # Wir indexen das falsche Bild
   im <- X_test[x, ]
@@ -1371,31 +1266,23 @@ for (x in which(truth == 9 & .pred_class == 4)) {
   dim(im) <- c(28, 28)
   
   # Bild anzeigen
-  heatmap(im, Rowv = NA, Colv = NA, revC = T, col = grays, scale = "none")
+  image(t(apply(im, 2, rev)), col = grays, axes = FALSE)
   
 }
 ```
 
-![Bla.](images/wrong4.png){width=90% #fig-wrong4}
-
-Es ist hier tatsächlich auch von Auge schwierig zu entscheiden, ob es sich um eine 9 oder eine 4 handelt.
+Es ist hier tatsächlich bei einigen Bildern auch von Auge schwierig zu entscheiden, ob es sich um eine 9 oder eine 4 handelt.
 
 Am Schluss können wir unser Modell im **HDF5** Dateiformat abspeichern. Dieses Format erlaubt es Webapplikationen, das Modell zu laden und für Vorhersagen zu verwenden. Gespeichert wird die Architektur des Modells, alle Hyperparameter und selbstverständlich die optimalen Parameterwerte (Gewichte).
 
 ```{r, eval = FALSE}
 # Modell speichern
-save_model_hdf5(ann, 'my_model.h5')
+save_model_hdf5(ann2, 'my_model.h5')
 
 # Clean-up Environment
 rm(list = ls())
 
 # Modell wieder laden
-ann <- load_model_hdf5('my_model.h5')
+ann2 <- load_model_hdf5('my_model.h5')
 ```
-
-
-
-
-
-
 
