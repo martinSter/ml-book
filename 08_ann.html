@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -41,10 +76,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8a682e290ec1fb13ec9c90c2171c650f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-1c38399175e8029fd3bc85ab2c04102e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -73,6 +108,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -238,8 +302,48 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Inhaltsverzeichnis</h2>
+   
+  <ul>
+  <li><a href="#mnist" id="toc-mnist" class="nav-link active" data-scroll-target="#mnist"><span class="header-section-number">8.1</span> MNIST</a>
+  <ul class="collapse">
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">8.1.1</span> Output</a></li>
+  <li><a href="#input-daten" id="toc-input-daten" class="nav-link" data-scroll-target="#input-daten"><span class="header-section-number">8.1.2</span> Input-Daten</a></li>
+  </ul></li>
+  <li><a href="#modellspezifikation" id="toc-modellspezifikation" class="nav-link" data-scroll-target="#modellspezifikation"><span class="header-section-number">8.2</span> Modellspezifikation</a>
+  <ul class="collapse">
+  <li><a href="#input-und-hidden-layer" id="toc-input-und-hidden-layer" class="nav-link" data-scroll-target="#input-und-hidden-layer"><span class="header-section-number">8.2.1</span> Input und Hidden Layer</a></li>
+  <li><a href="#aktivierungsfunktionen" id="toc-aktivierungsfunktionen" class="nav-link" data-scroll-target="#aktivierungsfunktionen"><span class="header-section-number">8.2.2</span> Aktivierungsfunktionen</a></li>
+  <li><a href="#output-layer" id="toc-output-layer" class="nav-link" data-scroll-target="#output-layer"><span class="header-section-number">8.2.3</span> Output Layer</a></li>
+  </ul></li>
+  <li><a href="#modelltraining" id="toc-modelltraining" class="nav-link" data-scroll-target="#modelltraining"><span class="header-section-number">8.3</span> Modelltraining</a>
+  <ul class="collapse">
+  <li><a href="#kostenfunktionen" id="toc-kostenfunktionen" class="nav-link" data-scroll-target="#kostenfunktionen"><span class="header-section-number">8.3.1</span> Kostenfunktionen</a></li>
+  <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link" data-scroll-target="#gradient-descent"><span class="header-section-number">8.3.2</span> Gradient Descent</a></li>
+  <li><a href="#backpropagation-algorithmus" id="toc-backpropagation-algorithmus" class="nav-link" data-scroll-target="#backpropagation-algorithmus"><span class="header-section-number">8.3.3</span> Backpropagation Algorithmus</a></li>
+  <li><a href="#vermeidung-von-overfitting" id="toc-vermeidung-von-overfitting" class="nav-link" data-scroll-target="#vermeidung-von-overfitting"><span class="header-section-number">8.3.4</span> Vermeidung von Overfitting</a></li>
+  </ul></li>
+  <li><a href="#beispiel-einfache-regression" id="toc-beispiel-einfache-regression" class="nav-link" data-scroll-target="#beispiel-einfache-regression"><span class="header-section-number">8.4</span> Beispiel einfache Regression</a>
+  <ul class="collapse">
+  <li><a href="#initialisierung-der-gewichte" id="toc-initialisierung-der-gewichte" class="nav-link" data-scroll-target="#initialisierung-der-gewichte"><span class="header-section-number">8.4.1</span> Initialisierung der Gewichte</a></li>
+  <li><a href="#backpropagation-step-by-step" id="toc-backpropagation-step-by-step" class="nav-link" data-scroll-target="#backpropagation-step-by-step"><span class="header-section-number">8.4.2</span> Backpropagation Step-by-Step</a></li>
+  </ul></li>
+  <li><a href="#multi-output-modelle" id="toc-multi-output-modelle" class="nav-link" data-scroll-target="#multi-output-modelle"><span class="header-section-number">8.5</span> Multi-Output Modelle</a>
+  <ul class="collapse">
+  <li><a href="#regressionsproblem" id="toc-regressionsproblem" class="nav-link" data-scroll-target="#regressionsproblem"><span class="header-section-number">8.5.1</span> Regressionsproblem</a></li>
+  <li><a href="#klassifikationsproblem" id="toc-klassifikationsproblem" class="nav-link" data-scroll-target="#klassifikationsproblem"><span class="header-section-number">8.5.2</span> Klassifikationsproblem</a></li>
+  </ul></li>
+  <li><a href="#anns-in-r" id="toc-anns-in-r" class="nav-link" data-scroll-target="#anns-in-r"><span class="header-section-number">8.6</span> ANNs in R</a>
+  <ul class="collapse">
+  <li><a href="#preprocessing-der-daten" id="toc-preprocessing-der-daten" class="nav-link" data-scroll-target="#preprocessing-der-daten"><span class="header-section-number">8.6.1</span> Preprocessing der Daten</a></li>
+  <li><a href="#erstes-modell" id="toc-erstes-modell" class="nav-link" data-scroll-target="#erstes-modell"><span class="header-section-number">8.6.2</span> Erstes Modell</a></li>
+  <li><a href="#zweites-modell" id="toc-zweites-modell" class="nav-link" data-scroll-target="#zweites-modell"><span class="header-section-number">8.6.3</span> Zweites Modell</a></li>
+  <li><a href="#finales-modell-evaluieren" id="toc-finales-modell-evaluieren" class="nav-link" data-scroll-target="#finales-modell-evaluieren"><span class="header-section-number">8.6.4</span> Finales Modell evaluieren</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -263,9 +367,1364 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Coming soon.</p>
+<p>Wir beginnen hier nun mit dem zweiten Teil des Buchs, der das Thema <strong>Deep Learning</strong> (DL) behandelt. DL ist der Bereich des Machine Learnings, in dem am meisten geforscht wird und in den aktuell Milliarden investiert werden. Grund dafür ist hauptsächlich die fantastische Performance von DL-Applikationen in den letzten paar Jahren, in Bereichen wie Sprachübersetzung (Stichwort <em>DeepL</em>), Chatbots (Stichwort <em>ChatGPT</em> oder <em>Claude</em>) oder sonstiger generativer AI (z.B. Bildgeneratoren).</p>
+<div id="fig-genAI" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-genAI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ai_van_gogh.jpg" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genAI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.1: Das Bild wurde mit der generativen AI <em>DALL-E 3</em> von OpenAI erstellt. Der <em>Prompt</em> für dieses Bild lautete <em>“How Van Gogh would draw AI”</em>.
+</figcaption>
+</figure>
+</div>
+<p>DL wird heutzutage grösstenteils für so genannte <strong>unstrukturierte Daten</strong> angewendet, d.h. für Bilder, Videos, Text und Audio. DL funktioniert aber auch für konventionelle (<strong>strukturierte</strong>) Daten.</p>
+<p>Einer der grossen Vorteile von DL im Vergleich zu anderen (klassischen) Machine Learning Algorithmen, die wir kennen gelernt haben, ist, dass beim DL <strong>kein Feature Engineering</strong> notwendig ist. Wir müssen also nicht, wie bspw. in <a href="02_linreg.html" class="quarto-xref"><span>Kapitel 2</span></a> oder <a href="03_linclass.html" class="quarto-xref"><span>Kapitel 3</span></a> gesehen, die Polynome der Input-Variablen bilden und darauf hoffen, dass wir so ein besseres Modell finden. Das Modell lernt in den sogenannten <em>Hidden Layers</em> (dazu später mehr) <strong>selbständig</strong>, wie es die vorhandenen Input-Variablen zu neuen Features kombinieren muss, um ein möglichst gutes Modell zu lernen.</p>
+<p>Doch DL hat nicht nur Vorteile im Vergleich zu klassichen Modellen. Ein DL Modell benötigt oft <strong>sehr viele Trainings-Daten</strong> und sollte darum nur dann verwendet werden, wenn die zur Verfügung stehenden Trainings-Daten auch wirklich gross sind (mehrere 10’000 Beobachtungen oder mehr). Weiter hat ein DL Modell <strong>viele Hyperparameter</strong>, die getunt werden müssen. Manchmal ist es nicht einfach, die Hyperparameterkombination zu finden, die zu einem sinnvollen Modell führt. Und ausserdem braucht das Modelltraining <strong>viele Computer Ressourcen</strong> und dementsprechend viel Energie.</p>
+<p>Heute sprechen wir fast ausschliesslich von Deep Learning oder AI, doch eigentlich sind DL/AI Modelle nichts anderes als künstliche neuronale Netzwerke, oder auf Englisch <strong>Artificial Neural Networks</strong> (ANNs). Man spricht hier von <em>Neural</em> Networks, weil die Erfinder dieser Modelle ursprünglich von der Struktur des menschlichen Gehirns inspiriert wurden. Heutige DL Modelle haben allerdings nur bedingt mit dem menschlichen Gehirn zu tun.</p>
+<p>Wir beginnen das Kapitel mit einer Einführung in das MNIST Problem, das <em>Hello World</em> im DL. Danach beschreiben wir ausführlich die Modellspezifikation oder -architektur des ANNs. In einem weiteren Schritt widmen wir uns dem Modelltraining und schauen uns danach alles anhand eines einfachen Beispiels an, nämlich dem einfachen (nur eine Input-Variable) Regressionsbeispiel. Nach einem kurzen Abstecher in Architekturen für Multi-Output Probleme schauen wir uns zum Schluss noch die Anwendung in <code>R</code> an.</p>
+<!-- TODO: Referenz zu Perceptron! -->
+<!-- TODO: Referenz zu Aktivierungsfunktionen -->
+<section id="mnist" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="mnist"><span class="header-section-number">8.1</span> MNIST</h2>
+<p>Der bekannte <strong>MNIST</strong> Datensatz ist ein Beispiel aus dem Bereich <strong>Computer Vision</strong>. Der Datensatz enthält Bilder von handgeschriebenen Zahlen, wie folgender Ausschnitt zeigt:</p>
+<div id="fig-mnistex" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mnistex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/MnistExamples.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnistex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.2: Ausschnitt aus dem MNIST Datensatz. Für jede Zahl sind 16 Bilder handgeschriebener Zahlen gezeigt. Quelle des Bilds: <a href="https://en.wikipedia.org/wiki/MNIST_database">Wikipedia</a>.
+</figcaption>
+</figure>
+</div>
+<p>Jede handgeschriebene “2” sieht anders aus, hat aber doch gewisse Ähnlichkeiten mit den anderen Bildern einer “2”. Dasselbe gilt für alle anderen Zahlen. Wir werden später nach Modellen suchen, welche einem handgeschriebenen Bild die korrekte Zahl zuordnen können. Hierbei handelt es sich um ein <strong>Klassifikationsproblem</strong> mit einer <strong>Zielvariable mit 10 möglichen Kategorien</strong>, nämlich die Zahlen 0 bis 9.</p>
+<p>Der MNIST Datensatz ist hier im Hintergrund bereits geladen und in einen Trainings- und Testdatensatz aufgeteilt. Warum ist der Datensatz bereits aufgeteilt? So arbeiten alle ML-Expert:innen auf der ganzen Welt mit demselben Trainings- und Testset und die Performances sind direkt vergleichbar. Ausserdem sind die beiden Datensätze <strong>balanced</strong>, d.h. die Zahlen 0-9 kommen in beiden Datensätzen etwa gleich oft vor.</p>
+<section id="output" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="output"><span class="header-section-number">8.1.1</span> Output</h3>
+<p>Die Outputvariable in Trainings- und Testset kann als <code>y_train</code> bzw. <code>y_test</code> aufgerufen werden. Dabei handelt es sich um Vektoren, welche die wahren Zahlen enthalten. Prüfen wir als erstes kurz die Dimensionen der beiden Vektoren. Da es sich um (eindimensionale) Vektoren handelt, gibt uns die Funktion <code>dim()</code> lediglich eine Zahl zurück, die der Anzahl Elemente im Vektor entspricht.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Überprüfe Dimensionen der Zielvariable</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(y_train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 60000</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(y_test)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10000</code></pre>
+</div>
+</div>
+<p>Aus obigem Code-Output sehen wir, dass der Trainingsdatensatz 60’000 Bilder von Zahlen und der Testdatensatz 10’000 Bilder von Zahlen enthält. Als nächstes transformieren wir die beiden Vektoren in Faktoren, denn es handelt sich hier ja um ein Klassifikationsproblem und wir behandeln die 10 Zahlen als Kategorien (oder Klassen):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In Faktoren transformieren</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">factor</span>(y_train)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">factor</span>(y_test)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="input-daten" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="input-daten"><span class="header-section-number">8.1.2</span> Input-Daten</h3>
+<p>Die Input-Daten sind etwas komplexer, denn es handelt sich hier ja um Bilder von handgeschriebenen Zahlen. Die Input-Daten können als <code>x_train</code> bzw. <code>x_test</code> aufgerufen werden. Schauen wir uns doch in einem ersten Schritt die Dimensionen der Input-Daten etwas genauer an, um zu verstehen, was z.B. in <code>x_train</code> drin ist:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Überprüfe Dimensionen der Input-Daten</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 60000    28    28</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_test)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10000    28    28</code></pre>
+</div>
+</div>
+<p>Wir sehen, dass die Input-Daten drei Dimensionen haben, da <code>dim()</code> uns drei Zahlen ausgibt. Es handelt sich bei <code>x_train</code> und <code>x_test</code> um eine R-Datenstruktur, mit der wir nicht so häufig arbeiten, nämlich <strong>3-dimensionale Arrays</strong>. Es ist allerdings einfacher, wenn wir uns diese 3-D Arrays als einen Stapel von (2-dimensionalen) Matrizen vorstellen. In diesem Stapel repräsentiert jede Matrix ein Bild. Wir können uns das wie folgt vorstellen (hier der Einfachheit halber nur 3 Bilder):</p>
+<div id="fig-immagesArray" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-immagesArray-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Images_Array_Schematic.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-immagesArray-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.3: Schematische Darstellung der Input-Daten im MNIST Problem. Man kann sich die Input-Daten als ein Stapel von 2-dimensionalen Bildern von handgeschriebenen Zahlen vorstellen. Hier ist der Einfachheit halber nur ein Stapel von 3 Bildern dargestellt.
+</figcaption>
+</figure>
+</div>
+<p>Die drei gestapelten <span class="math inline">\(12 \times 12\)</span> Matrizen entsprechen drei (ziemlich verpixelten) Bilder von handgeschriebenen Zahlen. Wie der Output der <code>dim()</code> Funktion zeigt, haben die Bilder im MNIST Datensatz eine Grösse von <span class="math inline">\(28 \times 28\)</span> Pixel. Ich habe im obigen Beispiel der Einfachheit halber nur <span class="math inline">\(12 \times 12\)</span> Pixel Bilder visualisiert.</p>
+<section id="fragen" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fragen">Fragen</h4>
+<p>Schauen Sie sich nun den Output der <code>dim()</code> Funktion nochmals genau an. Wie viele Bilder enthält der Trainingsdatensatz?</p>
+<ul>
+<li>10’000</li>
+<li>60’000</li>
+<li>70’000</li>
+<li>28</li>
+</ul>
+<p>Wie viele Pixel hat jedes Bild?</p>
+<ul>
+<li>10’000</li>
+<li>60’000</li>
+<li>784</li>
+<li>28</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Der Trainingsdatensatz enthält 60’000 Bilder. Das zeigt uns die erste Zahl im Output der <code>dim()</code> Funktion.</p>
+<p>Die MNIST Bilder haben eine Grösse von <span class="math inline">\(28 \times 28\)</span> Pixel. Deshalb hat jedes Pixel insgesamt 784 Pixels.</p>
+</div>
+</div>
+</div>
+<p>Mithilfe der eckigen Klammern (z.B. <code>x_train[]</code>) können wir indexen, d.h. wir können gewisse Elemente aus dem 3-D Array extrahieren und anschauen. Schauen wir uns doch mal die Dimensionen des ersten Bilds im Trainingsdatensatz an:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensionen des ersten Bilds im Trainingsdatensatz</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_train[<span class="dv">1</span>, , ])</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 28 28</code></pre>
+</div>
+</div>
+<p>Wie erwartet handelt es sich um eine <span class="math inline">\(28 \times 28\)</span> Matrix, also um eine Matrix mit 28 Zeilen und 28 Spalten. Jedes Element der Matrix repräsentiert ein Pixel im Bild. Das Element in der ersten Zeile der ersten Spalte ist das Pixel im linken oberen Ecken des Bilds. <strong>Wichtig</strong>: es handelt sich hier um sogenannte <strong>Grayscale</strong> Bilder. Das bedeutet, dass jeder Pixelwert jeweils die Dunkelheit des jeweiligen Pixels angibt.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Pixelwerte und Farben
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pixels mit dem Wert 0 sind schwarz und Pixels mit dem Wert 255 sind weiss. Alle Abstufungen dazwischen sind Graustufen. Das bedeutet, dass wir oben die Bilder der Zahlen eigentlich falsch dargestellt haben, nämlich als schwarze/graue Zahlen auf weissem Hintergrund. Die Zahlen im MNIST Datensatz sind jedoch in heller Farbe auf dunklem Hintergrund gespeichert. Wir werden das weiter unten sehen, wenn wir ein Bild als Heatmap darstellen.</p>
+</div>
+</div>
+<p>Mit der Funktion <code>prmatrix()</code> können wir uns die Matrix (oder zumindest einen Teil davon, denn ich indexe die Zeilen 5-26 und die Spalten 5-21) mal anzeigen lassen. Sehen Sie um welche Zahl es sich handelt?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrix des ersten Trainingsbild anzeigen lassen</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prmatrix</span>(x_train[<span class="dv">1</span>, <span class="dv">5</span><span class="sc">:</span><span class="dv">26</span>, <span class="dv">5</span><span class="sc">:</span><span class="dv">21</span>], <span class="at">rowlab =</span> <span class="fu">rep</span>(<span class="st">""</span>, <span class="dv">28</span>), <span class="at">collab =</span> <span class="fu">rep</span>(<span class="st">""</span>, <span class="dv">28</span>))</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                    
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   3  18  18  18 126 136 175  26 166
+   0   0   0   0  30  36  94 154 170 253 253 253 253 253 225 172 253
+   0   0   0  49 238 253 253 253 253 253 253 253 253 251  93  82  82
+   0   0   0  18 219 253 253 253 253 253 198 182 247 241   0   0   0
+   0   0   0   0  80 156 107 253 253 205  11   0  43 154   0   0   0
+   0   0   0   0   0  14   1 154 253  90   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0 139 253 190   2   0   0   0   0   0   0
+   0   0   0   0   0   0   0  11 190 253  70   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  35 241 225 160 108   1   0   0   0
+   0   0   0   0   0   0   0   0   0  81 240 253 253 119  25   0   0
+   0   0   0   0   0   0   0   0   0   0  45 186 253 253 150  27   0
+   0   0   0   0   0   0   0   0   0   0   0  16  93 252 253 187   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0 249 253 249  64
+   0   0   0   0   0   0   0   0   0   0  46 130 183 253 253 207   2
+   0   0   0   0   0   0   0   0  39 148 229 253 253 253 250 182   0
+   0   0   0   0   0   0  24 114 221 253 253 253 253 201  78   0   0
+   0   0   0   0  23  66 213 253 253 253 253 198  81   2   0   0   0
+   0   0  18 171 219 253 253 253 253 195  80   9   0   0   0   0   0
+  55 172 226 253 253 253 253 244 133  11   0   0   0   0   0   0   0
+ 136 253 253 253 212 135 132  16   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</code></pre>
+</div>
+</div>
+<p>Wir können die Matrix auch als <strong>Heatmap</strong> anzeigen lassen. Dazu müssen wir aber zuerst die Graustufen definieren:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definiere Grauabstufungen</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>grays <span class="ot">&lt;-</span> <span class="fu">rgb</span>(<span class="at">red =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">blue =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">green =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualisiere erstes Bild</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(x_train[<span class="dv">1</span>, , ], <span class="at">Rowv =</span> <span class="cn">NA</span>, <span class="at">Colv =</span> <span class="cn">NA</span>, <span class="at">revC =</span> T, <span class="at">col =</span> grays, <span class="at">scale =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Wir haben gesehen, dass die Input-Daten als 3-D Array gespeichert sind. Um die Input-Daten in Modellen zu verwenden, wollen wir sie in ein zweidimensionales Datenformat bringen (eine Matrix oder einen Data Frame), in dem eine Zeile ein Bild ist und die Spalten die Pixelwerte bezeichnen. Wir transformieren also die Bildmatrix in lange Vektoren. Jedes Bild wird so in einen Zeilenvektor der Länge <span class="math inline">\(28 \cdot 28 = 784\)</span> transformiert. Folgende Abbildung zeigt das Vorgehen schematisch für ein Bild:</p>
+<div id="fig-imagesArrayTo2D" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-imagesArrayTo2D-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/Images_Array_Schematic_to2D.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-imagesArrayTo2D-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.4: Schematische Darstellung wie aus einem MNIST Bild ein Input-Datenvektor wird.
+</figcaption>
+</figure>
+</div>
+<p>In <code>R</code> kann man diesen Schritt sehr einfach bewerkstelligen, indem man die Dimensionen der beiden Arrays (<code>x_train</code> und <code>x_test</code>) von Hand ändert zu <code>c(60000, 784)</code> (für den Trainingsdatensatz).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformieren 3-D Array zu 2-D Matrix</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_train) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">60000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_test) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Überprüfe Dimensionen in Trainingsdatensatz</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 60000   784</code></pre>
+</div>
+</div>
+<p>Ganz am Schluss skalieren wir die Input-Daten, indem wir jeden Wert durch 255 dividieren. Warum 255? Das ist die maximale Anzahl Farbabstufungen. Wenn ein Pixel den Wert 255 hat, dann ist es ein weisses Pixel. Durch die Skalierung hat jedes Pixel einen Wert zwischen 0 und 1. Durch die Skalierung der Input-Daten können wir oft die Trainingsperformance verbessern (inbesondere verkürzen wir so das Training).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scaling</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>x_train <span class="ot">&lt;-</span> x_train <span class="sc">/</span> <span class="dv">255</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>x_test <span class="ot">&lt;-</span> x_test <span class="sc">/</span> <span class="dv">255</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+</section>
+<section id="modellspezifikation" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="modellspezifikation"><span class="header-section-number">8.2</span> Modellspezifikation</h2>
+<p>In diesem Abschnitt schauen wir uns an, wie ein ANN aufgebaut ist. Da ANNs in der Regel sehr komplex sind, schreiben wir oft nicht eine mathematische Formel für das Modell auf, sondern wir stellen die Architektur eines ANNs grafisch dar. In diesem Abschnitt schauen wir uns der Einfachheit halber ein sehr simples ANN an, das lediglich zwei Input-Variablen hat, nämlich <span class="math inline">\(x_1\)</span> und <span class="math inline">\(x_2\)</span>. Der Einfachheit halber lasse ich hier das <span class="math inline">\(i\)</span> im Index der Input-Variablen immer weg.</p>
+<div id="fig-annfull" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-annfull-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ANN_FULL.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annfull-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.5: Architektur eines einfachen ANNs mit einem Input Layer, der zwei Input-Variablen enthält, einem Hidden Layer und einem Output Layer.
+</figcaption>
+</figure>
+</div>
+<p>Das oben abgebildete ANN hat drei sogenannte <strong>Layers</strong>:</p>
+<ul>
+<li>Input Layer</li>
+<li>Hidden Layer</li>
+<li>Output Layer</li>
+</ul>
+<p>Später werden wir sehen, dass ein ANN mehr als einen Hidden Layer haben kann. Das ist vor allem dann nötig, wenn wir es mit sehr komplexen Problemen zu tun haben. Wenn wir mehrere Hidden Layers haben, sprechen wir von <strong>tiefen</strong> ANNs. Das ist übrigens der Ursprung des Ausdrucks <em>Deep Learning</em>.</p>
+<p>Jeder Knoten (engl. <em>Node</em>) in obiger Grafik ist ein sogenanntes <strong>Neuron</strong> (Sie sehen an diesem Begriff eine der Analogien zu biologischen Gehirnen). Wir werden bald sehen, dass in jedem Neuron des ANNs einfache mathematische Operationen ausgeführt werden. Die Fähigkeit, komplexe Probleme zu lösen kommt erst aus dem Zusammenspiel bzw. der <strong>Kombination dieser vielen simplen Komponenten</strong>. Wir gehen nun auf die einzelnen Elemente dieser Architektur genauer ein.</p>
+<section id="input-und-hidden-layer" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="input-und-hidden-layer"><span class="header-section-number">8.2.1</span> Input und Hidden Layer</h3>
+<p>Der Input Layer enthält drei <strong>Input Neurons</strong>. Das erste Neuron nimmt immer den Wert 1 an. Es hilft uns, im Modell eine <strong>Konstante</strong> zu integrieren (ähnlich wie bei der linearen Regression der Parameter <span class="math inline">\(w_0\)</span>). Das zweite Neuron nimmt den jeweiligen Wert der ersten Input Variable <span class="math inline">\(x_1\)</span> an und das dritte Neuron den jeweiligen Wert der zweiten Input Variable <span class="math inline">\(x_2\)</span>. Für eine Beobachtung <span class="math inline">\(i\)</span> mit <span class="math inline">\(x_{i1}=2\)</span> und <span class="math inline">\(x_{i2}=4\)</span> gibt der Input-Layer z.B. die Werte 1, 2 und 4 an den Hidden Layer weiter.</p>
+<p>Wir sehen in obiger Abbildung, dass jedes Input Neuron mit jedem Neuron im Hidden Layer verbunden ist. Das heisst, jedes Input Neuron füttert seinen jeweiligen Wert jedem Neuron im Hidden Layer. Weil alle Input Neurons mit allen Neurons im Hidden Layer verbunden sind, spricht man hier in der englischsprachigen Literatur von einem <strong>fully connected</strong> oder <strong>dense</strong> Layer (in Bezug auf den Hidden Layer).</p>
+<p>Die Input Neurons füttern also ihre jeweiligen Werte den Neurons im Hidden Layer. Doch was heisst das genau aus mathematischer Sicht? Dazu schauen wir uns nur mal einen Teil des obigen ANNs an:</p>
+<div id="fig-annpartial1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-annpartial1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ANN_PARTIAL1.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annpartial1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.6: Berechnung im ersten Neuron des Hidden Layers.
+</figcaption>
+</figure>
+</div>
+<p>Was passiert in dem ersten Neuron im Hidden Layer? In einem ersten Schritt bilden wir eine <strong>gewichtete Summe</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> der Werte der Input Neurons (darum enthält jedes Neuron im Hidden Layer das Summenzeichen <span class="math inline">\(\sum\)</span>). Wir bezeichnen diese gewichtete Summe als <span class="math inline">\(z_1^{(1)}\)</span>. Die hochgestellte <span class="math inline">\(^{(1)}\)</span> sagt uns, dass es sich um den ersten (Hidden) Layer handelt (der Input Layer wird hier nicht gezählt). Die tiefgestellte <span class="math inline">\(1\)</span> sagt uns, dass es sich um das erste Neuron (im Hidden Layer) handelt. Die gewichtete Summe wird wie folgt gerechnet:</p>
+<p><span class="math display">\[
+\begin{aligned}
+z_1^{(1)} &amp;= \left(\mathbf{w}_1^{(1)}\right)' \mathbf{x}\\
+&amp;= w_{10}^{(1)}\cdot 1 + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\cdot x_2\\
+&amp;= w_{10}^{(1)} + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\cdot x_2
+\end{aligned}
+\]</span></p>
+<p>Wir berechnen also im ersten Neuron eine gewichtete Summe bestehend aus einer Konstante <span class="math inline">\(w_{10}^{(1)}\)</span> (auch Bias genannt) sowie den Inputs multipliziert mit dem jeweiligen Gewicht.</p>
+<section id="fragen-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fragen-1">Fragen</h4>
+<p>Wie wird die gewichtete Summe für das zweite Neuron <span class="math inline">\(z_2^{(1)}\)</span> im Hidden Layer gerechnet?</p>
+<ul>
+<li><span class="math inline">\(z_2^{(1)} = w_{10}^{(1)} + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\cdot x_2\)</span></li>
+<li><span class="math inline">\(z_2^{(1)} = w_{20}^{(1)} + w_{21}^{(1)}\cdot x_1 + w_{22}^{(1)}\cdot x_2\)</span></li>
+<li><span class="math inline">\(z_2^{(1)} = w_{30}^{(1)} + w_{31}^{(1)}\cdot x_1 + w_{32}^{(1)}\cdot x_2\)</span></li>
+<li><span class="math inline">\(z_2^{(1)} = w_{20}^{(2)} + w_{21}^{(2)}\cdot x_1 + w_{22}^{(2)}\cdot x_2\)</span></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Falsch. Das sind die Gewichte für das erste Neuron.</li>
+<li>Die erste Zahl im Index der Gewichte bezieht sich auf die Nummer des Neurons. Es handelt sich hier um das zweite Neuron im ersten Layer, darum ist diese Lösung korrekt.</li>
+<li>Falsch. Das wären die Gewichte für das dritte Neuron.</li>
+<li>Fast richtig. Aber hier haben wir die Gewichte für den zweiten Layer, darum das ‘hoch (2)’.</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Wir haben oben gesehen, dass wir für jedes Neuron im Hidden Layer drei Gewichte benötigen (je eines pro Input Neuron). Es stellt sich die Frage, wie viele Gewichte (Parameter) wir in diesem ANN für den ersten Layer, d.h. den Hidden Layer brauchen?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wir haben drei Neurons im Hidden Layer und drei Input Neurons. Insgesamt ergibt das <span class="math inline">\(3\cdot 3 = 9\)</span> Gewichte.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="aktivierungsfunktionen" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="aktivierungsfunktionen"><span class="header-section-number">8.2.2</span> Aktivierungsfunktionen</h3>
+<p>In einem zweiten Schritt übergeben wir die gewichteten Summen, die wir in den Neurons des Hidden Layers berechnet haben, einer <strong>Aktivierungsfunktion</strong>. Wir nennen diese Funktion einfach mal allgemein <span class="math inline">\(g\)</span> (das S-förmige Symbol in den Neurons in obiger Abbildung stellt die Aktivierung symbolisch dar). Wir können die gewichtete Summe des ersten Neurons wie folgt in die Aktivierungsfunktion einsetzen:</p>
+<p><span class="math display">\[
+g\left(z_1^{(1)}\right) = g(w_{10}^{(1)} + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\cdot x_2)
+\]</span></p>
+<p>Doch warum braucht es eine Aktivierungsfunktion überhaupt und was macht sie genau? Eine Aktivierungsfunktion kann ein Neuron aktivieren, wie es der Name ja bereits andeutet. Ob ein Neuron aktiviert wird oder nicht, hängt von der gewichteten Summe ab. <strong>Ist die gewichtete Summe gross, so wird das Neuron aktiviert</strong> und es wird ein Signal an den nächsten Layer weitergeleitet. Wenn die gewichtete Summe klein ist, dann wird kein Signal oder nur ein schwaches Signal an den nächsten Layer weitergeleitet.</p>
+<p>Welche Form nimmt diese Aktivierungsfunktion <span class="math inline">\(g\)</span> an? Historisch wurde vor allem die <strong>Sigmoid</strong> Aktivierungsfunktion verwendet. Wir kennen diese Funktion bereits von der logistischen Regression. Zur Erinnerung:</p>
+<p><span class="math display">\[
+g(z) = \frac{e^z}{1+e^z}=\frac{1}{1+e^{-z}}
+\]</span> Für jeden reellen Wert <span class="math inline">\(z\)</span> gibt uns die Funktion <span class="math inline">\(g(z)\)</span> einen Wert zwischen 0 und 1 zurück.</p>
+<p>Die Sigmoid Funktion ist allerdings bei weitem nicht die einzige Aktivierungsfunktion. Heute wird für die Aktivierung der Neurons in den Hidden Layers for allem die <strong>ReLU</strong> Funktion verwendet. ReLU steht für <em>Rectified Linear Unit</em> und die Funktion ist wie folgt definiert:</p>
+<p><span class="math display">\[
+g(z) =
+\begin{cases}
+0\, ,&amp; z &lt; 0 \\
+z  ,&amp; z\geq 0
+\end{cases}
+\]</span></p>
+<p>Die Funktion ist eigentlich ganz simpel. Solange die gewichtete Summe negativ ist, nimmt die Funktion den Wert 0 an. Erst wenn die gewichtete Summe im positiven Bereich liegt, nimmt die Funktion andere Werte an. Sie steigt nämlich von 0 an linear mit einer Steigung von 1. Grafisch sieht das folgendermassen aus:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/relu-1.png" class="img-fluid figure-img" style="width:60.0%" alt="ReLU Funktion"></p>
+<figcaption>Die Form der ReLU Funktion.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="fragen-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fragen-2">Fragen</h4>
+<ul>
+<li>Was ist der Output der ReLU Aktivierungsfunktion, wenn die gewichtete Summe 2.6 beträgt?</li>
+<li>Wie würden Sie die ReLU Funktion in <code>R</code> umsetzen, d.h. wie würden Sie <code>relu &lt;- function(z){"IHR CODE"}</code> ergänzen?</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Wenn die gewichtete Summe grösser als 0 ist, dann nimmt die Funktion genau den Wert des Inputs an, hier also 2.6.</li>
+<li>Die Funktion lässt sich in <code>R</code> einfach umsetzen: <code>relu &lt;- function(z){ifelse(z &lt; 0, 0, z)}</code>.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Nicht-lineare Aktivierungen
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wir haben nun zwei verschiedene Aktivierungsfunktionen kennen gelernt, die Sigmoid Funktion und die ReLU Funktion. Das wichtigste Merkmal einer Aktivierungsfunktion ist, dass es eine <strong>nicht-lineare</strong> Funktion ist (auch ReLU ist ingesamt nicht-linear, denn es ist eine Kombination aus zwei verschiedenen linearen Komponenten). Warum ist das wichtig? Weil sonst nur lineare Modelle gelernt werden können. Eine nicht-lineare Aktivierungsfunktion erlaubt dem ANN, komplexe Muster zu lernen. Wir werden das später noch anhand eines Beispiels anschauen.</p>
+</div>
+</div>
+<p>Wir können uns noch kurz eine andere Interpretation dieser Aktivierungen im Hidden Layer anschauen. Was passiert ist folgendes: wir generieren eine <strong>Transformation</strong> der Input Variablen <span class="math inline">\(x_1\)</span> und <span class="math inline">\(x_2\)</span> mithilfe der Gewichte sowie der Aktivierungsfunktion. Die Transformation ist dann in einem gewissen Sinn eine neue Variable (ein neues Feature). Das ist gemeint mit dem in der Einleitung erwähnten <strong>automatischen Feature Engineering</strong> Prozess. Weil jedes Neuron im Hidden Layer andere Gewichte hat, ist jede Transformation unterschiedlich, d.h. <strong>jedes Neuron generiert ein anderes neues Feature</strong>.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>AND Feature (optional)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Um ein besseres Verständnis zu erhalten, wie ein Neuron im Hidden Layer Feature Engineering betreibt, können wir uns kurz überlegen, wie mithilfe der Aktivierung und sinnvoll gewählten Gewichten die <strong>AND</strong>-Logik umgesetzt werden kann.</p>
+<p>Dabei nehmen wir an, dass die beiden Input-Variablen <span class="math inline">\(x_1\)</span> und <span class="math inline">\(x_2\)</span> binärer Natur sind, also nur die Werte <span class="math inline">\(\{0,1\}\)</span> annehmen können.</p>
+<p>Wie oben beschrieben, kann die Berechnung in einem Neuron im Hidden Layer wie folgt beschrieben werden:</p>
+<p><span class="math display">\[
+g(w_{10}^{(1)} + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\cdot x_2)
+\]</span></p>
+<p>Nun nehmen wir an, dass die Gewichte folgende Werte haben:</p>
+<ul>
+<li><span class="math inline">\(w_{10}^{(1)} = -1.5\)</span></li>
+<li><span class="math inline">\(w_{11}^{(1)} = 1\)</span></li>
+<li><span class="math inline">\(w_{12}^{(1)} = 1\)</span></li>
+</ul>
+<p>Ausserdem sei <span class="math inline">\(g\)</span> die ReLU Funktion.</p>
+<p>Nun können wir uns anschauen, was passiert, wenn beide Input-Variablen den Wert 1 annehmen:</p>
+<p><span class="math display">\[
+g(w_{10}^{(1)} + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\cdot x_2) = g(-1.5 + 1 \cdot 1 + 1 \cdot 1) = 0.5
+\]</span> Und was passiert, wenn nur eine der Input-Variablen (z.B. <span class="math inline">\(x_1\)</span>) den Wert 1 annimmt?</p>
+<p><span class="math display">\[
+g(w_{10}^{(1)} + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\cdot x_2) = g(-1.5 + 1 \cdot 1 + 1 \cdot 0) = 0
+\]</span> Wir sehen also, dass dieses Neuron nur dann aktiviert wird (also einen Output grösser als 0 zurückgibt), wenn beide Input-Variablen “aktiv” (also 1) sind.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="output-layer" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="output-layer"><span class="header-section-number">8.2.3</span> Output Layer</h3>
+<p>Nun ist es erstmal Zeit für eine kurze Zusammenfassung. Wir haben ein ANN mit drei Layers angeschaut. Das ANN hat einen Input Layer, einen Hidden Layer und einen Output Layer. Wir haben gesehen, dass der Input Layer die Werte der Variablen <span class="math inline">\(x_1\)</span> und <span class="math inline">\(x_2\)</span> sowie eine 1 an jedes Neuron im Hidden Layer übergibt. Diese rechnen dann eine gewichtete Summe, welche wiederum der Aktivierungsfunktion (Sigmoid oder ReLU) übergeben wird. So produziert jedes Neuron im Hidden Layer einen Output, die <strong>Aktivierung</strong>. Doch was passiert damit?</p>
+<p>Die Aktivierungen der drei Neurons im Hidden Layer, also <span class="math inline">\(g\left(z_1^{(1)}\right)\)</span>, <span class="math inline">\(g\left(z_2^{(1)}\right)\)</span> und <span class="math inline">\(g\left(z_3^{(1)}\right)\)</span>, werden an den Output Layer übergeben. Ausserdem fügen wir erneut einen Bias Term (d.h. ein Neuron mit dem Wert 1) zum Hidden Layer hinzu. Grafisch sieht dieser Sachverhalt wie folgt aus:</p>
+<div id="fig-annpartial2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-annpartial2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ANN_PARTIAL2.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annpartial2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.7: Berechnung des Output Layer Neurons.
+</figcaption>
+</figure>
+</div>
+<p>Wir können die Aktivierungen und die 1 in einem Vektor zusammenfassen:</p>
+<p><span class="math display">\[
+\mathbf{a}^{(1)} = \begin{pmatrix} 1 \\ g\left(z_1^{(1)}\right) \\ g\left(z_2^{(1)}\right) \\ g\left(z_3^{(1)}\right) \end{pmatrix}
+\]</span></p>
+<p>Und nun können wir wie vorhin mit den Gewichten des Output Layers eine gewichtete Summe errechnen:</p>
+<p><span class="math display">\[
+\begin{aligned}
+z_1^{(2)} &amp;= \left(\mathbf{w}_1^{(2)}\right)' \mathbf{a}^{(1)}\\
+&amp;= w_{10}^{(2)}\cdot 1 + w_{11}^{(2)}\cdot g\left(z_1^{(1)}\right) + w_{12}^{(2)}\cdot g\left(z_2^{(1)}\right) + w_{13}^{(2)}\cdot g\left(z_3^{(1)}\right)\\
+&amp;= w_{10}^{(2)} + w_{11}^{(2)}\cdot g\left(z_1^{(1)}\right) + w_{12}^{(2)}\cdot g\left(z_2^{(1)}\right) + w_{13}^{(2)}\cdot g\left(z_3^{(1)}\right)
+\end{aligned}
+\]</span></p>
+<p>Ob diese gewichtete Summe nochmals einer Aktivierungsfunktion übergeben wird, hängt vom Problem ab:</p>
+<ul>
+<li>Wenn wir das ANN verwenden, um ein <strong>Regressionsproblem</strong> zu lösen, dann ist die gewichtete Summe des Output Neurons das Endresultat, oder in anderen Worten der Output unseres Modells (z.B. der vorhergesagte Hauspreis). Wir bezeichnen diesen Output als <span class="math inline">\(\hat{y}=z_1^{(2)}\)</span>.</li>
+<li>Falls wir das ANN aber verwenden, um ein <strong>Klassifikationsproblem</strong> zu lösen, dann verwenden wir auch im Output Neuron nochmals eine Aktivierungsfunktion, typischerweise die Sigmoid Funktion. Wir wissen ja bereits, dass die Sigmoid Funktion einen Wert zwischen 0 und 1 zurückgibt. Dieser Wert kann als Wahrscheinlichkeit interpretiert werden. Wir bezeichnen diesen Output als <span class="math inline">\(\hat{y}=g\left(z_1^{(2)}\right)\)</span>.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Mathematische Modellspezifikation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Der Output unseres ANNs ist sowohl für das Regressionsproblem als auch für das Klassifikationsproblem eine <strong>komplexe Funktion</strong> unserer Input-Variablen <span class="math inline">\(x_1\)</span> und <span class="math inline">\(x_2\)</span>. Diese Funktion hängt von den Gewichten im Modell ab sowie von den verwendeten Aktivierungsfunktionen. Lassen Sie uns diese Funktion für dieses einfache Beispiel aufschreiben:</p>
+<p><span class="math display">\[
+\begin{align}
+\hat{y}
+&amp;= g\Big(
+    w_{10}^{(2)} \\
+&amp;\quad
+    + w_{11}^{(2)} \, \cdot g\big( w_{10}^{(1)} + w_{11}^{(1)} x_1 + w_{12}^{(1)} x_2 \big) \\
+&amp;\quad
+    + w_{12}^{(2)} \, \cdot g\big( w_{20}^{(1)} + w_{21}^{(1)} x_1 + w_{22}^{(1)} x_2 \big) \\
+&amp;\quad
+    + w_{13}^{(2)} \, \cdot g\big( w_{30}^{(1)} + w_{31}^{(1)} x_1 + w_{32}^{(1)} x_2 \big)
+\Big)
+\end{align}
+\]</span></p>
+</div>
+</div>
+<section id="fragen-3" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fragen-3">Fragen</h4>
+<ul>
+<li>Wie viele Gewichte (Parameter) hat das betrachtete ANN insgesamt?</li>
+<li>Wie viele Neurons hat der Input Layer eines ANN?</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Wir haben 9 Gewichte im ersten Layer (Hidden Layer) sowie 4 Gewichte im zweiten Layer (Output Layer). Insgesamt ergibt das also 13 Parameter.</li>
+<li>Die Anzahl Neurons im Input Layer hängt von der Anzahl Input-Variablen unseres Problems ab. Wir brauchen ein Neuron pro Input-Variable sowie ein weiteres Neuron mit dem Wert 1 für den Bias.</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Wir haben in diesem Abschnitt ein sehr einfaches ANN betrachtet, das einen Input Layer, einen Hidden Layer und einen Output Layer hat. Von nun an werden wir uns etwas komplexere ANNs anschauen, diese werden jedoch immer einen Input Layer und einen Output Layer haben. Was aber variieren kann, sind die <strong>Anzahl Hidden Layers</strong>. Je mehr Hidden Layers wir haben, desto tiefer (“deep”) ist unser Modell. Für komplexe Probleme (z.B. Bilderkennung) braucht es sehr tiefe ANN mit vielen Hidden Layers. Es ist also im Ermessen von Ihnen als Data Scientist:in, wie viele Hidden Layers Sie ins Modell aufnehmen. Ausserdem müssen Sie für jeden Hidden Layer bestimmen, wie viele Neurons der Layer enthalten soll. Und das sind nur mal zwei Hyperparameter des Modells, es gibt noch viele weitere.</p>
+</section>
+</section>
+</section>
+<section id="modelltraining" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="modelltraining"><span class="header-section-number">8.3</span> Modelltraining</h2>
+<p>Wir haben nun bereits viel über ANNs und deren Architektur gelernt. Bisher haben wir aber immer angenommen, dass alle Gewichte (Parameter) eines ANNs gegeben sind. Wie bei allen anderen parametrischen Modellen müssen die optimalen Gewichte in der Praxis aber mithilfe eines Trainingsdatensatzes gelernt werden (Model Fitting).</p>
+<p>Bevor wir in das Modelltraining einsteigen, führen wir noch ein kleines bisschen neue Notation ein. Die Modellvorhersagen bezeichnen wir nun ab hier jeweils mit <span class="math inline">\(\hat{y}_i\)</span>. Im Fall von Regressionsproblemen handelt es sich bei <span class="math inline">\(\hat{y}_i\)</span> um irgendeinen numerischen Wert (z.B. den vorhergesagten Hauspreis für Beobachtung <span class="math inline">\(i\)</span>). Im Fall von Klassifikationsproblemen handelt es sich bei <span class="math inline">\(\hat{y}_i\)</span> hingegen um eine Wahrscheinlichkeit. Wir bezeichnen den wahren Wert der Outputvariable wie bisher als <span class="math inline">\(y_i\)</span> (also ohne Zirkumflex).</p>
+<section id="kostenfunktionen" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="kostenfunktionen"><span class="header-section-number">8.3.1</span> Kostenfunktionen</h3>
+<p>Um die bestmöglichen Parameter für unser ANN zu finden, lösen wir (wie bereits für klassiche ML Modelle gesehen) ein Optimierungsproblem und zwar wollen wir eine <strong>Kostenfunktion minimieren</strong>.</p>
+<p>Wir haben die zwei zentralen Kostenfunktionen bereits kennen gelernt. Für den Regressionsfall wird auch im Deep Learning in den meisten Fällen der <strong>Mean Squared Error</strong> als Kostenfunktion verwendet (<a href="02_linreg.html" class="quarto-xref"><span>Kapitel 2</span></a>). Für unsere leicht angepasste Notation lässt sich die Kostenfunktion wie folgt schreiben:</p>
+<p><span class="math display">\[
+J(\mathbf{w}) = \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+\]</span> Unsere Kostenfunktion <span class="math inline">\(J(\mathbf{w})\)</span> ist eine Funktion aller Gewichte im ANN, die wir hier der Einfachheit halber als <span class="math inline">\(\mathbf{w}\)</span> bezeichnen (also ein Vektor, der alle Gewichte des ANNs enthält). Nun wundern Sie sich vielleicht, denn man sieht ja auf der rechten Seite der Gleichung gar keine Gewichte. Die sind nämlich versteckt in den vorhergesagten Werten <span class="math inline">\(\hat{y}_i\)</span>. Wir wissen von oben, dass diese Outputs des Modells von den Werten der Input-Variablen <span class="math inline">\(x_{i1}\)</span>, <span class="math inline">\(x_{i2}\)</span>, etc. abhängen, aber eben auch von allen Gewichten im ANN.</p>
+<p>Auch die meistverwendete Kostenfunktion für das binäre Klassifikationsbeispiel kennen Sie bereits. Es ist nämlich die <strong>log-loss</strong> Funktion, die wir auch bei der logistischen Regression verwenden (<a href="03_linclass.html" class="quarto-xref"><span>Kapitel 3</span></a>). Zur Erinnerung (und mit leicht angpasster Notation):</p>
+<p><span class="math display">\[
+J(\mathbf{w}) = -\frac{1}{n} \sum_{i=1}^{n} [y_i \cdot \mbox{log}(\hat{y}_i) + (1 - y_i) \cdot \mbox{log}(1 - \hat{y}_i)]
+\]</span> Wie beim Regressionsproblem sind die Gewichte des Modells in obiger <em>log-loss</em> Funktion in den Modell-Outputs <span class="math inline">\(\hat{y}_i\)</span> versteckt (oder verschachtelt).</p>
+</section>
+<section id="gradient-descent" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="gradient-descent"><span class="header-section-number">8.3.2</span> Gradient Descent</h3>
+<p>Wir möchten nun Werte für die Gewichte finden, so dass die Kostenfunktion möglichst klein wird. Doch wie finden wir diese <em>optimalen</em> Gewichte? Dazu werden wir einen Lernalgorithmus verwenden, mit dem wir uns <strong>iterativ</strong> den optimalen Gewichten annähern. Der typischerweise verwendete Algorithmus ist enorm populär und erstaunlich simpel und heisst <strong>Gradient Descent</strong>.</p>
+<p>Um den <em>Gradient Descent</em> Algorithmus zu verstehen, wenden wir ihn jetzt aber erst mal für ein einfaches Problem an. Anstelle der Kostenfunktion wollen wir die Funktion <span class="math inline">\(f(x) = x^2\)</span> minimieren. Oder anders gesagt, wir suchen den optimalen Wert <span class="math inline">\(x^*\)</span>, so dass <span class="math inline">\(f(x^*)\)</span> minimal ist. Die Funktion sieht grafisch wie folgt aus:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/x-sq-1.png" class="img-fluid figure-img" style="width:60.0%" alt="x**2 Funktion"></p>
+<figcaption>Die Funktion <span class="math inline">\(f(x) = x^2\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="frage" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
+<p>Sie sehen an obiger Abbildung sofort, wo das Minimum der Funktion liegt, nämlich bei <span class="math inline">\(x^* = 0\)</span>. Doch wie würden wir dieses Minimum analytisch finden?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wir würden in einem ersten Schritt die erste Ableitung dieser Funktion nach <span class="math inline">\(x\)</span> rechnen. Die erste Ableitung ist <span class="math inline">\(f'(x) = 2x\)</span>.</p>
+<p>Danach setzen wir die Ableitung gleich null und lösen nach <span class="math inline">\(x\)</span> auf:</p>
+<p><span class="math display">\[
+\begin{align}
+2x &amp;= 0 \\
+x^* &amp;= 0
+\end{align}
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="gradient-descent-schritt-für-schritt" class="level4">
+<h4 class="anchored" data-anchor-id="gradient-descent-schritt-für-schritt">Gradient Descent Schritt-für-Schritt</h4>
+<p>Wir haben gerade gesehen, dass sich das Minimum für die Funktion <span class="math inline">\(f(x) = x^2\)</span> analytisch finden lässt. Hier schauen wir uns nun aber anhand dieses Beispiels die grundlegenden Schritte des <em>Gradient Descent</em> Algorithmus an:</p>
+<ol type="1">
+<li>Wir starten mit einem zufällig gewählten Wert für <span class="math inline">\(x\)</span>, z.B. <span class="math inline">\(x=-2.2\)</span>.</li>
+<li>Wir haben oben bereits die <strong>erste Ableitung</strong> dieser Funktion nach <span class="math inline">\(x\)</span> berechnet. Die Ableitung gibt uns die Steigung einer Funktion an einem Punkt <span class="math inline">\(x\)</span> an. Wir rechnen nun also die Steigung am in Schritt 1 gewählten Punkt aus: <span class="math inline">\(f'(-2.2) = 2 \cdot (-2.2) = -4.4\)</span>. Man kann diese erste Ableitung auch <strong>Gradient</strong> nennen.</li>
+<li>Nun machen wir einen Schritt in die <strong>entgegengesetzte Richtung des Gradienten</strong>. Dadurch nähern wir uns dem Minimum der Funktion an. Wir schwächen aber den Schritt ab, indem wir den negativen Gradienten mit einer <strong>Lernrate</strong> <span class="math inline">\(\alpha\)</span> multiplizieren: <span class="math display">\[
+x := x - \alpha \cdot f'(x)
+\]</span> Wenn wir annehmen, dass <span class="math inline">\(\alpha=0.1\)</span>, dann machen wir folgenden Schritt: <span class="math inline">\(x := -2.2 - 0.1 \cdot (-4.4) = -1.76\)</span>. Wir sind dem Minimum (am Punkt 0) also ein kleines Stück näher gekommen.</li>
+<li>Nun <strong>iterieren</strong> wir die Schritte 2 und 3. Das heisst, wir berechnen nun den Gradient am neuen Wert <span class="math inline">\(x = -1.76\)</span> und machen erneut einen kleinen Schritt Richtung Minimum.</li>
+<li>Wir stoppen den Algorithmus, wenn sich <span class="math inline">\(x\)</span> nicht mehr oder nur noch ganz wenig verändert.</li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/gd-1.png" class="img-fluid figure-img" style="width:70.0%" alt="GD für x**2 Funktion"></p>
+<figcaption>Darstellung der Gradient Descent Schritte nachdem der Algorithmus mit <span class="math inline">\(x = -2.2\)</span> initialisiert wurde. Die Schritte mit denen wir uns dem Optimum annähern werden immer kleiner, weil der Gradient näher am Optimum flacher wird. Die Lernrate beträgt hier <span class="math inline">\(\alpha = 0.1\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="wichtigkeit-der-lernrate-alpha" class="level4">
+<h4 class="anchored" data-anchor-id="wichtigkeit-der-lernrate-alpha">Wichtigkeit der Lernrate <span class="math inline">\(\alpha\)</span></h4>
+<p>Die Lernrate ist enorm wichtig im <em>Gradient Descent</em> Algorithmus: wenn Sie einen zu kleinen Wert für <span class="math inline">\(\alpha\)</span> setzen, dann konvergiert der Algorithmus nur langsam zum Minimum. Wenn Sie hingegen einen zu grossen Wert für <span class="math inline">\(\alpha\)</span> festlegen, dann kann es vorkommen, dass der Algorithmus wortwörtlich über das Ziel hinausschiesst und sich dem Minimum annähert, indem er hin- und herspringt. In unserem Beispiel ist das nicht so schlimm, da der Algorithmus immer das Minimum findet (Ausnahme: <span class="math inline">\(\alpha=1.0\)</span>).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/gd-largealpha-1.png" class="img-fluid figure-img" style="width:70.0%" alt="GD für x**2 Funktion"></p>
+<figcaption>Darstellung der Gradient Descent Schritte nachdem der Algorithmus mit <span class="math inline">\(x = -2.2\)</span> initialisiert wurde. Die Lernrate beträgt hier <span class="math inline">\(\alpha = 0.9\)</span> und ist klar zu hoch. Der Algorithmus springt hin und her, findet das Minimum am Schluss aber trotzdem.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Wenn Sie dann allerdings später Kostenfunktionen minimieren wollen, dann kann es vorkommen, dass der <em>Gradient Descent</em> das Optimum nie findet, wenn Sie einen zu grossen Wert für die Lernrate festgelegt haben. Wir wollen also grundsätzlich <strong>langsam lernen</strong>.</p>
+<p>Im obigen Beispiel ist die zu optimierende Funktion sehr regulär (man spricht hier auch von <strong>konvexen Funktionen</strong>) und dementsprechend findet der <em>Gradient Descent</em> Algorithmus das Minimum sehr schnell und noch fast wichtiger: es gibt nur ein <strong>globales Minimum</strong> (und keine lokalen Minima). In untenstehender Abbildung sehen Sie eine (nicht-konvexe) Kostenfunktion mit einem lokalen und einem globalen Minimum. Je nach Initialisierung findet der Algorithmus das lokale oder das globale Minimum, wobei ersteres suboptimal ist. Wenn wir rechts starten, dann besteht die Gefahr, dass wir zu früh stoppen und dadurch das globale Minimum gar nicht erst finden.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/gd-localglobal-1.png" class="img-fluid figure-img" style="width:70.0%" alt="GD für Funktion mit lokalem Opt."></p>
+<figcaption>Darstellung der Gradient Descent Schritte nachdem der Algorithmus mit <span class="math inline">\(x = 2.9\)</span> initialisiert wurde. Die Lernrate beträgt hier <span class="math inline">\(\alpha = 0.05\)</span>. Der Algorithmus findet das lokale Minimum und endet, weil Schritt 5 des Algorithmus so erfüllt ist.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="backpropagation-algorithmus" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="backpropagation-algorithmus"><span class="header-section-number">8.3.3</span> Backpropagation Algorithmus</h3>
+<p>Der <strong>Backpropagation Algorithmus</strong> ist der Aspekt des Deep Learnings, den viele als den komplexesten Teil beurteilen. Aber eigentlich ist die Mathematik, die hier verwendet wird, nicht schwierig (zumindest dann, wenn wir uns ein einfaches Modell anschauen). Wir werden uns anhand des einfachen ANNs aus dem vorherigen Abschnitt kurz überlegen, was der Backpropagation Algorithmus macht. Wenn Sie den <em>Gradient Descent</em> Algorithmus verstanden haben, dann ist das schon die halbe Miete.</p>
+<p>Wir haben in einem ersten Schritt die Kostenfunktionen für das Regressions- und das Klassifikationsproblem aufgeschrieben. Wir wollen alle Gewichte des ANNs (geschrieben als <span class="math inline">\(\mathbf{w}\)</span>) so setzen, dass die Kostenfunktionen so klein wie möglich wird.</p>
+<p>Im vorherigen Abschnitt haben wir anhand eines einfachen Beispiels (<span class="math inline">\(f(x)=x^2\)</span>) gesehen, dass wir das Minimum einer Funktion mit dem <em>Gradient Descent</em> Algorithmus finden können. Die Hauptzutat dazu war die erste Ableitung der Funktion nach deren Argument <span class="math inline">\(x\)</span>.</p>
+<p>Der komplizierteste Teil ist nun, dass die (partiellen) <strong>Ableitungen der Kostenfunktion nach den Gewichten</strong> nicht ganz so einfach zu rechnen sind wie im Fall der einfachen Funktion <span class="math inline">\(f(x)=x^2\)</span>. Erstens müssen wir für jedes Gewicht eine separate partielle Ableitung rechnen und zweitens sind die partiellen Ableitungen selber nicht ganz so einfach, weil die Modellarchitektur von ANNs ziemlich <strong>verschachtelt</strong> ist.</p>
+<section id="backpropagation-für-das-regressionsproblem" class="level4">
+<h4 class="anchored" data-anchor-id="backpropagation-für-das-regressionsproblem">Backpropagation für das Regressionsproblem</h4>
+<p>Schauen wir uns doch die Kostenfunktion für das Regressionsproblem mal etwas genauer an:</p>
+<p><span class="math display">\[
+\begin{aligned}
+J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
+&amp;= \frac{1}{2n} \sum_{i=1}^{n} \left(y_i - \left(w_{10}^{(2)} + w_{11}^{(2)}\cdot g\left(z_{i1}^{(1)}\right) + w_{12}^{(2)}\cdot g\left(z_{i2}^{(1)}\right) + w_{13}^{(2)}\cdot g\left(z_{i3}^{(1)}\right)\right)\right)^2
+\end{aligned}
+\]</span> In obiger Formel haben wir für <span class="math inline">\(\hat{y}_i\)</span> die <strong>effektive Berechnung des Output Neurons</strong> eingesetzt. Nun haben wir die Gewichte des zweiten Layers bereits explizit in der Kostenfunktion drin. Wir wollen nun eine Ableitung nach einem dieser Gewichte rechnen, aber bevor wir das tun können, müssen wir noch zwei wichtige Ableitungsregeln repetieren.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Summen- und Kettenregel
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die <strong>Summenregel</strong> besagt, dass die Ableitung einer Summe von Funktionen gleich die Summe der Ableitungen ist. Oder mathematisch ausgedrückt:</p>
+<p><span class="math display">\[
+\left(\sum_{i=1}^{n} f_i(x)\right)'=\sum_{i=1}^{n}f'(x)
+\]</span></p>
+<p>Die <strong>Kettenregel</strong> definiert, wie verschachtelte Funktionen abgeleitet werden. Wir bilden zuerst die äussere Ableitung und multiplizieren diese mit der inneren Ableitung. Ein Beispiel: die Ableitung der Funktion <span class="math inline">\(f(x)=(x^3 + 1)^2\)</span> (nach <span class="math inline">\(x\)</span>) lautet <span class="math inline">\(f'(x) = 2(x^3 + 1) \cdot 3x^2 = 6x^2(x^3 + 1)\)</span>. Der erste Teil <span class="math inline">\(2(x^3 + 1)\)</span> ist die äussere Ableitung und der zweite Teil <span class="math inline">\(3x^2\)</span> ist die innere Ableitung. Die beiden Ableitungen werden multipliziert.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="frage-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-1">Frage</h4>
+<p>Was ist die Ableitung der Funktion <span class="math inline">\(f(x)=(2x+5)^3\)</span>?</p>
+<ul>
+<li><span class="math inline">\(3(2x+5)^2\)</span></li>
+<li><span class="math inline">\(6(2x+5)^2\)</span></li>
+<li><span class="math inline">\(3(2x+5)\)</span></li>
+<li><span class="math inline">\(6x+5\)</span></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die korrekte Lösung ist <span class="math inline">\(3(2x+5)^2 \cdot 2 = 6(2x+5)^2\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Nun sind wir bereit, die Ableitung der Kostenfunktion nach dem Gewicht <span class="math inline">\(w_{11}^{(2)}\)</span> anzuschauen. Die Ableitung sieht folgendermassen aus:</p>
+<p><span class="math display">\[
+\begin{align}
+\frac{\partial J(\mathbf{w})}{\partial w_{11}^{(2)}} &amp;= \frac{1}{2n}\sum_{i=1}^{n}2(y_i - \hat{y}_i) \cdot \left(-g\left(z_{i1}^{(1)}\right)\right)\\
+&amp;= -\frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y}_i) \cdot g\left(z_{i1}^{(1)}\right)
+\end{align}
+\]</span></p>
+<p>Wir sehen, dass die <strong>partielle Ableitung</strong> der Kostenfunktion nach <span class="math inline">\(w_{11}^{(2)}\)</span> einer Summe von Ableitungen entspricht (<strong>Summenregel</strong>). Jeder Teil der Summe ist eine Multiplikation der äusseren Ableitung, <span class="math inline">\(2(y_i - \hat{y}_i)\)</span>, und der inneren Ableitung, <span class="math inline">\(-g\left(z_{i1}^{(1)}\right)\)</span> (<strong>Kettenregel</strong>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Wie wird alles zusammen gesetzt?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Um die partielle Ableitung nach dem Gewicht <span class="math inline">\(w_{11}^{(2)}\)</span> zu berechnen, benötigen wir für jede Beobachtung <span class="math inline">\(i\)</span> den aktuellen Modelloutput <span class="math inline">\(\hat{y}_i\)</span> sowie die Aktivierung des ersten Neurons aus dem Hidden Layer <span class="math inline">\(g\left(z_{i1}^{(1)}\right)\)</span>. Darum machen wir vor jedem Gradient Descent Schritt einen sogenannten <strong>Forward Pass</strong>, d.h. wir füttern unserem ANN alle Beobachtungen <span class="math inline">\(i\)</span> und rechnen mit den aktuellen Gewichten die Aktivierungen sowie den Output und speichern diese für die Berechnung der Ableitungen. Mit obiger Formel und den gespeicherten Resultaten des <em>Forward Pass</em> können wir dann konkrete Werte für die Ableitungen rechnen und dann den <em>Gradient Descent</em> Schritt machen und die Gewichte anpassen, der sogenannte <strong>Backward Pass</strong>. Danach folgt der nächste <em>Forward Pass</em> mit den aktualisierten Gewichten, usw.</p>
+</div>
+</div>
+<p>Die Ableitungen nach Gewichten aus dem <strong>ersten Layer</strong> sind etwas komplexer, darum lassen wir die erstmal weg. Aber vom Prinzip her würden sie gleich funktionieren. Wenn Ihr Kopf im Moment etwas brummt, dann ist das völlig normal. Wenn Sie sich eine Zeit lang mit dem Algorithmus befasst haben, werden Sie sehen, dass er eigentlich mathematisch gar nicht schwierig ist.</p>
+</section>
+<section id="frage-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-2">Frage</h4>
+<p>Wie sieht die Ableitung nach der Konstante <span class="math inline">\(w_{10}^{(2)}\)</span> aus?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\begin{align}
+\frac{\partial J(\mathbf{w})}{\partial w_{10}^{(2)}} &amp;= \frac{1}{2n}\sum_{i=1}^{n}2(y_i - \hat{y}_i) \cdot \left(-1\right)\\
+&amp;= -\frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y}_i)
+\end{align}
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="mini-batch-gradient-descent" class="level4">
+<h4 class="anchored" data-anchor-id="mini-batch-gradient-descent">Mini-Batch Gradient Descent</h4>
+<p>Sie sehen oben, dass jede Ableitung <strong>eine Summe über den ganzen Datensatz</strong> beinhaltet. Wenn Ihre Trainingsdaten gross sind (z.B. <span class="math inline">\(n=10'000\)</span>), dann kann die Berechnung dieser Ableitungen viel Zeit verschlingen. Darum wird in der Praxis eine angepasste Variante des <em>Gradient Descents</em> praktiziert, nämlich <strong>Mini-Batch</strong> <em>Gradient Descent</em>. Die Idee ist einfach: anstatt die Ableitung mit dem ganzen Datensatz zu rechnen, rechnen wir sie mit einem Mini-Batch, d.h. mit einer kleineren Anzahl zufällig gewählter Beobachtungen.</p>
+<p>In jedem Schritt wird die Ableitung mit einem anderen Subset aus den Trainingsdaten (d.h. einem anderen Mini-Batch) gerechnet. Wenn ein Mini-Batch 128 Beobachtungen und der Trainingsdatensatz <span class="math inline">\(n=10'000\)</span> Beobachtungen enthält, dann benötigen wir <span class="math inline">\(10'000/128 \approx 78\)</span> Gradient Descent Schritte, um jede Beobachtung im Trainingsdatensatz einmal verwendet zu haben. Nach diesen 78 Schritten haben wir eine sogenannte <strong>Epoche</strong> des Trainings abgeschlossen.</p>
+</section>
+<section id="kurze-zusammenfassung" class="level4">
+<h4 class="anchored" data-anchor-id="kurze-zusammenfassung">Kurze Zusammenfassung</h4>
+<p>Zusammenfassend können wir sagen, dass der <em>Backpropagation</em> Algorithmus uns erlaubt die Gewichte bzw. Parameter eines ANNs so zu verändern, dass die Kosten kleiner werden. Wir iterieren diesen Algorithmus so lange bis wir ein Minimum erreicht haben. Wir werden später sehen, dass wir die Berechnungen des <em>Backpropagation</em> Algorithmus zum Glück nicht selber machen müssen. Dazu gibt es wunderbare Software (z.B. <strong>TensorFlow</strong> oder <strong>PyTorch</strong>).</p>
+</section>
+</section>
+<section id="vermeidung-von-overfitting" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="vermeidung-von-overfitting"><span class="header-section-number">8.3.4</span> Vermeidung von Overfitting</h3>
+<p>Wenn wir den Backpropagation Algorithmus uneingeschränkt anwenden, dann führt das unweigerlich zu <strong>Overfitting</strong>, denn ANNs sind enorm flexible Modelle und die Gewichte werden sich so lange anpassen bis das ANN die Trainingsdaten fast perfekt abbildet. Wir wollen dieses Overfitting aber unbedingt vermeiden! Dazu gibt es verschiedene Methoden.</p>
+<p>Eine ganz einfache Art, das Overfitting zu vermeiden ist das sogenannte <strong>Early Stopping</strong>. Die Idee ist, dass wir den Backpropagation Algorithmus nur so lange laufen lassen bis der Loss auf einem separaten Validierungsdatensatz (Beobachtungen, die nicht für das Training verwendet werden) nicht mehr sinkt. Das ist eine sehr einfache, aber effektive Art Overfitting zu vermeiden.</p>
+<p>Eine andere Form haben wir bereits kennen gelernt: <strong>Regularisierung</strong>. Wir fügen einen Ridge oder Lasso Regularisierungsterm zur Loss Funktion hinzu.</p>
+<p>Eine dritte Form zur Vermeidung von Overfitting ist <strong>Dropout Learning</strong>. Die Idee ist, dass bei jedem Gradient Descent Schritt (für jede Beobachtung <span class="math inline">\(i\)</span> separat) eine vorgegebene Anzahl zufällig ausgewählter Neurons im Hidden Layer nicht berücksichtigt werden. Dadurch vermeiden wir, dass sich die Neurons im Hidden Layer allzu stark spezialisieren und <em>Noise</em> in den Daten abbilden.</p>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "overfittingann_mc", echo = FALSE} -->
+<!-- question("Welche der folgenden Methoden dienen der Vermeidung von Overfitting?", -->
+<!--   answer("Gradient Descent"), -->
+<!--   answer("Early Stopping", correct = TRUE), -->
+<!--   answer("Dropout Learning", correct = TRUE), -->
+<!--   answer("Regularisierung", correct = TRUE), -->
+<!--   answer("Aktivierungsfunktionen"), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<!-- Hier nun einige Übungen zu ANNs: -->
+<!-- ```{r, echo = F, message = F, warning = F} -->
+<!-- tags$iframe(style = "height:700px; width:100%", src = "www/Aufgaben_DL1.pdf") -->
+<!-- ``` -->
+</section>
+</section>
+<section id="beispiel-einfache-regression" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="beispiel-einfache-regression"><span class="header-section-number">8.4</span> Beispiel einfache Regression</h2>
+<p>In diesem Abschnitt schauen wir uns an, wie wir ein einfaches Regressionsproblem mit einem ANN modellieren können. Es ist ein <em>einfaches</em> Regressionsproblem, weil wir nur eine Input Variable <span class="math inline">\(x\)</span> haben. Der wahre Zusammenhang zwischen <span class="math inline">\(x\)</span> und dem Output <span class="math inline">\(y\)</span> ist allerdings nicht linear, sondern entspricht einer Sinus-Kurve, weshalb ein einfaches lineares Regressionsmodell der Form <span class="math inline">\(y=b_0 + b_1 \cdot x\)</span> keine gute Lösung finden würde. Wir werden aber sehen, dass ein einfaches ANN mit drei Neurons im Hidden Layer (plus Bias) eine gute Lösung findet. Folgende Abbildung zeigt die Architektur des ANNs, das wir verwenden werden:</p>
+<div id="fig-annexample" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-annexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ANN_EXAMPLE.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.8: Bla.
+</figcaption>
+</figure>
+</div>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "numparam_mc", echo = FALSE} -->
+<!-- question("Wie viele Parameter hat dieses ANN?", -->
+<!--   answer("4"), -->
+<!--   answer("10", correct = TRUE, message = "Dieses ANN hat 6 Gewichte im ersten Layer und 4 Gewichte im zweiten Layer. Das ergibt insgesamt 10 Gewichte oder Parameter."), -->
+<!--   answer("6"), -->
+<!--   answer("Dieses ANN hat keine Parameter, nur Gewichte."), -->
+<!--   correct = "Richtig!", -->
+<!--   incorrect = "Falsch!", -->
+<!--   allow_retry = TRUE, -->
+<!--   random_answer_order = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, echo=FALSE} -->
+<!-- # https://stackoverflow.com/questions/64681705/layout-shiny-app-to-set-heights-of-elements-to-add-up-to-100-of-window-size -->
+<!-- fluidPage( -->
+<!--   h4("ANN für einfaches Regressionsproblem"), -->
+<!--   plotOutput("annPlots", height = "60vh", width = "50vw"), -->
+<!--   hr(), -->
+<!--   fluidRow( -->
+<!--     column(3, -->
+<!--            numericInput("epochs", "Anzahl Epochen", 100, 1, 20000), -->
+<!--            numericInput("learning_rate", "Lernrate", 0.01, 0.001, 0.5), -->
+<!--            br() -->
+<!--            ), -->
+<!--     column(4, offset = 1, -->
+<!--            radioButtons("activation",  -->
+<!--                         "Aktivierungsfunktion:",  -->
+<!--                         c("Sigmoid" = "sigmoid", "Keine Aktivierung" = "none")) -->
+<!--            ), -->
+<!--     column(4, -->
+<!--            radioButtons("init_weights", -->
+<!--                         "Initialisierung der Gewichte:",  -->
+<!--                         c("Random" = "random_norm", "0-Initialisierung" = "zero")) -->
+<!--            ) -->
+<!--     ) -->
+<!--   ) -->
+<!-- ``` -->
+<!-- </div><br> -->
+<!-- ```{r, context="server"} -->
+<!-- output$annPlots <- renderPlot({ -->
+<!--   # Plot Layout -->
+<!--   layout(mat = matrix(c(1, 1, 2, 3), nrow = 2, ncol = 2, byrow = TRUE), -->
+<!--          widths = c(2, 2), -->
+<!--          heights = c(6, 4)) -->
+<!--   # Parameter und Daten Generation -->
+<!--   set.seed(42) -->
+<!--   n <- 100 -->
+<!--   x <- runif(n, 0, 9) -->
+<!--   t <- sin(x) + 1.5 + rnorm(n, 0, 0.1) -->
+<!--   epochs <- input$epochs -->
+<!--   learning_rate <- input$learning_rate -->
+<!--   # Definiere Aktivierungsfunktionen -->
+<!--   sigmoid <- function(z){1 / (1 + exp(-z))} -->
+<!--   none <- function(z){z} -->
+<!--   # Definieren Initialisierungsfunktionen -->
+<!--   random_norm <- function(){ -->
+<!--     W1 <- matrix(rnorm(6), nrow = 3) -->
+<!--     w2 <- rnorm(4) -->
+<!--     return(list("W1" = W1, "w2" = w2)) -->
+<!--   } -->
+<!--   zero <- function(){ -->
+<!--     W1 <- matrix(0, 3, 2) -->
+<!--     w2 <- rep(0, 4) -->
+<!--     return(list("W1" = W1, "w2" = w2)) -->
+<!--   } -->
+<!--   # Gewichte initialisieren -->
+<!--   if(input$init_weights == "random_norm") weights <- random_norm() -->
+<!--   else weights <- zero() -->
+<!--   # Initialisierte Gewichte extrahieren -->
+<!--   W1 <- weights$W1 -->
+<!--   w2 <- weights$w2 -->
+<!--   # Erstelle Matrix für Inputs -->
+<!--   X <- rbind(1, x) -->
+<!--   # Hole Aktivierungsfunktion -->
+<!--   activation_fun <- get(input$activation) -->
+<!--   # Forward-pass -->
+<!--   forward <- function(X, W1, w2){ -->
+<!--     # Erster Layer -->
+<!--     Z <- W1 %*% X -->
+<!--     # Aktivierung -->
+<!--     A <- do.call(activation_fun, list(Z)) -->
+<!--     # Bias Term hinzufügen -->
+<!--     A1 <- rbind(1, A) -->
+<!--     # Zweiter Layer -->
+<!--     y <- w2 %*% A1 -->
+<!--     # Liste mit Outputs -->
+<!--     out <- list("Aktivierung" = A, "Aktivierung1" = A1, "Output" = y) -->
+<!--     # Gebe Output zurück -->
+<!--     return(out) -->
+<!--   } -->
+<!--   # Gradient zweiter Layer -->
+<!--   gradient2 <- function(n, y, t, A1) {2/n * (y - t) %*% t(A1)} -->
+<!--   # Gradient erster Layer -->
+<!--   gradient1 <- function(n, w2, y, t, A, X, activation = "sigmoid") { -->
+<!--     if(activation == "sigmoid"){ -->
+<!--       return(2/n * ((w2[2:length(w2)] %*% (y - t) * A * (1 - A)) %*% t(X))) -->
+<!--     } else {return(2/n * ((w2[2:length(w2)] %*% (y - t)) %*% t(X)))} -->
+<!--   } -->
+<!--   # Leerer Vektor für Loss -->
+<!--   loss <- vector("double", epochs) -->
+<!--   # Gradient Descent Loop -->
+<!--   for (i in 1:epochs) { -->
+<!--     # Forward-Pass -->
+<!--     out <- forward(X, W1, w2) -->
+<!--     # Berechnung Loss -->
+<!--     loss[i] <- mean((out$Output - t)^2) -->
+<!--     # Berechnung Gradients -->
+<!--     g1 <- gradient1(n, w2, out$Output, t, out$Aktivierung, X, input$activation) -->
+<!--     g2 <- gradient2(n, out$Output, t, out$Aktivierung1) -->
+<!--     # Update Gewichte -->
+<!--     W1 <- W1 - learning_rate * g1 -->
+<!--     w2 <- w2 - learning_rate * g2 -->
+<!--   } -->
+<!--   # Erstelle x-Sequenz für Plots -->
+<!--   x_seq <- seq(0, 9, 0.01) -->
+<!--   X_plot <- rbind(1, x_seq) -->
+<!--   # Margins für Plots -->
+<!--   par(mar = c(5, 4, 0.5, 0.5)) -->
+<!--   # Leeres Streuudiagramm -->
+<!--   plot(0, 0, type = "n", xlab = "x", ylab = "t",  -->
+<!--        xlim = c(0, 9), ylim = c(0, 3), -->
+<!--        cex.axis = 1.3, cex.lab = 1.3) -->
+<!--   # Grid -->
+<!--   grid() -->
+<!--   # Datenpunkte -->
+<!--   points(x, t, col = "blue", pch = 20, cex = 1.5) -->
+<!--   # Kurve des Modells -->
+<!--   lines(x_seq, forward(X_plot, W1, w2)$Output, type = "l", col = "red", lwd = 3, lty = 1) -->
+<!--   # Loss Plot -->
+<!--   plot(seq(1,epochs,1), loss, type = "l", col = "magenta", lwd = 3, lty = 1,  -->
+<!--        xlab = "Epochen", ylab = "Loss",  -->
+<!--        log = "xy", cex.axis = 1.3, cex.lab = 1.3) -->
+<!--   grid() -->
+<!--   # Rechne Aktivierungen -->
+<!--   act <- activation_fun(W1 %*% X_plot) -->
+<!--   # Plot Aktivierungen -->
+<!--   plot(0, 0, type = "n", yaxt = "n", xlab = "x", ylab = "Aktivierungen",  -->
+<!--        xlim = c(0, 9), ylim = c(0,1), cex.axis = 1.3, cex.lab = 1.3) -->
+<!--   grid() -->
+<!--   lines(x_seq, act[1, ], type = "l", col = "darkorange2", lwd = 3, lty = 1) -->
+<!--   lines(x_seq, act[2, ], type = "l", col = "green", lwd = 3, lty = 2) -->
+<!--   lines(x_seq, act[3, ], type = "l", col = "black", lwd = 3, lty = 3) -->
+<!--   # axis(1, at = seq(0, 900, 200), labels = seq(0, 9, 2), lwd = 0, lwd.ticks = 1) -->
+<!--   axis(2, at = seq(0, 1, 0.5), lwd = 0, lwd.ticks = 1, cex.axis = 1.3) -->
+<!--   legend(x = "topright",  -->
+<!--          legend = c(expression(g(z[1]^{(1)})), expression(g(z[2]^{(1)})), expression(g(z[3]^{(1)}))),  -->
+<!--          lty = c(1, 2, 3), col = c("darkorange2", "green", "black"), lwd = 3, cex = 1.1)  -->
+<!--     }) -->
+<!-- ``` -->
+<section id="initialisierung-der-gewichte" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="initialisierung-der-gewichte"><span class="header-section-number">8.4.1</span> Initialisierung der Gewichte</h3>
+<p>Warum findet das ANN keine gute Lösung, wenn alle Gewichte zu Beginn 0 betragen, also mit Nullen initialisiert sind? Das Problem ist, dass in diesem Fall die Neurons im Hidden Layer nicht unterscheidbar sind und sich auch nach vielen Backpropagation Iterationen nicht unterscheiden. Das ANN hat dann effektiv nur ein Neuron, auch wenn die Architektur ganz viele Neurons enthält. Es ist also äusserst wichtig, dass die Gewichte zufällig initialisiert werden. Z.B. kann man die ursprünglichen Gewichte aus einer Standardnormalverteilung mit Mittelwert 0 und Standardabweichung 1 ziehen.</p>
+</section>
+<section id="backpropagation-step-by-step" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="backpropagation-step-by-step"><span class="header-section-number">8.4.2</span> Backpropagation Step-by-Step</h3>
+<p>In dem Foliensatz schauen wir uns nun den Backpropagation Algorithmus für das einfache Beispiel Schritt für Schritt an.</p>
+<!-- ```{r, echo = F, message = F, warning = F} -->
+<!-- tags$iframe(style = "height:700px; width:100%", src = "www/Backprop_ANN_Beispiel.pdf") -->
+<!-- ``` -->
+</section>
+</section>
+<section id="multi-output-modelle" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="multi-output-modelle"><span class="header-section-number">8.5</span> Multi-Output Modelle</h2>
+<p>ANNs und Deep Learning im Allgemeinen sind insbesondere auch darum populär, weil es sehr klar ist, wie Modelle mit mehr als einer Output Variable (Zielvariable) gerechnet werden können. In diesem Zusammenhang spricht man von <strong>Multi-Output</strong> Modellen. Wir schauen uns zuerst Multi-Output Modelle für das Regressionsproblem und danach für das Klassifikationsproblem an.</p>
+<section id="regressionsproblem" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="regressionsproblem"><span class="header-section-number">8.5.1</span> Regressionsproblem</h3>
+<p>Wenn wir ein Regressionsproblem mit mehreren Output Variablen (Zielvariablen) mit einem ANN rechnen wollen, dann können wir einfach für jede Output Variable ein separates Neuron im Output Layer hinzufügen. Hier ein Beispiel mit zwei Output Variablen.</p>
+<div id="fig-annmultireg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-annmultireg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ANN_MULTI_REG.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annmultireg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.9: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Wir sehen, dass beide Neurons im Output Layer mit den Aktivierungen sowie dem Bias aus dem Hidden Layer gefüttert werden. Weil wir uns hier das Regressionsproblem anschauen, wird in den Output Neurons lediglich eine gewichtete Summe gerechnet, die dann auch gleich der Output des Modells ist. Es gilt allerdings zu erwähnen, dass auch im Regressionsproblem eine Aktivierung möglich ist, z.B. dann wenn die Outputs nicht negativ sein dürfen. In dem Fall kann die ReLU Funktion verwendet werden.</p>
+</section>
+<section id="klassifikationsproblem" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="klassifikationsproblem"><span class="header-section-number">8.5.2</span> Klassifikationsproblem</h3>
+<p>Wir haben oben bereits gelernt, dass wir ein ANN mit einem Neuron im Output Layer verwenden können, wenn ein Klassifikationsproblem mit einer Output Variable vorliegt. In diesem Fall verwenden wir im Output Neuron die Sigmoid Aktivierungsfunktion, um die gewichtete Summe in eine Wahrscheinlichkeit zu überführen.</p>
+<p>Selbstverständlich können wir auch für das Klassifikationsproblem ein <strong>Multi-Output</strong> Modell rechnen, das gleichzeitig mehrere Output Variablen vorhersagt.</p>
+<p>Das häufigere Problem ist allerdings, dass wir ein Klassifkationsproblem lösen wollen, das mehr als zwei Klassen hat. Wenn es sich also nicht um ein binäres Klassifikationsproblem handelt. Z.B. wollen wir basierend auf einem Bild einer von Hand geschriebenen Zahl vorhersagen, ob es sich um eine 0, 1, 2, … oder 9 handelt (MNIST). Dabei sind die 10 möglichen Output Werte (die Zahlen zwischen 0 und 9) nicht voneinander unabhängig. In diesem Fall spricht man von einem <strong>Multi-Class</strong> Problem. Die Architektur eines solchen Multi-Class Problems mit drei möglichen Klassen ist in folgender Abbildung dargestellt:</p>
+<div id="fig-annmulticlass" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-annmulticlass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/ANN_MULTI_CLASS.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annmulticlass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.10: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Es gibt eine zusätzliche Komponente im Vergleich zum ANN für das Regressionsproblem, das wir oben angeschaut haben, und zwar benötigen wir einen sogenannten <strong>Softmax</strong> Layer. Dieser stellt sicher, dass die gewichteten Summen aus dem Output Layer in Wahrscheinlichkeiten transformiert werden und zwar so, dass die Summe über alle Wahrscheinlichkeiten 1 ergibt.</p>
+<p>Die gewichtete Summe für das erste Output Neuron bezeichnen wir wie oben als <span class="math inline">\(z_1^{(2)}\)</span>. Die Softmax Funktion für dieses erste Output Neuron sieht dann wie folgt aus:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sigma(z_1^{(2)}) &amp;= \frac{e^{z_1^{(2)}}}{\sum_{j=1}^{K} e^{z_j^{(2)}}}\\
+&amp;= \frac{e^{z_1^{(2)}}}{e^{z_1^{(2)}} + e^{z_2^{(2)}} + e^{z_3^{(2)}}}
+\end{aligned}
+\]</span></p>
+<p>Sie sehen, dass alle gewichteten Summen aus dem Output Layer exponiert werden, z.B. <span class="math inline">\(e^{z_1^{(2)}}\)</span>. Dadurch werden potenziell negative gewichtete Summen positiv gemacht. Durch das Exponieren wird die grösste gewichtete Summe zur dominanten Komponente. Das ist auch der Grund für den Namen Softmax: es handelt sich in einem gewissen Sinne um eine sanfte (softe) Annäherung an die Max-Funktion. Folgende Aufgabe hilft beim Verständnis:</p>
+<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
+<!-- ```{r, "softmax_numeric", echo = FALSE} -->
+<!-- question_text( -->
+<!-- "Die gewichteten Summen der drei Output Neurons betragen 1, 3 und 9. Was ist die Wahrscheinlichkeit der dritten Output Variable wenn Sie die Softmax Funktion anwenden? Runden Sie Ihr Resultate auf vier Nachkommastellen.", -->
+<!-- answer("0.0025", message = "Das wäre die Wahrscheinlichkeit der zweiten Output Variable."), -->
+<!-- answer("0.0003", message = "Das wäre die Wahrscheinlichkeit der ersten Output Variable."), -->
+<!-- answer("0.9972", correct = TRUE), -->
+<!-- correct = "Richtig!", -->
+<!-- incorrect = "Falsch!", -->
+<!-- allow_retry = TRUE) -->
+<!-- ``` -->
+<!-- </div><br> -->
+</section>
+</section>
+<section id="anns-in-r" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="anns-in-r"><span class="header-section-number">8.6</span> ANNs in R</h2>
+<p>Das <code>keras</code> Package enthält den MNIST Datensatz bereits und wir können ihn darum sehr einfach in R laden. Zuerst müssen wir allerdings die Systemvariable <code>RETICULATE_PYTHON</code> setzen, so dass R die korrekte Python Installation (nämlich diejenige im Conda Environment “tf”) findet. Danach laden wir die beiden wichtigen R Packages <code>keras</code> und <code>tensorflow</code> sowie das altbekannte <code>tidyverse</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Benötigen wir, um R zur korrekten Python Installation zu leiten.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Muss zwingend als erster Befehl ausgeführt werden.</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON=</span><span class="st">"C:/Users/martin.sterchi/AppData/Local/anaconda3/envs/tf/python.exe"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages laden</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tensorflow)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean-up Environment</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Working Directory</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"..."</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="preprocessing-der-daten" class="level3" data-number="8.6.1">
+<h3 data-number="8.6.1" class="anchored" data-anchor-id="preprocessing-der-daten"><span class="header-section-number">8.6.1</span> Preprocessing der Daten</h3>
+<p>Nun laden wir MNIST direkt aus dem <code>keras</code> Package mit der Funktion <code>dataset_mnist()</code>. Danach führen wir die Preprocessing Schritte durch, die wir bereits weiter oben besprochen haben.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lade MNIST Daten direkt aus Keras</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mnist <span class="ot">&lt;-</span> <span class="fu">dataset_mnist</span>()</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Entpacke die Daten aus Liste</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>x</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>y</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>X_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>x</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>y</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformiere Input-Daten zu 2-D Matrix</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X_train) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">60000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X_test) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Skaliere Input-Daten</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> X_train <span class="sc">/</span> <span class="dv">255</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>X_test <span class="ot">&lt;-</span> X_test <span class="sc">/</span> <span class="dv">255</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Unsere Zielvariable enthält ja bekanntlich die Zahlen 0 bis 9, es handelt sich also um ein <strong>Multi-Class</strong> Problem. Wir werden dem Deep Learning Modell die Zielvariable <strong>one-hot-encoded</strong> übergeben müssen. Das können wir bereits hier mit der Funktion <code>to_categorical()</code> vorbereiten.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One-Hot-Encoding für Zielvariable</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_train, <span class="dv">10</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_test, <span class="dv">10</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Schauen wir uns an, wie der Output des One-Hot-Encodings ausschaut</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(y_train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,]    0    0    0    0    0    1    0    0    0     0
+[2,]    1    0    0    0    0    0    0    0    0     0
+[3,]    0    0    0    0    1    0    0    0    0     0
+[4,]    0    1    0    0    0    0    0    0    0     0
+[5,]    0    0    0    0    0    0    0    0    0     1
+[6,]    0    0    1    0    0    0    0    0    0     0</code></pre>
+<p>Sie sehen, dass jede Zeile in obigem Output einer Beobachtung entspricht. Die erste Zeile entspricht einer 5 (Achtung: es sieht aus als wäre es eine 6, aber das Indexing beginnt leider in R immer bei 1, weshalb die erste Spalte den Nullen entspricht, die zweite Spalten den Einsen, usw.).</p>
+</section>
+<section id="erstes-modell" class="level3" data-number="8.6.2">
+<h3 data-number="8.6.2" class="anchored" data-anchor-id="erstes-modell"><span class="header-section-number">8.6.2</span> Erstes Modell</h3>
+<p>Nun initialisieren wir unser ANN Modell mit der Keras Funktion <code>keras_model_sequential()</code>. Danach fügen wir die Layers des ANN mithilfe des Pipe Operators <code>%&gt;%</code> schrittweise hinzu.</p>
+<p>Der erste Layer ist ein <strong>Hidden Layer</strong>: wir definieren, dass wir 100 Neurons wollen und für die Aktivierungsfunktion verwenden wir ReLU. Mit dem Argument <code>input_shape = c(784)</code> sagen wir dem Hidden Layer, dass der Input Layer 784 (+1) Neurons enthält.</p>
+<p>Der zweite Layer ist ein weiterer <strong>Hidden Layer</strong> mit 50 Neurons und ebenfalls einer ReLU Aktivierungsfunktion.</p>
+<p>Der letzte Layer ist der <strong>Output Layer</strong>, der zwingend 10 Neurons haben muss, da wir ja 10 mögliche Kategorien in der Zielvariable haben (die Zahlen 0 - 9). Die Aktivierungsfunktion im Output Layer ist <strong>Softmax</strong>, da die 10 Wahrscheinlichkeiten sich auf 1 summieren sollen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sequenziell hinzufügen werden.</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ann1 <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>()</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier werden die zwei Hidden Layers und der Output Layer hinzugefügt.</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>ann1 <span class="sc">%&gt;%</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">100</span>, <span class="at">activation =</span> <span class="st">'relu'</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">784</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">'softmax'</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Mit dem <code>summary()</code> Befehl können wir uns die Architektur unseres Modells anschauen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir überprüfen die Architektur</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ann1)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>Model: "sequential_1"
+________________________________________________________________________________
+ Layer (type)                       Output Shape                        Param #            
+================================================================================
+ dense_1 (Dense)                    (None, 100)                         78500              
+ dense_2 (Dense)                    (None, 50)                          5050            
+ dense_3 (Dense)                    (None, 10)                          510                
+================================================================================
+Total params: 84060 (328.36 KB)
+Trainable params: 84060 (328.36 KB)
+Non-trainable params: 0 (0.00 Byte)
+________________________________________________________________________________</code></pre>
+<p>Wir sehen, dass unser Modell zwischen dem Input Layer und dem ersten Hidden Layer insgesamt <strong>78’500 Gewichte</strong> trainieren wird. Wie kommt man auf diese Zahl? Wir haben 784 Neurons im Input Layer und 100 Neurons im Hidden Layer und jedes Paar von Neurons in den beiden Layers ist durch ein Gewicht verknüpft. Das heisst, wir haben schon mal <span class="math inline">\(784 \cdot 100 = 78'400\)</span> Gewichte. Die restlichen 100 Gewichte sind die Konstanten, dargestellt durch die Pfeile vom 1-Neuron im Input-Layer zu allen Neurons im Hidden Layer.</p>
+<div style="background-color:#fef9e7; padding:10px">
+<p><strong>Aufgabe</strong>: Überlegen Sie sich, warum wir zwischen dem zweiten Hidden Layer und dem Output Layer 510 Gewichte trainieren werden.</p>
+</div>
+<p><br></p>
+<p>Nun kommt der Schritt, in dem wir das Modell <strong>kompilieren</strong>. Konkret heisst das: wir definieren, wie es trainiert werden soll (das Training passiert hier aber noch nicht). Wir definieren die <strong>Kostenfunktion</strong>, hier wählen wir <code>"categorical_crossentropy"</code>, eine Erweiterung des Log-Loss auf das Multi-Class Problem. Der <strong>Optimieralgorithmus</strong> heisst <em>Adam</em> und ist eine Erweiterung des Gradient Descents, den ihr bereits kennt. Als <strong>Gütemass</strong> wählen wir die <em>Accuracy</em>, da die Verteilung der 10 Zahlen schön <strong>balanced</strong> ist.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ann1 <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">"adam"</span>, </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun fitten (oder trainieren) wir unser erstes Deep Learning Modell! Dazu rufen wir die <code>fit()</code> Funktion auf und übergeben die Trainingsdaten sowie die Zielvariable (im one-hot-encoded Format). Mit <code>epochs = 10</code> definieren wir, dass der ganze Trainingsdatensatz insgesamt 10 Mal durch das Netzwerk hindurchgeschleust wird, um die Gewichte zu optimieren. Dabei wird bei jedem Forward- und Backward-Pass über das Netzwerk nur ein sogenannter <strong>Mini-Batch</strong> von 32 Beobachtungen durch das Netzwerk geschickt. Mit <code>validation_split = 0.1</code> definieren wir, dass 10% des Trainingsdatensatzes nicht verwendet werden, damit wir Beobachtungen haben, um den Grad des Overfittings abzuschätzen.</p>
+<div style="background-color:#fef9e7; padding:10px">
+<p><strong>Aufgabe</strong>: Wie kommt man auf die 1688 Trainingsschritte pro Epoche?</p>
+</div>
+<p><br></p>
+<p>Wichtig: Wir können auch in Deep Learning Modellen <strong>Gewichte</strong> (Achtung, hier sind <em>nicht</em> die Parameter des Modells gemeint) verwenden, um gewissen Beobachtungen während des Trainings mehr oder weniger Gewicht zu geben. Wie das funktionieren würde, findet ihr <a href="https://tensorflow.rstudio.com/guides/keras/training_with_built_in_methods.html#using-sample-weighting-and-class-weighting">hier</a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun trainieren wir das Modell</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> ann1 <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(X_train, y_train, <span class="at">epochs =</span> <span class="dv">10</span>, <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>Epoch 1/10
+1688/1688 [==================] - 7s 4ms/step - loss: 0.2809 - accuracy: 0.9174 - val_loss: 0.1299 - val_accuracy: 0.9608
+Epoch 2/10
+1688/1688 [==================] - 7s 4ms/step - loss: 0.1201 - accuracy: 0.9628 - val_loss: 0.1043 - val_accuracy: 0.9665
+Epoch 3/10
+1688/1688 [==================] - 7s 4ms/step - loss: 0.0852 - accuracy: 0.9731 - val_loss: 0.1063 - val_accuracy: 0.9678
+Epoch 4/10
+1688/1688 [==================] - 7s 4ms/step - loss: 0.0649 - accuracy: 0.9792 - val_loss: 0.0858 - val_accuracy: 0.9723
+Epoch 5/10
+1688/1688 [==================] - 8s 4ms/step - loss: 0.0498 - accuracy: 0.9838 - val_loss: 0.0791 - val_accuracy: 0.9765
+Epoch 6/10
+1688/1688 [==================] - 6s 4ms/step - loss: 0.0422 - accuracy: 0.9864 - val_loss: 0.0945 - val_accuracy: 0.9732
+Epoch 7/10
+1688/1688 [==================] - 5s 3ms/step - loss: 0.0337 - accuracy: 0.9896 - val_loss: 0.0865 - val_accuracy: 0.9765
+Epoch 8/10
+1688/1688 [==================] - 5s 3ms/step - loss: 0.0295 - accuracy: 0.9904 - val_loss: 0.0947 - val_accuracy: 0.9762
+Epoch 9/10
+1688/1688 [==================] - 5s 3ms/step - loss: 0.0233 - accuracy: 0.9921 - val_loss: 0.0845 - val_accuracy: 0.9787
+Epoch 10/10
+1688/1688 [==================] - 6s 3ms/step - loss: 0.0215 - accuracy: 0.9929 - val_loss: 0.0866 - val_accuracy: 0.9772</code></pre>
+<p>Der Fortschritt des Modell Fitting Prozesses wird in der R Konsole (wie oben) dargestellt. Da wir den Modell Fitting Prozess auch im Objekt <code>history</code> gespeichert haben, können wir den Fortschritt plotten:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots des Lernoutputs</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history, <span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-trainvalerror" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trainvalerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/train_val_error.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trainvalerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.11: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Wir sehen sowohl den Wert der Kostenfunktion als auch den Wert der Accuracy über die Trainingsepochen. <strong>Wichtig</strong>: wie beurteilen wir, ob ein Overfitting stattgefunden hat?</p>
+<ul>
+<li>Wenn die rote Trainingskurve im oberen Plot weit unter der blauen Kurve oder im unteren Plot weit über der blauen Kurve liegt, dann sind wir im Overfitting Bereich.</li>
+</ul>
+<p>Das ist hier klar der Fall. Auf dem Validierungsdatensatz ist relativ bald keine klare Verbesserung mehr ersichtlich. Wir müssen also das Modell verbessern, damit es nicht mehr zu Overfitting kommt.</p>
+<div style="background-color:#fef9e7; padding:10px">
+<p><strong>Optional</strong>: Warum beginnen die beiden Kurven jeweils an unterschiedlichen Stellen?</p>
+<p>Der Loss und die Accuracy auf dem <em>Validierungsdatensatz</em> werden jeweils am Ende einer Epoche gemessen. Der Loss und die Accuracy auf dem <em>Trainingsdatensatz</em> werden hingegeben während der Epoche gemessen.</p>
+</div>
+<p><br></p>
+</section>
+<section id="zweites-modell" class="level3" data-number="8.6.3">
+<h3 data-number="8.6.3" class="anchored" data-anchor-id="zweites-modell"><span class="header-section-number">8.6.3</span> Zweites Modell</h3>
+<p>Wir werden hier zwei Techniken verwenden, um das Overfitting zu vermeiden: <strong>Dropout Learning</strong> und <strong>Early Stopping</strong>. Wir haben das Dropout Learning weiter oben bereits kennen gelernt. Sie sehen in unten stehendem Code, dass in den beiden Hidden Layers je <strong>20%</strong> zufällig ausgewählte Neurons während des Trainings ignoriert werden. Falls das Overfitting sehr stark ist, dann könnte hier auch eine höhere Prozentzahl gewählt werden. Ansonsten ist das Modell dasselbe wie vorher.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sequenziell hinzufügen werden.</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>ann2 <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>()</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier werden die Hidden Layers, die Dropout Layers und der Output Layer hinzugefügt.</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">%&gt;%</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">100</span>, <span class="at">activation =</span> <span class="st">'relu'</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">784</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="fl">0.2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="fl">0.2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">'softmax'</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">%&gt;%</span> </span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>, </span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">"adam"</span>, </span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="background-color:#fef9e7; padding:10px">
+<p><strong>Optional</strong>: Analogie zu Dropout Learning aus HOML (p.&nbsp;394)</p>
+<p><em>“It is quite surprising at first that this rather brutal technique works at all. Would a company perform better if its employees were told to toss a coin every morning to decide whether or not to go to work? Well, who knows; perhaps it would! The company would obviously be forced to adapt its organization; it could not rely on any single person to fill in the coffee machine or perform any other critical tasks, so this expertise would have to be spread across several people. Employees would have to learn to cooperate with many of their coworkers, not just a handful of them. The company would become much more resilient. If one person quit, it wouldn’t make much of a difference. It’s unclear whether this idea would actually work for companies, but it certainly does for neural networks. Neurons trained with dropout cannot co-adapt with their neighboring neurons; they have to be as useful as possible on their own. They also cannot rely excessively on just a few input neurons; they must pay attention to each of their input neurons. They end up being less sensitive to slight changes in the inputs. In the end you get a more robust network that generalizes better.”</em></p>
+</div>
+<p><br></p>
+<p>Nun bereiten wir die zweite Technik zur Vermeidung des Overfittings vor, nämlich <strong>Early Stopping</strong>. Die Technik wurde von Geoffrey Hinton (einem Übervater des Deep Learnings) erfunden und er hat die Technik einmal einen <em>“beautiful free lunch”</em> genannt. Die Technik des Early Stoppings ist nämlich erstaunlich einfach: wir stoppen das Training sobald der Loss bzw. die Accuracy auf dem Validierungsdatensatz nicht mehr weiter sinkt, denn wenn wir nun weiter trainieren, dann kommen wir in den Overfitting Bereich.</p>
+<p>In der Praxis kann Early Stopping in Keras mit sogenannten <strong>Callbacks</strong> implementiert werden, was wir im folgenden Code Fenster machen. Das Argument <code>patience = 5</code> bedeutet, dass wir sobald der Validierungsloss nicht mehr weiter sinkt, noch 5 Epochen lang Geduld haben und schauen, ob er weiter sinkt. Wenn er nach diesen 5 Epochen nicht weiter gesunken ist, dann stoppen wir das Training. Mit <code>restore_best_weights = TRUE</code> werden am Schluss nur die Gewichte des insgesamt besten Modells gespeichert.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Early stopping callback</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>early_stopping_cb <span class="ot">&lt;-</span> <span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">5</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun trainieren wir das neue Modell. Wir setzen nun eine relativ hohe Zahl Epochen, weil wir der <code>fit()</code> Funktion eben auch den Early Stopping Callback mitgeben. Das heisst, es ist unwahrscheinlich, dass wir hier wirklich 30 Epochen lang trainieren werden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun trainieren wir das Modell</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> ann2 <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(X_train, y_train, <span class="at">epochs =</span> <span class="dv">30</span>, <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.1</span>, <span class="at">callbacks =</span> early_stopping_cb)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>Epoch 1/30
+1688/1688 [===================] - 7s 4ms/step - loss: 0.3938 - accuracy: 0.8821 - val_loss: 0.1225 - val_accuracy: 0.9647
+Epoch 2/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.1885 - accuracy: 0.9441 - val_loss: 0.0917 - val_accuracy: 0.9732
+Epoch 3/30
+1688/1688 [===================] - 5s 3ms/step - loss: 0.1530 - accuracy: 0.9542 - val_loss: 0.0812 - val_accuracy: 0.9760
+Epoch 4/30
+1688/1688 [===================] - 5s 3ms/step - loss: 0.1275 - accuracy: 0.9611 - val_loss: 0.0780 - val_accuracy: 0.9763
+Epoch 5/30
+1688/1688 [===================] - 5s 3ms/step - loss: 0.1137 - accuracy: 0.9660 - val_loss: 0.0761 - val_accuracy: 0.9787
+Epoch 6/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.1020 - accuracy: 0.9690 - val_loss: 0.0774 - val_accuracy: 0.9770
+Epoch 7/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0957 - accuracy: 0.9710 - val_loss: 0.0747 - val_accuracy: 0.9770
+Epoch 8/30
+1688/1688 [===================] - 7s 4ms/step - loss: 0.0922 - accuracy: 0.9719 - val_loss: 0.0713 - val_accuracy: 0.9795
+Epoch 9/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0821 - accuracy: 0.9745 - val_loss: 0.0785 - val_accuracy: 0.9792
+Epoch 10/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0790 - accuracy: 0.9754 - val_loss: 0.0771 - val_accuracy: 0.9812
+Epoch 11/30
+1688/1688 [===================] - 7s 4ms/step - loss: 0.0779 - accuracy: 0.9761 - val_loss: 0.0708 - val_accuracy: 0.9807
+Epoch 12/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0718 - accuracy: 0.9771 - val_loss: 0.0746 - val_accuracy: 0.9797
+Epoch 13/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0687 - accuracy: 0.9785 - val_loss: 0.0677 - val_accuracy: 0.9810
+Epoch 14/30
+1688/1688 [===================] - 7s 4ms/step - loss: 0.0650 - accuracy: 0.9801 - val_loss: 0.0730 - val_accuracy: 0.9815
+Epoch 15/30
+1688/1688 [===================] - 7s 4ms/step - loss: 0.0638 - accuracy: 0.9802 - val_loss: 0.0659 - val_accuracy: 0.9810
+Epoch 16/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0609 - accuracy: 0.9808 - val_loss: 0.0776 - val_accuracy: 0.9807
+Epoch 17/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0587 - accuracy: 0.9819 - val_loss: 0.0777 - val_accuracy: 0.9803
+Epoch 18/30
+1688/1688 [===================] - 6s 3ms/step - loss: 0.0558 - accuracy: 0.9817 - val_loss: 0.0765 - val_accuracy: 0.9802
+Epoch 19/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0553 - accuracy: 0.9816 - val_loss: 0.0799 - val_accuracy: 0.9820
+Epoch 20/30
+1688/1688 [===================] - 6s 4ms/step - loss: 0.0568 - accuracy: 0.9816 - val_loss: 0.0831 - val_accuracy: 0.9797</code></pre>
+<p>Wir sehen, dass das Training nach 20 Epochen gestoppt wurde. Tatsächlich war der Validierungsloss nach Epoche 15 am tiefsten (0.0659) und hat sich in den nächsten 5 Epochen nur wieder erhöht.</p>
+<p>Schauen wir uns nochmal kurz die bekannten Kurven an, die wir mit <code>plot(history, smooth = TRUE)</code> generieren können:</p>
+<div id="fig-trainvalerror2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trainvalerror2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/train_val_error_2.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trainvalerror2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.12: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Das sieht nun viel besser aus. Auf der Höhe von Epoche 15 sind die beiden Loss Kurven und die beiden Accuracy Kurven nun sehr nahe beieinander. Wir machen kein Overfitting und sind nun zufrieden mit diesem Modell.</p>
+</section>
+<section id="finales-modell-evaluieren" class="level3" data-number="8.6.4">
+<h3 data-number="8.6.4" class="anchored" data-anchor-id="finales-modell-evaluieren"><span class="header-section-number">8.6.4</span> Finales Modell evaluieren</h3>
+<p>Nachdem wir das Modell trainiert haben, können wir uns die optimalen Gewichte anschauen, indem wir sie mit <code>get_weights()</code> aus dem Modellobjekt <code>ann2</code> extrahieren. Das Objekt <code>trained_weights</code> ist eine Liste mit 6 Elementen. Überlegt euch kurz, ob die Dimensionen der 6 Elemente in der Liste Sinn machen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimale Gewichte anschauen</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>trained_weights <span class="ot">&lt;-</span> ann2 <span class="sc">%&gt;%</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_weights</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Mit <code>evaluate()</code> können wir das Modell auf dem <strong>Testset</strong> evaluieren.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation Testset Performance</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">evaluate</span>(X_test, y_test, <span class="at">verbose =</span> <span class="dv">0</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>      loss   accuracy 
+0.08615529 0.97810000</code></pre>
+<p>Wir kriegen sowohl den Wert der Kostenfunktion (auf dem Testset) als auch die Accuracy. Ihr seht, dass wir aktuell knapp 98% aller Bilder korrekt klassifizieren!</p>
+<p>Wir können nun die Vorhersagen für alle Beobachtungen im Testset rechnen (mit <code>predict()</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersagen auf Testset</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>pred_test <span class="ot">&lt;-</span> ann2 <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(X_test)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Erste Zeile</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pred_test, <span class="dv">1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>             [,1]         [,2]         [,3]         [,4]         [,5]         [,6]         [,7]      [,8]         [,9]        [,10]
+[1,] 6.685255e-13 5.311204e-10 8.525921e-08 5.529179e-09 5.470584e-12 1.843249e-10 1.825414e-17 0.9999895 3.462339e-11 1.033705e-05</code></pre>
+<p>Das Modell gibt uns für jede Beobachtung (hier die erste) 10 Wahrscheinlichkeiten (Spalten) zurück, eine für jede mögliche Zahl 0 - 9. Dabei muss beachtet werden, dass die Wahrscheinlichkeiten in der ersten Spalte (mit <code>[,1]</code> bezeichnet) den Wahrscheinlichkeiten für die Zahl 0 entsprechen, etc.</p>
+<p>Wir können aus diesen 10 Wahrscheinlichkeiten die <strong>harten Vorhersagen</strong> mit <code>apply()</code> ableiten. Wir rechnen am Schluss <code>- 1</code>, da wie bereits erwähnt der Index 1 der Zahl 0 entspricht, der Index 2 der Zahl 1, usw.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Harte Vorhersagen auf Testset</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>.pred_class <span class="ot">&lt;-</span> <span class="fu">apply</span>(pred_test, <span class="dv">1</span>, which.max) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wahre Werte Testset</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">apply</span>(y_test, <span class="dv">1</span>, which.max) <span class="sc">-</span> <span class="dv">1</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nun haben wir die Zutaten, um eine Konfusionsmatrix zu rechnen. Hier bietet es sich an, die Zellen der Matrix mit <code>ggplot2</code> visuell darzustellen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Konfusionsmatrix</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_cols</span>(<span class="at">.pred_class =</span> .pred_class, <span class="at">truth =</span> truth) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(factor, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">labels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.pred_class, truth) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> truth, <span class="at">y =</span> .pred_class, <span class="at">fill =</span> n)) <span class="sc">+</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span> </span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Greens"</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n)) <span class="sc">+</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-confmatmnist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confmatmnist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/confMat.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confmatmnist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.13: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Es kann sein, dass die Zahlen, die ihr kriegt für die Konfusionsmatrix von denjenigen in obiger Abbildung abweichen. Der Grund hierfür ist, dass ein Modell durch die zufällige Initialisierung der Gewichte jedes Mal etwas anders trainiert wird und dementsprechend auch leicht andere Vorhersagen (und Fehler) macht. In oben abgebildeter Konfusionsmatrix machen wir zum Beispiel 18 Mal den Fehler, eine 9 als eine 4 vorherzusagen. Mit unten stehendem Code können wir uns die Bilder, welche eine 9 darstellen aber als 4 klassifiziert wurden, anschauen. Abgebildet ist nur ein Beispielsbild.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definiere Grauabstufungen</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>grays <span class="ot">&lt;-</span> <span class="fu">rgb</span>(<span class="at">red =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">blue =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">green =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Falsche Bilder anschauen</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (x <span class="cf">in</span> <span class="fu">which</span>(truth <span class="sc">==</span> <span class="dv">9</span> <span class="sc">&amp;</span> .pred_class <span class="sc">==</span> <span class="dv">4</span>)) {</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir indexen das falsche Bild</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  im <span class="ot">&lt;-</span> X_test[x, ]</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transformation in eine Matrix</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dim</span>(im) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">28</span>, <span class="dv">28</span>)</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bild anzeigen</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">heatmap</span>(im, <span class="at">Rowv =</span> <span class="cn">NA</span>, <span class="at">Colv =</span> <span class="cn">NA</span>, <span class="at">revC =</span> T, <span class="at">col =</span> grays, <span class="at">scale =</span> <span class="st">"none"</span>)</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fig-wrong4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wrong4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/wrong4.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wrong4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;8.14: Bla.
+</figcaption>
+</figure>
+</div>
+<p>Es ist hier tatsächlich auch von Auge schwierig zu entscheiden, ob es sich um eine 9 oder eine 4 handelt.</p>
+<p>Am Schluss können wir unser Modell im <strong>HDF5</strong> Dateiformat abspeichern. Dieses Format erlaubt es Webapplikationen, das Modell zu laden und für Vorhersagen zu verwenden. Gespeichert wird die Architektur des Modells, alle Hyperparameter und selbstverständlich die optimalen Parameterwerte (Gewichte).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell speichern</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save_model_hdf5</span>(ann, <span class="st">'my_model.h5'</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean-up Environment</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell wieder laden</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>ann <span class="ot">&lt;-</span> <span class="fu">load_model_hdf5</span>(<span class="st">'my_model.h5'</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Oder alternativ: das Skalarprodukt zwischen den Input-Variablenwerten und dem Gewichtsvektor.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
