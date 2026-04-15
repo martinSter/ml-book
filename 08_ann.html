@@ -325,11 +325,7 @@ window.Quarto = {
   <li><a href="#backpropagation-algorithmus" id="toc-backpropagation-algorithmus" class="nav-link" data-scroll-target="#backpropagation-algorithmus"><span class="header-section-number">8.3.3</span> Backpropagation Algorithmus</a></li>
   <li><a href="#vermeidung-von-overfitting" id="toc-vermeidung-von-overfitting" class="nav-link" data-scroll-target="#vermeidung-von-overfitting"><span class="header-section-number">8.3.4</span> Vermeidung von Overfitting</a></li>
   </ul></li>
-  <li><a href="#beispiel-einfache-regression" id="toc-beispiel-einfache-regression" class="nav-link" data-scroll-target="#beispiel-einfache-regression"><span class="header-section-number">8.4</span> Beispiel einfache Regression</a>
-  <ul class="collapse">
-  <li><a href="#initialisierung-der-gewichte" id="toc-initialisierung-der-gewichte" class="nav-link" data-scroll-target="#initialisierung-der-gewichte"><span class="header-section-number">8.4.1</span> Initialisierung der Gewichte</a></li>
-  <li><a href="#backpropagation-step-by-step" id="toc-backpropagation-step-by-step" class="nav-link" data-scroll-target="#backpropagation-step-by-step"><span class="header-section-number">8.4.2</span> Backpropagation Step-by-Step</a></li>
-  </ul></li>
+  <li><a href="#beispiel-einfache-regression" id="toc-beispiel-einfache-regression" class="nav-link" data-scroll-target="#beispiel-einfache-regression"><span class="header-section-number">8.4</span> Beispiel einfache Regression</a></li>
   <li><a href="#multi-output-modelle" id="toc-multi-output-modelle" class="nav-link" data-scroll-target="#multi-output-modelle"><span class="header-section-number">8.5</span> Multi-Output Modelle</a>
   <ul class="collapse">
   <li><a href="#regressionsproblem" id="toc-regressionsproblem" class="nav-link" data-scroll-target="#regressionsproblem"><span class="header-section-number">8.5.1</span> Regressionsproblem</a></li>
@@ -383,8 +379,6 @@ Abbildung&nbsp;8.1: Das Bild wurde mit der generativen AI <em>DALL-E 3</em> von 
 <p>Doch DL hat nicht nur Vorteile im Vergleich zu klassichen Modellen. Ein DL Modell benötigt oft <strong>sehr viele Trainings-Daten</strong> und sollte darum nur dann verwendet werden, wenn die zur Verfügung stehenden Trainings-Daten auch wirklich gross sind (mehrere 10’000 Beobachtungen oder mehr). Weiter hat ein DL Modell <strong>viele Hyperparameter</strong>, die getunt werden müssen. Manchmal ist es nicht einfach, die Hyperparameterkombination zu finden, die zu einem sinnvollen Modell führt. Und ausserdem braucht das Modelltraining <strong>viele Computer Ressourcen</strong> und dementsprechend viel Energie.</p>
 <p>Heute sprechen wir fast ausschliesslich von Deep Learning oder AI, doch eigentlich sind DL/AI Modelle nichts anderes als künstliche neuronale Netzwerke, oder auf Englisch <strong>Artificial Neural Networks</strong> (ANNs). Man spricht hier von <em>Neural</em> Networks, weil die Erfinder dieser Modelle ursprünglich von der Struktur des menschlichen Gehirns inspiriert wurden. Heutige DL Modelle haben allerdings nur bedingt mit dem menschlichen Gehirn zu tun.</p>
 <p>Wir beginnen das Kapitel mit einer Einführung in das MNIST Problem, das <em>Hello World</em> im DL. Danach beschreiben wir ausführlich die Modellspezifikation oder -architektur des ANNs. In einem weiteren Schritt widmen wir uns dem Modelltraining und schauen uns danach alles anhand eines einfachen Beispiels an, nämlich dem einfachen (nur eine Input-Variable) Regressionsbeispiel. Nach einem kurzen Abstecher in Architekturen für Multi-Output Probleme schauen wir uns zum Schluss noch die Anwendung in <code>R</code> an.</p>
-<!-- TODO: Referenz zu Perceptron! -->
-<!-- TODO: Referenz zu Aktivierungsfunktionen -->
 <section id="mnist" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="mnist"><span class="header-section-number">8.1</span> MNIST</h2>
 <p>Der bekannte <strong>MNIST</strong> Datensatz ist ein Beispiel aus dem Bereich <strong>Computer Vision</strong>. Der Datensatz enthält Bilder von handgeschriebenen Zahlen, wie folgender Ausschnitt zeigt:</p>
@@ -398,13 +392,13 @@ Abbildung&nbsp;8.2: Ausschnitt aus dem MNIST Datensatz. Für jede Zahl sind 16 B
 </figcaption>
 </figure>
 </div>
-<p>Jede handgeschriebene “2” sieht anders aus, hat aber doch gewisse Ähnlichkeiten mit den anderen Bildern einer “2”. Dasselbe gilt für alle anderen Zahlen. Wir werden später nach Modellen suchen, welche einem handgeschriebenen Bild die korrekte Zahl zuordnen können. Hierbei handelt es sich um ein <strong>Klassifikationsproblem</strong> mit einer <strong>Zielvariable mit 10 möglichen Kategorien</strong>, nämlich die Zahlen 0 bis 9.</p>
+<p>Jede handgeschriebene “2” sieht anders aus, hat aber doch gewisse Ähnlichkeiten mit den anderen Bildern einer “2”. Dasselbe gilt für alle anderen Zahlen. Wir werden später nach Modellen suchen, welche einem handgeschriebenen Bild die korrekte Zahl zuordnen können. Hierbei handelt es sich um ein <strong>Klassifikationsproblem</strong> mit einer <strong>Outputvariable mit 10 möglichen Kategorien</strong>, nämlich die Zahlen 0 bis 9.</p>
 <p>Der MNIST Datensatz ist hier im Hintergrund bereits geladen und in einen Trainings- und Testdatensatz aufgeteilt. Warum ist der Datensatz bereits aufgeteilt? So arbeiten alle ML-Expert:innen auf der ganzen Welt mit demselben Trainings- und Testset und die Performances sind direkt vergleichbar. Ausserdem sind die beiden Datensätze <strong>balanced</strong>, d.h. die Zahlen 0-9 kommen in beiden Datensätzen etwa gleich oft vor.</p>
 <section id="output" class="level3" data-number="8.1.1">
 <h3 data-number="8.1.1" class="anchored" data-anchor-id="output"><span class="header-section-number">8.1.1</span> Output</h3>
 <p>Die Outputvariable in Trainings- und Testset kann als <code>y_train</code> bzw. <code>y_test</code> aufgerufen werden. Dabei handelt es sich um Vektoren, welche die wahren Zahlen enthalten. Prüfen wir als erstes kurz die Dimensionen der beiden Vektoren. Da es sich um (eindimensionale) Vektoren handelt, gibt uns die Funktion <code>dim()</code> lediglich eine Zahl zurück, die der Anzahl Elemente im Vektor entspricht.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Überprüfe Dimensionen der Zielvariable</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Überprüfe Dimensionen der Outputvariable</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(y_train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 60000</code></pre>
@@ -684,7 +678,14 @@ g\left(z_1^{(1)}\right) = g(w_{10}^{(1)} + w_{11}^{(1)}\cdot x_1 + w_{12}^{(1)}\
 <p><span class="math display">\[
 g(z) = \frac{e^z}{1+e^z}=\frac{1}{1+e^{-z}}
 \]</span> Für jeden reellen Wert <span class="math inline">\(z\)</span> gibt uns die Funktion <span class="math inline">\(g(z)\)</span> einen Wert zwischen 0 und 1 zurück.</p>
-<p>Die Sigmoid Funktion ist allerdings bei weitem nicht die einzige Aktivierungsfunktion. Heute wird für die Aktivierung der Neurons in den Hidden Layers for allem die <strong>ReLU</strong> Funktion verwendet. ReLU steht für <em>Rectified Linear Unit</em> und die Funktion ist wie folgt definiert:</p>
+<p>Wir haben beim Perceptron (<a href="01_intro.html" class="quarto-xref"><span>Kapitel 1</span></a>) ebenfalls bereits eine Form von Aktivierung kennen gelernt, die wie folgt aussah:</p>
+<p><span class="math display">\[
+g(z) = \begin{cases}
+            -1, &amp; z &lt; 0\\
+      +1, &amp; z \geq 0
+        \end{cases}
+\]</span></p>
+<p>Die Perceptron Aktivierung und die Sigmoid Funktion sind allerdings bei weitem nicht die einzigen Aktivierungsfunktionen. Heute wird für die Aktivierung der Neurons in den Hidden Layers for allem die <strong>ReLU</strong> Funktion verwendet. ReLU steht für <em>Rectified Linear Unit</em> und die Funktion ist wie folgt definiert:</p>
 <p><span class="math display">\[
 g(z) =
 \begin{cases}
@@ -863,6 +864,63 @@ z_1^{(2)} &amp;= \left(\mathbf{w}_1^{(2)}\right)' \mathbf{a}^{(1)}\\
 </div>
 </div>
 <p>Wir haben in diesem Abschnitt ein sehr einfaches ANN betrachtet, das einen Input Layer, einen Hidden Layer und einen Output Layer hat. Von nun an werden wir uns etwas komplexere ANNs anschauen, diese werden jedoch immer einen Input Layer und einen Output Layer haben. Was aber variieren kann, sind die <strong>Anzahl Hidden Layers</strong>. Je mehr Hidden Layers wir haben, desto tiefer (“deep”) ist unser Modell. Für komplexe Probleme (z.B. Bilderkennung) braucht es sehr tiefe ANN mit vielen Hidden Layers. Es ist also im Ermessen von Ihnen als Data Scientist:in, wie viele Hidden Layers Sie ins Modell aufnehmen. Ausserdem müssen Sie für jeden Hidden Layer bestimmen, wie viele Neurons der Layer enthalten soll. Und das sind nur mal zwei Hyperparameter des Modells, es gibt noch viele weitere.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Wie das XOR Problem gelöst wird (optional)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Das Problem des Perceptrons ist, dass es <strong>keinen Hidden Layer</strong> gibt. Darum kann das einfache Perceptron keine <em>nicht</em> linear-separierbare Probleme lösen.</p>
+<p>Das ändert sich jedoch sofort, wenn wir einen Hidden Layer mit beispielsweise zwei Neurons verwenden. Im folgenden Beispiel ist die Aktivierung eine <strong>Heavyside Step</strong> Funktion (die der Perceptron Aktivierung sehr ähnlich ist):</p>
+<p><span class="math display">\[
+g(z) = \begin{cases}
+            0, &amp; z &lt; 0\\
+      1, &amp; z \geq 0
+        \end{cases}
+\]</span></p>
+<p>Sie erinnern sich, dass wir beim XOR Problem zwei Input-Variablen <span class="math inline">\(x_{i1}\)</span> und <span class="math inline">\(x_{i2}\)</span> haben, die je nur die Werte <span class="math inline">\(\{0,1\}\)</span> annehmen können.</p>
+<p>Im ersten Neuron im Hidden Layer wird folgendes gerechnet:</p>
+<p><span class="math display">\[
+g\left(z_1^{(1)}\right) = g(-0.5 + 1\cdot x_1 + 1\cdot x_2)
+\]</span> Lassen Sie uns diese Berechnung für die vier möglichen Kombinationen von Input-Werten machen:</p>
+<ul>
+<li>Falls <span class="math inline">\(x_{i1}=0\)</span> und <span class="math inline">\(x_{i2}=0\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(1)}\right) = 0\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=1\)</span> und <span class="math inline">\(x_{i2}=1\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(1)}\right) = 1\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=1\)</span> und <span class="math inline">\(x_{i2}=0\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(1)}\right) = 1\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=0\)</span> und <span class="math inline">\(x_{i2}=1\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(1)}\right) = 1\)</span>.</li>
+</ul>
+<p>Was in diesem ersten Neuron im Hidden Layer effektiv umgesetzt wird, ist die <strong>OR</strong> Logik. Das Neuron wird aktiviert, wenn mindestens eine der Input-Variablen aktiviert (= 1) ist.</p>
+<p>Was passiert im zweiten Neuron des Hidden Layers?</p>
+<p><span class="math display">\[
+g\left(z_2^{(1)}\right) = g(-1.5 + 1\cdot x_1 + 1\cdot x_2)
+\]</span> Auch hier schauen wir uns die Berechnungen konkret an:</p>
+<ul>
+<li>Falls <span class="math inline">\(x_{i1}=0\)</span> und <span class="math inline">\(x_{i2}=0\)</span>, dann ist <span class="math inline">\(g\left(z_2^{(1)}\right) = 0\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=1\)</span> und <span class="math inline">\(x_{i2}=1\)</span>, dann ist <span class="math inline">\(g\left(z_2^{(1)}\right) = 1\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=1\)</span> und <span class="math inline">\(x_{i2}=0\)</span>, dann ist <span class="math inline">\(g\left(z_2^{(1)}\right) = 0\)</span>.</li>
+<li>Falls <span class="math inline">\(x_{i1}=0\)</span> und <span class="math inline">\(x_{i2}=1\)</span>, dann ist <span class="math inline">\(g\left(z_2^{(1)}\right) = 0\)</span>.</li>
+</ul>
+<p>Das zweite Neuron setzt die <strong>AND</strong> Logik um und wird nur aktiviert, wenn beide Input-Variablen aktiviert (= 1) sind.</p>
+<p>Im Output Neuron passiert dann folgende Berechnung:</p>
+<p><span class="math display">\[
+g\left(z_1^{(2)}\right) = g\left(-0.5 + 1\cdot g\left(z_1^{(1)}\right) - 1\cdot g\left(z_2^{(1)}\right)\right)
+\]</span> Welche finalen Modelloutputs ergeben sich daraus?</p>
+<ul>
+<li>Falls <span class="math inline">\(g\left(z_1^{(1)}\right) = 0\)</span> und <span class="math inline">\(g\left(z_2^{(1)}\right) = 0\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(2)}\right) = 0\)</span>.</li>
+<li>Falls <span class="math inline">\(g\left(z_1^{(1)}\right) = 1\)</span> und <span class="math inline">\(g\left(z_2^{(1)}\right) = 1\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(2)}\right) = 0\)</span>.</li>
+<li>Falls <span class="math inline">\(g\left(z_1^{(1)}\right) = 1\)</span> und <span class="math inline">\(g\left(z_2^{(1)}\right) = 0\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(2)}\right) = 1\)</span>.</li>
+<li>Falls <span class="math inline">\(g\left(z_1^{(1)}\right) = 1\)</span> und <span class="math inline">\(g\left(z_2^{(1)}\right) = 0\)</span>, dann ist <span class="math inline">\(g\left(z_1^{(2)}\right) = 1\)</span>.</li>
+</ul>
+<p>Wow, unser Modell kann das XOR Problem nun perfekt lösen. Was war dafür nötig? Zwei nicht-lineare Transformationen im Hidden Layer.</p>
+</div>
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -900,7 +958,7 @@ J(\mathbf{w}) = -\frac{1}{n} \sum_{i=1}^{n} [y_i \cdot \mbox{log}(\hat{y}_i) + (
 <h4 class="unnumbered anchored" data-anchor-id="frage">Frage</h4>
 <p>Sie sehen an obiger Abbildung sofort, wo das Minimum der Funktion liegt, nämlich bei <span class="math inline">\(x^* = 0\)</span>. Doch wie würden wir dieses Minimum analytisch finden?</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -909,7 +967,7 @@ J(\mathbf{w}) = -\frac{1}{n} \sum_{i=1}^{n} [y_i \cdot \mbox{log}(\hat{y}_i) + (
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Wir würden in einem ersten Schritt die erste Ableitung dieser Funktion nach <span class="math inline">\(x\)</span> rechnen. Die erste Ableitung ist <span class="math inline">\(f'(x) = 2x\)</span>.</p>
 <p>Danach setzen wir die Ableitung gleich null und lösen nach <span class="math inline">\(x\)</span> auf:</p>
@@ -989,7 +1047,7 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 \end{aligned}
 \]</span> In obiger Formel haben wir für <span class="math inline">\(\hat{y}_i\)</span> die <strong>effektive Berechnung des Output Neurons</strong> eingesetzt. Nun haben wir die Gewichte des zweiten Layers bereits explizit in der Kostenfunktion drin. Wir wollen nun eine Ableitung nach einem dieser Gewichte rechnen, aber bevor wir das tun können, müssen wir noch zwei wichtige Ableitungsregeln repetieren.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -998,7 +1056,7 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Die <strong>Summenregel</strong> besagt, dass die Ableitung einer Summe von Funktionen gleich die Summe der Ableitungen ist. Oder mathematisch ausgedrückt:</p>
 <p><span class="math display">\[
@@ -1019,7 +1077,7 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 <li><span class="math inline">\(6x+5\)</span></li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1028,7 +1086,7 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Die korrekte Lösung ist <span class="math inline">\(3(2x+5)^2 \cdot 2 = 6(2x+5)^2\)</span>.</p>
 </div>
@@ -1061,7 +1119,7 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 <h4 class="unnumbered anchored" data-anchor-id="frage-2">Frage</h4>
 <p>Wie sieht die Ableitung nach der Konstante <span class="math inline">\(w_{10}^{(2)}\)</span> aus?</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1070,7 +1128,7 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math display">\[
 \begin{align}
@@ -1087,6 +1145,11 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 <p>Sie sehen oben, dass jede Ableitung <strong>eine Summe über den ganzen Datensatz</strong> beinhaltet. Wenn Ihre Trainingsdaten gross sind (z.B. <span class="math inline">\(n=10'000\)</span>), dann kann die Berechnung dieser Ableitungen viel Zeit verschlingen. Darum wird in der Praxis eine angepasste Variante des <em>Gradient Descents</em> praktiziert, nämlich <strong>Mini-Batch</strong> <em>Gradient Descent</em>. Die Idee ist einfach: anstatt die Ableitung mit dem ganzen Datensatz zu rechnen, rechnen wir sie mit einem Mini-Batch, d.h. mit einer kleineren Anzahl zufällig gewählter Beobachtungen.</p>
 <p>In jedem Schritt wird die Ableitung mit einem anderen Subset aus den Trainingsdaten (d.h. einem anderen Mini-Batch) gerechnet. Wenn ein Mini-Batch 128 Beobachtungen und der Trainingsdatensatz <span class="math inline">\(n=10'000\)</span> Beobachtungen enthält, dann benötigen wir <span class="math inline">\(10'000/128 \approx 78\)</span> Gradient Descent Schritte, um jede Beobachtung im Trainingsdatensatz einmal verwendet zu haben. Nach diesen 78 Schritten haben wir eine sogenannte <strong>Epoche</strong> des Trainings abgeschlossen.</p>
 </section>
+<section id="initialisierung-der-gewichte" class="level4">
+<h4 class="anchored" data-anchor-id="initialisierung-der-gewichte">Initialisierung der Gewichte</h4>
+<p>Ganz zu Beginn des Backpropagation Algorithmus müssen alle Gewichte des ANNs mit irgendwelchen Werten <strong>initialisiert</strong> werden. Es gibt viele Arten, wie die Gewichte initialisiert werden können, aber die wichtigste Erkenntnis ist, dass die Gewichte zufällig mit unterschiedlichen Werten initialisiert werden (z.B. durch Ziehen aus einer Standardnormalverteilung).</p>
+<p>Eine andere Idee könnte sein, die Gewichte alle <strong>mit 0 zu initialisieren</strong>. Doch warum ist das eine schlechte Idee? Das Problem ist, dass in diesem Fall die Neurons im Hidden Layer <strong>nicht unterscheidbar</strong> sind und sich auch nach vielen Backpropagation Iterationen nicht unterscheiden. Das ANN hat dann effektiv nur ein Neuron, auch wenn die Architektur ganz viele Neurons beinhaltet.</p>
+</section>
 <section id="kurze-zusammenfassung" class="level4">
 <h4 class="anchored" data-anchor-id="kurze-zusammenfassung">Kurze Zusammenfassung</h4>
 <p>Zusammenfassend können wir sagen, dass der <em>Backpropagation</em> Algorithmus uns erlaubt die Gewichte bzw. Parameter eines ANNs so zu verändern, dass die Kosten kleiner werden. Wir iterieren diesen Algorithmus so lange bis wir ein Minimum erreicht haben. Wir werden später sehen, dass wir die Berechnungen des <em>Backpropagation</em> Algorithmus zum Glück nicht selber machen müssen. Dazu gibt es wunderbare Software (z.B. <strong>TensorFlow</strong> oder <strong>PyTorch</strong>).</p>
@@ -1094,238 +1157,114 @@ J(\mathbf{w}) &amp;= \frac{1}{2n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\\
 </section>
 <section id="vermeidung-von-overfitting" class="level3" data-number="8.3.4">
 <h3 data-number="8.3.4" class="anchored" data-anchor-id="vermeidung-von-overfitting"><span class="header-section-number">8.3.4</span> Vermeidung von Overfitting</h3>
-<p>Wenn wir den Backpropagation Algorithmus uneingeschränkt anwenden, dann führt das unweigerlich zu <strong>Overfitting</strong>, denn ANNs sind enorm flexible Modelle und die Gewichte werden sich so lange anpassen bis das ANN die Trainingsdaten fast perfekt abbildet. Wir wollen dieses Overfitting aber unbedingt vermeiden! Dazu gibt es verschiedene Methoden.</p>
-<p>Eine ganz einfache Art, das Overfitting zu vermeiden ist das sogenannte <strong>Early Stopping</strong>. Die Idee ist, dass wir den Backpropagation Algorithmus nur so lange laufen lassen bis der Loss auf einem separaten Validierungsdatensatz (Beobachtungen, die nicht für das Training verwendet werden) nicht mehr sinkt. Das ist eine sehr einfache, aber effektive Art Overfitting zu vermeiden.</p>
-<p>Eine andere Form haben wir bereits kennen gelernt: <strong>Regularisierung</strong>. Wir fügen einen Ridge oder Lasso Regularisierungsterm zur Loss Funktion hinzu.</p>
-<p>Eine dritte Form zur Vermeidung von Overfitting ist <strong>Dropout Learning</strong>. Die Idee ist, dass bei jedem Gradient Descent Schritt (für jede Beobachtung <span class="math inline">\(i\)</span> separat) eine vorgegebene Anzahl zufällig ausgewählter Neurons im Hidden Layer nicht berücksichtigt werden. Dadurch vermeiden wir, dass sich die Neurons im Hidden Layer allzu stark spezialisieren und <em>Noise</em> in den Daten abbilden.</p>
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "overfittingann_mc", echo = FALSE} -->
-<!-- question("Welche der folgenden Methoden dienen der Vermeidung von Overfitting?", -->
-<!--   answer("Gradient Descent"), -->
-<!--   answer("Early Stopping", correct = TRUE), -->
-<!--   answer("Dropout Learning", correct = TRUE), -->
-<!--   answer("Regularisierung", correct = TRUE), -->
-<!--   answer("Aktivierungsfunktionen"), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
-<!-- Hier nun einige Übungen zu ANNs: -->
-<!-- ```{r, echo = F, message = F, warning = F} -->
-<!-- tags$iframe(style = "height:700px; width:100%", src = "www/Aufgaben_DL1.pdf") -->
-<!-- ``` -->
+<p>Wenn wir den Backpropagation Algorithmus uneingeschränkt anwenden, dann führt das unweigerlich zu <strong>Overfitting</strong>, denn ANNs sind enorm flexible Modelle und die Gewichte werden sich so lange anpassen bis das ANN die Trainingsdaten fast perfekt abbildet. Wir wollen dieses Overfitting aber unbedingt vermeiden. Dazu gibt es verschiedene Methoden.</p>
+<p>Eine ganz einfache Art, das Overfitting zu vermeiden ist das sogenannte <strong>Early Stopping</strong>. Die Idee ist, dass wir den Backpropagation Algorithmus nur so lange laufen lassen bis die Kosten auf einem separaten Validierungsdatensatz (Beobachtungen, die nicht für das Training verwendet werden) nicht mehr sinken. Das ist eine sehr einfache, aber effektive Art, Overfitting zu vermeiden.</p>
+<p>Eine andere Art, Overfitting zu vermeiden haben wir bereits kennen gelernt: <strong>Regularisierung</strong>. Wir fügen einen Ridge oder Lasso Regularisierungsterm zur Kostenfunktion hinzu.</p>
+<p>Eine dritte Art der Vermeidung von Overfitting ist <strong>Dropout Learning</strong>. Die Idee ist, dass bei jedem Gradient Descent Schritt (für jede Beobachtung <span class="math inline">\(i\)</span> separat) eine vorgegebene Anzahl zufällig ausgewählter Neurons im Hidden Layer nicht berücksichtigt werden. Dadurch vermeiden wir, dass sich die Neurons im Hidden Layer allzu stark spezialisieren und <em>Noise</em> in den Daten abbilden.</p>
+<section id="frage-3" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-3">Frage</h4>
+<p>Welche der folgenden Methoden dienen der Vermeidung von Overfitting?</p>
+<ul>
+<li>Gradient Descent</li>
+<li>Early Stopping</li>
+<li>Dropout Learning</li>
+<li>Regularisierung</li>
+<li>Aktivierungsfunktionen</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Der Vermeidung von Overfitting dienen Early Stopping, Dropout Learning und Regularisierung.</p>
+<p>Gradient Descent ist Teil des Backpropagation Algorithmus und hat per se nichts mit der Vermeidung von Overfitting zu tun.</p>
+<p>Die Aktivierungsfunktionen sind Teil der Architektur eines ANNs und haben ebenfalls nicht direkt mit der Vermeidung von Overifitting zu tun.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="beispiel-einfache-regression" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="beispiel-einfache-regression"><span class="header-section-number">8.4</span> Beispiel einfache Regression</h2>
-<p>In diesem Abschnitt schauen wir uns an, wie wir ein einfaches Regressionsproblem mit einem ANN modellieren können. Es ist ein <em>einfaches</em> Regressionsproblem, weil wir nur eine Input Variable <span class="math inline">\(x\)</span> haben. Der wahre Zusammenhang zwischen <span class="math inline">\(x\)</span> und dem Output <span class="math inline">\(y\)</span> ist allerdings nicht linear, sondern entspricht einer Sinus-Kurve, weshalb ein einfaches lineares Regressionsmodell der Form <span class="math inline">\(y=b_0 + b_1 \cdot x\)</span> keine gute Lösung finden würde. Wir werden aber sehen, dass ein einfaches ANN mit drei Neurons im Hidden Layer (plus Bias) eine gute Lösung findet. Folgende Abbildung zeigt die Architektur des ANNs, das wir verwenden werden:</p>
+<p>In diesem Abschnitt schauen wir uns an, wie wir ein einfaches Regressionsproblem mit einem ANN modellieren können. Es ist ein <em>einfaches</em> Regressionsproblem, weil wir nur eine Input-Variable <span class="math inline">\(x_i\)</span> haben. Der wahre Zusammenhang zwischen <span class="math inline">\(x_i\)</span> und dem Output <span class="math inline">\(y_i\)</span> ist allerdings nicht linear, sondern entspricht einer Sinus-Kurve, weshalb ein einfaches lineares Regressionsmodell der Form <span class="math inline">\(\hat{y}_i = w_0 + w_1 \cdot x_i\)</span> keine gute Lösung finden würde. Wir werden aber sehen, dass ein einfaches ANN mit drei Neurons im Hidden Layer (plus Bias) eine gute Lösung findet. Folgende Abbildung zeigt die Architektur des ANNs, das wir verwenden werden:</p>
 <div id="fig-annexample" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-annexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="images/ANN_EXAMPLE.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;8.8: Bla.
+Abbildung&nbsp;8.8: Architektur für ein ANN mit einer Input-Variable <span class="math inline">\(x_i\)</span> und einem reellen Output <span class="math inline">\(y_i\)</span>. Das Modell hat insgesamt 10 Gewichte (6 im ersten (Hidden) Layer und 4 im zweiten (Output) Layer).
 </figcaption>
 </figure>
 </div>
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "numparam_mc", echo = FALSE} -->
-<!-- question("Wie viele Parameter hat dieses ANN?", -->
-<!--   answer("4"), -->
-<!--   answer("10", correct = TRUE, message = "Dieses ANN hat 6 Gewichte im ersten Layer und 4 Gewichte im zweiten Layer. Das ergibt insgesamt 10 Gewichte oder Parameter."), -->
-<!--   answer("6"), -->
-<!--   answer("Dieses ANN hat keine Parameter, nur Gewichte."), -->
-<!--   correct = "Richtig!", -->
-<!--   incorrect = "Falsch!", -->
-<!--   allow_retry = TRUE, -->
-<!--   random_answer_order = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- </div><br> -->
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, echo=FALSE} -->
-<!-- # https://stackoverflow.com/questions/64681705/layout-shiny-app-to-set-heights-of-elements-to-add-up-to-100-of-window-size -->
-<!-- fluidPage( -->
-<!--   h4("ANN für einfaches Regressionsproblem"), -->
-<!--   plotOutput("annPlots", height = "60vh", width = "50vw"), -->
-<!--   hr(), -->
-<!--   fluidRow( -->
-<!--     column(3, -->
-<!--            numericInput("epochs", "Anzahl Epochen", 100, 1, 20000), -->
-<!--            numericInput("learning_rate", "Lernrate", 0.01, 0.001, 0.5), -->
-<!--            br() -->
-<!--            ), -->
-<!--     column(4, offset = 1, -->
-<!--            radioButtons("activation",  -->
-<!--                         "Aktivierungsfunktion:",  -->
-<!--                         c("Sigmoid" = "sigmoid", "Keine Aktivierung" = "none")) -->
-<!--            ), -->
-<!--     column(4, -->
-<!--            radioButtons("init_weights", -->
-<!--                         "Initialisierung der Gewichte:",  -->
-<!--                         c("Random" = "random_norm", "0-Initialisierung" = "zero")) -->
-<!--            ) -->
-<!--     ) -->
-<!--   ) -->
-<!-- ``` -->
-<!-- </div><br> -->
-<!-- ```{r, context="server"} -->
-<!-- output$annPlots <- renderPlot({ -->
-<!--   # Plot Layout -->
-<!--   layout(mat = matrix(c(1, 1, 2, 3), nrow = 2, ncol = 2, byrow = TRUE), -->
-<!--          widths = c(2, 2), -->
-<!--          heights = c(6, 4)) -->
-<!--   # Parameter und Daten Generation -->
-<!--   set.seed(42) -->
-<!--   n <- 100 -->
-<!--   x <- runif(n, 0, 9) -->
-<!--   t <- sin(x) + 1.5 + rnorm(n, 0, 0.1) -->
-<!--   epochs <- input$epochs -->
-<!--   learning_rate <- input$learning_rate -->
-<!--   # Definiere Aktivierungsfunktionen -->
-<!--   sigmoid <- function(z){1 / (1 + exp(-z))} -->
-<!--   none <- function(z){z} -->
-<!--   # Definieren Initialisierungsfunktionen -->
-<!--   random_norm <- function(){ -->
-<!--     W1 <- matrix(rnorm(6), nrow = 3) -->
-<!--     w2 <- rnorm(4) -->
-<!--     return(list("W1" = W1, "w2" = w2)) -->
-<!--   } -->
-<!--   zero <- function(){ -->
-<!--     W1 <- matrix(0, 3, 2) -->
-<!--     w2 <- rep(0, 4) -->
-<!--     return(list("W1" = W1, "w2" = w2)) -->
-<!--   } -->
-<!--   # Gewichte initialisieren -->
-<!--   if(input$init_weights == "random_norm") weights <- random_norm() -->
-<!--   else weights <- zero() -->
-<!--   # Initialisierte Gewichte extrahieren -->
-<!--   W1 <- weights$W1 -->
-<!--   w2 <- weights$w2 -->
-<!--   # Erstelle Matrix für Inputs -->
-<!--   X <- rbind(1, x) -->
-<!--   # Hole Aktivierungsfunktion -->
-<!--   activation_fun <- get(input$activation) -->
-<!--   # Forward-pass -->
-<!--   forward <- function(X, W1, w2){ -->
-<!--     # Erster Layer -->
-<!--     Z <- W1 %*% X -->
-<!--     # Aktivierung -->
-<!--     A <- do.call(activation_fun, list(Z)) -->
-<!--     # Bias Term hinzufügen -->
-<!--     A1 <- rbind(1, A) -->
-<!--     # Zweiter Layer -->
-<!--     y <- w2 %*% A1 -->
-<!--     # Liste mit Outputs -->
-<!--     out <- list("Aktivierung" = A, "Aktivierung1" = A1, "Output" = y) -->
-<!--     # Gebe Output zurück -->
-<!--     return(out) -->
-<!--   } -->
-<!--   # Gradient zweiter Layer -->
-<!--   gradient2 <- function(n, y, t, A1) {2/n * (y - t) %*% t(A1)} -->
-<!--   # Gradient erster Layer -->
-<!--   gradient1 <- function(n, w2, y, t, A, X, activation = "sigmoid") { -->
-<!--     if(activation == "sigmoid"){ -->
-<!--       return(2/n * ((w2[2:length(w2)] %*% (y - t) * A * (1 - A)) %*% t(X))) -->
-<!--     } else {return(2/n * ((w2[2:length(w2)] %*% (y - t)) %*% t(X)))} -->
-<!--   } -->
-<!--   # Leerer Vektor für Loss -->
-<!--   loss <- vector("double", epochs) -->
-<!--   # Gradient Descent Loop -->
-<!--   for (i in 1:epochs) { -->
-<!--     # Forward-Pass -->
-<!--     out <- forward(X, W1, w2) -->
-<!--     # Berechnung Loss -->
-<!--     loss[i] <- mean((out$Output - t)^2) -->
-<!--     # Berechnung Gradients -->
-<!--     g1 <- gradient1(n, w2, out$Output, t, out$Aktivierung, X, input$activation) -->
-<!--     g2 <- gradient2(n, out$Output, t, out$Aktivierung1) -->
-<!--     # Update Gewichte -->
-<!--     W1 <- W1 - learning_rate * g1 -->
-<!--     w2 <- w2 - learning_rate * g2 -->
-<!--   } -->
-<!--   # Erstelle x-Sequenz für Plots -->
-<!--   x_seq <- seq(0, 9, 0.01) -->
-<!--   X_plot <- rbind(1, x_seq) -->
-<!--   # Margins für Plots -->
-<!--   par(mar = c(5, 4, 0.5, 0.5)) -->
-<!--   # Leeres Streuudiagramm -->
-<!--   plot(0, 0, type = "n", xlab = "x", ylab = "t",  -->
-<!--        xlim = c(0, 9), ylim = c(0, 3), -->
-<!--        cex.axis = 1.3, cex.lab = 1.3) -->
-<!--   # Grid -->
-<!--   grid() -->
-<!--   # Datenpunkte -->
-<!--   points(x, t, col = "blue", pch = 20, cex = 1.5) -->
-<!--   # Kurve des Modells -->
-<!--   lines(x_seq, forward(X_plot, W1, w2)$Output, type = "l", col = "red", lwd = 3, lty = 1) -->
-<!--   # Loss Plot -->
-<!--   plot(seq(1,epochs,1), loss, type = "l", col = "magenta", lwd = 3, lty = 1,  -->
-<!--        xlab = "Epochen", ylab = "Loss",  -->
-<!--        log = "xy", cex.axis = 1.3, cex.lab = 1.3) -->
-<!--   grid() -->
-<!--   # Rechne Aktivierungen -->
-<!--   act <- activation_fun(W1 %*% X_plot) -->
-<!--   # Plot Aktivierungen -->
-<!--   plot(0, 0, type = "n", yaxt = "n", xlab = "x", ylab = "Aktivierungen",  -->
-<!--        xlim = c(0, 9), ylim = c(0,1), cex.axis = 1.3, cex.lab = 1.3) -->
-<!--   grid() -->
-<!--   lines(x_seq, act[1, ], type = "l", col = "darkorange2", lwd = 3, lty = 1) -->
-<!--   lines(x_seq, act[2, ], type = "l", col = "green", lwd = 3, lty = 2) -->
-<!--   lines(x_seq, act[3, ], type = "l", col = "black", lwd = 3, lty = 3) -->
-<!--   # axis(1, at = seq(0, 900, 200), labels = seq(0, 9, 2), lwd = 0, lwd.ticks = 1) -->
-<!--   axis(2, at = seq(0, 1, 0.5), lwd = 0, lwd.ticks = 1, cex.axis = 1.3) -->
-<!--   legend(x = "topright",  -->
-<!--          legend = c(expression(g(z[1]^{(1)})), expression(g(z[2]^{(1)})), expression(g(z[3]^{(1)}))),  -->
-<!--          lty = c(1, 2, 3), col = c("darkorange2", "green", "black"), lwd = 3, cex = 1.1)  -->
-<!--     }) -->
-<!-- ``` -->
-<section id="initialisierung-der-gewichte" class="level3" data-number="8.4.1">
-<h3 data-number="8.4.1" class="anchored" data-anchor-id="initialisierung-der-gewichte"><span class="header-section-number">8.4.1</span> Initialisierung der Gewichte</h3>
-<p>Warum findet das ANN keine gute Lösung, wenn alle Gewichte zu Beginn 0 betragen, also mit Nullen initialisiert sind? Das Problem ist, dass in diesem Fall die Neurons im Hidden Layer nicht unterscheidbar sind und sich auch nach vielen Backpropagation Iterationen nicht unterscheiden. Das ANN hat dann effektiv nur ein Neuron, auch wenn die Architektur ganz viele Neurons enthält. Es ist also äusserst wichtig, dass die Gewichte zufällig initialisiert werden. Z.B. kann man die ursprünglichen Gewichte aus einer Standardnormalverteilung mit Mittelwert 0 und Standardabweichung 1 ziehen.</p>
-</section>
-<section id="backpropagation-step-by-step" class="level3" data-number="8.4.2">
-<h3 data-number="8.4.2" class="anchored" data-anchor-id="backpropagation-step-by-step"><span class="header-section-number">8.4.2</span> Backpropagation Step-by-Step</h3>
-<p>In dem Foliensatz schauen wir uns nun den Backpropagation Algorithmus für das einfache Beispiel Schritt für Schritt an.</p>
-<!-- ```{r, echo = F, message = F, warning = F} -->
-<!-- tags$iframe(style = "height:700px; width:100%", src = "www/Backprop_ANN_Beispiel.pdf") -->
-<!-- ``` -->
-</section>
+<p>In den nächsten Abbildung (oben) sind die 100 Trainingsdatenpunkte in Blau visualisiert. Die rötliche Kurve zeigt das trainierte ANN nach 100’000 Epochen mit einer Lernrate von <span class="math inline">\(\alpha = 0.01\)</span>. Wir sehen, dass sich das ANN ausser rechts oben sehr gut an die Trainingsdaten angepasst hat und der wahren zugrundeliegenden Sinuskurve relativ nahe kommt.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/ann-linreg-1.png" class="img-fluid figure-img" style="width:95.0%" alt="ANN für einfaches Regressionsproblem."></p>
+<figcaption>Oben: 100 Trainingsdatenpunkte (in Blau) sowie der Modelloutput (in Rot). Links unten: Kostenwerte über die Epochen. Die x-Axchse ist logarithmisch transformiert. Rechts unten: Aktivierungen im Hidden Layer für jeden möglichen <span class="math inline">\(x\)</span>-Wert.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Im Plot links unten sehen wir, wie sich die Kosten über die 100’000 Epochen entwickeln. Rechts unten sind die Aktivierungen im Hidden Layer für jeden möglichen <span class="math inline">\(x\)</span>-Wert dargestellt.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Takeaway
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Die finale Modellkurve im Plot oben ist im Prinzip nichts anderes als eine <strong>Kombination der drei Aktivierungskurven</strong> im Plot rechts unten.</p>
+<p>Für jeden möglichen <span class="math inline">\(x\)</span>-Wert werden die entsprechenden Aktivierungen linear (und mit Konstante) zum Output des Modells kombiniert.</p>
+</div>
+</div>
+<p>Sie können das <code>R</code>-Skript <a href="data/simple-ann.R">hier</a> herunterladen. Probieren Sie verschiedene Werte für die Anzahl Epochen und die Lernrate aus und schauen Sie, wie sich der Output verändert.</p>
+<p>Ein Foliensatz mit weiteren Informationen zu diesem Beispiel und den genauen Herleitungen der Gradienten kann <a href="data/Backprop_ANN_Beispiel.pdf">hier</a> heruntergeladen werden.</p>
 </section>
 <section id="multi-output-modelle" class="level2" data-number="8.5">
 <h2 data-number="8.5" class="anchored" data-anchor-id="multi-output-modelle"><span class="header-section-number">8.5</span> Multi-Output Modelle</h2>
-<p>ANNs und Deep Learning im Allgemeinen sind insbesondere auch darum populär, weil es sehr klar ist, wie Modelle mit mehr als einer Output Variable (Zielvariable) gerechnet werden können. In diesem Zusammenhang spricht man von <strong>Multi-Output</strong> Modellen. Wir schauen uns zuerst Multi-Output Modelle für das Regressionsproblem und danach für das Klassifikationsproblem an.</p>
+<p>ANNs und Deep Learning im Allgemeinen sind insbesondere auch darum populär, weil es sehr klar ist, wie Modelle mit mehr als einer Outputvariable gerechnet werden können. In diesem Zusammenhang spricht man von <strong>Multi-Output</strong> Modellen. Wir schauen uns zuerst Multi-Output Modelle für das Regressionsproblem und danach für das Klassifikationsproblem an.</p>
 <section id="regressionsproblem" class="level3" data-number="8.5.1">
 <h3 data-number="8.5.1" class="anchored" data-anchor-id="regressionsproblem"><span class="header-section-number">8.5.1</span> Regressionsproblem</h3>
-<p>Wenn wir ein Regressionsproblem mit mehreren Output Variablen (Zielvariablen) mit einem ANN rechnen wollen, dann können wir einfach für jede Output Variable ein separates Neuron im Output Layer hinzufügen. Hier ein Beispiel mit zwei Output Variablen.</p>
+<p>Wenn wir ein Regressionsproblem mit mehreren Outputvariablen mit einem ANN rechnen wollen, dann können wir einfach für jede Outputvariable ein <strong>separates Neuron</strong> im Output Layer hinzufügen. Hier ein Beispiel mit zwei Outputvariablen.</p>
 <div id="fig-annmultireg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-annmultireg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="images/ANN_MULTI_REG.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annmultireg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;8.9: Bla.
+Abbildung&nbsp;8.9: Einfaches ANN mit zwei Neurons im Output Layer.
 </figcaption>
 </figure>
 </div>
 <p>Wir sehen, dass beide Neurons im Output Layer mit den Aktivierungen sowie dem Bias aus dem Hidden Layer gefüttert werden. Weil wir uns hier das Regressionsproblem anschauen, wird in den Output Neurons lediglich eine gewichtete Summe gerechnet, die dann auch gleich der Output des Modells ist. Es gilt allerdings zu erwähnen, dass auch im Regressionsproblem eine Aktivierung möglich ist, z.B. dann wenn die Outputs nicht negativ sein dürfen. In dem Fall kann die ReLU Funktion verwendet werden.</p>
+<p>Interessanterweise wirken Multi-Output Probleme <strong>regularisierend</strong> auf das Modell. Warum? Die Gewichte des Modells müssen sich nun während des Trainings so anpassen, dass sie gute Vorhersagen für zwei (oder mehr) Teilprobleme machen. Dadurch werden sie gezwungen, sich nicht zu stark auf ein Problem zu fokussieren.</p>
 </section>
 <section id="klassifikationsproblem" class="level3" data-number="8.5.2">
 <h3 data-number="8.5.2" class="anchored" data-anchor-id="klassifikationsproblem"><span class="header-section-number">8.5.2</span> Klassifikationsproblem</h3>
-<p>Wir haben oben bereits gelernt, dass wir ein ANN mit einem Neuron im Output Layer verwenden können, wenn ein Klassifikationsproblem mit einer Output Variable vorliegt. In diesem Fall verwenden wir im Output Neuron die Sigmoid Aktivierungsfunktion, um die gewichtete Summe in eine Wahrscheinlichkeit zu überführen.</p>
-<p>Selbstverständlich können wir auch für das Klassifikationsproblem ein <strong>Multi-Output</strong> Modell rechnen, das gleichzeitig mehrere Output Variablen vorhersagt.</p>
-<p>Das häufigere Problem ist allerdings, dass wir ein Klassifkationsproblem lösen wollen, das mehr als zwei Klassen hat. Wenn es sich also nicht um ein binäres Klassifikationsproblem handelt. Z.B. wollen wir basierend auf einem Bild einer von Hand geschriebenen Zahl vorhersagen, ob es sich um eine 0, 1, 2, … oder 9 handelt (MNIST). Dabei sind die 10 möglichen Output Werte (die Zahlen zwischen 0 und 9) nicht voneinander unabhängig. In diesem Fall spricht man von einem <strong>Multi-Class</strong> Problem. Die Architektur eines solchen Multi-Class Problems mit drei möglichen Klassen ist in folgender Abbildung dargestellt:</p>
+<p>Wir haben weiter oben bereits gelernt, dass wir ein ANN mit einem Neuron im Output Layer verwenden können, wenn ein (binäres) Klassifikationsproblem mit einer Output Variable vorliegt. In diesem Fall verwenden wir im Output Neuron die <strong>Sigmoid</strong> Aktivierungsfunktion, um die gewichtete Summe in eine Wahrscheinlichkeit zu überführen.</p>
+<p>Selbstverständlich können wir auch für das Klassifikationsproblem ein <strong>Multi-Output</strong> Modell rechnen, das gleichzeitig mehrere separate Output Variablen vorhersagt.</p>
+<p>Das häufigere Problem ist allerdings, dass wir ein Klassifkationsproblem lösen wollen, das mehr als zwei Klassen hat (also nicht binäre ist). Zum Beispiel wollen wir basierend auf einem Bild einer von Hand geschriebenen Zahl vorhersagen, ob es sich um eine 0, 1, 2, … oder 9 handelt (MNIST). Dabei sind die 10 möglichen Output Werte (die Zahlen zwischen 0 und 9) nicht voneinander unabhängig. In diesem Fall spricht man von einem <strong>Multi-Class</strong> Problem. Die Architektur eines solchen Multi-Class Problems mit drei möglichen Klassen ist in folgender Abbildung dargestellt:</p>
 <div id="fig-annmulticlass" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-annmulticlass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="images/ANN_MULTI_CLASS.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-annmulticlass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;8.10: Bla.
+Abbildung&nbsp;8.10: ANN Architektur für ein Multi-Class Problem mit drei möglichen Klassen bzw. Kategorien. Die Modelloutputs für die drei Klassen sollen sich zu 1 aufsummieren, so dass sie als Verteilung über die drei möglichen Klassen interpretiert werden können.
 </figcaption>
 </figure>
 </div>
@@ -1333,74 +1272,81 @@ Abbildung&nbsp;8.10: Bla.
 <p>Die gewichtete Summe für das erste Output Neuron bezeichnen wir wie oben als <span class="math inline">\(z_1^{(2)}\)</span>. Die Softmax Funktion für dieses erste Output Neuron sieht dann wie folgt aus:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\sigma(z_1^{(2)}) &amp;= \frac{e^{z_1^{(2)}}}{\sum_{j=1}^{K} e^{z_j^{(2)}}}\\
+\sigma\left(z_1^{(2)}\right) &amp;= \frac{e^{z_1^{(2)}}}{\sum_{j=1}^{K} e^{z_j^{(2)}}}\\
 &amp;= \frac{e^{z_1^{(2)}}}{e^{z_1^{(2)}} + e^{z_2^{(2)}} + e^{z_3^{(2)}}}
 \end{aligned}
 \]</span></p>
-<p>Sie sehen, dass alle gewichteten Summen aus dem Output Layer exponiert werden, z.B. <span class="math inline">\(e^{z_1^{(2)}}\)</span>. Dadurch werden potenziell negative gewichtete Summen positiv gemacht. Durch das Exponieren wird die grösste gewichtete Summe zur dominanten Komponente. Das ist auch der Grund für den Namen Softmax: es handelt sich in einem gewissen Sinne um eine sanfte (softe) Annäherung an die Max-Funktion. Folgende Aufgabe hilft beim Verständnis:</p>
-<!-- <div style = "background-color:#fef9e7; padding:10px"> -->
-<!-- ```{r, "softmax_numeric", echo = FALSE} -->
-<!-- question_text( -->
-<!-- "Die gewichteten Summen der drei Output Neurons betragen 1, 3 und 9. Was ist die Wahrscheinlichkeit der dritten Output Variable wenn Sie die Softmax Funktion anwenden? Runden Sie Ihr Resultate auf vier Nachkommastellen.", -->
-<!-- answer("0.0025", message = "Das wäre die Wahrscheinlichkeit der zweiten Output Variable."), -->
-<!-- answer("0.0003", message = "Das wäre die Wahrscheinlichkeit der ersten Output Variable."), -->
-<!-- answer("0.9972", correct = TRUE), -->
-<!-- correct = "Richtig!", -->
-<!-- incorrect = "Falsch!", -->
-<!-- allow_retry = TRUE) -->
-<!-- ``` -->
-<!-- </div><br> -->
+<p>Sie sehen, dass alle gewichteten Summen aus dem Output Layer <strong>exponiert</strong> werden, z.B. <span class="math inline">\(e^{z_1^{(2)}}\)</span>. Dadurch werden potenziell negative gewichtete Summen positiv gemacht. Durch das Exponieren wird die grösste gewichtete Summe zur <strong>dominanten Komponente</strong>. Das ist auch der Grund für den Namen Softmax: es handelt sich in einem gewissen Sinne um eine sanfte Annäherung an die Max-Funktion.</p>
+<section id="frage-4" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-4">Frage</h4>
+<p>Die gewichteten Summen der drei Output Neurons betragen 1, 3 und 9. Was ist die Wahrscheinlichkeit der dritten Output Variable wenn Sie die Softmax Funktion anwenden?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\begin{aligned}
+\sigma\left(z_3^{(2)}\right) &amp;= \frac{e^{z_3^{(2)}}}{\sum_{j=1}^{K} e^{z_j^{(2)}}}\\
+&amp;= \frac{e^{9}}{e^{1} + e^{3} + e^{9}}\\
+&amp;= \frac{8103.084}{2.718 + 20.086 + 8103.084}\\
+&amp;= 0.997
+\end{aligned}
+\]</span> Der Softmax wird hier dominiert von <span class="math inline">\(e^{9}=8103.084\)</span>, weshalb der Output für die dritte Klasse 99.7%.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="anns-in-r" class="level2" data-number="8.6">
 <h2 data-number="8.6" class="anchored" data-anchor-id="anns-in-r"><span class="header-section-number">8.6</span> ANNs in R</h2>
-<p>Das <code>keras</code> Package enthält den MNIST Datensatz bereits und wir können ihn darum sehr einfach in R laden. Zuerst müssen wir allerdings die Systemvariable <code>RETICULATE_PYTHON</code> setzen, so dass R die korrekte Python Installation (nämlich diejenige im Conda Environment “tf”) findet. Danach laden wir die beiden wichtigen R Packages <code>keras</code> und <code>tensorflow</code> sowie das altbekannte <code>tidyverse</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Benötigen wir, um R zur korrekten Python Installation zu leiten.</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Muss zwingend als erster Befehl ausgeführt werden.</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON=</span><span class="st">"C:/Users/martin.sterchi/AppData/Local/anaconda3/envs/tf/python.exe"</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages laden</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tensorflow)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean-up Environment</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Working Directory</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"..."</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p>In der Praxis werden ANNs häufig mit <code>keras</code> und <code>tensorflow</code> trainiert, welche ursprünglich für Python entwickelt wurden. Glücklicherweise gibt es seit einigen Jahren <code>R</code>-Packages, welche uns eine Schnittstelle zu diesen wichtigen Softwarepackages ermöglichen. Für die notwendigen Installationen in <code>R</code> konsultieren Sie bitte die folgende <a href="https://tensorflow.rstudio.com/">Quelle</a>.</p>
 <section id="preprocessing-der-daten" class="level3" data-number="8.6.1">
 <h3 data-number="8.6.1" class="anchored" data-anchor-id="preprocessing-der-daten"><span class="header-section-number">8.6.1</span> Preprocessing der Daten</h3>
-<p>Nun laden wir MNIST direkt aus dem <code>keras</code> Package mit der Funktion <code>dataset_mnist()</code>. Danach führen wir die Preprocessing Schritte durch, die wir bereits weiter oben besprochen haben.</p>
+<p>Wir beginnen hier damit, die notwendigen Packages zu laden. Das <code>keras3</code> Package enthält den MNIST Datensatz bereits und wir können ihn darum sehr einfach mit <code>dataset_mnist()</code> laden. Danach führen wir die Preprocessing Schritte durch, die wir bereits am Anfang dieses Kapitels besprochen haben.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lade MNIST Daten direkt aus Keras</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mnist <span class="ot">&lt;-</span> <span class="fu">dataset_mnist</span>()</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Entpacke die Daten aus Liste</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>x</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>y</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>X_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>x</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>y</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformiere Input-Daten zu 2-D Matrix</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X_train) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">60000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X_test) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Skaliere Input-Daten</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> X_train <span class="sc">/</span> <span class="dv">255</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>X_test <span class="ot">&lt;-</span> X_test <span class="sc">/</span> <span class="dv">255</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages laden</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tensorflow)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras3)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Seed</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>tensorflow<span class="sc">::</span><span class="fu">set_random_seed</span>(<span class="dv">42</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Lade MNIST Daten direkt aus Keras</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>mnist <span class="ot">&lt;-</span> <span class="fu">dataset_mnist</span>()</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Entpacke die Daten aus Liste</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>x</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>y</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>X_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>x</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>y</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformiere Input-Daten zu 2-D Matrix</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X_train) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">60000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X_test) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">28</span> <span class="sc">*</span> <span class="dv">28</span>)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Skaliere Input-Daten</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> X_train <span class="sc">/</span> <span class="dv">255</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>X_test <span class="ot">&lt;-</span> X_test <span class="sc">/</span> <span class="dv">255</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Unsere Zielvariable enthält ja bekanntlich die Zahlen 0 bis 9, es handelt sich also um ein <strong>Multi-Class</strong> Problem. Wir werden dem Deep Learning Modell die Zielvariable <strong>one-hot-encoded</strong> übergeben müssen. Das können wir bereits hier mit der Funktion <code>to_categorical()</code> vorbereiten.</p>
+<p>Unsere Outputvariable enthält ja bekanntlich die Zahlen 0 bis 9, es handelt sich also um ein <strong>Multi-Class</strong> Problem. Wir werden dem Modell die Outputvariable <strong>one-hot-encoded</strong> übergeben müssen. Das können wir bereits hier mit der <code>keras3</code> Funktion <code>to_categorical()</code> vorbereiten.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One-Hot-Encoding für Zielvariable</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_train, <span class="dv">10</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_test, <span class="dv">10</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Schauen wir uns an, wie der Output des One-Hot-Encodings ausschaut</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(y_train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One-Hot-Encoding für Outputvariable</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_train, <span class="dv">10</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_test, <span class="dv">10</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Schauen wir uns an, wie der Output des One-Hot-Encodings ausschaut</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(y_train)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
 [1,]    0    0    0    0    0    1    0    0    0     0
 [2,]    1    0    0    0    0    0    0    0    0     0
@@ -1408,312 +1354,377 @@ Abbildung&nbsp;8.10: Bla.
 [4,]    0    1    0    0    0    0    0    0    0     0
 [5,]    0    0    0    0    0    0    0    0    0     1
 [6,]    0    0    1    0    0    0    0    0    0     0</code></pre>
+</div>
+</div>
 <p>Sie sehen, dass jede Zeile in obigem Output einer Beobachtung entspricht. Die erste Zeile entspricht einer 5 (Achtung: es sieht aus als wäre es eine 6, aber das Indexing beginnt leider in R immer bei 1, weshalb die erste Spalte den Nullen entspricht, die zweite Spalten den Einsen, usw.).</p>
 </section>
 <section id="erstes-modell" class="level3" data-number="8.6.2">
 <h3 data-number="8.6.2" class="anchored" data-anchor-id="erstes-modell"><span class="header-section-number">8.6.2</span> Erstes Modell</h3>
-<p>Nun initialisieren wir unser ANN Modell mit der Keras Funktion <code>keras_model_sequential()</code>. Danach fügen wir die Layers des ANN mithilfe des Pipe Operators <code>%&gt;%</code> schrittweise hinzu.</p>
+<p>Nun initialisieren wir unser ANN Modell mit der Funktion <code>keras_model_sequential()</code>. Danach fügen wir die Layers des ANNs mithilfe des Pipe Operators <code>|&gt;</code> schrittweise hinzu.</p>
 <p>Der erste Layer ist ein <strong>Hidden Layer</strong>: wir definieren, dass wir 100 Neurons wollen und für die Aktivierungsfunktion verwenden wir ReLU. Mit dem Argument <code>input_shape = c(784)</code> sagen wir dem Hidden Layer, dass der Input Layer 784 (+1) Neurons enthält.</p>
 <p>Der zweite Layer ist ein weiterer <strong>Hidden Layer</strong> mit 50 Neurons und ebenfalls einer ReLU Aktivierungsfunktion.</p>
-<p>Der letzte Layer ist der <strong>Output Layer</strong>, der zwingend 10 Neurons haben muss, da wir ja 10 mögliche Kategorien in der Zielvariable haben (die Zahlen 0 - 9). Die Aktivierungsfunktion im Output Layer ist <strong>Softmax</strong>, da die 10 Wahrscheinlichkeiten sich auf 1 summieren sollen.</p>
+<p>Der letzte Layer ist der <strong>Output Layer</strong>, der zwingend 10 Neurons haben muss, da wir ja 10 mögliche Kategorien in der Outputvariable haben (die Zahlen 0 - 9). Die Aktivierungsfunktion im Output Layer ist <strong>Softmax</strong>, da die 10 Wahrscheinlichkeiten sich auf 1 summieren sollen.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sequenziell hinzufügen werden.</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ann1 <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>()</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier werden die zwei Hidden Layers und der Output Layer hinzugefügt.</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>ann1 <span class="sc">%&gt;%</span> </span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">100</span>, <span class="at">activation =</span> <span class="st">'relu'</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">784</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">'softmax'</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sequenziell hinzufügen werden.</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>ann1 <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>()</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier werden die zwei Hidden Layers und der Output Layer hinzugefügt.</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>ann1 <span class="sc">|&gt;</span> </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">100</span>, <span class="at">activation =</span> <span class="st">'relu'</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">784</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">'softmax'</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Mit dem <code>summary()</code> Befehl können wir uns die Architektur unseres Modells anschauen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir überprüfen die Architektur</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ann1)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir überprüfen die Architektur.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ann1)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "sequential"
+┌───────────────────────────────────┬──────────────────────────┬───────────────
+│ Layer (type)                      │ Output Shape             │       Param # 
+├───────────────────────────────────┼──────────────────────────┼───────────────
+│ dense (Dense)                     │ (None, 100)              │        78,500 
+├───────────────────────────────────┼──────────────────────────┼───────────────
+│ dense_1 (Dense)                   │ (None, 50)               │         5,050 
+├───────────────────────────────────┼──────────────────────────┼───────────────
+│ dense_2 (Dense)                   │ (None, 10)               │           510 
+└───────────────────────────────────┴──────────────────────────┴───────────────
+ Total params: 84,060 (328.36 KB)
+ Trainable params: 84,060 (328.36 KB)
+ Non-trainable params: 0 (0.00 B)</code></pre>
 </div>
-<pre><code>Model: "sequential_1"
-________________________________________________________________________________
- Layer (type)                       Output Shape                        Param #            
-================================================================================
- dense_1 (Dense)                    (None, 100)                         78500              
- dense_2 (Dense)                    (None, 50)                          5050            
- dense_3 (Dense)                    (None, 10)                          510                
-================================================================================
-Total params: 84060 (328.36 KB)
-Trainable params: 84060 (328.36 KB)
-Non-trainable params: 0 (0.00 Byte)
-________________________________________________________________________________</code></pre>
-<p>Wir sehen, dass unser Modell zwischen dem Input Layer und dem ersten Hidden Layer insgesamt <strong>78’500 Gewichte</strong> trainieren wird. Wie kommt man auf diese Zahl? Wir haben 784 Neurons im Input Layer und 100 Neurons im Hidden Layer und jedes Paar von Neurons in den beiden Layers ist durch ein Gewicht verknüpft. Das heisst, wir haben schon mal <span class="math inline">\(784 \cdot 100 = 78'400\)</span> Gewichte. Die restlichen 100 Gewichte sind die Konstanten, dargestellt durch die Pfeile vom 1-Neuron im Input-Layer zu allen Neurons im Hidden Layer.</p>
-<div style="background-color:#fef9e7; padding:10px">
-<p><strong>Aufgabe</strong>: Überlegen Sie sich, warum wir zwischen dem zweiten Hidden Layer und dem Output Layer 510 Gewichte trainieren werden.</p>
 </div>
-<p><br></p>
-<p>Nun kommt der Schritt, in dem wir das Modell <strong>kompilieren</strong>. Konkret heisst das: wir definieren, wie es trainiert werden soll (das Training passiert hier aber noch nicht). Wir definieren die <strong>Kostenfunktion</strong>, hier wählen wir <code>"categorical_crossentropy"</code>, eine Erweiterung des Log-Loss auf das Multi-Class Problem. Der <strong>Optimieralgorithmus</strong> heisst <em>Adam</em> und ist eine Erweiterung des Gradient Descents, den ihr bereits kennt. Als <strong>Gütemass</strong> wählen wir die <em>Accuracy</em>, da die Verteilung der 10 Zahlen schön <strong>balanced</strong> ist.</p>
+<p>Wir sehen, dass unser Modell zwischen dem Input Layer und dem ersten Hidden Layer insgesamt <strong>78’500 Gewichte</strong> trainieren wird. Wie kommt man auf diese Zahl? Wir haben 784 Neurons im Input Layer und 100 Neurons im Hidden Layer und jedes Paar von Neurons in den beiden Layers ist durch ein Gewicht verknüpft. Das heisst, wir haben schon mal <span class="math inline">\(784 \cdot 100 = 78'400\)</span> Gewichte. Die restlichen 100 Gewichte sind die Konstanten, dargestellt durch die Pfeile vom 1-Neuron im Input Layer zu allen Neurons im Hidden Layer.</p>
+<section id="frage-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-5">Frage</h4>
+<p>Überlegen Sie sich, warum wir zwischen dem zweiten Hidden Layer und dem Output Layer 510 Gewichte trainieren werden.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wir haben im zweiten Hidden Layer 50 Neurons, die alle mit den 10 Output Neurons verknüpft sind. Daraus ergeben sich schon mal <span class="math inline">\(50 \cdot 10 = 500\)</span> Gewichte. Dazu kommen noch die 10 Konstanten, je eine pro Output Neuron.</p>
+</div>
+</div>
+</div>
+<p>Nun kommt der Schritt, in dem wir das Modell <strong>kompilieren</strong>. Konkret heisst das, wir definieren, wie es trainiert werden soll (das Training passiert hier aber noch nicht):</p>
+<ul>
+<li>Wir definieren die <strong>Kostenfunktion</strong> (hier wählen wir <code>"categorical_crossentropy"</code>, eine Erweiterung des Log-Loss auf das Multi-Class Problem).</li>
+<li>Der <strong>Optimieralgorithmus</strong> heisst <em>Adam</em> und ist eine Erweiterung des Gradient Descents, den ihr bereits kennt.</li>
+<li>Als <strong>Gütemass</strong> wählen wir die <em>Accuracy</em>, da die Verteilung der 10 Zahlen im MNIST schön <strong>balanced</strong> ist.</li>
+</ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ann1 <span class="sc">%&gt;%</span> </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>, </span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">"adam"</span>, </span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ann1 <span class="sc">|&gt;</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>, </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">"adam"</span>, </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Nun fitten (oder trainieren) wir unser erstes Deep Learning Modell! Dazu rufen wir die <code>fit()</code> Funktion auf und übergeben die Trainingsdaten sowie die Zielvariable (im one-hot-encoded Format). Mit <code>epochs = 10</code> definieren wir, dass der ganze Trainingsdatensatz insgesamt 10 Mal durch das Netzwerk hindurchgeschleust wird, um die Gewichte zu optimieren. Dabei wird bei jedem Forward- und Backward-Pass über das Netzwerk nur ein sogenannter <strong>Mini-Batch</strong> von 32 Beobachtungen durch das Netzwerk geschickt. Mit <code>validation_split = 0.1</code> definieren wir, dass 10% des Trainingsdatensatzes nicht verwendet werden, damit wir Beobachtungen haben, um den Grad des Overfittings abzuschätzen.</p>
-<div style="background-color:#fef9e7; padding:10px">
-<p><strong>Aufgabe</strong>: Wie kommt man auf die 1688 Trainingsschritte pro Epoche?</p>
-</div>
-<p><br></p>
-<p>Wichtig: Wir können auch in Deep Learning Modellen <strong>Gewichte</strong> (Achtung, hier sind <em>nicht</em> die Parameter des Modells gemeint) verwenden, um gewissen Beobachtungen während des Trainings mehr oder weniger Gewicht zu geben. Wie das funktionieren würde, findet ihr <a href="https://tensorflow.rstudio.com/guides/keras/training_with_built_in_methods.html#using-sample-weighting-and-class-weighting">hier</a>.</p>
+<p>Nun fitten (oder trainieren) wir unser erstes Deep Learning Modell. Dazu rufen wir die <code>fit()</code> Funktion auf und übergeben die Trainingsdaten sowie die Outputvariable (im one-hot-encoded Format). Mit <code>epochs = 10</code> definieren wir, dass der ganze Trainingsdatensatz insgesamt 10 Mal durch das Modell hindurchgeschleust wird, um die Gewichte zu optimieren. Dabei wird bei jedem Forward- und Backward-Pass über das Netzwerk nur ein sogenannter <strong>Mini-Batch</strong> von 32 Beobachtungen durch das Netzwerk geschickt. Mit <code>validation_split = 0.1</code> definieren wir, dass 10% des Trainingsdatensatzes nicht verwendet werden, damit wir Beobachtungen haben, um den Grad des Overfittings abzuschätzen.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun trainieren wir das Modell</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> ann1 <span class="sc">%&gt;%</span> </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(X_train, y_train, <span class="at">epochs =</span> <span class="dv">10</span>, <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun trainieren wir das Modell.</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> ann1 <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(X_train, y_train, <span class="at">epochs =</span> <span class="dv">10</span>, <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>Epoch 1/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.2809 - accuracy: 0.9174 - val_loss: 0.1299 - val_accuracy: 0.9608
+1688/1688 - 7s - 4ms/step - accuracy: 0.9209 - loss: 0.2672 - val_accuracy: 0.9648 - val_loss: 0.1163
 Epoch 2/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.1201 - accuracy: 0.9628 - val_loss: 0.1043 - val_accuracy: 0.9665
+1688/1688 - 6s - 3ms/step - accuracy: 0.9655 - loss: 0.1137 - val_accuracy: 0.9685 - val_loss: 0.1029
 Epoch 3/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.0852 - accuracy: 0.9731 - val_loss: 0.1063 - val_accuracy: 0.9678
+1688/1688 - 6s - 3ms/step - accuracy: 0.9767 - loss: 0.0781 - val_accuracy: 0.9710 - val_loss: 0.0998
 Epoch 4/10
-1688/1688 [==================] - 7s 4ms/step - loss: 0.0649 - accuracy: 0.9792 - val_loss: 0.0858 - val_accuracy: 0.9723
+1688/1688 - 6s - 4ms/step - accuracy: 0.9825 - loss: 0.0581 - val_accuracy: 0.9722 - val_loss: 0.1011
 Epoch 5/10
-1688/1688 [==================] - 8s 4ms/step - loss: 0.0498 - accuracy: 0.9838 - val_loss: 0.0791 - val_accuracy: 0.9765
+1688/1688 - 5s - 3ms/step - accuracy: 0.9869 - loss: 0.0434 - val_accuracy: 0.9743 - val_loss: 0.0992
 Epoch 6/10
-1688/1688 [==================] - 6s 4ms/step - loss: 0.0422 - accuracy: 0.9864 - val_loss: 0.0945 - val_accuracy: 0.9732
+1688/1688 - 5s - 3ms/step - accuracy: 0.9892 - loss: 0.0352 - val_accuracy: 0.9722 - val_loss: 0.1168
 Epoch 7/10
-1688/1688 [==================] - 5s 3ms/step - loss: 0.0337 - accuracy: 0.9896 - val_loss: 0.0865 - val_accuracy: 0.9765
+1688/1688 - 9s - 5ms/step - accuracy: 0.9911 - loss: 0.0277 - val_accuracy: 0.9773 - val_loss: 0.0967
 Epoch 8/10
-1688/1688 [==================] - 5s 3ms/step - loss: 0.0295 - accuracy: 0.9904 - val_loss: 0.0947 - val_accuracy: 0.9762
+1688/1688 - 7s - 4ms/step - accuracy: 0.9915 - loss: 0.0267 - val_accuracy: 0.9727 - val_loss: 0.1267
 Epoch 9/10
-1688/1688 [==================] - 5s 3ms/step - loss: 0.0233 - accuracy: 0.9921 - val_loss: 0.0845 - val_accuracy: 0.9787
+1688/1688 - 5s - 3ms/step - accuracy: 0.9927 - loss: 0.0221 - val_accuracy: 0.9752 - val_loss: 0.1158
 Epoch 10/10
-1688/1688 [==================] - 6s 3ms/step - loss: 0.0215 - accuracy: 0.9929 - val_loss: 0.0866 - val_accuracy: 0.9772</code></pre>
+1688/1688 - 5s - 3ms/step - accuracy: 0.9934 - loss: 0.0195 - val_accuracy: 0.9722 - val_loss: 0.1303</code></pre>
+</div>
+</div>
+</section>
+<section id="frage-6" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="frage-6">Frage</h4>
+<p>Sie sehen im Output oben, dass wir in jeder Epoche 1688 Trainingsschritte machen. Wie kommt man auf die 1688 Trainingsschritte pro Epoche?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Lösung
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Wir haben insgesamt 54’000 Beobachtungen, die als Trainingsdatenpunkte zur Verfügung stehen (90% des ursprünglichen Datensatzes, die restlichen 10% brauchen wir als Validierungsdaten).</p>
+<p>Die Grösse der Mini-Batches haben wir als 32 festgelegt. Dadurch werden während jeder Epoche <span class="math inline">\(54'000/32 \approx 1688\)</span> Mini-Batches gebildet. Für jeden Mini-Batch gibt es einen Forward- und Backward-Pass, nach denen die Gewichte angepasst werden.</p>
+</div>
+</div>
+</div>
 <p>Der Fortschritt des Modell Fitting Prozesses wird in der R Konsole (wie oben) dargestellt. Da wir den Modell Fitting Prozess auch im Objekt <code>history</code> gespeichert haben, können wir den Fortschritt plotten:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots des Lernoutputs</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history, <span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="fig-trainvalerror" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-trainvalerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/train_val_error.png" class="img-fluid figure-img" style="width:90.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trainvalerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;8.11: Bla.
-</figcaption>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots des Lernoutputs.</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history, <span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-<p>Wir sehen sowohl den Wert der Kostenfunktion als auch den Wert der Accuracy über die Trainingsepochen. <strong>Wichtig</strong>: wie beurteilen wir, ob ein Overfitting stattgefunden hat?</p>
+</div>
+</div>
+<p>Wir sehen sowohl den Wert der Kostenfunktion (unten) als auch den Wert der Accuracy (oben) über die Trainingsepochen. Wie beurteilen wir, ob ein Overfitting stattgefunden hat?</p>
 <ul>
 <li>Wenn die rote Trainingskurve im oberen Plot weit unter der blauen Kurve oder im unteren Plot weit über der blauen Kurve liegt, dann sind wir im Overfitting Bereich.</li>
 </ul>
-<p>Das ist hier klar der Fall. Auf dem Validierungsdatensatz ist relativ bald keine klare Verbesserung mehr ersichtlich. Wir müssen also das Modell verbessern, damit es nicht mehr zu Overfitting kommt.</p>
-<div style="background-color:#fef9e7; padding:10px">
-<p><strong>Optional</strong>: Warum beginnen die beiden Kurven jeweils an unterschiedlichen Stellen?</p>
-<p>Der Loss und die Accuracy auf dem <em>Validierungsdatensatz</em> werden jeweils am Ende einer Epoche gemessen. Der Loss und die Accuracy auf dem <em>Trainingsdatensatz</em> werden hingegeben während der Epoche gemessen.</p>
+<p>Das ist hier klar der Fall. Auf dem Validierungsdatensatz ist relativ bald <strong>keine klare Verbesserung</strong> mehr ersichtlich. Wir müssen also das Modell verbessern, damit es nicht mehr zu Overfitting kommt.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p><br></p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Vorsicht</span>Warum beginnen die beiden Kurven jeweils an unterschiedlichen Stellen? (optional)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Die Kosten (Loss) und die Accuracy auf dem <em>Validierungsdatensatz</em> werden jeweils <strong>am Ende</strong> einer Epoche gemessen.</p>
+<p>Die Kosten (Loss) und die Accuracy auf dem <em>Trainingsdatensatz</em> werden hingegeben <strong>während</strong> der Epoche als laufende Mittelwerte gemessen.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="zweites-modell" class="level3" data-number="8.6.3">
 <h3 data-number="8.6.3" class="anchored" data-anchor-id="zweites-modell"><span class="header-section-number">8.6.3</span> Zweites Modell</h3>
 <p>Wir werden hier zwei Techniken verwenden, um das Overfitting zu vermeiden: <strong>Dropout Learning</strong> und <strong>Early Stopping</strong>. Wir haben das Dropout Learning weiter oben bereits kennen gelernt. Sie sehen in unten stehendem Code, dass in den beiden Hidden Layers je <strong>20%</strong> zufällig ausgewählte Neurons während des Trainings ignoriert werden. Falls das Overfitting sehr stark ist, dann könnte hier auch eine höhere Prozentzahl gewählt werden. Ansonsten ist das Modell dasselbe wie vorher.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sequenziell hinzufügen werden.</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>ann2 <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>()</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier werden die Hidden Layers, die Dropout Layers und der Output Layer hinzugefügt.</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">%&gt;%</span> </span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">100</span>, <span class="at">activation =</span> <span class="st">'relu'</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">784</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="fl">0.2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="fl">0.2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">'softmax'</span>)</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">%&gt;%</span> </span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>, </span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">"adam"</span>, </span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir initialisieren nun ein sequentielles Modell, in dem wir die Layers</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sequenziell hinzufügen werden.</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>ann2 <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>()</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hier werden die Hidden Layers, die Dropout Layers und der Output Layer hinzugefügt.</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">|&gt;</span> </span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">100</span>, <span class="at">activation =</span> <span class="st">'relu'</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">784</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="fl">0.2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="fl">0.2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">'softmax'</span>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Mit 'compile()' spezifizieren wir, wie das Modell gefittet werden soll.</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">|&gt;</span> </span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>, </span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">"adam"</span>, </span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div style="background-color:#fef9e7; padding:10px">
-<p><strong>Optional</strong>: Analogie zu Dropout Learning aus HOML (p.&nbsp;394)</p>
-<p><em>“It is quite surprising at first that this rather brutal technique works at all. Would a company perform better if its employees were told to toss a coin every morning to decide whether or not to go to work? Well, who knows; perhaps it would! The company would obviously be forced to adapt its organization; it could not rely on any single person to fill in the coffee machine or perform any other critical tasks, so this expertise would have to be spread across several people. Employees would have to learn to cooperate with many of their coworkers, not just a handful of them. The company would become much more resilient. If one person quit, it wouldn’t make much of a difference. It’s unclear whether this idea would actually work for companies, but it certainly does for neural networks. Neurons trained with dropout cannot co-adapt with their neighboring neurons; they have to be as useful as possible on their own. They also cannot rely excessively on just a few input neurons; they must pay attention to each of their input neurons. They end up being less sensitive to slight changes in the inputs. In the end you get a more robust network that generalizes better.”</em></p>
-</div>
-<p><br></p>
-<p>Nun bereiten wir die zweite Technik zur Vermeidung des Overfittings vor, nämlich <strong>Early Stopping</strong>. Die Technik wurde von Geoffrey Hinton (einem Übervater des Deep Learnings) erfunden und er hat die Technik einmal einen <em>“beautiful free lunch”</em> genannt. Die Technik des Early Stoppings ist nämlich erstaunlich einfach: wir stoppen das Training sobald der Loss bzw. die Accuracy auf dem Validierungsdatensatz nicht mehr weiter sinkt, denn wenn wir nun weiter trainieren, dann kommen wir in den Overfitting Bereich.</p>
-<p>In der Praxis kann Early Stopping in Keras mit sogenannten <strong>Callbacks</strong> implementiert werden, was wir im folgenden Code Fenster machen. Das Argument <code>patience = 5</code> bedeutet, dass wir sobald der Validierungsloss nicht mehr weiter sinkt, noch 5 Epochen lang Geduld haben und schauen, ob er weiter sinkt. Wenn er nach diesen 5 Epochen nicht weiter gesunken ist, dann stoppen wir das Training. Mit <code>restore_best_weights = TRUE</code> werden am Schluss nur die Gewichte des insgesamt besten Modells gespeichert.</p>
+<p>Nun bereiten wir die zweite Technik zur Vermeidung des Overfittings vor, nämlich <strong>Early Stopping</strong>. Die Technik wurde von Geoffrey Hinton (einem der “Godfathers” des Deep Learnings) erfunden und er hat die Technik einmal einen <em>“beautiful free lunch”</em> genannt. Die Technik des Early Stoppings ist nämlich erstaunlich einfach: wir stoppen das Training sobald die Kosten auf dem Validierungsdatensatz nicht mehr weiter sinken, denn wenn wir nun weiter trainieren, dann kommen wir in den Overfitting-Bereich.</p>
+<p>In der Praxis kann Early Stopping in Keras mit sogenannten <strong>Callbacks</strong> implementiert werden, was wir nachfolgend machen. Das Argument <code>patience = 5</code> bedeutet, dass wir sobald der Validierungsloss nicht mehr weiter sinkt, noch 5 Epochen lang Geduld haben und schauen, ob er weiter sinkt. Wenn er nach diesen 5 Epochen nicht weiter gesunken ist, dann stoppen wir das Training. Mit <code>restore_best_weights = TRUE</code> werden am Schluss nur die Gewichte des insgesamt besten Modells gespeichert.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Early stopping callback</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>early_stopping_cb <span class="ot">&lt;-</span> <span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">5</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Early stopping callback</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>early_stopping_cb <span class="ot">&lt;-</span> <span class="fu">callback_early_stopping</span>(<span class="at">patience =</span> <span class="dv">5</span>, <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nun trainieren wir das neue Modell. Wir setzen nun eine relativ hohe Zahl Epochen, weil wir der <code>fit()</code> Funktion eben auch den Early Stopping Callback mitgeben. Das heisst, es ist unwahrscheinlich, dass wir hier wirklich 30 Epochen lang trainieren werden.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun trainieren wir das Modell</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> ann2 <span class="sc">%&gt;%</span> </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(X_train, y_train, <span class="at">epochs =</span> <span class="dv">30</span>, <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.1</span>, <span class="at">callbacks =</span> early_stopping_cb)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nun trainieren wir das Modell</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> ann2 <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(X_train, y_train, <span class="at">epochs =</span> <span class="dv">30</span>, <span class="at">batch_size =</span> <span class="dv">32</span>, <span class="at">validation_split =</span> <span class="fl">0.1</span>, <span class="at">callbacks =</span> early_stopping_cb)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>Epoch 1/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.3938 - accuracy: 0.8821 - val_loss: 0.1225 - val_accuracy: 0.9647
+1688/1688 - 8s - 5ms/step - accuracy: 0.8860 - loss: 0.3848 - val_accuracy: 0.9630 - val_loss: 0.1280
 Epoch 2/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.1885 - accuracy: 0.9441 - val_loss: 0.0917 - val_accuracy: 0.9732
+1688/1688 - 7s - 4ms/step - accuracy: 0.9434 - loss: 0.1869 - val_accuracy: 0.9693 - val_loss: 0.0983
 Epoch 3/30
-1688/1688 [===================] - 5s 3ms/step - loss: 0.1530 - accuracy: 0.9542 - val_loss: 0.0812 - val_accuracy: 0.9760
+1688/1688 - 6s - 4ms/step - accuracy: 0.9552 - loss: 0.1473 - val_accuracy: 0.9732 - val_loss: 0.0867
 Epoch 4/30
-1688/1688 [===================] - 5s 3ms/step - loss: 0.1275 - accuracy: 0.9611 - val_loss: 0.0780 - val_accuracy: 0.9763
+1688/1688 - 6s - 3ms/step - accuracy: 0.9623 - loss: 0.1247 - val_accuracy: 0.9772 - val_loss: 0.0827
 Epoch 5/30
-1688/1688 [===================] - 5s 3ms/step - loss: 0.1137 - accuracy: 0.9660 - val_loss: 0.0761 - val_accuracy: 0.9787
+1688/1688 - 6s - 4ms/step - accuracy: 0.9660 - loss: 0.1113 - val_accuracy: 0.9790 - val_loss: 0.0773
 Epoch 6/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.1020 - accuracy: 0.9690 - val_loss: 0.0774 - val_accuracy: 0.9770
+1688/1688 - 6s - 3ms/step - accuracy: 0.9697 - loss: 0.0988 - val_accuracy: 0.9783 - val_loss: 0.0740
 Epoch 7/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0957 - accuracy: 0.9710 - val_loss: 0.0747 - val_accuracy: 0.9770
+1688/1688 - 6s - 4ms/step - accuracy: 0.9708 - loss: 0.0949 - val_accuracy: 0.9798 - val_loss: 0.0728
 Epoch 8/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0922 - accuracy: 0.9719 - val_loss: 0.0713 - val_accuracy: 0.9795
+1688/1688 - 7s - 4ms/step - accuracy: 0.9731 - loss: 0.0872 - val_accuracy: 0.9790 - val_loss: 0.0779
 Epoch 9/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0821 - accuracy: 0.9745 - val_loss: 0.0785 - val_accuracy: 0.9792
+1688/1688 - 6s - 4ms/step - accuracy: 0.9742 - loss: 0.0815 - val_accuracy: 0.9803 - val_loss: 0.0727
 Epoch 10/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0790 - accuracy: 0.9754 - val_loss: 0.0771 - val_accuracy: 0.9812
+1688/1688 - 7s - 4ms/step - accuracy: 0.9759 - loss: 0.0764 - val_accuracy: 0.9808 - val_loss: 0.0744
 Epoch 11/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0779 - accuracy: 0.9761 - val_loss: 0.0708 - val_accuracy: 0.9807
+1688/1688 - 5s - 3ms/step - accuracy: 0.9765 - loss: 0.0752 - val_accuracy: 0.9817 - val_loss: 0.0760
 Epoch 12/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0718 - accuracy: 0.9771 - val_loss: 0.0746 - val_accuracy: 0.9797
+1688/1688 - 9s - 5ms/step - accuracy: 0.9780 - loss: 0.0676 - val_accuracy: 0.9808 - val_loss: 0.0722
 Epoch 13/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0687 - accuracy: 0.9785 - val_loss: 0.0677 - val_accuracy: 0.9810
+1688/1688 - 8s - 5ms/step - accuracy: 0.9783 - loss: 0.0675 - val_accuracy: 0.9795 - val_loss: 0.0813
 Epoch 14/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0650 - accuracy: 0.9801 - val_loss: 0.0730 - val_accuracy: 0.9815
+1688/1688 - 6s - 4ms/step - accuracy: 0.9787 - loss: 0.0648 - val_accuracy: 0.9813 - val_loss: 0.0773
 Epoch 15/30
-1688/1688 [===================] - 7s 4ms/step - loss: 0.0638 - accuracy: 0.9802 - val_loss: 0.0659 - val_accuracy: 0.9810
+1688/1688 - 7s - 4ms/step - accuracy: 0.9802 - loss: 0.0628 - val_accuracy: 0.9817 - val_loss: 0.0758
 Epoch 16/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0609 - accuracy: 0.9808 - val_loss: 0.0776 - val_accuracy: 0.9807
+1688/1688 - 7s - 4ms/step - accuracy: 0.9809 - loss: 0.0600 - val_accuracy: 0.9798 - val_loss: 0.0740
 Epoch 17/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0587 - accuracy: 0.9819 - val_loss: 0.0777 - val_accuracy: 0.9803
-Epoch 18/30
-1688/1688 [===================] - 6s 3ms/step - loss: 0.0558 - accuracy: 0.9817 - val_loss: 0.0765 - val_accuracy: 0.9802
-Epoch 19/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0553 - accuracy: 0.9816 - val_loss: 0.0799 - val_accuracy: 0.9820
-Epoch 20/30
-1688/1688 [===================] - 6s 4ms/step - loss: 0.0568 - accuracy: 0.9816 - val_loss: 0.0831 - val_accuracy: 0.9797</code></pre>
-<p>Wir sehen, dass das Training nach 20 Epochen gestoppt wurde. Tatsächlich war der Validierungsloss nach Epoche 15 am tiefsten (0.0659) und hat sich in den nächsten 5 Epochen nur wieder erhöht.</p>
-<p>Schauen wir uns nochmal kurz die bekannten Kurven an, die wir mit <code>plot(history, smooth = TRUE)</code> generieren können:</p>
-<div id="fig-trainvalerror2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-trainvalerror2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/train_val_error_2.png" class="img-fluid figure-img" style="width:90.0%">
+1688/1688 - 6s - 4ms/step - accuracy: 0.9812 - loss: 0.0576 - val_accuracy: 0.9818 - val_loss: 0.0731</code></pre>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trainvalerror2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;8.12: Bla.
-</figcaption>
+</div>
+<p>Wir sehen, dass das Training nach 17 Epochen gestoppt wurde.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Tatsächlich war der Validierungsloss nach Epoche 12 am tiefsten (0.0722) und hat sich in den nächsten 5 Epochen nur wieder erhöht.</p>
+<p>Schauen wir uns nochmal kurz die bekannten Kurven an:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots des Lernoutputs.</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history, <span class="at">smooth =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-<p>Das sieht nun viel besser aus. Auf der Höhe von Epoche 15 sind die beiden Loss Kurven und die beiden Accuracy Kurven nun sehr nahe beieinander. Wir machen kein Overfitting und sind nun zufrieden mit diesem Modell.</p>
+</div>
+</div>
+<p>Das sieht nun viel besser aus. Auf der Höhe von Epoche 12 sind die beiden Loss Kurven und die beiden Accuracy Kurven nun sehr nahe beieinander. Wir machen kein oder kaum Overfitting und sind nun zufrieden mit diesem Modell.</p>
 </section>
 <section id="finales-modell-evaluieren" class="level3" data-number="8.6.4">
 <h3 data-number="8.6.4" class="anchored" data-anchor-id="finales-modell-evaluieren"><span class="header-section-number">8.6.4</span> Finales Modell evaluieren</h3>
-<p>Nachdem wir das Modell trainiert haben, können wir uns die optimalen Gewichte anschauen, indem wir sie mit <code>get_weights()</code> aus dem Modellobjekt <code>ann2</code> extrahieren. Das Objekt <code>trained_weights</code> ist eine Liste mit 6 Elementen. Überlegt euch kurz, ob die Dimensionen der 6 Elemente in der Liste Sinn machen.</p>
+<p>Nachdem wir das Modell trainiert haben, können wir uns die optimalen Gewichte anschauen, indem wir sie mit <code>get_weights()</code> aus dem Modellobjekt <code>ann2</code> extrahieren. Das Objekt <code>trained_weights</code> ist eine Liste mit 6 Elementen.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimale Gewichte anschauen</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>trained_weights <span class="ot">&lt;-</span> ann2 <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimale Gewichte</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>trained_weights <span class="ot">&lt;-</span> ann2 <span class="sc">|&gt;</span> </span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_weights</span>()</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Schauen wir uns doch mal die Dimensionen des ersten Objekts an:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Erste Gewichtsmatrix</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(trained_weights[[<span class="dv">1</span>]])</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 784 100</code></pre>
+</div>
+</div>
+<p>Wir haben hier also die Gewichte zwischen dem Input Layer (784 Neurons) und dem ersten Hidden Layer (100 Neurons).</p>
 <p>Mit <code>evaluate()</code> können wir das Modell auf dem <strong>Testset</strong> evaluieren.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation Testset Performance</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">%&gt;%</span> </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">evaluate</span>(X_test, y_test, <span class="at">verbose =</span> <span class="dv">0</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation Testset Performance</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>ann2 <span class="sc">|&gt;</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">evaluate</span>(X_test, y_test, <span class="at">verbose =</span> <span class="dv">0</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$accuracy
+[1] 0.978
+
+$loss
+[1] 0.08359446</code></pre>
 </div>
-<pre><code>      loss   accuracy 
-0.08615529 0.97810000</code></pre>
-<p>Wir kriegen sowohl den Wert der Kostenfunktion (auf dem Testset) als auch die Accuracy. Ihr seht, dass wir aktuell knapp 98% aller Bilder korrekt klassifizieren!</p>
+</div>
+<p>Wir kriegen sowohl den Wert der Kostenfunktion (auf dem Testset) als auch die Accuracy. Ihr seht, dass wir aktuell knapp 98% aller Bilder korrekt klassifizieren - nicht schlecht.</p>
 <p>Wir können nun die Vorhersagen für alle Beobachtungen im Testset rechnen (mit <code>predict()</code>).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersagen auf Testset</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>pred_test <span class="ot">&lt;-</span> ann2 <span class="sc">%&gt;%</span> </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(X_test)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Erste Zeile</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pred_test, <span class="dv">1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vorhersagen auf Testset</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pred_test <span class="ot">&lt;-</span> ann2 <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(X_test)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>313/313 - 0s - 2ms/step</code></pre>
 </div>
-<pre><code>             [,1]         [,2]         [,3]         [,4]         [,5]         [,6]         [,7]      [,8]         [,9]        [,10]
-[1,] 6.685255e-13 5.311204e-10 8.525921e-08 5.529179e-09 5.470584e-12 1.843249e-10 1.825414e-17 0.9999895 3.462339e-11 1.033705e-05</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Erste Zeile</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pred_test, <span class="dv">1</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             [,1]         [,2]         [,3]         [,4]         [,5]
+[1,] 6.512713e-10 1.708819e-06 6.344855e-07 7.352776e-06 1.366777e-11
+             [,6]         [,7]      [,8]        [,9]       [,10]
+[1,] 7.722699e-07 3.478731e-14 0.9999838 3.64391e-08 5.61377e-06</code></pre>
+</div>
+</div>
 <p>Das Modell gibt uns für jede Beobachtung (hier die erste) 10 Wahrscheinlichkeiten (Spalten) zurück, eine für jede mögliche Zahl 0 - 9. Dabei muss beachtet werden, dass die Wahrscheinlichkeiten in der ersten Spalte (mit <code>[,1]</code> bezeichnet) den Wahrscheinlichkeiten für die Zahl 0 entsprechen, etc.</p>
 <p>Wir können aus diesen 10 Wahrscheinlichkeiten die <strong>harten Vorhersagen</strong> mit <code>apply()</code> ableiten. Wir rechnen am Schluss <code>- 1</code>, da wie bereits erwähnt der Index 1 der Zahl 0 entspricht, der Index 2 der Zahl 1, usw.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Harte Vorhersagen auf Testset</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>.pred_class <span class="ot">&lt;-</span> <span class="fu">apply</span>(pred_test, <span class="dv">1</span>, which.max) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wahre Werte Testset</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">apply</span>(y_test, <span class="dv">1</span>, which.max) <span class="sc">-</span> <span class="dv">1</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Harte Vorhersagen auf Testset</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>.pred_class <span class="ot">&lt;-</span> <span class="fu">apply</span>(pred_test, <span class="dv">1</span>, which.max) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wahre Werte Testset</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">apply</span>(y_test, <span class="dv">1</span>, which.max) <span class="sc">-</span> <span class="dv">1</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nun haben wir die Zutaten, um eine Konfusionsmatrix zu rechnen. Hier bietet es sich an, die Zellen der Matrix mit <code>ggplot2</code> visuell darzustellen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Konfusionsmatrix</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_cols</span>(<span class="at">.pred_class =</span> .pred_class, <span class="at">truth =</span> truth) <span class="sc">%&gt;%</span> </span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(factor, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">labels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.pred_class, truth) <span class="sc">%&gt;%</span> </span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> truth, <span class="at">y =</span> .pred_class, <span class="at">fill =</span> n)) <span class="sc">+</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span> </span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Greens"</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n)) <span class="sc">+</span></span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="fig-confmatmnist" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-confmatmnist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/confMat.png" class="img-fluid figure-img" style="width:90.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confmatmnist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;8.13: Bla.
-</figcaption>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Konfusionsmatrix</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_cols</span>(<span class="at">.pred_class =</span> .pred_class, <span class="at">truth =</span> truth) <span class="sc">|&gt;</span> </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(factor, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">labels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.pred_class, truth) <span class="sc">|&gt;</span> </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> truth, <span class="at">y =</span> .pred_class, <span class="at">fill =</span> n)) <span class="sc">+</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span> </span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Greens"</span>, <span class="at">direction =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n)) <span class="sc">+</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-<p>Es kann sein, dass die Zahlen, die ihr kriegt für die Konfusionsmatrix von denjenigen in obiger Abbildung abweichen. Der Grund hierfür ist, dass ein Modell durch die zufällige Initialisierung der Gewichte jedes Mal etwas anders trainiert wird und dementsprechend auch leicht andere Vorhersagen (und Fehler) macht. In oben abgebildeter Konfusionsmatrix machen wir zum Beispiel 18 Mal den Fehler, eine 9 als eine 4 vorherzusagen. Mit unten stehendem Code können wir uns die Bilder, welche eine 9 darstellen aber als 4 klassifiziert wurden, anschauen. Abgebildet ist nur ein Beispielsbild.</p>
+</div>
+</div>
+<p>Es kann sein, dass die Zahlen, die Sie kriegen für die Konfusionsmatrix von denjenigen in obiger Abbildung abweichen. Der Grund hierfür ist, dass ein Modell durch die zufällige Initialisierung der Gewichte jedes Mal etwas anders trainiert wird und dementsprechend auch leicht andere Vorhersagen (und Fehler) macht. In oben abgebildeter Konfusionsmatrix machen wir zum Beispiel 12 Mal den Fehler, eine 9 als eine 4 vorherzusagen. Mit unten stehendem Code können wir uns die Bilder, welche eine 9 darstellen aber als 4 klassifiziert wurden, anschauen.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definiere Grauabstufungen</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>grays <span class="ot">&lt;-</span> <span class="fu">rgb</span>(<span class="at">red =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">blue =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">green =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Falsche Bilder anschauen</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (x <span class="cf">in</span> <span class="fu">which</span>(truth <span class="sc">==</span> <span class="dv">9</span> <span class="sc">&amp;</span> .pred_class <span class="sc">==</span> <span class="dv">4</span>)) {</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir indexen das falsche Bild</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  im <span class="ot">&lt;-</span> X_test[x, ]</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transformation in eine Matrix</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dim</span>(im) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">28</span>, <span class="dv">28</span>)</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bild anzeigen</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">heatmap</span>(im, <span class="at">Rowv =</span> <span class="cn">NA</span>, <span class="at">Colv =</span> <span class="cn">NA</span>, <span class="at">revC =</span> T, <span class="at">col =</span> grays, <span class="at">scale =</span> <span class="st">"none"</span>)</span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="fig-wrong4" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-wrong4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/wrong4.png" class="img-fluid figure-img" style="width:90.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wrong4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;8.14: Bla.
-</figcaption>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definiere Grauabstufungen.</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>grays <span class="ot">&lt;-</span> <span class="fu">rgb</span>(<span class="at">red =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">blue =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>, <span class="at">green =</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">255</span>)<span class="sc">/</span><span class="dv">255</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Index mit den als 4 vorhergesagten 9-Bilder.</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> <span class="fu">which</span>(truth <span class="sc">==</span> <span class="dv">9</span> <span class="sc">&amp;</span> .pred_class <span class="sc">==</span> <span class="dv">4</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Anordnung der Plots</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">1.5</span>, <span class="fl">0.5</span>))</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Falsche Bilder anschauen</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (x <span class="cf">in</span> wrong) {</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir indexen das falsche Bild</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  im <span class="ot">&lt;-</span> X_test[x, ]</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transformation in eine Matrix</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dim</span>(im) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">28</span>, <span class="dv">28</span>)</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bild anzeigen</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">image</span>(<span class="fu">t</span>(<span class="fu">apply</span>(im, <span class="dv">2</span>, rev)), <span class="at">col =</span> grays, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08_ann_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-<p>Es ist hier tatsächlich auch von Auge schwierig zu entscheiden, ob es sich um eine 9 oder eine 4 handelt.</p>
+</div>
+</div>
+<p>Es ist hier tatsächlich bei einigen Bildern auch von Auge schwierig zu entscheiden, ob es sich um eine 9 oder eine 4 handelt.</p>
 <p>Am Schluss können wir unser Modell im <strong>HDF5</strong> Dateiformat abspeichern. Dieses Format erlaubt es Webapplikationen, das Modell zu laden und für Vorhersagen zu verwenden. Gespeichert wird die Architektur des Modells, alle Hyperparameter und selbstverständlich die optimalen Parameterwerte (Gewichte).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell speichern</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save_model_hdf5</span>(ann, <span class="st">'my_model.h5'</span>)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean-up Environment</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell wieder laden</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>ann <span class="ot">&lt;-</span> <span class="fu">load_model_hdf5</span>(<span class="st">'my_model.h5'</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell speichern</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save_model_hdf5</span>(ann2, <span class="st">'my_model.h5'</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean-up Environment</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Modell wieder laden</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>ann2 <span class="ot">&lt;-</span> <span class="fu">load_model_hdf5</span>(<span class="st">'my_model.h5'</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1723,6 +1734,7 @@ Abbildung&nbsp;8.14: Bla.
 <hr>
 <ol>
 <li id="fn1"><p>Oder alternativ: das Skalarprodukt zwischen den Input-Variablenwerten und dem Gewichtsvektor.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Es kann sein, dass das Training bei Ihnen aufgrund der zufälligen Initialisierung länger oder weniger lange dauert.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
