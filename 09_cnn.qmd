@@ -139,15 +139,19 @@ Ein Pooling Layer erfüllt viele verschiedene Zwecke:
 
 ### Architektur
 
-Wie eine **vereinfachte Architektur** eines CNNs aussieht, zeigt folgende Abbildung:
+Wie eine **vereinfachte Architektur** eines CNNs aussieht, zeigt folgende Abbildung, die inspiriert ist durch [@Geron, Kapitel 14]:
 
-<!-- ![Bla.](images/architektur.PNG){width=80% #fig-archit} -->
+![Vereinfachte Architektur eines gesamten CNNs. Ein Farbbild mit den drei Farbchannels wird durch zwei Convolution-Pooling Sequencen geschleust bevor jedes "Pixel" des letzten Pooling Outputs auf typische ANN-Art in einen Output Layer übergeben wird.](images/cnnArchitektur.png){width=95% #fig-archit}
 
-Ihr seht, dass ein CNN typischerweise mehrere Abfolgen von Convolution und Pooling Layers enthält. Wir sehen im ersten Convolution Layer **5 Feature Maps**, d.h. wir haben hier $K=5$ Filter angewendet und jeder Filter bestand aus drei kleinen Matrizen (z.B. $3\times 3$). Danach folgt bereits ein erster Pooling Layer, der die 5 Feature Maps kleiner macht. Danach kommt ein zweiter Convolution Layer, der zu **10 Feature Maps** führt, d.h. wir haben hier $K=10$ Filter angewendet. **Ganz wichtig**: jeder der 10 Filter besteht in diesem Schritt aus **5** kleinen Matrizen (z.B. $3\times 3$). Warum? Weil jeder Filter 5 Feature Maps aus dem vorherigen Layer verarbeiten muss. Danach folgt ein zweiter Pooling Layer, der die 10 Feature Maps verkleinert. Wir können beobachten, dass die Feature Maps durch das Pooling stets etwas kleiner werden. Dafür erhöhen wir grundsätzlich die *Anzahl* Feature Maps von Layer zu Layer, indem wir in jedem Convolution Layer die Anzahl Filter $K$ erhöhen. In unserem Beispiel haben wir $K$ vom ersten zum zweiten Convolution Layer von 5 auf 10 erhöht.
+Ihr seht in obiger Abbildung, dass ein CNN typischerweise mehrere Abfolgen von Convolution und Pooling Layers enthält. Wir sehen im ersten Convolution Layer **5 Feature Maps**, d.h. wir haben hier $K=5$ Filter angewendet und jeder Filter bestand aus drei kleinen Matrizen (z.B. $3\times 3$). Danach folgt bereits ein erster Pooling Layer, der die 5 Feature Maps kleiner macht. Danach kommt ein zweiter Convolution Layer, der zu **10 Feature Maps** führt, d.h. wir haben hier $K=10$ Filter angewendet. **Ganz wichtig**: jeder der 10 Filter besteht in diesem Schritt aus **5** kleinen Matrizen (z.B. $3\times 3$). Warum? Weil jeder Filter 5 Feature Maps aus dem vorherigen Layer verarbeiten muss. Danach folgt ein zweiter Pooling Layer, der die 10 Feature Maps verkleinert.
 
-Nach diesen zwei Convolution-Pooling Sequenzen wird der letzte Pooling Output *geflatted* und es folgen noch ein paar **dense (fully connected) Layers** wie wir sie aus einer klassischen ANN Architektur kennen. Und ganz am Schluss kommt der Output Layer, welcher in Bildklassifikationsproblemen meist ein **Softmax** Layer ist, da wir versuchen ein Bild in eine von z.B. 7 Kategorien zu klassifizieren (z.B. Vogel, Haus, Baum, Person, etc.).
+Wir können beobachten, dass die Feature Maps durch das Pooling stets etwas kleiner werden. Dafür erhöhen wir grundsätzlich die *Anzahl* Feature Maps von Layer zu Layer, indem wir in jedem Convolution Layer die Anzahl Filter $K$ erhöhen. In unserem Beispiel haben wir $K$ vom ersten zum zweiten Convolution Layer von 5 auf 10 erhöht.
 
-Die Architektur eines CNNs sowie die Ausgestaltung der einzelnen Layers ist enorm flexibel und es gibt **unzählige Hyperparameter**:
+Nach diesen zwei Convolution-Pooling Sequenzen wird der letzte Pooling Output *geflatted* und es folgen noch einer oder mehrere **dense (fully connected) Layers** wie wir sie aus einer klassischen ANN Architektur kennen. In obiger Abbildung führt der Output des letzten Pooling Layers der Einfachheit halber direkt in den Output Layer. Hierbei ist jeder Pooling Output mittels eines Gewichts mit einem Output Neuron verbunden (*fully connected*).
+
+Der Output Layer hat meist eine **Softmax** Aktivierung, zumindest in Bildklassifikationsproblemen, wo wir versuchen ein Bild in eine von z.B. 6 Kategorien zu klassifizieren (z.B. Vogel, Haus, Baum, Person, etc.).
+
+Die Architektur eines CNNs sowie die Ausgestaltung der einzelnen Layers ist enorm flexibel und es gibt **unzählige Hyperparameter**. Eine Auswahl:
 
 * Anzahl Convolution Layers
 * Anzahl Pooling Layers
@@ -155,40 +159,41 @@ Die Architektur eines CNNs sowie die Ausgestaltung der einzelnen Layers ist enor
 * Dimensionen der Convolution Filter
 * Zero-Padding: ja oder nein
 * Max- oder Mean-Pooling
-* Viele weitere
 
-### Data Augmentation
+## Data Augmentation
 
-Eine Technik, welche CNNs massiv verbessert hat, ist **Data Augmentation**. Bei dieser Technik werden die Bilder während des Trainings leicht verändert. Zum Beispiel kann ein gegebenes Bild leicht verschoben oder rotiert, einen Ausschnitt daraus gewählt oder die Lichtbedingungen verändert werden. Ein Beispiel seht ihr in folgender Abbildung (Quelle: TseKiChung via Wikimedia):
+Eine praxisrelevante Technik, die CNNs massiv verbessert hat, ist **Data Augmentation**. Bei dieser Technik werden die Bilder, welche als Input-Daten dienen, während des Trainings leicht verändert. Zum Beispiel kann ein gegebenes Bild leicht verschoben oder rotiert werden, es kann ein Ausschnitt (*Crop*) daraus gewählt werden oder die Lichtbedingungen können verändert werden. 
 
-![Quelle der Abbildung: TseKiChung, via Wikimedia Commons, CC BY-SA 4.0](images/data_aug.png){width=70% #fig-dataaugment}
+Ein Beispiel sehen Sie in folgender Abbildung:
 
-Data Augmentation wirkt wie **Regularisierung** und kann das Overfitting von CNNs wesentlich eindämmen. Ein weiterer toller Aspekt von Data Augmentation ist, dass die Veränderungen der Bilder **on the fly** während des Modelltrainings gemacht werden können und die veränderten Bilder nicht abgespeichert werden müssen. Mit Keras und TensorFlow können wir direkt nach dem Input Layer spezielle Layers ins Modell aufnehmen, die solche Data Augmentation Schritte für uns durchführen. Details dazu findet ihr [hier](https://tensorflow.rstudio.com/examples/image_classification_from_scratch.html#using-image-data-augmentation).
+![Zwei Arten, wie ein Input-Bild verändert werden kann. Quelle der Abbildung: TseKiChung, via Wikimedia Commons, CC BY-SA 4.0](images/data_aug.png){width=70% #fig-dataaugment}
+
+Data Augmentation wirkt wie **Regularisierung** und kann das Overfitting von CNNs wesentlich eindämmen. Ein weiterer toller Aspekt von Data Augmentation ist, dass die Veränderungen der Bilder **on the fly** während des Modelltrainings gemacht werden können und die veränderten Bilder nicht abgespeichert werden müssen. Mit Keras und TensorFlow können wir direkt nach dem Input Layer spezielle Layers ins Modell aufnehmen, die solche Data Augmentation Schritte für uns durchführen. Details dazu finden Sie [hier](https://tensorflow.rstudio.com/examples/image_classification_from_scratch.html#using-image-data-augmentation).
+
 
 ## Beispiel: ResNet
 
 Wir schauen uns hier die Architektur des Modells **ResNet34** an, das im Jahr 2015 von Microsoft Mitarbeitenden vorgeschlagen wurde ([He et al., 2015](https://arxiv.org/abs/1512.03385)). Eine Variante dieses Modells hat 2015 die sogenannte ImageNet Challenge gewonnen (dazu später mehr).
 
-Der Name ResNet34 ist dadurch begründet, dass **Skip Connections** verwendet werden und dadurch **Residuen (Res)** gelernt werden (ähnlich wie Gradient Boosting). Was Skip Connections genau sind, sehen wir etwas weiter unten. Ausserdem hat das Modell 34 Layers, wobei die Pooling Layers nicht mitgezählt werden.
+Der Name ResNet34 ist dadurch begründet, dass **Skip Connections** verwendet werden und dadurch **Residuen (Res)** gelernt werden (ähnlich wie beim Gradient Boosting). Was Skip Connections genau sind, sehen wir etwas weiter unten. Ausserdem hat das Modell **34 Layers**, wobei die Pooling Layers nicht mitgezählt werden.
 
 Die Architektur des ResNet34 sieht wie folgt aus:
 
-![Quelle der Abbildung: [He et al., 2015](https://arxiv.org/abs/1512.03385)](images/resnet34.png){width=100% #fig-resnet34}
+![Architektur des ResNet34. Eigene Abbildung inspiriert durch [He et al., 2015](https://arxiv.org/abs/1512.03385).](images/resnet34.png){width=100% #fig-resnet34}
 
 Schauen wir uns die einzelnen Komponenten schrittweise (von links nach rechts) an:
 
 * Als Input erwartet das Modell Farbbilder mit einer Auflösung von $224\times 224$ Pixels (mit 3 Farbchannels).
-* Im ersten Convolution Layer (orange) werden $K=64$ Filter der Grösse $7\times 7$ verwendet. Weil wir einen **Stride von 2** (in der Abbildung gekennzeichnet durch "/2") verwenden (die Filter also immer um 2 und nicht nur um 1 Pixel verschieben), reduzieren wir die Input Bilder um die Hälfte. Die 64 resultierenden Feature Maps haben also je eine Grösse von $112\times 112$ Pixels.
+* Im ersten Convolution Layer (orange) werden $K=64$ Filter der Grösse $7\times 7$ verwendet. Weil wir einen **Stride von 2** (in der Abbildung gekennzeichnet durch "S2") verwenden (die Filter also immer um 2 und nicht nur um 1 Pixel verschoben werden), reduzieren wir die Input Bilder um die Hälfte. Die 64 resultierenden Feature Maps haben also je eine Grösse von $112\times 112$ Pixels.
 * Danach folgt ein Max. Pooling Layer, ebenfalls mit einem Stride von 2, so dass die Dimensionen der 64 Feature Maps nochmal halbiert werden auf $56\times 56$ Pixels.
-* Nun folgen **6 Convolution Layers** (violett). Jeder Layer hat $K=64$ Filter der Grösse $3\times 3$ und einem Stride von 1, was bedeutet, dass die Dimensionen der resultierenden Feature Maps im Moment nicht halbiert werden. Der zentrale Aspekt dieser Architektur sind die Pfeile oberhalb der Layers. Sie stellen die **Skip Connections** dar. Der erste solche Pfeil bedeutet, dass der Output aus dem Pooling Layer nicht nur in den ersten violetten Convolution Layer einfliesst, sondern auch direkt in den dritten violetten Layer. Der Output des Pooling Layers kann also auch gewisse Layer überspringen (*skippen*). Solche Skip Connections haben viele Vorteile. Zum Beispiel "fliessen" die wesentlichen Informationen so schneller durch das Modell und das Training des Modells wird kürzer. Was in der Abbildung nicht dargestellt ist: in jedem Convolution Layer wird nach der Convolution, eine Batch Normalization (d.h. Standardizierung der Outputs) betrieben bevor die Outputs noch durch die ReLU Aktivierungsfunktion fliessen.
-* Es folgen **8 weitere Convolution Layers** (grün), in denen jeweils $K=128$ Filter der Grösse $3\times 3$ verwendet werden. Um die Architektur ausgeglichen zu halten, wird im ersten grünen Convolution Layer ein Stride von 2 verwendet, wodurch sich die Dimensionen der Feature Maps auf $28\times 28$ Pixels reduzieren. Das stellt jedoch ein Problem für die Skip Connection dar. Der Output aus dem letzten violetten Convolution Layer enthält 64 Feature Maps der Grösse $56\times 56$ und soll nun nach den ersten beiden grünen Convolution Layers hinzu addiert werden. Der dazugehörige **gestrichelte** Pfeil stellt dar, dass bei dieser Skip Connection der Output aus dem letzten violetten Layer angepasst wird, so dass er ebenfalls 128 Feature Maps der Grösse $28\times 28$ entspricht.
-* Nun folgen **12 weitere Convolution Layers** (rot), in denen jeweils $K=256$ Filter der Grösse $3\times 3$ verwendet werden. Auch hier haben die Filter des ersten Layers der roten Gruppe einen Stride von 2, wodurch die Dimensionen der Feature Maps auf $14\times 14$ reduziert werden. Dadurch muss auch hier die erste Skip Connection entsprechend angepasst werden.
-* Danach folgt die letzte Gruppe von **6 Convolution Layers** (blau), in denen jeweils $K=512$ Filter der Grösse $3\times 3$ verwendet werden. Durch den Stride von 2 im ersten Layer der Gruppe reduziert sich die Grösse der Feature Maps auf nur noch $7\times 7$.
+* Nun folgen **6 Convolution Layers** (rot). Jeder Layer hat $K=64$ Filter der Grösse $3\times 3$ und einem Stride von 1, was bedeutet, dass die Dimensionen der resultierenden Feature Maps im Moment nicht halbiert werden. Der zentrale Aspekt dieser Architektur sind die Pfeile oberhalb der Layers. Sie stellen die **Skip Connections** dar. Der erste solche Pfeil bedeutet, dass der Output aus dem Pooling Layer nicht nur in den ersten roten Convolution Layer einfliesst, sondern auch direkt in den dritten roten Layer. Der Output des Pooling Layers kann also auch gewisse Layer überspringen (*skippen*). Solche Skip Connections haben viele Vorteile. Zum Beispiel "fliessen" die wesentlichen Informationen so schneller durch das Modell und das Training des Modells wird kürzer. Was in der Abbildung nicht dargestellt ist: in jedem Convolution Layer wird nach der Convolution, eine **Batch Normalization** (d.h. Standardizierung der Outputs) betrieben bevor die Outputs noch durch die **ReLU** Aktivierungsfunktion fliessen.
+* Es folgen **8 weitere Convolution Layers** (grün), in denen jeweils $K=128$ Filter der Grösse $3\times 3$ verwendet werden. Um die Architektur ausgeglichen zu halten, wird im ersten grünen Convolution Layer ein Stride von 2 verwendet, wodurch sich die Dimensionen der Feature Maps auf $28\times 28$ Pixels reduzieren. Das stellt jedoch ein Problem für die Skip Connection dar. Der Output aus dem letzten roten Convolution Layer enthält 64 Feature Maps der Grösse $56\times 56$ und soll nun nach den ersten beiden grünen Convolution Layers hinzu addiert werden. Der dazugehörige **gestrichelte** Pfeil stellt dar, dass bei dieser Skip Connection der Output aus dem letzten roten Layer angepasst wird, so dass er ebenfalls 128 Feature Maps der Grösse $28\times 28$ entspricht.
+* Nun folgen **12 weitere Convolution Layers** (blau), in denen jeweils $K=256$ Filter der Grösse $3\times 3$ verwendet werden. Auch hier haben die Filter des ersten Layers der blauen Gruppe einen Stride von 2, wodurch die Dimensionen der Feature Maps auf $14\times 14$ reduziert werden. Dadurch muss auch hier die erste Skip Connection entsprechend angepasst werden.
+* Danach folgt die letzte Gruppe von **6 Convolution Layers** (pink), in denen jeweils $K=512$ Filter der Grösse $3\times 3$ verwendet werden. Durch den Stride von 2 im ersten Layer der Gruppe reduziert sich die Grösse der Feature Maps auf nur noch $7\times 7$.
 * Nun kommt ein **Global Average Pooling** Layer, der für jeden der resultierenden 512 Feature Maps des letzten Convolution Layers den Mittelwert über die $7\times 7 = 49$ Pixels rechnet.
 * Die resultierenden 512 Mittelwerte sind **fully connected** mit den 1000 Output Neurons. Letztere sind nötig, weil die ImageNet Challenge 1000 mögliche Kategorien hat. Die 1000 Outputs der Output Neurons werden mittels **Softmax** in Wahrscheinlichkeiten umgerechnet.
 
-Wow! Ziemlich komplex das Ganze, aber die einzelnen Komponenten sind eigentlich erstaunlich simpel.
-
+Wow, ziemlich komplex das Ganze, aber die einzelnen Komponenten sind eigentlich erstaunlich simpel.
 
 
 ## Anwenden von Modellen
