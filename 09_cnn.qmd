@@ -196,20 +196,20 @@ Schauen wir uns die einzelnen Komponenten schrittweise (von links nach rechts) a
 Wow, ziemlich komplex das Ganze, aber die einzelnen Komponenten sind eigentlich erstaunlich simpel.
 
 
-## Anwenden von Modellen
+## Verwendung von CNNs
 
-Es gibt viele verschiedene Möglichkeiten, wie ihr Deep Learning Modelle anwenden könnt. Die verschiedenen Möglichkeiten unterscheiden sich im Grad der technischen Komplexität und hängen davon ab, ob eine bestehende Lösung euer konkretes Problem bereits vollumfänglich abbildet. Konkret gibt es folgende Möglichkeiten:
+Es gibt viele verschiedene Möglichkeiten, wie Sie aus praktischer Sicht CNNs verwenden können. Die verschiedenen Möglichkeiten unterscheiden sich im Grad der technischen Komplexität und hängen davon ab, ob eine bestehende (sog. *off-the-shelf*) Lösung Ihr konkretes Problem bereits vollumfänglich abbildet. Konkret gibt es folgende Möglichkeiten^[Siehe auch [@Geron, Kapitel 14] für detailliertere Ausführungen zu diesem Thema.]:
 
-1. Ihr verwendet ein Deep Learning Modell über **API-Services**, welche oft von grossen Firmen wie Amazon, Google oder OpenAI angeboten werden. Das ist sehr einfach, hat jedoch den Nachteil, dass ihr keinerlei Flexibilität habt und das Modell nicht verändern könnt. Ausserdem sind solche Dienstleistungen in den meisten Fällen kostenpflichtig.
-2. Wie weiter unten demonstriert, könnt ihr **bestehende (trainierte) Modelle** (vor allem CNNs) auch direkt mit Keras herunterladen und verwenden. Dabei habt ihr vollen Einblick in das Modell und allzu schwierig ist es dank Keras auch nicht. Für mobile Applikationen enthält Keras sogar sogenannte *Lightweight Models* ([MobileNet](https://tensorflow.rstudio.com/reference/keras/application_mobilenet_v2.html)).
-3. Wenn es für euer Problem, das ihr lösen wollt, keine vorgefertigte Lösung gibt (zum Beispiel wenn ihr andere Kategorien als die ImageNet Kategorien vorhersagen wollt), dann könnt ihr ein bestehendes (CNN) Modell nehmen und nur die letzten paar Layers trainieren. Dieser Prozess wird **Transfer Learning** genannt und ist enorm hilfreich. Die Convolution Layers von grossen Modellen, die von Google, Microsoft, etc. trainiert wurden, eignen sich oft auch für andere Probleme. Eine Anleitung für das Transfer Learning findet ihr [hier](https://tensorflow.rstudio.com/guides/keras/transfer_learning.html).
-4. *Last but not least* könnt ihr natürlich auch ein **eigenes Modell von Grund auf trainieren**. Doch dazu braucht ihr erst einmal einen sehr grossen und vor allem **gelabelten** Datensatz. Für das Labelling greifen die Entwicklerinnen und Entwickler von DL Modellen oft auf Crowdsourcing Plattformen wie z.B. AmazonTurk zurück. Wie das Trainieren eines eigenen CNNs funktioniert, ist in diesem [Tutorial](https://tensorflow.rstudio.com/examples/cifar10_cnn) oder in HOML (für Python) beschrieben. Für realistische Modelle empfehle ich euch, eine Cloud Lösung zu verwenden (z.B. [Google Colab](https://colab.research.google.com/)), denn unsere Rechner haben grundsätzlich zu wenig Processing Power und vor allem auch zu wenig Arbeitsspeicher (RAM), ausser ihr habt eine **Graphics Processing Unit** (GPU) und ganz viel RAM. Wie ihr lokal mit R eine GPU einbindet, ist [hier](https://tensorflow.rstudio.com/install/local_gpu) beschrieben.
+1. Sie verwenden ein Modell über **API-Services**, welche oft von grossen Unternehmen wie Amazon oder Google angeboten werden. Das ist sehr einfach, hat jedoch den Nachteil, dass Sie wenig Flexibilität haben und das Modell (oft) nicht verändern können. Ausserdem sind solche Dienstleistungen in den meisten Fällen kostenpflichtig.
+2. Wie weiter unten demonstriert, können Sie **bestehende (trainierte) Modelle** auch direkt mit Keras herunterladen und verwenden. Dabei haben Sie vollen Einblick in das Modell und allzu schwierig ist es dank Keras auch nicht. Für mobile Applikationen enthält Keras sogar sogenannte *Lightweight Models* ([MobileNet](https://tensorflow.rstudio.com/reference/keras/application_mobilenet_v2.html)).
+3. Wenn es für das Problem, das Sie lösen wollen, keine vorgefertigte Lösung gibt (zum Beispiel wenn Sie andere Kategorien als die ImageNet Kategorien vorhersagen wollen), dann können Sie ein bestehendes (CNN) Modell nehmen und nur die letzten paar Layers trainieren. Dieser Prozess wird **Transfer Learning** genannt und ist enorm hilfreich. Die Convolution Layers von grossen Modellen, die von Google, Microsoft, etc. trainiert wurden, eignen sich oft auch für andere Probleme. Eine Anleitung für das Transfer Learning finden Sie [hier](https://tensorflow.rstudio.com/guides/keras/transfer_learning.html).
+4. *Last but not least* können Sie natürlich auch ein **eigenes Modell von Grund auf trainieren**. Doch dazu brauchen Sie erst einmal einen sehr grossen und vor allem **gelabelten** Datensatz. Für das Labelling greifen die Entwicklerinnen und Entwickler von DL Modellen oft auf Crowdsourcing Plattformen zurück.^[Seit der Einführungen von grossen Sprachmodellen gibt es eigens dafür grosse Unternehmen, welche die aufwendige Arbeite des manuellen Annotierens von Daten in Billiglohnländer auslagern.] Wie das Trainieren eines eigenen CNNs funktioniert, ist [hier](https://tensorflow.rstudio.com/examples/cifar10_cnn) oder in [@Geron, Kapitel 14] (für Python) beschrieben. Für realistische Modelle empfehle ich Ihnen, eine Cloud Lösung zu verwenden, denn unsere Rechner haben grundsätzlich zu wenig Processing Power und vor allem auch zu wenig Arbeitsspeicher (RAM), ausser Sie haben eine (oder mehrere) **Graphics Processing Unit** (GPU) und ganz viel RAM. Wie Sie lokal mit `R` eine GPU einbinden, ist [hier](https://tensorflow.rstudio.com/install/local_gpu) beschrieben.
 
 ### Anwenden eines bestehenden CNNs (Option 2)
 
-Wir schauen uns hier ein bestehendes CNN an, das mit den Daten aus der [ImageNet Challenge](https://www.image-net.org/index.php) trainiert wurde. Der entsprechende Datensatz enthält über 14 Millionen Bilder, welche alle **gelabelt** sind. Jedes Bild muss in eine von 1000 Kategorien klassifiziert werden. Die möglichen Kategorien findet ihr [hier](https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a). Die Performance wird mit der **Top-5 Error Rate** gemessen, d.h. eine Vorhersage entspricht nur dann einem Fehler, wenn das wahre Label nicht unter den Top-5 Vorhersagen des Modells ist. Das aktuell beste Modell hat eine Top-5 Error Rate von etwas mehr als 2%. Wow!
+Wir schauen uns hier ein bestehendes CNN an, das mit den Daten aus der [ImageNet Challenge](https://www.image-net.org/index.php) trainiert wurde. Der entsprechende Datensatz enthält über 14 Millionen Bilder, welche alle **gelabelt** sind. Jedes Bild ist in eine von 1000 Kategorien klassifiziert worden. Die möglichen Kategorien finden Sie [hier](https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a). Die Performance wird mit der **Top-5 Error Rate** gemessen, d.h. eine Vorhersage entspricht nur dann einem Fehler, wenn das wahre Label nicht unter den Top-5 Vorhersagen des Modells ist. Das aktuell beste Modell hat eine Top-5 Error Rate von etwas mehr als 2%.
 
-Wir werden hier das **ResNet50** Modell verwenden. Eine Variante davon hat die 2015 ImageNet Challenge gewonnen mit einer Top-5 Error Rate von weniger als 3.6% (vgl. HOML, p. 505). Wir haben uns im vorherigen Kapitel bereits die Architektur des etwas kleineren Modells **ResNet34** angeschaut.
+Wir werden hier das **ResNet50** Modell verwenden. Eine Variante davon hat die 2015 ImageNet Challenge gewonnen mit einer Top-5 Error Rate von weniger als 3.6% [@Geron, S. 505]. Wir haben uns im vorherigen Kapitel bereits die Architektur des etwas kleineren Modells **ResNet34** angeschaut. Die Architektur von ResNet50 ist sehr ähnlich, hat aber nochmal mehr Layers (ist also *deeper*).
 
 Als erstes laden wir das trainierte Modell mit Keras. Dazu verwenden wir die Funktion `application_resnet50()`. Wir kriegen das Modell mit den optimalen Gewichten, indem wir das Argument `weights = "imagenet"` setzen. Mit der `summary()` Funktion können wir uns die Architektur des Modells anschauen:
 
@@ -217,8 +217,7 @@ Als erstes laden wir das trainierte Modell mit Keras. Dazu verwenden wir die Fun
 # Packages laden
 library(tidyverse)
 library(tensorflow)
-library(keras)
-library(jpeg)
+library(keras3)
 
 # Als erstes laden wir das resnet50 Model und zwar mit den optimalen Gewichten.
 model <- application_resnet50(weights = "imagenet")
@@ -259,22 +258,22 @@ Trainable params: 25,583,592
 Non-trainable params: 53,120
 _______________________________________________________________________________________________________
 ```
-Die Architektur des Modells ist riesig, weshalb ich sie hier verkürzt dargestellt habe. Ihr seht beim **Input Layer**, dass das Modell Farbbilder (3 Channels) mit einer Auflösung von **224 x 224 Pixel** erwartet. Nach dem Input Layer kommt der **erste Convolutional Layer** (= oranger Layer in ResNet34 Architektur). In Keras bzw. TensorFlow werden die **einzelnen Elemente** eines Convolution Layers separat dargestellt. Der erste Layer setzt sich zusammen aus:
+Die Architektur des Modells ist riesig, weshalb ich sie hier verkürzt dargestellt habe. Sie sehen beim **Input Layer**, dass das Modell Farbbilder (3 Channels) mit einer Auflösung von **224 x 224 Pixels** erwartet. Nach dem Input Layer kommt der **erste Convolutional Layer** (= oranger Layer in ResNet34 Architektur). In Keras bzw. TensorFlow werden die **einzelnen Elemente** eines Convolution Layers separat dargestellt. Der erste Layer setzt sich zusammen aus:
 
 * `conv1_pad (ZeroPadding2D)`: In einem ersten Schritt wird das Zero Padding gemacht und da brauchen wir selbstverständlich keine Gewichte dazu. 
-* `conv1_conv (Conv2D)`: Dann kommen 64 (7 x 7) Convolution Filters. Überlegen wir uns doch kurz, wie wir auf die insgesamt 9472 Gewichte kommen. Wir haben 64 Filter, wovon jeder drei 7 x 7 Matrizen enthält. Warum drei? Weil wir pro Farbchannel eine separate 7 x 7 Matrix haben. Das gibt uns bereits $64 \cdot 3 \cdot 7 \cdot 7 = 9408$ Gewichte. Dazu kommen noch 64 Bias Terms, was uns dann insgesamt $9408 + 64 = 9472$ Gewichte gibt.
+* `conv1_conv (Conv2D)`: Dann kommen 64 ($7 \times 7$) Convolution Filters. Überlegen wir uns doch kurz, wie wir auf die insgesamt 9472 Gewichte kommen. Wir haben 64 Filter, wovon jeder drei $7 \times 7$ Matrizen enthält. Warum drei? Weil wir pro Farbchannel eine separate $7 \times 7$ Matrix haben. Das gibt uns bereits $64 \cdot 3 \cdot 7 \cdot 7 = 9408$ Gewichte. Dazu kommen noch 64 Bias Terms, was uns dann insgesamt $9408 + 64 = 9472$ Gewichte gibt.
 * `conv1_bn (BatchNormalization)`: Danach kommt eine sogenannte **Batch Normalization**, was vereinfacht nichts anderes als eine Standardisierung der Outputs der Convolution Filters ist.
 * `conv1_relu (Activation) `: ReLU Aktivierung der standardisierten Outputs in den 64 Feature Maps.
 
-Danach folgt der Max. Pooling Layer, welcher in Keras bzw. TensorFlow ebenfalls in zwei Unterschritte aufgeteilt wird: `pool1_pad (ZeroPadding2D)` und `pool1_pool (MaxPooling2D)`. Nicht abgebildet werden die diversen Gruppen von Convolution Layers.
+Danach folgt der **Max. Pooling Layer**, welcher in Keras bzw. TensorFlow ebenfalls in zwei Unterschritte aufgeteilt wird: `pool1_pad (ZeroPadding2D)` und `pool1_pool (MaxPooling2D)`. Oben nicht abgebildet sind die diversen Gruppen von Convolution Layers, welche nun folgen würden.
 
-Der Output Layer ist **dense** und enthält 1000 Neurons, da wir die Wahrscheinlichkeiten für 1000 Kategorien rechnen wollen. Der zweitletzte Global Average Pooling Layer hat 2048 Neurons (in ResNet34 hatten wir hier nur 512 Neurons), wodurch der Output Layer insgesamt $(2048 + 1) \cdot 1000 = 2'049'000$ Gewichte hat. Ganz unten im Output ist ersichtlich, dass das Modell insgesamt über 25 Millionen Parameter hat, wovon die meisten trainiert werden müssten. Hier haben wir aber die bereits trainierten (optimalen) Gewichte importieren können.
+Der Output Layer ist **dense** und enthält 1000 Neurons, da wir die Wahrscheinlichkeiten für 1000 Kategorien rechnen wollen. Der zweitletzte **Global Average Pooling Layer** hat 2048 Neurons (in ResNet34 hatten wir hier nur 512 Neurons), wodurch der Output Layer insgesamt $(2048 + 1) \cdot 1000 = 2'049'000$ Gewichte hat. Ganz unten im Output ist ersichtlich, dass das Modell insgesamt über 25 Millionen Parameter hat, wovon die meisten trainiert werden müssten. Hier haben wir aber die bereits trainierten (optimalen) Gewichte importieren können.
 
-Nun extrahieren wir die Gewichte aus dem Modell und schauen uns den **ersten Filter** im **ersten Convolutional Layer** an. Anhand des Indexings, `[ , , , 1]`, seht ihr, dass die Gewichte in einem 4-dimensionalen Array gespeichert sind. Die ersten beiden Dimensionen bezeichnen die Dimensionen der Filtermatrizen (also 7 x 7). Die dritte Dimension bezeichnet die Anzahl Feature Maps, welche der Convolutional Layer aus dem vorherigen Layer erwartet. In unserem Fall sind das 3, da wir im ersten Convolutional Layer die drei Farbchannels aus dem Input Layer erhalten. Die vierte Dimension bezeichnet die Anzahl Filter des vorliegenden Convolutional Layers. Mit der `1` spezifizieren wir, dass wir nur den ersten Filter anschauen wollen.
+Nun extrahieren wir die Gewichte aus dem Modell und schauen uns den **ersten Filter** im **ersten Convolutional Layer** an. Anhand des Indexings, `[ , , , 1]`, seht ihr, dass die Gewichte in einem 4-dimensionalen Array gespeichert sind. Die ersten beiden Dimensionen bezeichnen die Dimensionen der Filtermatrizen (also $7 \times 7$). Die dritte Dimension bezeichnet die Anzahl Feature Maps, welche der Convolutional Layer aus dem vorherigen Layer erwartet. In unserem Fall sind das 3, da wir im ersten Convolutional Layer die drei Farbchannels aus dem Input Layer erhalten. Die vierte Dimension bezeichnet die Anzahl Filter des vorliegenden Convolutional Layers. Mit der `1` spezifizieren wir, dass wir nur den ersten Filter anschauen wollen.
 
 ```{r eval = FALSE}
 # Wir können auch die Gewichte extrahieren.
-optimal_weights <- model %>% get_weights()
+optimal_weights <- model |>  get_weights()
 
 # Erster Convolution Filter im ersten Conv. Layer
 optimal_weights[[1]][ , , , 1]
@@ -317,31 +316,16 @@ optimal_weights[[1]][ , , , 1]
 
 Wie erwartet besteht der erste Filter aus **drei 7 x 7 Matrizen**.
 
-Wir laden nun das Bild des Zebras mit der Funktion `image_load()` und lassen es durch die Funktion gleich in die korrekte Auflösung überführen. Wir erinnern uns, dass *ResNet50* Bilder mit einer Auflösung von 224 x 224 Pixels erwartet. Danach konvertieren wir das Bild in einen 3D-Array:
+Wir laden nun das Bild des Zebras mit der Funktion `image_load()` und lassen es durch die Funktion gleich in die korrekte Auflösung überführen. Wir erinnern uns, dass *ResNet50* Bilder mit einer Auflösung von $224 \times 224$ Pixels erwartet. Danach konvertieren wir das Bild in einen 3D-Array:
 
 ```{r eval = FALSE}
 # Lade ein Bild mit 'image_load()'
 # Wichtig: resnet50 erwartet eine Auflösung von 224 x 224 Pixels
-img <- image_load("zebra.jpg", target_size = c(224, 224))
+img <- image_load("images/zebra.jpg", target_size = c(224, 224))
 
 # Wir konvertieren das Bild in einen 3D-Array (letzte Dimension sind die drei Farbchannels)
 x <- image_to_array(img)
 ```
-
-Wir können das Bild mit geringerer Auflösung nochmals plotten:
-
-```{r eval = FALSE}
-# Quadratischer Plot in R
-par(pty = "s")
-
-# Leere Plot-Hülle
-plot(0:1, 0:1, type = "n", ann = FALSE, axes = FALSE)
-
-# Bild plotten
-rasterImage(x / 255, 0, 0, 1, 1)
-```
-
-<!-- ![Bla.](images/zebra_224_224.jpeg){width=60% #fig-zebra} -->
 
 Nun verändern wir die Dimensionalität des Bilds in einen 4-D Array. Warum wir das tun, ist im Code Kommentar unten beschrieben.
 
@@ -353,7 +337,7 @@ Nun verändern wir die Dimensionalität des Bilds in einen 4-D Array. Warum wir 
 x <- array_reshape(x, c(1, dim(x)))
 ```
 
-Die Funktion `imagenet_preprocess_input()` enthält alle notwendigen Preprocessing Schritte, welche das Modell erwartet.
+Die Funktion `imagenet_preprocess_input()` enthält alle notwendigen **Preprocessing** Schritte, welche das Modell erwartet.
 
 ```{r eval = FALSE}
 # Und nun noch ein paar spezifischen Preprocessing Schritte,
@@ -365,21 +349,21 @@ Nun können wir die Vorhersage des Modells für unser Bild `x` rechnen und die T
 
 ```{r eval = FALSE}
 # Nun rechnen wir die Vorhersage
-preds <- model %>% predict(x)
+preds <- model |> predict(x)
 
-# Schöner Output
+# Schöner Output:
 imagenet_decode_predictions(preds, top = 5)[[1]]
 ```
 
 ```
   class_name class_description        score
-1  n02391049             zebra 9.998761e-01
-2  n02129604             tiger 2.369525e-05
-3  n02422699            impala 1.781611e-05
-4  n02422106        hartebeest 1.060396e-05
-5  n02123159         tiger_cat 8.302844e-06
+1  n02391049             zebra 0.9954357743
+2  n02130308           cheetah 0.0009791906
+3  n02423022           gazelle 0.0004443732
+4  n02422106        hartebeest 0.0004240675
+5  n02129604             tiger 0.0004097163
 ```
 
-Das Modell hat kein Problem, das Bild korrekt zu klassifizieren! Doch was passiert eigentlich in all diesen Convolution Layers? Der folgende [Blogpost](https://machinelearningmastery.com/how-to-visualize-filters-and-feature-maps-in-convolutional-neural-networks/) zeigt die Outputs der Convolutions Layers für eine andere bekannte CNN Architektur, nämlich VGG16.
+Das Modell hat kein Problem, das Bild korrekt zu klassifizieren. Doch was passiert eigentlich in all diesen Convolution Layers? Der folgende [Blogpost](https://machinelearningmastery.com/how-to-visualize-filters-and-feature-maps-in-convolutional-neural-networks/) zeigt die Outputs der Convolution Layers für eine andere bekannte CNN Architektur, nämlich VGG16.
 
-Im Bereich Computer Vision gibt es viele verschiedene Probleme. Das Hauptproblem ist die Klassifikation eines Objekts in einem Bild - das Problem, das wir bis jetzt betrachtet haben. Andere Probleme sind die **gleichzeitige Klassifikation und Lokalisation** eines Objekts in einem Bild, die Erkennung von **mehreren Objekten** in einem Bild oder die **Klassifikation jedes Pixels** in einem Bild. All diese Varianten des Standard Computer Vision Problems sind in [@Geron, Kapitel 14] im Detail beschrieben.
+Im Bereich Computer Vision gibt es viele verschiedene Probleme. Das bekannteste Problem ist die hier betrachtete Klassifikation eines Objekts in einem Bild. Andere Probleme sind die **gleichzeitige Klassifikation und Lokalisation** eines Objekts in einem Bild, die Erkennung von **mehreren Objekten** in einem Bild oder die **Klassifikation jedes Pixels** in einem Bild. All diese Varianten des Standard Computer Vision Problems sind in [@Geron, Kapitel 14] im Detail beschrieben.
